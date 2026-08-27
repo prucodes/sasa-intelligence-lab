@@ -4,13 +4,15 @@
 
 | Solution | Buildable now | Strict interpretation |
 |---|---|---|
-| Asset–Outcome Gap Radar | **Partial** | A descriptive, explainable cross-sectional radar is feasible after a reviewed name crosswalk and period alignment. A causal or predictive radar is not. |
-| Swachh Bottleneck & Next-Best-Action Engine | **Partial** | KPI bottleneck flags are feasible. Data-driven next-best-action recommendations are not supported by the inspected fields. |
+| Asset–Outcome Gap Radar | **Conditional / not scoreable from retained excerpts** | The schemas can support a descriptive, explainable cross-sectional radar after authenticated full ingestion, a reviewed name crosswalk, and same-year period alignment. The retained examples produce no eligible asset-to-outcome score. A causal or predictive radar is not supported. |
+| Swachh Bottleneck & Next-Best-Action Engine | **Partial for rules; no for next-best action** | Single-record KPI bottleneck flags are feasible. Data-driven action ranking or effectiveness claims are not supported by the inspected fields. |
 | ULB Early-Warning Radar | **No** | Only one operational month and one annual outcome year are verified; there is no trend history, incident stream, or leading-outcome label. |
+
+These verdicts distinguish schema potential from current deployment readiness. The supplied DOCX retains one representative record per selected endpoint rather than full result sets, and anonymous Data Lake access redirects to sign-in.
 
 ## 1. Asset–Outcome Gap Radar
 
-**Buildable now: Partial**
+**Buildable now: Conditional schema support; no eligible score from current evidence**
 
 ### Exact fields used
 
@@ -32,6 +34,7 @@
 - For a descriptive same-period snapshot: one complete operational period plus one outcome observation in the same reporting year.
 - For a credible trend/gap signal: at least 12 consecutive monthly operational periods and at least two comparable annual outcome cycles.
 - Verified now: only July 2026 operational examples and 2024 outcome examples. The supplied examples do not satisfy same-period asset/outcome alignment.
+- The document also does not retain the complete result sets, so statewide coverage, ULB overlap, uniqueness, and join yield cannot be measured.
 
 ### Missing fields
 
@@ -63,7 +66,7 @@
 
 ## 2. Swachh Bottleneck & Next-Best-Action Engine
 
-**Buildable now: Partial**
+**Buildable now: Partial for deterministic snapshot rules; not buildable as a next-best-action engine**
 
 ### Exact fields used
 
@@ -149,7 +152,19 @@
 
 ## Best MVP recommendation
 
-Build the **Asset–Outcome Gap Radar first, but explicitly as a descriptive, rules-based MVP with evidence and coverage labels—not as a predictive AI model**. It is the only option that can create immediate decision value from the inspected fields: procurement progress, reported facility capacity/status, IHHL pipeline counts, and annual outcome labels/rank. Make every gap unscored unless the ULB match is reviewed and the periods align. Do not launch an Early-Warning model or claim next-best-action optimization until history, utilization, stable IDs, and intervention data are supplied.
+Build the **data-quality and evidence foundation for the Asset–Outcome Gap Radar first**, with an operational snapshot mode that shows procurement progress, reported facility capacity/status, and IHHL pipeline counts. Keep the asset-to-outcome gap component disabled or explicitly unscored until authenticated full payloads, reviewed ULB matches, and same-year outcome data are available. This preserves the proposed radar as the best target architecture without pretending the retained 2026 asset and 2024 outcome excerpts form a valid gap score. Do not launch an Early-Warning model or claim next-best-action optimization until history, utilization, stable IDs, and intervention data are supplied.
+
+## Production activation gates
+
+| Capability | Minimum activation evidence | Current status |
+|---|---|---|
+| Operational snapshot | fresh authenticated payload, complete pagination, valid typed fields, reviewed ULB match | Blocked by access and unretained full payloads |
+| Asset–outcome gap flag | operational snapshot requirements plus same-year outcome and disclosed comparison cohort | Blocked by 2026/2024 mismatch |
+| Persistent bottleneck flag | at least six consecutive validated months under a declared business rule | No verified history |
+| Early-warning model | forecast label/horizon, 12+ consecutive months (preferably 24+), multiple outcome cycles, backtest | Unsupported |
+| Next-best-action ranking | action catalogue, eligibility, cost/owner/dependencies, interventions, post-action outcomes | Unsupported |
+
+The six-, 12-, and 24-month thresholds above are proposed product validation gates, not claims about periods present in SASA.
 
 ## Smallest production-ready MVP architecture
 
@@ -169,7 +184,8 @@ This architecture is appropriate only for the descriptive Asset–Outcome Gap Ra
 | `sanitation_ihhl_monthly` | ULB + month + run | identified, approved, under construction, completed, reported percentage |
 | `outcome_swachh_annual` | ULB + year + outcome type + run | raw GFC/ODF label or parsed national rank |
 | `ulb_feature_snapshot` | ULB + as-of period | calculated features, source coverage, quality flags, evidence JSON |
-| `ulb_gap_score` | ULB + as-of period + score version | component values, unscored reasons, score/flag, explanation |
+| `gap_flag_policy` | policy version | effective dates, eligible components, cohort definition, versioned thresholds, approval metadata |
+| `ulb_gap_assessment` | ULB + as-of period + policy version | component values, unscored reasons, flag, explanation |
 
 All facts should retain raw strings, parsed values, source table key, source period, run ID, and record hash.
 
@@ -204,9 +220,11 @@ Version 1 should be deterministic and deliberately conservative:
 
 1. **Eligibility gate:** reviewed ULB match, complete pagination, valid period, same-year operational/outcome data, and at least one asset readiness ratio plus one outcome field.
 2. **Asset readiness:** use target-based ratios only. Do not size-normalize raw TPD or asset counts without population/waste denominators.
-3. **Outcome weakness:** use within-year rank percentile only if rank coverage and comparison cohort are disclosed. Preserve GFC/ODF as categorical facets until a domain-approved ordinal dictionary is provided.
-4. **Gap flag:** flag “high reported asset progress with weak reported outcome” only when both dimensions are eligible. Display component fields, not a black-box score.
+3. **Outcome weakness:** use within-year rank percentile only if complete rank coverage, comparability, and the comparison cohort are disclosed and approved. Preserve GFC/ODF as categorical facets until a domain-approved ordinal dictionary is provided.
+4. **Gap flag:** flag “high reported asset progress with weak reported outcome” only when both dimensions are eligible and the versioned policy supplies the two thresholds. Display the policy version and component fields.
 5. **Unscored state:** default when periods are stale/misaligned, ULB matching is unresolved, or denominators are zero/missing.
+
+Do not create a weighted composite score in version 1: the observed fields do not justify weights across vehicles, configured capacity, IHHL delivery, and categorical outcomes. A flag is safer and more auditable. The source data does not supply valid threshold values, so production thresholds must remain unset until a named domain owner approves them in `gap_flag_policy`; unset thresholds yield `unscored`, never an implicit default.
 
 No causal language, forecasting, automated recommendations, or learned model is warranted in version 1.
 
@@ -236,6 +254,21 @@ Suggested internal APIs:
 | `GET /api/v1/gap-radar/{ulb_key}?as_of=` | ULB detail, source periods, join provenance, calculations |
 | `GET /api/v1/data-quality?run_id=&table_key=` | pagination, parsing, period, duplicate, and join audits |
 | `POST /api/v1/ingestion-runs` | controlled server-side ingestion trigger; not exposed to public clients |
+
+### Minimum production components
+
+| Component | Smallest responsibility |
+|---|---|
+| Governed source connector | authenticate server-side, submit exact table-key requests, paginate, retry safely, and record request/response metadata |
+| Immutable raw evidence store | retain each response page, checksum, retrieval time, table key, filters, and run ID; encrypt and apply retention policy |
+| Validation/normalization worker | parse typed values, validate periods and grain, resolve reviewed ULB aliases, quarantine failures, and publish quality metrics |
+| PostgreSQL or equivalent relational store | hold the normalized dimensions/facts, policy versions, feature snapshots, and evidence pointers |
+| Read-only application API | enforce user/role scope and serve radar, evidence, coverage, and quality endpoints; ingestion trigger remains operator-only |
+| Scheduler and operations controls | run approved refreshes, alert on schema drift/pagination mismatch/staleness, and expose run logs and audit history |
+
+There is no model-serving component in version 1. Secrets remain in a managed secret store, raw payloads never go to the browser, and every displayed metric links back to a run ID and record hash.
+
+The separate SASA KPI Dashboard whitelisting evidence suggests an IMS-hosted connector already targets the Data Lake `/api/v1/datasets/<tableKey>/query` family. Reuse should be evaluated through the platform owner and existing service identity, but the screenshot does not authorize credential reuse or prove permissions for the representative radar datasets.
 
 ### Minimum dashboard views
 

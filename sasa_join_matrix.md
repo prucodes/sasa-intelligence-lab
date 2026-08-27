@@ -6,6 +6,8 @@ There is **no verified common stable ULB key** across the selected collection, p
 
 `ulb_id` appears in some other SASA/MEPMA examples, but it is absent from every representative endpoint in this analysis. It therefore cannot be assumed to exist in the asset/outcome tables.
 
+The supplied DOCX retains only one representative record per selected endpoint, even when `responseMetadata` reports many returned rows. This matrix therefore assesses schema compatibility and demonstrated record-level examples; it does not measure full-payload overlap, coverage, uniqueness, or join rates.
+
 ## Canonicalization required before any join
 
 ```text
@@ -27,7 +29,7 @@ crosswalk fields = source_dataset, district_raw, ulb_raw,
 
 ## Pairwise feasibility matrix
 
-Legend: **Direct** = same exact normalized fields and compatible period; **Conditional** = name/period crosswalk required; **Not currently valid** = inspected samples cannot be aligned.
+Legend: **Conditional** = schema-compatible but a reviewed name/ID crosswalk and valid period are required; **Not currently valid** = the retained record excerpts cannot be aligned temporally. No selected cross-dataset join is direct from a shared stable source ID.
 
 | Left dataset | Right dataset | Candidate join | Feasibility | Evidence / limitation |
 |---|---|---|---|---|
@@ -38,7 +40,7 @@ Legend: **Direct** = same exact normalized fields and compatible period; **Condi
 | E-Autos Service Model | National Rank | normalized district + ULB + year | Not currently valid | same temporal mismatch |
 | ISWM Facilities | ODF Status | normalized district + ULB + year | Not currently valid | same Narsipatnam identity candidate, but 2026 versus 2024 |
 | ISWM Facilities | National Rank | normalized district + ULB + year | Not currently valid | same temporal mismatch |
-| ODF Status | National Rank | normalized district + ULB + year | Direct after normalization | Anakapalli / NARSIPATNAM / 2024 exists in both inspected samples |
+| ODF Status | National Rank | normalized district + ULB + year | Conditional | Anakapalli / NARSIPATNAM / 2024 exists in both retained excerpts, but neither source carries a stable ULB ID |
 | GFC Status | ODF Status | normalized district + ULB + year | Conditional | compatible schema, but GFC sample has only 5 records and no demonstrated Narsipatnam match |
 | GFC Status | National Rank | normalized district + ULB + year | Conditional | compatible schema, but coverage and sample overlap are unverified |
 
@@ -59,9 +61,13 @@ ANAKAPALLI|NARSIPATNAM
 
 This demonstrates identity-level join feasibility, but **not a temporally valid asset-to-outcome comparison**. The two-year period mismatch must remain visible; it must not be silently bridged.
 
+It also does not establish dataset-wide overlap: the DOCX retains one record object from each reported result set, so overlap counts and join coverage cannot be computed.
+
 ## Demonstrated failure mode
 
 The IHHL sample uses `ulb_name="Yelamanchali"`. Another supplied sample uses `ulb_nm="Yelamanchili"`. Uppercase/trim normalization does not reconcile those spellings. A production pipeline needs a reviewed alias mapping or an authoritative ULB master.
+
+The supplied MEPMA circular-economy excerpt maps `district_id="16"`, `ulb_id="181"` to Anakapalli / Narsipatnam for `month_id="202603"`. This is useful candidate evidence for a crosswalk, but it is not a verified master key for the selected asset/outcome endpoints and must not be propagated without authoritative confirmation.
 
 ## Period-join rules
 
@@ -87,3 +93,5 @@ The IHHL sample uses `ulb_name="Yelamanchali"`. Another supplied sample uses `ul
 ## Join conclusion
 
 Reliable joins are **not available directly from source keys**. A reviewed ULB crosswalk can make selected joins operational, but this is a local data-governance layer, not evidence that the source APIs share a canonical ULB identifier.
+
+With the evidence currently retained, only the ODF-to-National-Rank Narsipatnam record pair is both identity- and year-compatible. No retained asset-to-outcome pair is contemporaneous, and no full-payload join rate can be calculated.
