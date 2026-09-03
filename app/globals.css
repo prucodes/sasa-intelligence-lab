@@ -5118,3 +5118,12 @@ table td, table th { font-variant-numeric: tabular-nums; }
 .theme-dark .nf-foot { border-color: rgba(111,174,213,.17); background: rgba(13,25,42,.5); }
 .theme-dark .nf-foot span { color: #9db0c4; }
 .theme-dark .nf-foot b { color: #7d93a8; }
+
+/* First-paint mode isolation: the shell stays hidden until the client resolves the
+   URL's mode/theme, so a shared governed link never flashes synthetic DEMO values.
+   A gentle fade on reveal; instant for reduced-motion. */
+.app-shell { opacity: 1; transition: opacity 0.18s ease; }
+.app-shell.booting { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .app-shell { transition: none; }
+}

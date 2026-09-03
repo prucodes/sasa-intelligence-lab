@@ -147,10 +147,46 @@ function withMode(href: string, mode: DataMode, colorTheme: ColorTheme = 'light'
   return `${href}?${params.toString()}`;
 }
 
+/**
+ * A view-selection state that is mirrored in the URL, so every internal view is a
+ * shareable deep link and survives a reload. Starts at `fallback` (matching the static
+ * prerender), then adopts a valid `?param` value on mount; changing it rewrites the URL.
+ */
+function useUrlParam<T extends string>(param: string, allowed: readonly T[], fallback: T): [T, (value: T) => void] {
+  const [value, setValue] = useState<T>(fallback);
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    try {
+      const found = new URLSearchParams(window.location.search).get(param);
+      if (found && (allowed as readonly string[]).includes(found)) setValue(found as T);
+    } catch {
+      // A malformed URL leaves the fallback in place.
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+    // `allowed` and `fallback` are literals at every call site, so `param` alone is the key.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [param]);
+  const set = (next: T) => {
+    setValue(next);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set(param, next);
+      window.history.replaceState({}, '', url);
+    } catch {
+      // URL persistence is optional; the in-memory selection still updates.
+    }
+  };
+  return [value, set];
+}
+
 export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColorTheme = 'light', initialAnalyticsTab = 'collection' }: { page: Page; initialUlbKey?: string; initialMode?: DataMode; initialColorTheme?: ColorTheme; initialAnalyticsTab?: AnalyticsTab }) {
   const [mode, setMode] = useState<DataMode>(initialMode);
   const [colorTheme, setColorTheme] = useState<ColorTheme>(initialColorTheme);
   const [aboutOpen, setAboutOpen] = useState(false);
+  // On a static host the prerendered HTML is always the default (DEMO · light); the URL's
+  // real mode/theme are applied on mount. Keep the shell hidden until that resolves so a
+  // shared ?mode=governed link never flashes synthetic DEMO values before hydration.
+  const [booted, setBooted] = useState(false);
   // Set when a reviewer arrived from a table row, so the page can offer a way back.
   const cameFrom = useSyncExternalStore(
     () => () => {},
@@ -179,6 +215,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
     } catch {
       // A malformed URL should never take the app down; defaults stay in place.
     }
+    setBooted(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [initialUlbKey]);
 
@@ -208,7 +245,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
   const currentUlbKey = initialUlbKey && datasets[mode].diagnostics.some((item) => item.ulbKey === initialUlbKey) ? initialUlbKey : diagnosticDefault;
 
   return (
-    <div className={`app-shell theme-${colorTheme}`} suppressHydrationWarning>
+    <div className={`app-shell theme-${colorTheme}${booted ? '' : ' booting'}`} suppressHydrationWarning>
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} />
       <div className="app-main">
@@ -1028,7 +1065,7 @@ function InsightCell({ icon, label, text }: { icon: IconName; label: string; tex
 }
 
 function CollectionAnalytics({ period }: { period: string | null }) {
-  const [view, setView] = useState<'procurement' | 'district-assets'>('procurement');
+  const [view, setView] = useUrlParam('subview', ['procurement', 'district-assets'] as const, 'procurement');
   const data = getCollectionProcurementSummary(period);
   // Peers are the ULBs that reported a comparable ratio in the same period from this source.
   const deliveryPeers = useMemo(() => distributionOf(data.rows.map((row) => row.deliveryRatio)), [data]);
@@ -1089,7 +1126,7 @@ function SanitationAnalytics({ period }: { period: string | null }) {
 }
 
 function ProcessingAnalytics({ period }: { period: string | null }) {
-  const [view, setView] = useState<'legacy' | 'facilities'>('legacy');
+  const [view, setView] = useUrlParam('subview', ['legacy', 'facilities'] as const, 'legacy');
   const data = getProcessingRegistry(period);
   const legacy = getLegacyWasteSummary(period);
   const statusQueue = getFacilityStatusReviewQueue();
@@ -1827,7 +1864,7 @@ function EvidenceRow({ icon, label, value }: { icon: IconName; label: string; va
 }
 
 function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnType<ReturnType<typeof createProvider>['getReadiness']> }) {
-  const [view, setView] = useState<'catalogue' | 'coverage' | 'periods' | 'quality'>('catalogue');
+  const [view, setView] = useUrlParam('view', ['catalogue', 'coverage', 'periods', 'quality'] as const, 'catalogue');
   const [query, setQuery] = useState('');
   const [theme, setTheme] = useState('ALL');
   const [evidence, setEvidence] = useState('ALL');
