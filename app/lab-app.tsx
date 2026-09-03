@@ -227,7 +227,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
 }
 
 function ProductFooter({ mode }: { mode: DataMode }) {
-  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><Image src="/assets/sasa/brand-primary.png" alt="" width={44} height={42}/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'connector inactive'}</span></footer>;
+  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><Image src="/assets/sasa/brand-primary.png" alt="" width={44} height={42}/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'on-demand connector · on the roadmap'}</span></footer>;
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string }) {
@@ -866,7 +866,7 @@ function PulseChart() {
 }
 
 function EmptyChart({ mode }: { mode: DataMode }) {
-  return <div className="empty-chart"><span className="empty-icon"><Icon name={mode === 'LIVE' ? 'link' : 'clock'} size={30}/></span><strong>{mode === 'SAMPLE' ? 'Trend intentionally unavailable' : 'Live data not connected'}</strong><p>{mode === 'SAMPLE' ? 'Complete current-period snapshots do not establish a verified multi-month trend.' : 'This prototype does not make authenticated source requests.'}</p></div>;
+  return <div className="empty-chart"><span className="empty-icon"><Icon name={mode === 'LIVE' ? 'link' : 'clock'} size={30}/></span><strong>{mode === 'SAMPLE' ? 'Trend intentionally unavailable' : 'Live connector — on the roadmap'}</strong><p>{mode === 'SAMPLE' ? 'Complete current-period snapshots do not establish a verified multi-month trend.' : 'The planned next step: a on-demand authenticated pull from the AI Living Labs Data Lake. Governed data mode shows the same sources today, retained as snapshots.'}</p></div>;
 }
 
 function WhyItem({ icon, title, text }: { icon: IconName; title: string; text: string }) {
@@ -978,7 +978,7 @@ function ReportedPeriods({ tab }: { tab: AnalyticsTab }) {
 
 function ModeAnalyticsPlaceholder({ mode, tab }: { mode: DataMode; tab: AnalyticsTab }) {
   const label = analyticsTabs.find((item) => item.id === tab)?.label;
-  if (mode === 'LIVE') return <article className="panel analytics-placeholder"><Icon name="link" size={34}/><h2>Live connector remains inert</h2><p>No browser or client request is made. Switch to SAMPLE to use the retained authenticated snapshots.</p></article>;
+  if (mode === 'LIVE') return <article className="panel analytics-placeholder"><Icon name="link" size={34}/><h2>Live connector — on the roadmap</h2><p>The planned on-demand authenticated pull is not yet enabled. Switch to Governed data to work with the same sources today, retained as snapshots.</p></article>;
   const demoValues = tab === 'collection' ? ['1,200 target', '720 work orders', '510 supplied']
     : tab === 'sanitation' ? ['4,900 identified', '3,200 approved', '1,440 completed']
       : tab === 'processing' ? ['24 facility fixtures', '310 TPD configured', '4 review flags']
@@ -2236,7 +2236,7 @@ function EvidenceVintagePanel() {
 }
 
 function ReadinessModeNotice({ mode }: { mode: DataMode }) {
-  return <article className="panel analytics-placeholder"><Icon name={mode === 'LIVE' ? 'link' : 'info'} size={30}/><h2>{mode === 'LIVE' ? 'Live evidence has not been retrieved' : 'Coverage view is isolated to authenticated SAMPLE evidence'}</h2><p>{mode === 'LIVE' ? 'No external request is made from this prototype.' : 'Switch to SAMPLE to inspect the retained governed responses.'}</p></article>;
+  return <article className="panel analytics-placeholder"><Icon name={mode === 'LIVE' ? 'link' : 'info'} size={30}/><h2>{mode === 'LIVE' ? 'Live connector — on the roadmap' : 'Coverage view is isolated to authenticated governed evidence'}</h2><p>{mode === 'LIVE' ? 'The planned on-demand pull is not yet enabled; Governed data shows the same sources today.' : 'Switch to Governed data to inspect the retained governed responses.'}</p></article>;
 }
 
 function sentenceCase(value: string) {

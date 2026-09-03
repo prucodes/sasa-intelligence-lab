@@ -528,13 +528,13 @@ const sampleData: ModeDataset = {
 
 const liveDiagnostic: Diagnostic = {
   ulbKey: 'live-pending', name: 'Live source pending', district: 'Governed SASA Data Lake', reportingContext: 'No authenticated request attempted',
-  state: 'UNSCORED', title: 'Access pending', summary: 'Live mode is a connector boundary and does not make network requests in this prototype.',
+  state: 'UNSCORED', title: 'On the roadmap', summary: 'Live mode is the planned on-demand connector to the AI Living Labs Data Lake. It is not enabled in this prototype; Governed data mode shows the same sources today, retained as snapshots.',
   metrics: [{ label: 'Live metrics', value: 'Unavailable', detail: 'authenticated source access required', tone: 'neutral' }],
   evidence: [], qualityFlags: ['Platform token required', 'Dataset permissions unverified', 'Complete pagination unverified'],
 };
 
 const liveData: ModeDataset = {
-  mode: 'LIVE', banner: 'Live connector reserved · no government API request is made',
+  mode: 'LIVE', banner: 'Live connector · on the roadmap — on-demand authenticated pull, not yet enabled',
   overview: [
     { label: 'Collection & Machinery', value: '—', detail: 'access pending', tone: 'neutral' },
     { label: 'Processing & Facilities', value: '—', detail: 'access pending', tone: 'neutral' },
