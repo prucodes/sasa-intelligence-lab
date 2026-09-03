@@ -115,8 +115,33 @@ function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   );
 }
 
+/**
+ * The SAMPLE mode runs on real, authenticated government data (retained Data Lake
+ * snapshots), so it is presented as "Governed data" and its URL reads ?mode=governed —
+ * "sample" wrongly implied mock/example figures in a link people would share. The
+ * internal enum stays SAMPLE to avoid churning keys, tests and the crosswalk seed.
+ */
+const MODE_URL: Record<DataMode, string> = { DEMO: 'demo', SAMPLE: 'governed', LIVE: 'live' };
+const MODE_LABEL: Record<DataMode, string> = { DEMO: 'Demo', SAMPLE: 'Governed data', LIVE: 'Live' };
+
+/** Resolve a URL mode value to the enum. Legacy 'sample' still maps to SAMPLE so any
+ *  already-shared ?mode=sample link keeps working. */
+function modeFromUrl(value: string | null | undefined): DataMode | null {
+  switch ((value ?? '').toLowerCase()) {
+    case 'governed':
+    case 'sample':
+      return 'SAMPLE';
+    case 'live':
+      return 'LIVE';
+    case 'demo':
+      return 'DEMO';
+    default:
+      return null;
+  }
+}
+
 function withMode(href: string, mode: DataMode, colorTheme: ColorTheme = 'light') {
-  const params = new URLSearchParams({ mode: mode.toLowerCase() });
+  const params = new URLSearchParams({ mode: MODE_URL[mode] });
   if (colorTheme === 'dark') params.set('theme', 'dark');
   return `${href}?${params.toString()}`;
 }
@@ -145,8 +170,8 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
     /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const params = new URLSearchParams(window.location.search);
-      const urlMode = params.get('mode')?.toUpperCase();
-      if (urlMode === 'SAMPLE' || urlMode === 'LIVE' || urlMode === 'DEMO') setMode(urlMode);
+      const urlMode = modeFromUrl(params.get('mode'));
+      if (urlMode) setMode(urlMode);
       else if (initialUlbKey?.startsWith('sample-')) setMode('SAMPLE');
       else if (initialUlbKey?.startsWith('live-')) setMode('LIVE');
       if (params.get('theme') === 'dark') setColorTheme('dark');
@@ -159,7 +184,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
   function changeMode(next: DataMode) {
     setMode(next);
     const url = new URL(window.location.href);
-    url.searchParams.set('mode', next.toLowerCase());
+    url.searchParams.set('mode', MODE_URL[next]);
     window.history.replaceState({}, '', url);
   }
 
@@ -202,7 +227,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
 }
 
 function ProductFooter({ mode }: { mode: DataMode }) {
-  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><Image src="/assets/sasa/brand-primary.png" alt="" width={44} height={42}/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{mode} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'connector inactive'}</span></footer>;
+  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><Image src="/assets/sasa/brand-primary.png" alt="" width={44} height={42}/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'connector inactive'}</span></footer>;
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string }) {
@@ -229,7 +254,7 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
     <header className="topbar">
       <div className="header-brand"><b><GlossaryText text="SASA Intelligence Lab"/></b><span className="lab-tag"><span>◇</span> Decision-intelligence concept</span><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status"><Icon name="shield" size={17}/>{datasets[mode].banner}</span></div>
       <div className="header-actions">
-        <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">DEMO</option><option value="SAMPLE">SAMPLE</option><option value="LIVE">LIVE</option></select></label>
+        <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
         <button className="icon-button" aria-label="About SASA Intelligence Lab and glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={20}/></button>
         <span className="header-avatar">AP</span>
