@@ -39,6 +39,7 @@ import {
 import { disputedSumImpact } from '@/lib/disputes';
 import type { CollectionProcurementSummary, ContrastPoint, IhhlFunnel, LegacyWasteSummary } from '@/lib/analytics';
 import { governedSnapshotStats, operationalPeriodOptions } from '@/lib/snapshots';
+import { readinessCatalogueStats } from '@/lib/catalogue';
 import { distributionOf, ordinal, peerContext, type Distribution } from '@/lib/comparison';
 import { datasetVintages, formatPeriodLabel, formatRetrievalDate, vintageSummary } from '@/lib/vintage';
 import {
@@ -1848,7 +1849,7 @@ function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnT
     {mode === 'SAMPLE' && <div className="readiness-count-footer"><span>Technical coverage</span><b>29 complete working exports</b><i/> <b>4,359 retained rows</b><i/> <b>30 authorized endpoints</b></div>}
     {view === 'catalogue' && <>{mode === 'SAMPLE' && <><DatasetUsageRegister/><SupportingProgrammePortfolio/></>}<section className="readiness-layout">
       <article className="panel readiness-table-panel">
-        <div className="catalogue-heading"><PanelTitle icon="database" title={mode === 'SAMPLE' ? 'Governed and documented catalogue' : 'Dataset readiness'} subtitle={mode === 'SAMPLE' ? '30 authorized endpoints · 3 documented PR integrations pending authenticated ingestion' : 'Mode-isolated readiness evidence'}/><span className="catalogue-count">{filteredRows.length} / {readiness.rows.length}</span></div>
+        <div className="catalogue-heading"><PanelTitle icon="database" title={mode === 'SAMPLE' ? 'Governed and documented catalogue' : 'Dataset readiness'} subtitle={mode === 'SAMPLE' ? `${readinessCatalogueStats.platformAvailable} datasets granted on the platform (per API docs) · ${readinessCatalogueStats.notProvisioned} further documented keys not yet provisioned` : 'Mode-isolated readiness evidence'}/><span className="catalogue-count">{filteredRows.length} / {readiness.rows.length}</span></div>
         <div className="catalogue-filters" aria-label="Catalogue filters">
           <label className="catalogue-search"><span className="sr-only">Search catalogue</span><Icon name="search" size={16}/><input aria-label="Search catalogue" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search dataset, key, or field"/></label>
           <label><span className="sr-only">Filter by theme</span><select aria-label="Filter by theme" value={theme} onChange={(event) => setTheme(event.target.value)}><option value="ALL">All themes</option>{themes.map((value) => <option value={value} key={value}>{value}</option>)}</select></label>

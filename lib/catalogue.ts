@@ -464,6 +464,17 @@ const liveNotIngested = notYetIngested.filter((dataset) => typeof dataset.liveRo
 
 export const readinessCatalogueStats = {
   documentedDatasets: readinessCatalogue.length,
+  /**
+   * Datasets the platform actually grants this account, confirmed against the published
+   * API docs (`/docs#authentication`) on 2026-09-03: the account has access to exactly 33.
+   * Computed from sourceState so it cannot drift from the catalogue.
+   */
+  platformAvailable: readinessCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED').length,
+  /**
+   * Keys documented in a source doc but NOT in the account's grant — they return 404 on
+   * the live API. The 3 SASA PR gram-panchayat datasets and 10 further CDMA keys.
+   */
+  notProvisioned: readinessCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING').length,
   /** Derived from completePayload rather than a length sum, so it means what it says. */
   documentedPending: notYetIngested.length,
   documentedPendingFields: documentedIntegrationCatalogue.reduce((total, dataset) => total + dataset.fieldCount, 0),
