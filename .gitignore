@@ -1,0 +1,18 @@
+node_modules/
+.next/
+dist/
+.vinext/
+.vite/
+.wrangler/
+*.log
+.DS_Store
+
+
+# Raw paginated pulls and the secretariat-level detail aggregate. Large, regenerable,
+# and never bundled into the application. The ULB roll-up in data/aggregates/*.json
+# (without .detail) is small and may be committed.
+data/large-snapshots/
+data/aggregates/*.detail.json
+dist-static/
+tsconfig.tsbuildinfo
+artifacts/

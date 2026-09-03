@@ -1,0 +1,51 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "012aefd5-31da-48e1-9662-10f947eb3adf",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_c_d_waste_processing_api",
+    "filters": {
+      "month_number": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-55f7f4cf-f4a0-4d14-8509-77a26653812a",
+    "generatedAt": "2026-08-28T03:28:21.198949+00:00",
+    "totalRecordCount": 3,
+    "returnedRecordCount": 3,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_c_d_waste_processing_api",
+    "tableName": "ap_citizen360.sasa_sac_c_d_waste_processing_api"
+  },
+  "records": [
+    {
+      "district_name": "NTR",
+      "ulb_name": "Vijayawada",
+      "plnt_cpcty_in_tpd": "200",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Tirupathi",
+      "plnt_cpcty_in_tpd": "80",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Visakhapatnam",
+      "ulb_name": "GVMC",
+      "plnt_cpcty_in_tpd": "200",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

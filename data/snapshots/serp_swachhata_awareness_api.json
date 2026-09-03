@@ -1,0 +1,274 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "40da05a6-38bf-4017-bb4a-8e9869afd148",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "serp_swachhata_awareness_api",
+    "filters": {
+      "month": "July",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-522c9512-b9c6-4b89-92ba-ef70a2c45215",
+    "generatedAt": "2026-08-28T03:27:14.509755+00:00",
+    "totalRecordCount": 25,
+    "returnedRecordCount": 25,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "serp_swachhata_awareness_api",
+    "tableName": "ap_citizen360.serp_swachhata_awareness_api"
+  },
+  "records": [
+    {
+      "district_id": "011501",
+      "district_name": "Alluri Sitharama Raju",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "13282",
+      "shg_swachhata_awareness_previous_month_achievement": "4747",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "6605"
+    },
+    {
+      "district_id": "011601",
+      "district_name": "Anakapalli",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "39788",
+      "shg_swachhata_awareness_previous_month_achievement": "19814",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "23116"
+    },
+    {
+      "district_id": "011201",
+      "district_name": "Anantapur",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "35048",
+      "shg_swachhata_awareness_previous_month_achievement": "17576.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "20506"
+    },
+    {
+      "district_id": "012401",
+      "district_name": "Annamayya",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "25744",
+      "shg_swachhata_awareness_previous_month_achievement": "14838",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "17311"
+    },
+    {
+      "district_id": "012101",
+      "district_name": "Bapatla",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "26262",
+      "shg_swachhata_awareness_previous_month_achievement": "16468.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "19213"
+    },
+    {
+      "district_id": "011001",
+      "district_name": "Chittoor",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "30643",
+      "shg_swachhata_awareness_previous_month_achievement": "17451.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "20360"
+    },
+    {
+      "district_id": "010401",
+      "district_name": "East Godavari",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "36329",
+      "shg_swachhata_awareness_previous_month_achievement": "15483",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "18064"
+    },
+    {
+      "district_id": "011901",
+      "district_name": "Eluru",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "40171",
+      "shg_swachhata_awareness_previous_month_achievement": "20759",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "24219"
+    },
+    {
+      "district_id": "010701",
+      "district_name": "Guntur",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "20378",
+      "shg_swachhata_awareness_previous_month_achievement": "10188",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "11886"
+    },
+    {
+      "district_id": "011701",
+      "district_name": "Kakinada",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "38518",
+      "shg_swachhata_awareness_previous_month_achievement": "19260.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "22471"
+    },
+    {
+      "district_id": "011801",
+      "district_name": "Konaseema",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "32925",
+      "shg_swachhata_awareness_previous_month_achievement": "19167",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "22362"
+    },
+    {
+      "district_id": "010601",
+      "district_name": "Krishna",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "29291",
+      "shg_swachhata_awareness_previous_month_achievement": "14641.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "17082"
+    },
+    {
+      "district_id": "011301",
+      "district_name": "Kurnool",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "32200",
+      "shg_swachhata_awareness_previous_month_achievement": "16034.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "18707"
+    },
+    {
+      "district_id": "012001",
+      "district_name": "NTR",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "24741",
+      "shg_swachhata_awareness_previous_month_achievement": "13110.1666666667",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "15171"
+    },
+    {
+      "district_id": "012601",
+      "district_name": "Nandyal",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "30650",
+      "shg_swachhata_awareness_previous_month_achievement": "15352.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "17911"
+    },
+    {
+      "district_id": "010901",
+      "district_name": "Nellore",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "35127",
+      "shg_swachhata_awareness_previous_month_achievement": "18989",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "22154"
+    },
+    {
+      "district_id": "012201",
+      "district_name": "Palnadu",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "36003",
+      "shg_swachhata_awareness_previous_month_achievement": "17977.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "20974"
+    },
+    {
+      "district_id": "011401",
+      "district_name": "Parvathipuram Manyam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "19955",
+      "shg_swachhata_awareness_previous_month_achievement": "9944.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "11602"
+    },
+    {
+      "district_id": "010801",
+      "district_name": "Prakasam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "34148",
+      "shg_swachhata_awareness_previous_month_achievement": "11464",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "15207"
+    },
+    {
+      "district_id": "012501",
+      "district_name": "Sri Sathya Sai",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "31959",
+      "shg_swachhata_awareness_previous_month_achievement": "15990.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "18656"
+    },
+    {
+      "district_id": "010101",
+      "district_name": "Srikakulam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "48984",
+      "shg_swachhata_awareness_previous_month_achievement": "24339.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "28396"
+    },
+    {
+      "district_id": "012301",
+      "district_name": "Tirupati",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "34956",
+      "shg_swachhata_awareness_previous_month_achievement": "16538",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "19294"
+    },
+    {
+      "district_id": "010301",
+      "district_name": "Visakhapatanam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "4904",
+      "shg_swachhata_awareness_previous_month_achievement": "2450.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "2859"
+    },
+    {
+      "district_id": "010201",
+      "district_name": "Vizianagaram",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "40197",
+      "shg_swachhata_awareness_previous_month_achievement": "20083.5",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "23431"
+    },
+    {
+      "district_id": "010501",
+      "district_name": "West Godavari",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "shg_swachhata_awareness_target_units": "29340",
+      "shg_swachhata_awareness_previous_month_achievement": "13940",
+      "shg_swachhata_awareness_cummulative_achievement_till_current_month": "16263"
+    }
+  ]
+}

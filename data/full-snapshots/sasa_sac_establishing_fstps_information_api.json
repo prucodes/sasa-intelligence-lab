@@ -1,0 +1,721 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "0315b204-29ea-47b1-8100-f60b7ba980c8",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_establishing_fstps_information_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-f9068997-2441-4e6e-a0a8-cd891f442d76",
+    "generatedAt": "2026-08-28T15:04:37.260954+00:00",
+    "totalRecordCount": 70,
+    "returnedRecordCount": 70,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_establishing_fstps_information_api",
+    "tableName": "ap_citizen360.sasa_sac_establishing_fstps_information_api"
+  },
+  "records": [
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Kalyanadurgam",
+      "capacity_in_kld": "10",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Rayadurg",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Kalyanadurgam",
+      "capacity_in_kld": "10",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Gooty",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Rayadurg",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Gooty",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "Rayachoty",
+      "capacity_in_kld": "25",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "Rayachoty",
+      "capacity_in_kld": "25",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "Punganur",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "Punganur",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "Chirala",
+      "capacity_in_kld": "25",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "Bapatla",
+      "capacity_in_kld": "25",
+      "overall_progress": "10%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "Bapatla",
+      "capacity_in_kld": "25",
+      "overall_progress": "10%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "Chirala",
+      "capacity_in_kld": "25",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Palamaneru",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Palamaneru",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Nagari",
+      "capacity_in_kld": "20",
+      "overall_progress": "5%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Nagari",
+      "capacity_in_kld": "20",
+      "overall_progress": "5%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Dr. B.R. Ambedkar Konaseema",
+      "ulb_name": "Ramachandrapuram",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Dr. B.R. Ambedkar Konaseema",
+      "ulb_name": "Ramachandrapuram",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Mangalagiri",
+      "capacity_in_kld": "30",
+      "overall_progress": "20%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Ponnur",
+      "capacity_in_kld": "15",
+      "overall_progress": "35%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Mangalagiri",
+      "capacity_in_kld": "30",
+      "overall_progress": "20%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Ponnur",
+      "capacity_in_kld": "15",
+      "overall_progress": "35%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "Yeleswaram",
+      "capacity_in_kld": "10",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "Pithapuram",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "Yeleswaram",
+      "capacity_in_kld": "10",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "Peddapuram",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "Pithapuram",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "Peddapuram",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "Kanigiri",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "Kanigiri",
+      "capacity_in_kld": "15",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "Markapur",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "Markapur",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Tiruvuru",
+      "capacity_in_kld": "10",
+      "overall_progress": "75%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Jaggaiahpet",
+      "capacity_in_kld": "15",
+      "overall_progress": "75%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Kondapalli",
+      "capacity_in_kld": "20",
+      "overall_progress": "75%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Jaggaiahpet",
+      "capacity_in_kld": "15",
+      "overall_progress": "75%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Kondapalli",
+      "capacity_in_kld": "20",
+      "overall_progress": "75%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Tiruvuru",
+      "capacity_in_kld": "10",
+      "overall_progress": "75%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Nandigama",
+      "capacity_in_kld": "15",
+      "overall_progress": "75%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Nandigama",
+      "capacity_in_kld": "15",
+      "overall_progress": "75%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Nandyal",
+      "ulb_name": "Dhone",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Nandyal",
+      "ulb_name": "Dhone",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Vinukonda",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Vinukonda",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Piduguralla",
+      "capacity_in_kld": "15",
+      "overall_progress": "1%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Macherla",
+      "capacity_in_kld": "15",
+      "overall_progress": "5%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Piduguralla",
+      "capacity_in_kld": "15",
+      "overall_progress": "1%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Macherla",
+      "capacity_in_kld": "15",
+      "overall_progress": "5%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "Kandukur",
+      "capacity_in_kld": "20",
+      "overall_progress": "50%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "Kandukur",
+      "capacity_in_kld": "20",
+      "overall_progress": "50%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Gudur (NLR)",
+      "capacity_in_kld": "20",
+      "overall_progress": "45%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Gudur (NLR)",
+      "capacity_in_kld": "20",
+      "overall_progress": "45%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "Puttaparthi",
+      "capacity_in_kld": "10",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "Kadiri",
+      "capacity_in_kld": "25",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "Puttaparthi",
+      "capacity_in_kld": "10",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "Kadiri",
+      "capacity_in_kld": "25",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Venkatagiri",
+      "capacity_in_kld": "15",
+      "overall_progress": "35%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Sullurpeta",
+      "capacity_in_kld": "15",
+      "overall_progress": "50%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Sullurpeta",
+      "capacity_in_kld": "15",
+      "overall_progress": "50%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Venkatagiri",
+      "capacity_in_kld": "15",
+      "overall_progress": "35%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "Rajam",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "Bobbili",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "Rajam",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "Bobbili",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "Pulivendula",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "Jammalamadugu",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "Pulivendula",
+      "capacity_in_kld": "20",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "Jammalamadugu",
+      "capacity_in_kld": "15",
+      "overall_progress": "100%",
+      "month_number": "7",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "e1d32efc-041e-4087-8b2e-d7ec069e12a9",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_machinery_compactors_api",
+    "filters": {
+      "month_number": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-0b70d796-0c23-4440-976f-a4f4c3deb1e7",
+    "generatedAt": "2026-08-28T03:27:56.146658+00:00",
+    "totalRecordCount": 12,
+    "returnedRecordCount": 12,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_machinery_compactors_api",
+    "tableName": "ap_citizen360.sasa_sac_machinery_compactors_api"
+  },
+  "records": [
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "Bapatla",
+      "no_of_units": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Kuppam",
+      "no_of_units": "5",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Mangalagiri",
+      "no_of_units": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Tenali",
+      "no_of_units": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Mangalagiri Tadepalli",
+      "no_of_units": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Ponnuru",
+      "no_of_units": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Krishna",
+      "ulb_name": "YSR Tadigadapa",
+      "no_of_units": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Krishna",
+      "ulb_name": "Machilipatnam",
+      "no_of_units": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "Narasaraopeta",
+      "no_of_units": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Kandukur",
+      "no_of_units": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Nellore",
+      "no_of_units": "6",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "Vizianagaram",
+      "no_of_units": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

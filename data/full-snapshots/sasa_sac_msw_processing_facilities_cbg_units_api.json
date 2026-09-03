@@ -1,0 +1,141 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "7f96a679-ad93-4092-a379-13810187440c",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_msw_processing_facilities_cbg_units_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-698b6527-0110-42dc-94cc-47613aa72cf0",
+    "generatedAt": "2026-08-28T15:25:50.091960+00:00",
+    "totalRecordCount": 12,
+    "returnedRecordCount": 12,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_msw_processing_facilities_cbg_units_api",
+    "tableName": "ap_citizen360.sasa_sac_msw_processing_facilities_cbg_units_api"
+  },
+  "records": [
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Kuppam",
+      "total_tpd": "15",
+      "status_tx": "In Progress",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Kuppam",
+      "total_tpd": "15",
+      "status_tx": "In Progress",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "Rajahmahendravaram",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "Rajahmahendravaram",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Guntur",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Guntur",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Vijayawada",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Vijayawada",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "Ongole",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "Ongole",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Nellore",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Nellore",
+      "total_tpd": "25",
+      "status_tx": "LOA Issued & Agreement to be Concluded",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    }
+  ]
+}

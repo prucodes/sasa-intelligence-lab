@@ -1,0 +1,304 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "081cba1d-0838-4c22-bfa4-8ebf5e7327ac",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_door_to_door_tri_cycles_api",
+    "filters": {
+      "mnth_no": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-a9ab6512-03ce-4b1c-848c-9ec1a0a36e6e",
+    "generatedAt": "2026-08-28T03:27:19.065985+00:00",
+    "totalRecordCount": 28,
+    "returnedRecordCount": 28,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_door_to_door_tri_cycles_api",
+    "tableName": "ap_citizen360.sasa_sac_door_to_door_tri_cycles_api"
+  },
+  "records": [
+    {
+      "district_name": "ALLURI SITHARAMA RAJU",
+      "tri_cycles_target": "238",
+      "tri_cycles_achievement": "238",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANAKAPALLI",
+      "tri_cycles_target": "560",
+      "tri_cycles_achievement": "560",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANANTHAPURAMU",
+      "tri_cycles_target": "361",
+      "tri_cycles_achievement": "361",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANNAMAYYA",
+      "tri_cycles_target": "371",
+      "tri_cycles_achievement": "371",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "BAPATLA",
+      "tri_cycles_target": "629",
+      "tri_cycles_achievement": "629",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "CHITTOOR",
+      "tri_cycles_target": "561",
+      "tri_cycles_achievement": "561",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "DR. B.R.AMBEDKAR KONASEEMA",
+      "tri_cycles_target": "290",
+      "tri_cycles_achievement": "290",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "EAST GODAVARI",
+      "tri_cycles_target": "409",
+      "tri_cycles_achievement": "409",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ELURU",
+      "tri_cycles_target": "548",
+      "tri_cycles_achievement": "548",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "GUNTUR",
+      "tri_cycles_target": "242",
+      "tri_cycles_achievement": "242",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KAKINADA",
+      "tri_cycles_target": "627",
+      "tri_cycles_achievement": "627",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KRISHNA",
+      "tri_cycles_target": "221",
+      "tri_cycles_achievement": "221",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KURNOOL",
+      "tri_cycles_target": "214",
+      "tri_cycles_achievement": "214",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "MARKAPURAM",
+      "tri_cycles_target": "558",
+      "tri_cycles_achievement": "558",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NANDYAL",
+      "tri_cycles_target": "590",
+      "tri_cycles_achievement": "590",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "tri_cycles_target": "167",
+      "tri_cycles_achievement": "167",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PALNADU",
+      "tri_cycles_target": "308",
+      "tri_cycles_achievement": "308",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PARVATHIPURAM MANYAM",
+      "tri_cycles_target": "389",
+      "tri_cycles_achievement": "389",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "POLAVARAM",
+      "tri_cycles_target": "174",
+      "tri_cycles_achievement": "174",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PRAKASAM",
+      "tri_cycles_target": "424",
+      "tri_cycles_achievement": "424",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI POTTI SRIRAMULU NELLORE",
+      "tri_cycles_target": "778",
+      "tri_cycles_achievement": "778",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI SATHYASAI",
+      "tri_cycles_target": "593",
+      "tri_cycles_achievement": "593",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRIKAKULAM",
+      "tri_cycles_target": "937",
+      "tri_cycles_achievement": "937",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "TIRUPATI",
+      "tri_cycles_target": "422",
+      "tri_cycles_achievement": "422",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "VISAKHAPATNAM",
+      "tri_cycles_target": "82",
+      "tri_cycles_achievement": "82",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "VIZIANAGARAM",
+      "tri_cycles_target": "581",
+      "tri_cycles_achievement": "581",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "WEST GODAVARI",
+      "tri_cycles_target": "216",
+      "tri_cycles_achievement": "216",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Y.S.R. KADAPA",
+      "tri_cycles_target": "510",
+      "tri_cycles_achievement": "510",
+      "tri_cycles_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

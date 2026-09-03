@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 460" width="1600" height="460" preserveAspectRatio="xMidYMax slice" role="presentation">
+  <defs>
+    <filter id="far" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="mid" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3.6"/></filter>
+    <filter id="near" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.5"/></filter>
+
+    <linearGradient id="atmo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8f1f8" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#d3e4f1" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#bcd6e9" stop-opacity=".6"/>
+    </linearGradient>
+    <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cadeed"/><stop offset="1" stop-color="#b4cfe3"/>
+    </linearGradient>
+    <linearGradient id="hillGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cadfd8"/><stop offset="1" stop-color="#aecbc4"/>
+    </linearGradient>
+    <linearGradient id="grove" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d4cb"/><stop offset="1" stop-color="#9cbdb4"/>
+    </linearGradient>
+
+    <!-- edges carry the scene; the centre stays calm for content -->
+    <linearGradient id="edgeWeight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="1"/>
+      <stop offset=".22" stop-color="#fff" stop-opacity=".72"/>
+      <stop offset=".42" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset=".58" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset=".78" stop-color="#fff" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="riseFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".34" stop-color="#fff" stop-opacity=".45"/>
+      <stop offset=".62" stop-color="#fff" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="sceneMask">
+      <rect width="1600" height="460" fill="url(#riseFade)"/>
+      <rect width="1600" height="460" fill="url(#edgeWeight)" style="mix-blend-mode:multiply"/>
+    </mask>
+  </defs>
+
+  <g mask="url(#sceneMask)">
+    <rect width="1600" height="460" fill="url(#atmo)"/>
+
+    <!-- FAR: dissolved ridgelines across the whole width -->
+    <g filter="url(#far)" opacity=".5">
+      <path d="M0 300c90-84 170-112 250-78 62 26 108 12 168-34 70-52 140-44 204 14 44 38 86 46 134 24 58-28 114-12 164 40l60 62H0Z" fill="url(#hillFar)"/>
+      <path d="M1600 312c-102-90-192-118-278-84-66 26-116 12-178-36-72-56-146-46-212 18-46 44-90 50-138 24-60-32-118-12-172 44l-62 66h1040Z" fill="url(#hillFar)"/>
+      <path d="M560 340c70-40 132-46 186-18 42 22 80 18 116-10 44-34 88-28 132 18l40 42H560Z" fill="#c3d9ea" opacity=".7"/>
+    </g>
+
+    <!-- FAR city, centre: soft, low contrast so content reads over it -->
+    <g filter="url(#mid)" opacity=".3" fill="#a9c5de">
+      <path d="M600 400v-84h36v84Zm46 0V286h32v114Zm42 0v-70h28v70Zm38 0v-98h34v98Zm44 0v-56h26v56Zm36 0v-88h32v88Zm42 0v-64h28v64Zm38 0V300h34v100Zm44 0v-74h28v74Zm38 0v-50h26v50Zm36 0v-80h30v80Z"/>
+    </g>
+    <g filter="url(#mid)" opacity=".22" fill="#e6f1fa">
+      <path d="M652 306h7v8h-7Zm12 0h7v8h-7Zm-12 18h7v8h-7Zm12 0h7v8h-7Zm86-6h7v8h-7Zm12 0h7v8h-7Zm128 4h7v8h-7Zm12 0h7v8h-7Z"/>
+    </g>
+
+    <!-- LEFT: green hill rising high up the edge -->
+    <g filter="url(#mid)">
+      <path d="M0 460V214c62-44 124-58 186-40 46 14 82 6 110-24 36-38 76-32 112 8 26 30 54 38 84 24l58-28v306Z" fill="url(#hillGreen)" opacity=".46"/>
+      <path d="M0 460V286c48-32 96-42 144-28 36 10 64 4 86-18 28-28 58-24 86 6l44 46v168Z" fill="url(#grove)" opacity=".38"/>
+    </g>
+    <!-- left grove: overlapping canopy masses, not separate trees -->
+    <g filter="url(#near)" opacity=".4" fill="url(#grove)">
+      <ellipse cx="70" cy="330" rx="86" ry="62"/><ellipse cx="164" cy="356" rx="70" ry="50"/>
+      <ellipse cx="252" cy="374" rx="56" ry="40"/><ellipse cx="330" cy="392" rx="46" ry="32"/>
+      <ellipse cx="18" cy="298" rx="62" ry="48"/>
+    </g>
+    <!-- gopuram, dissolved into the grove -->
+    <g filter="url(#near)" opacity=".38" fill="#9db8d4">
+      <path d="M196 400v-72h14l20-32 20 32h14v72Z"/>
+      <ellipse cx="230" cy="322" rx="24" ry="17"/>
+      <rect x="227" y="284" width="6" height="20" rx="3"/>
+    </g>
+
+    <!-- RIGHT: industrial complex rising up the edge -->
+    <g filter="url(#mid)" opacity=".55">
+      <path d="M1600 460V250c-58-38-116-48-174-30-44 14-78 6-104-22-34-36-72-30-106 8l-52 58v196Z" fill="url(#hillGreen)" opacity=".5"/>
+    </g>
+    <g filter="url(#near)" opacity=".5">
+      <rect x="1396" y="286" width="118" height="114" rx="7" fill="#9fbdd8"/>
+      <rect x="1396" y="286" width="118" height="14" rx="7" fill="#9ac6b4"/>
+      <rect x="1418" y="320" width="20" height="20" rx="3" fill="#dfeef8"/>
+      <rect x="1450" y="320" width="20" height="20" rx="3" fill="#dfeef8"/>
+      <rect x="1482" y="320" width="20" height="20" rx="3" fill="#dfeef8"/>
+      <rect x="1524" y="240" width="38" height="160" rx="18" fill="#b0cbe0"/>
+      <rect x="1566" y="264" width="32" height="136" rx="15" fill="#a2c1d9"/>
+      <rect x="1362" y="228" width="17" height="60" rx="8" fill="#9bbcd8"/>
+      <rect x="1338" y="250" width="15" height="38" rx="7" fill="#9bbcd8"/>
+      <ellipse cx="1300" cy="378" rx="72" ry="22" fill="#9dc6d6"/>
+      <ellipse cx="1300" cy="373" rx="52" ry="14" fill="#c7e3e9"/>
+    </g>
+    <!-- right grove -->
+    <g filter="url(#near)" opacity=".36" fill="url(#grove)">
+      <ellipse cx="1580" cy="336" rx="84" ry="60"/><ellipse cx="1486" cy="374" rx="58" ry="42"/>
+      <ellipse cx="1236" cy="374" rx="62" ry="44"/><ellipse cx="1160" cy="390" rx="48" ry="34"/>
+    </g>
+    <!-- recycling mark, faint -->
+    <g filter="url(#near)" opacity=".3" stroke="#8fbca8" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1452 214l12-20 12 20M1488 232l-5 23-23-4M1440 255l-23-4-5-23"/>
+    </g>
+
+    <!-- turbines, atmospheric -->
+    <g filter="url(#near)" opacity=".3" stroke="#8fb2ce" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M470 400V246M470 246l-48-46M470 246l66-26M470 246l-6 54"/>
+      <path d="M1122 400V286M1122 286l-38-36M1122 286l52-20M1122 286l-5 40"/>
+    </g>
+
+    <!-- near ground haze binds it together -->
+    <path d="M0 396h1600v64H0z" fill="#a8c8de" opacity=".26" filter="url(#mid)"/>
+    <path d="M0 430h1600v30H0z" fill="#9cbfd9" opacity=".22"/>
+  </g>
+</svg>

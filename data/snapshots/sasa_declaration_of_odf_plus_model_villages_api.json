@@ -1,0 +1,36 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "41a93840-4b45-4d96-ada1-6d310c9b0d23",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_declaration_of_odf_plus_model_villages_api",
+    "filters": {
+      "dstrt_id": "14",
+      "mnth_no": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-6e0f0e61-4a9c-49b6-889a-09f2af6c1a1b",
+    "generatedAt": "2026-08-28T03:27:21.925558+00:00",
+    "totalRecordCount": 1,
+    "returnedRecordCount": 1,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_declaration_of_odf_plus_model_villages_api",
+    "tableName": "ap_citizen360.sasa_declaration_of_odf_plus_model_villages_api"
+  },
+  "records": [
+    {
+      "dstrt_id": "14",
+      "dstrt_nm": "ALLURI SITHARAMA RAJU",
+      "mnth_no": "7",
+      "mnth_nm": "JULY",
+      "fin_year": "2026-2027",
+      "year": "2026",
+      "odf_vlges_declaration_target_units": "1323",
+      "odf_vlges_declaration_achvmt": "1323",
+      "odf_vlges_declaration_achvmt_prcntge": "100"
+    }
+  ]
+}

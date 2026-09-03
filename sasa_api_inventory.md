@@ -303,3 +303,49 @@ Until these gaps close, this repository validates current public schemas, govern
 5. Do not fabricate ULB IDs. Resolve names through a governed crosswalk and retain match confidence and provenance.
 6. Do not interpret capacity as utilization or project completion as operating status.
 7. Log request/response filter discrepancies and use the record's own period for analytics.
+
+## Authenticated Data Lake validation addendum — 2026-08-27
+
+The signed-in AI Living Labs Data Lake session closes the earlier authentication and pagination gaps for the current exported filter periods.
+
+- The API Playground reports **30 of 30 published datasets authorized** for the account: **27 SASA** and **3 SERP**.
+- Governed JSON export succeeded for **29 datasets** and retained **1,136 records** under `data/snapshots/`.
+- Every retained export reconciles its local row count to both `totalRecordCount` and `returnedRecordCount`, with `hasNextPage=false` and `nextPageToken=null`.
+- The Gobardhan endpoint remains authorized but did not produce a dataset page or JSON export; it is the only missing snapshot.
+- Seven exports retain source-default geographic filters. They are complete for those filters, not evidence of statewide coverage.
+- No access token, refresh token, cookie, or password is retained in the repository.
+
+Representative complete current-period counts are now verified as follows:
+
+| Dataset | Exported filter period | Complete rows | Grain / caveat |
+|---|---:|---:|---|
+| E-Autos Service Model | July 2026 | 83 | ULB names; no stable source ULB ID |
+| ISWM Facilities | July 2026 | 108 | ULB names; configured capacity and status, not utilization |
+| Identification of New IHHLs | July 2026 | 123 | 121 normalized district/ULB name candidates; Puttur and Naidupet each occur twice |
+| FSTP | July filter, 2026 | 35 | every row says `month_number=7` and `month_name=JUNE`; quarantined |
+| GFC Status | 2024 | 5 | ULB names; categorical status |
+| ODF Status | 2024 | 85 | ULB names; categorical status |
+| National Rank | 2024 | 74 | ULB names; numeric-string rank |
+
+The Playground query endpoint also returned E-Autos for June 2026 with 83 rows. This proves at least two accessible E-Auto months, but it does not establish a complete historical series. No other dataset family has enough deliberately enumerated periods to change the trend-readiness verdict.
+
+Remaining acceptance gaps are now narrower:
+
+1. enumerate all supported periods for every endpoint and record empty/negative period responses;
+2. resolve the Gobardhan service failure;
+3. deliberately remove or enumerate the seven source-default geographic filters where the API permits it;
+4. obtain and approve an authoritative ULB/district crosswalk;
+5. obtain same-year outcome evidence for the operational period, or same-year operational evidence for 2024;
+6. confirm `inserted_date` population and semantics where it is documented but absent from returned records.
+
+## Documented SASA PR integration candidates — 2026-08-28
+
+Two newly supplied DOCX files add three table keys beyond the 30 endpoints already represented in the signed-in catalogue. They are documented integrations, not retained governed snapshots, so the authenticated counters remain 30 authorized, 29 complete, and 1,136 retained rows.
+
+| Dataset | Table key | Documented grain | Example completeness | Activation condition |
+|---|---|---|---|---|
+| PR Gram Panchayat SWPC availability / working condition | `sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026` | District → Block → Gram Panchayat | 52 / 52 for district `745`, block `5609`; filtered slice | Complete intended-scope export and SWPC/Swachh Ratham semantic confirmation |
+| PR Swachh Ratham mandal operator reconciliation | `sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026` | District | 1 / 1 for district `745`; filtered slice | Statewide/intended-scope export and title-to-field semantic confirmation |
+| PR Door-to-door garbage collection | `sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026` | District → Block → Gram Panchayat → collection date | 100 / 1,241,643 for July 2026; `hasNextPage=true` | Complete server-side pagination, reconciliation, duplicate/grain profiling, and raw provenance retention |
+
+The full guide documents the token URL `https://data.ap.gov.in/DataLake/Citizen/api/api/v1/auth/token` and shared-data URL `https://data.ap.gov.in/DataLake/Citizen/api/datatransfer/shared-data/request`. Any future connector must keep client credentials server-side. The browser prototype remains non-connecting.

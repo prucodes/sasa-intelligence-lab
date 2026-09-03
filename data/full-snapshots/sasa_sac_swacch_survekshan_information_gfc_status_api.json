@@ -1,0 +1,51 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "432c5dc2-d89a-487b-9f63-b17f26ed504d",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_swacch_survekshan_information_gfc_status_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-227be346-8d3d-4830-9f14-77c705b8d589",
+    "generatedAt": "2026-08-28T15:25:53.368707+00:00",
+    "totalRecordCount": 5,
+    "returnedRecordCount": 5,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_swacch_survekshan_information_gfc_status_api",
+    "tableName": "ap_citizen360.sasa_sac_swacch_survekshan_information_gfc_status_api"
+  },
+  "records": [
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "RAJAHMUNDRY",
+      "gfc_status": "3 Star",
+      "year": "2024"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "GUNTUR",
+      "gfc_status": "5 Star",
+      "year": "2024"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "VIJAYAWADA",
+      "gfc_status": "7 Star",
+      "year": "2024"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "TIRUPATI",
+      "gfc_status": "5 Star",
+      "year": "2024"
+    },
+    {
+      "district_name": "Visakhapatnam",
+      "ulb_name": "GVMC VISAKHAPATNAM",
+      "gfc_status": "5 Star",
+      "year": "2024"
+    }
+  ]
+}

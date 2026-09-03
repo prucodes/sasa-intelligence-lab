@@ -278,4 +278,25 @@ UI design is out of scope, but the minimum information views are:
 2. **ULB evidence detail:** exact source fields, formulas, source periods, join method, and data-quality flags.
 3. **Coverage and quality:** fetched/expected rows, ULB crosswalk coverage, unmatched/ambiguous names, period conflicts, and outcome staleness.
 
-These views are requirements for auditability; no visual design should begin until authenticated API access confirms actual retained periods and a reviewed ULB master is available.
+These views are requirements for auditability. At the initial assessment boundary, authenticated payload access and a reviewed ULB master were prerequisites for moving beyond illustrative design; the authenticated snapshot addendum below supersedes the access portion of that gate but not the crosswalk or period-alignment requirements.
+
+## Authenticated snapshot buildability update — 2026-08-27
+
+Authenticated access and complete current-filter pagination are now demonstrated for 29 of 30 authorized endpoints. The local evidence pack contains 1,136 governed rows with response IDs, generation timestamps, filters, table keys, and reconciled row counts. This materially improves ingestion and evidence-inspection buildability but does not remove the analytical gates.
+
+| Product | Updated verdict | Evidence-backed boundary |
+|---|---|---|
+| Asset–Outcome Gap Radar | **Buildable as an evidence-gated, mostly unscored descriptive product** | 121 IHHL-anchored normalized ULB-name candidates can be inspected; exact candidate overlap is measurable, but stable IDs and same-year outcomes remain absent |
+| Swachh Bottleneck & Next-Best-Action Engine | **Not buildable as an action-ranking engine** | complete current snapshots expose statuses and pipeline values, but not persistent six-month bottlenecks, intervention choices, costs, owners, dependencies, or post-action outcomes |
+| ULB Early-Warning Radar | **Not buildable as a predictive system** | one current snapshot per most datasets and one older annual outcome cycle do not support labels, horizons, training windows, or backtesting |
+
+The smallest safe prototype data boundary is now implemented locally as immutable authenticated snapshots plus deterministic validation. It must continue to:
+
+1. distinguish 30 authorized endpoints from 29 successful exports;
+2. retain all 1,136 rows, including duplicate source rows and the 35 FSTP period conflicts;
+3. expose 121 normalized IHHL-anchored ULB-name candidates without calling them canonical ULB IDs;
+4. keep district-grain datasets out of ULB-level facts;
+5. mark every source profile `UNSCORED` until crosswalk and period gates pass;
+6. keep LIVE mode non-connecting until a server-side service identity and refresh policy are approved.
+
+The recommended production architecture and scoring rules above remain valid. The authentication/pagination gate is substantially closed for snapshot ingestion; crosswalk governance, historical enumeration, contemporaneous outcomes, policy thresholds, and model evidence remain open.

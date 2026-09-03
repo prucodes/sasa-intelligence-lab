@@ -1,0 +1,258 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "a6996cba-2aaa-49a8-810b-cf63958cee5c",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_cdma_ulbs_single_use_plastic_ban_api",
+    "filters": {
+      "month": "8",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-674124d2-f84d-437d-8fa8-806be74da92e",
+    "generatedAt": "2026-08-28T03:28:22.410202+00:00",
+    "totalRecordCount": 26,
+    "returnedRecordCount": 26,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_cdma_ulbs_single_use_plastic_ban_api",
+    "tableName": "ap_citizen360.sasa_cdma_ulbs_single_use_plastic_ban_api"
+  },
+  "records": [
+    {
+      "district_id": "6",
+      "district_name": "Anakapalli",
+      "total_ulbs": "2",
+      "sup_ban_in_achieved": "0",
+      "percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "21",
+      "district_name": "Anantapuram",
+      "total_ulbs": "6",
+      "sup_ban_in_achieved": "2",
+      "percentage": "33.33",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "24",
+      "district_name": "Annamayya",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "16",
+      "district_name": "Bapatla",
+      "total_ulbs": "3",
+      "sup_ban_in_achieved": "0",
+      "percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "26",
+      "district_name": "Chittoor",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "9",
+      "district_name": "Dr. B.R. Ambedkar Konaseema",
+      "total_ulbs": "3",
+      "sup_ban_in_achieved": "1",
+      "percentage": "33.33",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "8",
+      "district_name": "East Godavari",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "10",
+      "district_name": "Eluru",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "15",
+      "district_name": "Guntur",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "3",
+      "percentage": "75.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "7",
+      "district_name": "Kakinada",
+      "total_ulbs": "7",
+      "sup_ban_in_achieved": "1",
+      "percentage": "14.29",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "13",
+      "district_name": "Krishna",
+      "total_ulbs": "5",
+      "sup_ban_in_achieved": "1",
+      "percentage": "20.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "19",
+      "district_name": "Kurnool",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "28",
+      "district_name": "Markapuram",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "0",
+      "percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "12",
+      "district_name": "NTR",
+      "total_ulbs": "5",
+      "sup_ban_in_achieved": "1",
+      "percentage": "20.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "20",
+      "district_name": "Nandyal",
+      "total_ulbs": "6",
+      "sup_ban_in_achieved": "0",
+      "percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "14",
+      "district_name": "Palnadu",
+      "total_ulbs": "8",
+      "sup_ban_in_achieved": "1",
+      "percentage": "12.50",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "2",
+      "district_name": "Parvathipuram Manyam",
+      "total_ulbs": "3",
+      "sup_ban_in_achieved": "0",
+      "percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "17",
+      "district_name": "Prakasam",
+      "total_ulbs": "5",
+      "sup_ban_in_achieved": "2",
+      "percentage": "40.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "18",
+      "district_name": "Sri Potti Sriramulu Nellore",
+      "total_ulbs": "6",
+      "sup_ban_in_achieved": "1",
+      "percentage": "16.67",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "22",
+      "district_name": "Sri Sathya Sai",
+      "total_ulbs": "6",
+      "sup_ban_in_achieved": "3",
+      "percentage": "50.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "1",
+      "district_name": "Srikakulam",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "25",
+      "district_name": "Tirupati",
+      "total_ulbs": "6",
+      "sup_ban_in_achieved": "1",
+      "percentage": "16.67",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "4",
+      "district_name": "Visakhapatnam",
+      "total_ulbs": "1",
+      "sup_ban_in_achieved": "1",
+      "percentage": "100.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "3",
+      "district_name": "Vizianagaram",
+      "total_ulbs": "4",
+      "sup_ban_in_achieved": "1",
+      "percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "11",
+      "district_name": "West Godavari",
+      "total_ulbs": "6",
+      "sup_ban_in_achieved": "3",
+      "percentage": "50.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "23",
+      "district_name": "YSR Kadapa",
+      "total_ulbs": "9",
+      "sup_ban_in_achieved": "1",
+      "percentage": "11.11",
+      "month": "8",
+      "year": "2026"
+    }
+  ]
+}

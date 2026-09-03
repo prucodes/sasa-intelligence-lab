@@ -1,0 +1,35 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "a84975aa-b88b-4d24-b64f-ba26a67d5080",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+    "filters": {
+      "district_id": "16",
+      "ulb_id": "181",
+      "month_id": "202603"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-75957c08-0943-4049-bde3-f4ab4904bf61",
+    "generatedAt": "2026-08-28T03:27:50.274467+00:00",
+    "totalRecordCount": 1,
+    "returnedRecordCount": 1,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+    "tableName": "ap_citizen360.sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api"
+  },
+  "records": [
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202603",
+      "terrace_gardening_targeted_members": "1420",
+      "terrace_gardening_achieved": "6",
+      "terrace_gardening_percentage": "0.42"
+    }
+  ]
+}

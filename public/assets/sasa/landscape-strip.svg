@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 260" width="1600" height="260" preserveAspectRatio="xMidYMax slice" role="presentation">
+  <defs>
+    <linearGradient id="lsSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dceaf6" stop-opacity="0"/><stop offset="1" stop-color="#c3dcef" stop-opacity=".5"/>
+    </linearGradient>
+    <linearGradient id="lsHill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c2dcea"/><stop offset="1" stop-color="#a6c8de"/>
+    </linearGradient>
+    <linearGradient id="lsGreenHill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a7cdb4"/><stop offset="1" stop-color="#87b89c"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="70" width="1600" height="190" fill="url(#lsSky)"/>
+
+  <!-- birds -->
+  <g stroke="#8fb0cc" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5">
+    <path d="M1148 74c4-5 8-5 11 0M1159 74c4-5 8-5 11 0"/>
+    <path d="M1196 90c3-4 7-4 9 0M1205 90c3-4 7-4 9 0"/>
+    <path d="M470 84c3-4 7-4 9 0M479 84c3-4 7-4 9 0"/>
+  </g>
+
+  <!-- distant hills -->
+  <g fill="url(#lsHill)" opacity=".55">
+    <path d="M0 178c62-46 118-64 176-40 44 18 74 8 116-24 48-36 96-30 140 10 30 27 58 32 92 16 40-19 78-8 112 28l40 42H0Z"/>
+    <path d="M1600 186c-70-52-132-68-192-40-46 21-80 10-122-26-50-42-100-34-146 12-32 32-62 36-96 18-42-22-82-8-118 32l-42 46h716Z"/>
+  </g>
+
+  <!-- green hill mass, left -->
+  <path d="M0 236V186c46-30 92-40 138-26 34 10 60 6 84-12 30-22 60-16 84 10 18 20 36 24 58 12l30-16v82Z" fill="url(#lsGreenHill)" opacity=".5"/>
+
+  <!-- heritage gopuram + dome, left -->
+  <g fill="#9db9d6" opacity=".62">
+    <path d="M96 232v-56h12l16-26 16 26h12v56Z"/>
+    <ellipse cx="132" cy="172" rx="21" ry="15"/>
+    <rect x="129" y="138" width="6" height="18" rx="3"/>
+    <path d="M58 232v-38h24v38ZM182 232v-38h24v38Z"/>
+    <path d="M108 190h48v6h-48Z"/>
+  </g>
+
+  <!-- palms, far left -->
+  <g opacity=".55" stroke="#7fb59c" stroke-width="3.4" fill="none" stroke-linecap="round">
+    <path d="M28 232v-50M28 182c-13-10-24-10-32-2M28 182c13-10 25-9 33 0M28 182c-6-14-3-24 4-29M28 182c9-12 18-13 27-9"/>
+    <path d="M296 232v-42M296 190c-11-8-20-8-27-2M296 190c11-8 21-7 28 0M296 190c-5-12-3-20 3-24"/>
+  </g>
+
+  <!-- wind turbines -->
+  <g stroke="#93b6d6" stroke-width="3.4" stroke-linecap="round" fill="none" opacity=".6">
+    <path d="M410 232v-108M410 124 372 86M410 124l52-21M410 124l-5 44"/>
+    <path d="M1268 232v-94M1268 138l-33-31M1268 138l44-17M1268 138l-4 38"/>
+    <path d="M1340 232v-72M1340 160l-26-24M1340 160l34-13M1340 160l-3 30"/>
+  </g>
+  <g fill="#93b6d6" opacity=".6"><circle cx="410" cy="124" r="5"/><circle cx="1268" cy="138" r="4.4"/><circle cx="1340" cy="160" r="3.6"/></g>
+
+  <!-- city block with lit windows -->
+  <g fill="#a6c3de" opacity=".55">
+    <path d="M560 232v-76h34v76Zm44 0v-102h30v102Zm40 0v-64h26v64Zm36 0v-90h32v90Zm42 0v-52h24v52Zm34 0v-80h30v80Zm40 0v-60h26v60Zm36 0v-94h32v94Zm42 0v-68h26v68Zm36 0v-46h24v46Z"/>
+  </g>
+  <g fill="#e3f0fa" opacity=".55">
+    <path d="M610 144h6v6h-6Zm10 0h6v6h-6Zm-10 15h6v6h-6Zm10 0h6v6h-6Zm-10 15h6v6h-6Zm10 0h6v6h-6Z"/>
+    <path d="M686 156h6v6h-6Zm10 0h6v6h-6Zm-10 15h6v6h-6Zm10 0h6v6h-6Z"/>
+    <path d="M842 152h6v6h-6Zm10 0h6v6h-6Zm-10 15h6v6h-6Zm10 0h6v6h-6Z"/>
+    <path d="M568 168h6v6h-6Zm10 0h6v6h-6Z"/>
+  </g>
+
+  <!-- treatment plant cluster with silos + recycling mark, right -->
+  <g opacity=".68">
+    <rect x="1400" y="164" width="96" height="68" rx="5" fill="#a2c0da"/>
+    <rect x="1400" y="164" width="96" height="10" rx="5" fill="#7fbfa4"/>
+    <rect x="1414" y="186" width="16" height="16" rx="2" fill="#dcecf7"/>
+    <rect x="1440" y="186" width="16" height="16" rx="2" fill="#dcecf7"/>
+    <rect x="1466" y="186" width="16" height="16" rx="2" fill="#dcecf7"/>
+    <!-- silos -->
+    <rect x="1508" y="140" width="30" height="92" rx="14" fill="#b3cee2"/>
+    <rect x="1544" y="152" width="26" height="80" rx="12" fill="#a6c4da"/>
+    <rect x="1574" y="166" width="22" height="66" rx="10" fill="#b3cee2"/>
+    <path d="M1508 158h30M1544 168h26M1574 182h22" stroke="#8fb2ce" stroke-width="2.4"/>
+    <!-- chimneys -->
+    <rect x="1372" y="126" width="13" height="40" rx="6" fill="#9bbcd8"/>
+    <rect x="1352" y="140" width="12" height="26" rx="6" fill="#9bbcd8"/>
+    <!-- clarifier -->
+    <ellipse cx="1310" cy="212" rx="52" ry="15" fill="#9dc6d6"/>
+    <ellipse cx="1310" cy="209" rx="38" ry="10" fill="#bfe0e6"/>
+    <path d="M1272 209h76" stroke="#8fb8c6" stroke-width="2.2"/>
+  </g>
+  <!-- recycling mark -->
+  <g opacity=".62" stroke="#6fb894" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1466 120l9-15 9 15M1492 132l-4 17-17-3M1458 149l-17 3-4-17"/>
+  </g>
+
+  <!-- trees -->
+  <g opacity=".6">
+    <g fill="#86b9a2">
+      <ellipse cx="248" cy="196" rx="28" ry="32"/><ellipse cx="340" cy="204" rx="20" ry="23"/>
+      <ellipse cx="960" cy="198" rx="26" ry="30"/><ellipse cx="1012" cy="207" rx="19" ry="22"/>
+      <ellipse cx="1180" cy="200" rx="24" ry="28"/><ellipse cx="500" cy="205" rx="21" ry="24"/>
+      <ellipse cx="700" cy="208" rx="17" ry="20"/><ellipse cx="1108" cy="209" rx="18" ry="21"/>
+    </g>
+    <g fill="#8aa8b8">
+      <rect x="245" y="204" width="6" height="28" rx="3"/><rect x="337" y="212" width="6" height="20" rx="3"/>
+      <rect x="957" y="206" width="6" height="26" rx="3"/><rect x="1009" y="214" width="6" height="18" rx="3"/>
+      <rect x="1177" y="208" width="6" height="24" rx="3"/><rect x="497" y="212" width="6" height="20" rx="3"/>
+      <rect x="697" y="216" width="6" height="16" rx="3"/><rect x="1105" y="216" width="6" height="16" rx="3"/>
+    </g>
+  </g>
+
+  <!-- collection vehicle + bins, left foreground -->
+  <g opacity=".72">
+    <rect x="130" y="196" width="78" height="29" rx="4" fill="#7fb89e"/>
+    <rect x="140" y="202" width="22" height="12" rx="2" fill="#a8d6c2"/>
+    <path d="M208 225v-21h23l16 21Z" fill="#9dc0da"/>
+    <rect x="214" y="208" width="14" height="10" rx="2" fill="#dcecf7"/>
+    <circle cx="154" cy="227" r="8" fill="#7e97ad"/><circle cx="228" cy="227" r="8" fill="#7e97ad"/>
+    <rect x="262" y="210" width="16" height="22" rx="3" fill="#7fb89e"/>
+    <rect x="284" y="215" width="14" height="17" rx="3" fill="#8fb6cd"/>
+    <path d="M262 214h16M284 219h14" stroke="#6aa38c" stroke-width="2"/>
+  </g>
+  <!-- bins, right foreground -->
+  <g opacity=".68">
+    <rect x="1236" y="212" width="16" height="20" rx="3" fill="#7fb89e"/>
+    <rect x="1258" y="216" width="14" height="16" rx="3" fill="#8fb6cd"/>
+  </g>
+
+  <path d="M0 230h1600v30H0z" fill="#9dc0da" opacity=".34"/>
+</svg>

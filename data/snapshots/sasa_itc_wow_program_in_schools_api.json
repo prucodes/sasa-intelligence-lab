@@ -1,0 +1,36 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "56615ad1-4edb-4953-9dd4-7aaad77c622e",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_itc_wow_program_in_schools_api",
+    "filters": {
+      "dstrt_id": "15",
+      "mnth_no": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-7ec7c0d3-07b9-46b3-aa72-b308d63bb466",
+    "generatedAt": "2026-08-28T03:27:25.289177+00:00",
+    "totalRecordCount": 1,
+    "returnedRecordCount": 1,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_itc_wow_program_in_schools_api",
+    "tableName": "ap_citizen360.sasa_itc_wow_program_in_schools_api"
+  },
+  "records": [
+    {
+      "dstrt_id": "15",
+      "dstrt_nm": "ANAKAPALLI",
+      "mnth_no": "7",
+      "mnth_nm": "JULY",
+      "fin_year": "2026-2027",
+      "year": "2026",
+      "trgt_units": "336",
+      "achvmnt": "95",
+      "prcnt_achvd": "28%"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "c203b9d8-50a7-4248-ac83-d3990dd97891",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_mepma_entrepreneurs_promoted_for_circular_economy_api",
+    "filters": {
+      "district_id": "16",
+      "ulb_id": "181",
+      "month_id": "202603"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-e55a0ecf-f0a2-490a-8a16-fc37da4dc2a7",
+    "generatedAt": "2026-08-28T03:27:49.536769+00:00",
+    "totalRecordCount": 1,
+    "returnedRecordCount": 1,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_mepma_entrepreneurs_promoted_for_circular_economy_api",
+    "tableName": "ap_citizen360.sasa_mepma_entrepreneurs_promoted_for_circular_economy_api"
+  },
+  "records": [
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202603",
+      "circular_economy_targeted_members": "6",
+      "circular_economy_achieved": "0",
+      "circular_percentage": "0.00"
+    }
+  ]
+}

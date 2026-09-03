@@ -95,3 +95,35 @@ The supplied MEPMA circular-economy excerpt maps `district_id="16"`, `ulb_id="18
 Reliable joins are **not available directly from source keys**. A reviewed ULB crosswalk can make selected joins operational, but this is a local data-governance layer, not evidence that the source APIs share a canonical ULB identifier.
 
 With the evidence currently retained, only the ODF-to-National-Rank Narsipatnam record pair is both identity- and year-compatible. No retained asset-to-outcome pair is contemporaneous, and no full-payload join rate can be calculated.
+
+## Authenticated full-snapshot overlap addendum — 2026-08-27
+
+Full current-period snapshots now permit an exact-normalization overlap audit. These counts use lowercase, whitespace collapse, punctuation removal, and `district|ULB` concatenation only. They are **candidate overlaps**, not approved joins and not fuzzy matches.
+
+| Dataset pair | Exact normalized candidates in common | Temporal eligibility |
+|---|---:|---|
+| E-Autos (83) × ISWM (108) | 44 | Same July 2026 period; crosswalk review still required |
+| E-Autos (83) × IHHL (121 candidates) | 48 | Same July 2026 period; crosswalk review still required |
+| ISWM (108) × IHHL (121 candidates) | 93 | Same July 2026 period; crosswalk review still required |
+| ODF (85) × National Rank (74) | 57 | Same 2024 year; crosswalk review still required |
+| ODF (85) × GFC (5) | 5 | Same 2024 year; crosswalk review still required |
+| E-Autos (2026) × ODF (2024) | 38 | Not contemporaneous |
+| E-Autos (2026) × National Rank (2024) | 34 | Not contemporaneous |
+| ISWM (2026) × ODF (2024) | 64 | Not contemporaneous |
+| ISWM (2026) × National Rank (2024) | 58 | Not contemporaneous |
+| IHHL (2026) × ODF (2024) | 69 | Not contemporaneous |
+| IHHL (2026) × National Rank (2024) | 64 | Not contemporaneous |
+
+The authenticated evidence changes the earlier “overlap unverified” conclusion to “overlap measured under an unreviewed exact-name candidate method.” It does **not** change the stable-key verdict: the representative operational and outcome datasets still lack a common source ULB ID, and the 2026/2024 asset–outcome mismatch still blocks scoring.
+
+## SASA PR grain and join addendum — 2026-08-28
+
+The three newly documented PR table keys are excluded from the ULB overlap matrix. Their examples expose District, Block, Gram Panchayat, and collection-date identifiers, but no reviewed mapping to the ULB candidates used by the prototype.
+
+| PR dataset | Safe local key candidate | ULB join status | Current use |
+|---|---|---|---|
+| GP SWPC availability / working condition | `DISTRICT_ID + BLOCK_ID + GRAM_PANCHAYAT_ID` | Not permitted | Gram Panchayat registry after complete retrieval |
+| Swachh Ratham operator reconciliation | `DISTRICT_ID` | District only | District reconciliation after semantic review |
+| Door-to-door garbage collection | `DISTRICT_ID + BLOCK_ID + GRAM_PANCHAYAT_ID + COLLECTION_DATE` | Not permitted | Descriptive rural collection analytics after complete pagination |
+
+Missing PR records must never be interpreted as zero collection, absence of an SWPC, or absence of an operator. No PR value may be rolled up to a ULB without a governed geographic crosswalk and an explicit aggregation policy.

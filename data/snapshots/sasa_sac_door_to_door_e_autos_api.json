@@ -1,0 +1,304 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "60716708-cb60-4176-8f56-a6287ddf958f",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_door_to_door_e_autos_api",
+    "filters": {
+      "mnth_no": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-6fe8d139-6b43-4b61-b1ea-b40d97f8f0c1",
+    "generatedAt": "2026-08-28T03:27:16.598297+00:00",
+    "totalRecordCount": 28,
+    "returnedRecordCount": 28,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_door_to_door_e_autos_api",
+    "tableName": "ap_citizen360.sasa_sac_door_to_door_e_autos_api"
+  },
+  "records": [
+    {
+      "district_name": "ALLURI SITHARAMA RAJU",
+      "e_autos_target": "4",
+      "e_autos_achievement": "4",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANAKAPALLI",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANANTHAPURAMU",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANNAMAYYA",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "BAPATLA",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "CHITTOOR",
+      "e_autos_target": "10",
+      "e_autos_achievement": "10",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "DR. B.R.AMBEDKAR KONASEEMA",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "EAST GODAVARI",
+      "e_autos_target": "7",
+      "e_autos_achievement": "7",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ELURU",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "GUNTUR",
+      "e_autos_target": "7",
+      "e_autos_achievement": "7",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KAKINADA",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KRISHNA",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KURNOOL",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "MARKAPURAM",
+      "e_autos_target": "4",
+      "e_autos_achievement": "4",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NANDYAL",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "e_autos_target": "7",
+      "e_autos_achievement": "7",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PALNADU",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PARVATHIPURAM MANYAM",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "POLAVARAM",
+      "e_autos_target": "4",
+      "e_autos_achievement": "4",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PRAKASAM",
+      "e_autos_target": "4",
+      "e_autos_achievement": "4",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI POTTI SRIRAMULU NELLORE",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI SATHYASAI",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRIKAKULAM",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "TIRUPATI",
+      "e_autos_target": "6",
+      "e_autos_achievement": "6",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "VISAKHAPATNAM",
+      "e_autos_target": "3",
+      "e_autos_achievement": "3",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "VIZIANAGARAM",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "WEST GODAVARI",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Y.S.R. KADAPA",
+      "e_autos_target": "8",
+      "e_autos_achievement": "8",
+      "e_autos_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

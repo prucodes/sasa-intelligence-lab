@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 180" width="1600" height="180" preserveAspectRatio="xMidYMax slice" role="presentation">
+  <g fill="#8fb2d6" opacity=".72">
+    <path d="M0 150h58v-38h20v38h34v-56h26v56h30v-26h22v26h40v-70h30v70h26v-44h24v44h44v-90h34v90h28v-58h22v58h46v-34h26v34h38v-64h30v64h30v-46h22v46h48v-80h32v80h26v-52h24v52h44v-30h26v30h40v-68h30v68h28v-40h22v40h46v-58h30v58h34v-86h32v86h26v-50h24v50h44v-32h26v32h42v-62h30v62h28v-44h22v44h48v-74h32v74h26v-40h24v40h40v-28h26v28h48v-56h30v56h30V180H0Z"/>
+  </g>
+  <g fill="#a8c5e0" opacity=".62">
+    <path d="M0 162h44v-30h22v30h38v-44h26v44h34v-22h22v22h44v-52h28v52h30v-34h24v34h42v-64h30v64h30v-40h22v40h46v-26h26v26h40v-48h30v48h28v-30h22v30h48v-58h30v58h30v-36h24v36h44v-24h26v24h40v-50h30v50h28v-34h22v34h46v-42h30v42h32v-60h32v60h26v-38h24v38h44v-26h26v26h42v-46h30v46h30V180H0Z"/>
+  </g>
+  <g fill="#7ea9d0" opacity=".5">
+    <circle cx="248" cy="128" r="22"/><rect x="246" y="128" width="4" height="42" rx="2"/>
+    <circle cx="1044" cy="120" r="18"/><rect x="1042" y="120" width="4" height="50" rx="2"/>
+    <circle cx="1418" cy="132" r="20"/><rect x="1416" y="132" width="4" height="38" rx="2"/>
+    <ellipse cx="392" cy="146" rx="26" ry="30"/><rect x="389" y="150" width="6" height="26" rx="3"/>
+    <ellipse cx="452" cy="152" rx="20" ry="24"/><rect x="449" y="156" width="6" height="20" rx="3"/>
+    <ellipse cx="878" cy="150" rx="24" ry="28"/><rect x="875" y="154" width="6" height="22" rx="3"/>
+    <ellipse cx="1240" cy="148" rx="22" ry="26"/><rect x="1237" y="152" width="6" height="24" rx="3"/>
+    <ellipse cx="1300" cy="154" rx="18" ry="22"/><rect x="1297" y="158" width="6" height="18" rx="3"/>
+    <ellipse cx="118" cy="152" rx="22" ry="26"/><rect x="115" y="156" width="6" height="20" rx="3"/>
+  </g>
+  <path d="M0 176h1600v4H0z" fill="#7ea9d0" opacity=".3"/>
+</svg>

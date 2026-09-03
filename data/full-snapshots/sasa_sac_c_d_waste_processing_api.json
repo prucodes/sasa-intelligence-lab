@@ -1,0 +1,75 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "086a4949-2089-4854-909d-f893a9f77083",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_c_d_waste_processing_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-0b94e65a-6814-43d4-991b-6bff8251efd8",
+    "generatedAt": "2026-08-28T15:26:35.158484+00:00",
+    "totalRecordCount": 6,
+    "returnedRecordCount": 6,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_c_d_waste_processing_api",
+    "tableName": "ap_citizen360.sasa_sac_c_d_waste_processing_api"
+  },
+  "records": [
+    {
+      "district_name": "NTR",
+      "ulb_name": "Vijayawada",
+      "plnt_cpcty_in_tpd": "200",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Vijayawada",
+      "plnt_cpcty_in_tpd": "200",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Tirupathi",
+      "plnt_cpcty_in_tpd": "80",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Tirupathi",
+      "plnt_cpcty_in_tpd": "80",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Visakhapatnam",
+      "ulb_name": "GVMC",
+      "plnt_cpcty_in_tpd": "200",
+      "month_number": "6",
+      "month_name": "JUNE",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Visakhapatnam",
+      "ulb_name": "GVMC",
+      "plnt_cpcty_in_tpd": "200",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

@@ -1,0 +1,531 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "7bb524b5-0498-43fb-8002-72668824e6dc",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_swacch_survekshan_information_odf_status_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-4bd7f4cd-2c22-41b1-bdfd-988be71273c0",
+    "generatedAt": "2026-08-28T15:25:56.798684+00:00",
+    "totalRecordCount": 85,
+    "returnedRecordCount": 85,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_swacch_survekshan_information_odf_status_api",
+    "tableName": "ap_citizen360.sasa_sac_swacch_survekshan_information_odf_status_api"
+  },
+  "records": [
+    {
+      "district_name": "Anakapalli",
+      "ulb_name": "NARSIPATNAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "TADIPATRI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "ANANTAPUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "B KOTHAKOTA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "RAYACHOTY",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Annamayya",
+      "ulb_name": "PUNGANUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "BAPATLA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Bapatla",
+      "ulb_name": "CHIRALA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "PALAMANERU",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "NAGARI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "CHITTOOR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Dr. B.R. Ambedkar Konaseema",
+      "ulb_name": "AMALAPURAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "KOVVUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "NIDADAVOLE",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "RAJAHMUNDRY",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "MANDAPETA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Eluru",
+      "ulb_name": "ELURU",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Eluru",
+      "ulb_name": "CHINTALAPUDI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Eluru",
+      "ulb_name": "JANGAREDDYGUDEM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "MANGALAGIRI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "TENALI",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "GUNTUR",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "PONNUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "SAMALKOT",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Kakinada",
+      "ulb_name": "KAKINADA",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Krishna",
+      "ulb_name": "VUYYURU",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Krishna",
+      "ulb_name": "GUDIVADA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Krishna",
+      "ulb_name": "MACHILIPATNAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Krishna",
+      "ulb_name": "YSR TADIGADAPA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Kurnool",
+      "ulb_name": "KURNOOL",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Kurnool",
+      "ulb_name": "YEMMIGANUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Kurnool",
+      "ulb_name": "ADONI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "MARKAPUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "GIDDALURU",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "KANIGIRI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Markapuram",
+      "ulb_name": "PODILI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "JAGGAIAHPET",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "KONDAPALLI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "VIJAYAWADA",
+      "odf_status": "Water+",
+      "year": "2024"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "TIRUVURU",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Nandyal",
+      "ulb_name": "NANDYAL",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Nandyal",
+      "ulb_name": "ATMAKUR_K",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Nandyal",
+      "ulb_name": "ALLAGADDA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "GURAJALA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "VINUKONDA",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "SATTENAPALLI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "MACHERLA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "PIDUGURALLA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "NARASARAOPET",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "DACHEPALLI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Palnadu",
+      "ulb_name": "CHILAKALURIPET",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "CHIMAKURTHY",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "ONGOLE",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "ADDANKI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "DARSI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "NELLORE",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "GUDUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "BUCHIREDDYPALEM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "ATMAKUR_N",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "HINDUPUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "DHARMAVARAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "KADIRI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "MADAKASIRA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Sri Satya Sai",
+      "ulb_name": "PENUKONDA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Srikakulam",
+      "ulb_name": "AMADALAVALASA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Srikakulam",
+      "ulb_name": "ICHCHAPURAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "NAIDUPET",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "PUTTUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "TIRUPATI",
+      "odf_status": "Water+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "SRIKALAHASTI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "VENKATAGIRI",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Visakhapatnam",
+      "ulb_name": "GVMC VISAKHAPATNAM",
+      "odf_status": "Water+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "BOBBILI",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "RAJAM",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "VIZIANAGARAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "NELLIMARLA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "West Godavari",
+      "ulb_name": "TANUKU",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "West Godavari",
+      "ulb_name": "BHIMAVARAM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "West Godavari",
+      "ulb_name": "PALACOLE",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "West Godavari",
+      "ulb_name": "TADEPALLIGUDEM",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "KADAPA",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "RAJAMPETA",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "PULIVENDULA",
+      "odf_status": "ODF++",
+      "year": "2024"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "JAMMALAMADUGU",
+      "odf_status": "ODF+",
+      "year": "2024"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "MYDUKUR",
+      "odf_status": "ODF+",
+      "year": "2024"
+    }
+  ]
+}

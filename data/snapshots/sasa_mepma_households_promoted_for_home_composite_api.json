@@ -1,0 +1,35 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "2ac028ff-c631-48c9-8b73-1f16bd0ef76c",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_mepma_households_promoted_for_home_composite_api",
+    "filters": {
+      "district_id": "16",
+      "ulb_id": "181",
+      "month_id": "202603"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-8a0a4ee2-d8af-4d20-a2fe-c903d71f5147",
+    "generatedAt": "2026-08-28T03:27:51.170156+00:00",
+    "totalRecordCount": 1,
+    "returnedRecordCount": 1,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_mepma_households_promoted_for_home_composite_api",
+    "tableName": "ap_citizen360.sasa_mepma_households_promoted_for_home_composite_api"
+  },
+  "records": [
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202603",
+      "home_composite_targeted_members": "1420",
+      "home_composite_achieved": "14",
+      "home_composite_percentage": "0.99"
+    }
+  ]
+}

@@ -1,0 +1,861 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "16cfe971-7fe3-4470-8f9e-54882519a0f3",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_door_to_door_tri_cycles_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-d26ac9aa-e6e7-4983-abf3-45e5536efdc8",
+    "generatedAt": "2026-08-28T15:12:57.291308+00:00",
+    "totalRecordCount": 84,
+    "returnedRecordCount": 84,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_door_to_door_tri_cycles_api",
+    "tableName": "ap_citizen360.sasa_sac_door_to_door_tri_cycles_api"
+  },
+  "records": [
+    {
+      "district_name": "ALLURI SITHARAMA RAJU",
+      "target": "238",
+      "achievement": "238",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ALLURI SITHARAMA RAJU",
+      "target": "238",
+      "achievement": "238",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ALLURI SITHARAMA RAJU",
+      "target": "238",
+      "achievement": "238",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANAKAPALLI",
+      "target": "560",
+      "achievement": "560",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANAKAPALLI",
+      "target": "560",
+      "achievement": "560",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANAKAPALLI",
+      "target": "560",
+      "achievement": "560",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANANTHAPURAMU",
+      "target": "361",
+      "achievement": "361",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANANTHAPURAMU",
+      "target": "361",
+      "achievement": "361",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANANTHAPURAMU",
+      "target": "361",
+      "achievement": "361",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANNAMAYYA",
+      "target": "371",
+      "achievement": "371",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANNAMAYYA",
+      "target": "371",
+      "achievement": "371",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ANNAMAYYA",
+      "target": "371",
+      "achievement": "371",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "BAPATLA",
+      "target": "629",
+      "achievement": "629",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "BAPATLA",
+      "target": "629",
+      "achievement": "629",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "BAPATLA",
+      "target": "629",
+      "achievement": "629",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "CHITTOOR",
+      "target": "561",
+      "achievement": "561",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "CHITTOOR",
+      "target": "561",
+      "achievement": "561",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "CHITTOOR",
+      "target": "561",
+      "achievement": "561",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "DR. B.R.AMBEDKAR KONASEEMA",
+      "target": "290",
+      "achievement": "290",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "DR. B.R.AMBEDKAR KONASEEMA",
+      "target": "290",
+      "achievement": "290",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "DR. B.R.AMBEDKAR KONASEEMA",
+      "target": "290",
+      "achievement": "290",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "EAST GODAVARI",
+      "target": "409",
+      "achievement": "409",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "EAST GODAVARI",
+      "target": "409",
+      "achievement": "409",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "EAST GODAVARI",
+      "target": "409",
+      "achievement": "409",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ELURU",
+      "target": "548",
+      "achievement": "548",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ELURU",
+      "target": "548",
+      "achievement": "548",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "ELURU",
+      "target": "548",
+      "achievement": "548",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "GUNTUR",
+      "target": "242",
+      "achievement": "242",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "GUNTUR",
+      "target": "242",
+      "achievement": "242",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "GUNTUR",
+      "target": "242",
+      "achievement": "242",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KAKINADA",
+      "target": "627",
+      "achievement": "627",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KAKINADA",
+      "target": "627",
+      "achievement": "627",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KAKINADA",
+      "target": "627",
+      "achievement": "627",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KRISHNA",
+      "target": "221",
+      "achievement": "221",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KRISHNA",
+      "target": "221",
+      "achievement": "221",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KRISHNA",
+      "target": "221",
+      "achievement": "221",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KURNOOL",
+      "target": "214",
+      "achievement": "214",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KURNOOL",
+      "target": "214",
+      "achievement": "214",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "KURNOOL",
+      "target": "214",
+      "achievement": "214",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "MARKAPURAM",
+      "target": "558",
+      "achievement": "558",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "MARKAPURAM",
+      "target": "558",
+      "achievement": "558",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "MARKAPURAM",
+      "target": "558",
+      "achievement": "558",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NANDYAL",
+      "target": "590",
+      "achievement": "590",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NANDYAL",
+      "target": "590",
+      "achievement": "590",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NANDYAL",
+      "target": "590",
+      "achievement": "590",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "target": "167",
+      "achievement": "167",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "target": "167",
+      "achievement": "167",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "target": "167",
+      "achievement": "167",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PALNADU",
+      "target": "308",
+      "achievement": "308",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PALNADU",
+      "target": "308",
+      "achievement": "308",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PALNADU",
+      "target": "308",
+      "achievement": "308",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PARVATHIPURAM MANYAM",
+      "target": "389",
+      "achievement": "389",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PARVATHIPURAM MANYAM",
+      "target": "389",
+      "achievement": "389",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PARVATHIPURAM MANYAM",
+      "target": "389",
+      "achievement": "389",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "POLAVARAM",
+      "target": "174",
+      "achievement": "174",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "POLAVARAM",
+      "target": "174",
+      "achievement": "174",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "POLAVARAM",
+      "target": "174",
+      "achievement": "174",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PRAKASAM",
+      "target": "424",
+      "achievement": "424",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PRAKASAM",
+      "target": "424",
+      "achievement": "424",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "PRAKASAM",
+      "target": "424",
+      "achievement": "424",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI POTTI SRIRAMULU NELLORE",
+      "target": "778",
+      "achievement": "778",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI POTTI SRIRAMULU NELLORE",
+      "target": "778",
+      "achievement": "778",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI POTTI SRIRAMULU NELLORE",
+      "target": "778",
+      "achievement": "778",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI SATHYASAI",
+      "target": "593",
+      "achievement": "593",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI SATHYASAI",
+      "target": "593",
+      "achievement": "593",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI SATHYASAI",
+      "target": "593",
+      "achievement": "593",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRIKAKULAM",
+      "target": "937",
+      "achievement": "937",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRIKAKULAM",
+      "target": "937",
+      "achievement": "937",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "SRIKAKULAM",
+      "target": "937",
+      "achievement": "937",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "TIRUPATI",
+      "target": "422",
+      "achievement": "422",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "TIRUPATI",
+      "target": "422",
+      "achievement": "422",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "TIRUPATI",
+      "target": "422",
+      "achievement": "422",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "VISAKHAPATNAM",
+      "target": "82",
+      "achievement": "82",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "VISAKHAPATNAM",
+      "target": "82",
+      "achievement": "82",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "VISAKHAPATNAM",
+      "target": "82",
+      "achievement": "82",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "VIZIANAGARAM",
+      "target": "581",
+      "achievement": "581",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "VIZIANAGARAM",
+      "target": "581",
+      "achievement": "581",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "VIZIANAGARAM",
+      "target": "581",
+      "achievement": "581",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "WEST GODAVARI",
+      "target": "216",
+      "achievement": "216",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "WEST GODAVARI",
+      "target": "216",
+      "achievement": "216",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "WEST GODAVARI",
+      "target": "216",
+      "achievement": "216",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Y.S.R. KADAPA",
+      "target": "510",
+      "achievement": "510",
+      "achievement_percentage": "100",
+      "month_id": "5",
+      "month_name": "may",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Y.S.R. KADAPA",
+      "target": "510",
+      "achievement": "510",
+      "achievement_percentage": "100",
+      "month_id": "6",
+      "month_name": "june",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Y.S.R. KADAPA",
+      "target": "510",
+      "achievement": "510",
+      "achievement_percentage": "100",
+      "month_id": "7",
+      "month_name": "july",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    }
+  ]
+}

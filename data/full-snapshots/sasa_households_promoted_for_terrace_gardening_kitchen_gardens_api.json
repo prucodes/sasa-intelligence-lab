@@ -1,0 +1,6172 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "8549e9aa-4559-456e-b4bd-ef2dbfb373f5",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-c13a2135-95d2-46ad-9351-6df918346122",
+    "generatedAt": "2026-08-28T15:13:39.746286+00:00",
+    "totalRecordCount": 615,
+    "returnedRecordCount": 615,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+    "tableName": "ap_citizen360.sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+    "exportedPageCount": 7
+  },
+  "records": [
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202607",
+      "target": "1420",
+      "achievement": "0",
+      "achievement_percentage": "91.69"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202605",
+      "target": "1420",
+      "achievement": "0",
+      "achievement_percentage": "0.42"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202604",
+      "target": "1420",
+      "achievement": "0",
+      "achievement_percentage": "0.42"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202603",
+      "target": "1420",
+      "achievement": "6",
+      "achievement_percentage": "0.42"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "181",
+      "ulb_name": "NARSIPATNAM",
+      "month_id": "202606",
+      "target": "1420",
+      "achievement": "1296",
+      "achievement_percentage": "91.69"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "182",
+      "ulb_name": "YELLAMANCHALLI",
+      "month_id": "202605",
+      "target": "1178",
+      "achievement": "1",
+      "achievement_percentage": "0.17"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "182",
+      "ulb_name": "YELLAMANCHALLI",
+      "month_id": "202606",
+      "target": "1178",
+      "achievement": "1009",
+      "achievement_percentage": "85.82"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "182",
+      "ulb_name": "YELLAMANCHALLI",
+      "month_id": "202603",
+      "target": "1178",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "182",
+      "ulb_name": "YELLAMANCHALLI",
+      "month_id": "202604",
+      "target": "1178",
+      "achievement": "1",
+      "achievement_percentage": "0.08"
+    },
+    {
+      "district_id": "16",
+      "district_name": "ANAKAPALLI",
+      "ulb_id": "182",
+      "ulb_name": "YELLAMANCHALLI",
+      "month_id": "202607",
+      "target": "1178",
+      "achievement": "0",
+      "achievement_percentage": "85.82"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "8",
+      "ulb_name": "ANANTHAPUR",
+      "month_id": "202605",
+      "target": "3687",
+      "achievement": "1",
+      "achievement_percentage": "27.88"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "8",
+      "ulb_name": "ANANTHAPUR",
+      "month_id": "202603",
+      "target": "3687",
+      "achievement": "1026",
+      "achievement_percentage": "27.83"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "8",
+      "ulb_name": "ANANTHAPUR",
+      "month_id": "202604",
+      "target": "3687",
+      "achievement": "1",
+      "achievement_percentage": "27.85"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "8",
+      "ulb_name": "ANANTHAPUR",
+      "month_id": "202606",
+      "target": "3687",
+      "achievement": "36",
+      "achievement_percentage": "28.86"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "8",
+      "ulb_name": "ANANTHAPUR",
+      "month_id": "202607",
+      "target": "3687",
+      "achievement": "0",
+      "achievement_percentage": "28.86"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "146",
+      "ulb_name": "GOOTY",
+      "month_id": "202607",
+      "target": "881",
+      "achievement": "0",
+      "achievement_percentage": "50.51"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "146",
+      "ulb_name": "GOOTY",
+      "month_id": "202606",
+      "target": "881",
+      "achievement": "0",
+      "achievement_percentage": "50.51"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "146",
+      "ulb_name": "GOOTY",
+      "month_id": "202604",
+      "target": "881",
+      "achievement": "0",
+      "achievement_percentage": "50.51"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "146",
+      "ulb_name": "GOOTY",
+      "month_id": "202605",
+      "target": "881",
+      "achievement": "0",
+      "achievement_percentage": "50.51"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "146",
+      "ulb_name": "GOOTY",
+      "month_id": "202603",
+      "target": "881",
+      "achievement": "445",
+      "achievement_percentage": "50.51"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "10",
+      "ulb_name": "GUNTAKAL",
+      "month_id": "202604",
+      "target": "2180",
+      "achievement": "5",
+      "achievement_percentage": "94.72"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "10",
+      "ulb_name": "GUNTAKAL",
+      "month_id": "202605",
+      "target": "2180",
+      "achievement": "5",
+      "achievement_percentage": "94.95"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "10",
+      "ulb_name": "GUNTAKAL",
+      "month_id": "202603",
+      "target": "2180",
+      "achievement": "2060",
+      "achievement_percentage": "94.50"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "10",
+      "ulb_name": "GUNTAKAL",
+      "month_id": "202606",
+      "target": "2180",
+      "achievement": "1036",
+      "achievement_percentage": "142.48"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "10",
+      "ulb_name": "GUNTAKAL",
+      "month_id": "202607",
+      "target": "2180",
+      "achievement": "0",
+      "achievement_percentage": "142.48"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "189",
+      "ulb_name": "KALYANDURG",
+      "month_id": "202607",
+      "target": "980",
+      "achievement": "0",
+      "achievement_percentage": "69.29"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "189",
+      "ulb_name": "KALYANDURG",
+      "month_id": "202603",
+      "target": "980",
+      "achievement": "673",
+      "achievement_percentage": "68.67"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "189",
+      "ulb_name": "KALYANDURG",
+      "month_id": "202604",
+      "target": "980",
+      "achievement": "0",
+      "achievement_percentage": "68.67"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "189",
+      "ulb_name": "KALYANDURG",
+      "month_id": "202606",
+      "target": "980",
+      "achievement": "6",
+      "achievement_percentage": "69.29"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "189",
+      "ulb_name": "KALYANDURG",
+      "month_id": "202605",
+      "target": "980",
+      "achievement": "0",
+      "achievement_percentage": "68.67"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "13",
+      "ulb_name": "RAYADURG",
+      "month_id": "202607",
+      "target": "1364",
+      "achievement": "0",
+      "achievement_percentage": "432.62"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "13",
+      "ulb_name": "RAYADURG",
+      "month_id": "202603",
+      "target": "1364",
+      "achievement": "5787",
+      "achievement_percentage": "424.27"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "13",
+      "ulb_name": "RAYADURG",
+      "month_id": "202604",
+      "target": "1364",
+      "achievement": "0",
+      "achievement_percentage": "424.27"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "13",
+      "ulb_name": "RAYADURG",
+      "month_id": "202605",
+      "target": "1364",
+      "achievement": "0",
+      "achievement_percentage": "424.27"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "13",
+      "ulb_name": "RAYADURG",
+      "month_id": "202606",
+      "target": "1364",
+      "achievement": "114",
+      "achievement_percentage": "432.62"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "14",
+      "ulb_name": "TADIPATRI",
+      "month_id": "202603",
+      "target": "1501",
+      "achievement": "744",
+      "achievement_percentage": "49.57"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "14",
+      "ulb_name": "TADIPATRI",
+      "month_id": "202607",
+      "target": "1501",
+      "achievement": "0",
+      "achievement_percentage": "49.57"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "14",
+      "ulb_name": "TADIPATRI",
+      "month_id": "202606",
+      "target": "1501",
+      "achievement": "0",
+      "achievement_percentage": "49.57"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "14",
+      "ulb_name": "TADIPATRI",
+      "month_id": "202604",
+      "target": "1501",
+      "achievement": "0",
+      "achievement_percentage": "49.57"
+    },
+    {
+      "district_id": "12",
+      "district_name": "ANANTHAPUR",
+      "ulb_id": "14",
+      "ulb_name": "TADIPATRI",
+      "month_id": "202605",
+      "target": "1501",
+      "achievement": "0",
+      "achievement_percentage": "49.57"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "16",
+      "ulb_name": "MADANAPALLE",
+      "month_id": "202605",
+      "target": "2157",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "16",
+      "ulb_name": "MADANAPALLE",
+      "month_id": "202607",
+      "target": "2157",
+      "achievement": "0",
+      "achievement_percentage": "6.40"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "16",
+      "ulb_name": "MADANAPALLE",
+      "month_id": "202603",
+      "target": "2157",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "16",
+      "ulb_name": "MADANAPALLE",
+      "month_id": "202606",
+      "target": "2157",
+      "achievement": "138",
+      "achievement_percentage": "6.40"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "16",
+      "ulb_name": "MADANAPALLE",
+      "month_id": "202604",
+      "target": "2157",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "19",
+      "ulb_name": "PUNGANUR",
+      "month_id": "202607",
+      "target": "1076",
+      "achievement": "0",
+      "achievement_percentage": "1.49"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "19",
+      "ulb_name": "PUNGANUR",
+      "month_id": "202606",
+      "target": "1076",
+      "achievement": "16",
+      "achievement_percentage": "1.49"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "19",
+      "ulb_name": "PUNGANUR",
+      "month_id": "202603",
+      "target": "1076",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "19",
+      "ulb_name": "PUNGANUR",
+      "month_id": "202604",
+      "target": "1076",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "19",
+      "ulb_name": "PUNGANUR",
+      "month_id": "202605",
+      "target": "1076",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "50",
+      "ulb_name": "RAYACHOTY",
+      "month_id": "202606",
+      "target": "1286",
+      "achievement": "141",
+      "achievement_percentage": "13.37"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "50",
+      "ulb_name": "RAYACHOTY",
+      "month_id": "202605",
+      "target": "1286",
+      "achievement": "0",
+      "achievement_percentage": "2.41"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "50",
+      "ulb_name": "RAYACHOTY",
+      "month_id": "202607",
+      "target": "1286",
+      "achievement": "0",
+      "achievement_percentage": "13.37"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "50",
+      "ulb_name": "RAYACHOTY",
+      "month_id": "202603",
+      "target": "1286",
+      "achievement": "31",
+      "achievement_percentage": "2.41"
+    },
+    {
+      "district_id": "24",
+      "district_name": "ANNAMAYYA",
+      "ulb_id": "50",
+      "ulb_name": "RAYACHOTY",
+      "month_id": "202604",
+      "target": "1286",
+      "achievement": "0",
+      "achievement_percentage": "2.41"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "163",
+      "ulb_name": "ADANKI",
+      "month_id": "202603",
+      "target": "817",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "163",
+      "ulb_name": "ADANKI",
+      "month_id": "202607",
+      "target": "817",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "163",
+      "ulb_name": "ADANKI",
+      "month_id": "202605",
+      "target": "817",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "163",
+      "ulb_name": "ADANKI",
+      "month_id": "202606",
+      "target": "817",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "163",
+      "ulb_name": "ADANKI",
+      "month_id": "202604",
+      "target": "817",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "32",
+      "ulb_name": "BAPATLA",
+      "month_id": "202603",
+      "target": "1903",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "32",
+      "ulb_name": "BAPATLA",
+      "month_id": "202604",
+      "target": "1903",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "32",
+      "ulb_name": "BAPATLA",
+      "month_id": "202605",
+      "target": "1903",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "32",
+      "ulb_name": "BAPATLA",
+      "month_id": "202607",
+      "target": "1903",
+      "achievement": "32",
+      "achievement_percentage": "7.20"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "32",
+      "ulb_name": "BAPATLA",
+      "month_id": "202606",
+      "target": "1903",
+      "achievement": "105",
+      "achievement_percentage": "5.52"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "96",
+      "ulb_name": "CHIRALA",
+      "month_id": "202605",
+      "target": "1473",
+      "achievement": "6",
+      "achievement_percentage": "0.81"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "96",
+      "ulb_name": "CHIRALA",
+      "month_id": "202606",
+      "target": "1473",
+      "achievement": "201",
+      "achievement_percentage": "14.46"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "96",
+      "ulb_name": "CHIRALA",
+      "month_id": "202604",
+      "target": "1473",
+      "achievement": "6",
+      "achievement_percentage": "0.41"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "96",
+      "ulb_name": "CHIRALA",
+      "month_id": "202607",
+      "target": "1473",
+      "achievement": "39",
+      "achievement_percentage": "17.11"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "96",
+      "ulb_name": "CHIRALA",
+      "month_id": "202603",
+      "target": "1473",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "40",
+      "ulb_name": "REPALLE",
+      "month_id": "202603",
+      "target": "763",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "40",
+      "ulb_name": "REPALLE",
+      "month_id": "202605",
+      "target": "763",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "40",
+      "ulb_name": "REPALLE",
+      "month_id": "202606",
+      "target": "763",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "40",
+      "ulb_name": "REPALLE",
+      "month_id": "202607",
+      "target": "763",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "21",
+      "district_name": "BAPATLA",
+      "ulb_id": "40",
+      "ulb_name": "REPALLE",
+      "month_id": "202604",
+      "target": "763",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "15",
+      "ulb_name": "CHITTOOR",
+      "month_id": "202607",
+      "target": "3180",
+      "achievement": "164",
+      "achievement_percentage": "12.52"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "15",
+      "ulb_name": "CHITTOOR",
+      "month_id": "202606",
+      "target": "3180",
+      "achievement": "234",
+      "achievement_percentage": "7.36"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "15",
+      "ulb_name": "CHITTOOR",
+      "month_id": "202605",
+      "target": "3180",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "15",
+      "ulb_name": "CHITTOOR",
+      "month_id": "202603",
+      "target": "3180",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "15",
+      "ulb_name": "CHITTOOR",
+      "month_id": "202604",
+      "target": "3180",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "204",
+      "ulb_name": "KUPPAM",
+      "month_id": "202605",
+      "target": "1004",
+      "achievement": "0",
+      "achievement_percentage": "1.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "204",
+      "ulb_name": "KUPPAM",
+      "month_id": "202606",
+      "target": "1004",
+      "achievement": "9",
+      "achievement_percentage": "1.89"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "204",
+      "ulb_name": "KUPPAM",
+      "month_id": "202604",
+      "target": "1004",
+      "achievement": "0",
+      "achievement_percentage": "1.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "204",
+      "ulb_name": "KUPPAM",
+      "month_id": "202607",
+      "target": "1004",
+      "achievement": "0",
+      "achievement_percentage": "1.89"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "204",
+      "ulb_name": "KUPPAM",
+      "month_id": "202603",
+      "target": "1004",
+      "achievement": "10",
+      "achievement_percentage": "1.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "17",
+      "ulb_name": "NAGARI",
+      "month_id": "202607",
+      "target": "1172",
+      "achievement": "0",
+      "achievement_percentage": "3.24"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "17",
+      "ulb_name": "NAGARI",
+      "month_id": "202605",
+      "target": "1172",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "17",
+      "ulb_name": "NAGARI",
+      "month_id": "202606",
+      "target": "1172",
+      "achievement": "38",
+      "achievement_percentage": "3.24"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "17",
+      "ulb_name": "NAGARI",
+      "month_id": "202604",
+      "target": "1172",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "17",
+      "ulb_name": "NAGARI",
+      "month_id": "202603",
+      "target": "1172",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "18",
+      "ulb_name": "PALAMANERU",
+      "month_id": "202605",
+      "target": "1023",
+      "achievement": "101",
+      "achievement_percentage": "19.75"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "18",
+      "ulb_name": "PALAMANERU",
+      "month_id": "202606",
+      "target": "1023",
+      "achievement": "95",
+      "achievement_percentage": "29.03"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "18",
+      "ulb_name": "PALAMANERU",
+      "month_id": "202604",
+      "target": "1023",
+      "achievement": "101",
+      "achievement_percentage": "9.87"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "18",
+      "ulb_name": "PALAMANERU",
+      "month_id": "202607",
+      "target": "1023",
+      "achievement": "32",
+      "achievement_percentage": "32.16"
+    },
+    {
+      "district_id": "10",
+      "district_name": "CHITTOOR",
+      "ulb_id": "18",
+      "ulb_name": "PALAMANERU",
+      "month_id": "202603",
+      "target": "1023",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "23",
+      "ulb_name": "AMALAPURAM",
+      "month_id": "202607",
+      "target": "875",
+      "achievement": "0",
+      "achievement_percentage": "8.00"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "23",
+      "ulb_name": "AMALAPURAM",
+      "month_id": "202605",
+      "target": "875",
+      "achievement": "21",
+      "achievement_percentage": "8.00"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "23",
+      "ulb_name": "AMALAPURAM",
+      "month_id": "202606",
+      "target": "875",
+      "achievement": "0",
+      "achievement_percentage": "8.00"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "23",
+      "ulb_name": "AMALAPURAM",
+      "month_id": "202603",
+      "target": "875",
+      "achievement": "28",
+      "achievement_percentage": "3.20"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "23",
+      "ulb_name": "AMALAPURAM",
+      "month_id": "202604",
+      "target": "875",
+      "achievement": "21",
+      "achievement_percentage": "5.60"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "150",
+      "ulb_name": "MUMIDIVARAM",
+      "month_id": "202606",
+      "target": "625",
+      "achievement": "0",
+      "achievement_percentage": "19.20"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "150",
+      "ulb_name": "MUMIDIVARAM",
+      "month_id": "202607",
+      "target": "625",
+      "achievement": "0",
+      "achievement_percentage": "19.20"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "150",
+      "ulb_name": "MUMIDIVARAM",
+      "month_id": "202603",
+      "target": "625",
+      "achievement": "120",
+      "achievement_percentage": "19.20"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "150",
+      "ulb_name": "MUMIDIVARAM",
+      "month_id": "202604",
+      "target": "625",
+      "achievement": "0",
+      "achievement_percentage": "19.20"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "150",
+      "ulb_name": "MUMIDIVARAM",
+      "month_id": "202605",
+      "target": "625",
+      "achievement": "0",
+      "achievement_percentage": "19.20"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "29",
+      "ulb_name": "RAMACHANDRAPURAM",
+      "month_id": "202606",
+      "target": "882",
+      "achievement": "0",
+      "achievement_percentage": "2.95"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "29",
+      "ulb_name": "RAMACHANDRAPURAM",
+      "month_id": "202607",
+      "target": "882",
+      "achievement": "0",
+      "achievement_percentage": "2.95"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "29",
+      "ulb_name": "RAMACHANDRAPURAM",
+      "month_id": "202605",
+      "target": "882",
+      "achievement": "13",
+      "achievement_percentage": "2.95"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "29",
+      "ulb_name": "RAMACHANDRAPURAM",
+      "month_id": "202603",
+      "target": "882",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "18",
+      "district_name": "DR. BR AMBEDKAR KONASEEMA",
+      "ulb_id": "29",
+      "ulb_name": "RAMACHANDRAPURAM",
+      "month_id": "202604",
+      "target": "882",
+      "achievement": "13",
+      "achievement_percentage": "1.47"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "118",
+      "ulb_name": "KOVVUR",
+      "month_id": "202603",
+      "target": "723",
+      "achievement": "3",
+      "achievement_percentage": "0.41"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "118",
+      "ulb_name": "KOVVUR",
+      "month_id": "202607",
+      "target": "723",
+      "achievement": "0",
+      "achievement_percentage": "0.41"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "118",
+      "ulb_name": "KOVVUR",
+      "month_id": "202604",
+      "target": "723",
+      "achievement": "0",
+      "achievement_percentage": "0.41"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "118",
+      "ulb_name": "KOVVUR",
+      "month_id": "202605",
+      "target": "723",
+      "achievement": "0",
+      "achievement_percentage": "0.41"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "118",
+      "ulb_name": "KOVVUR",
+      "month_id": "202606",
+      "target": "723",
+      "achievement": "0",
+      "achievement_percentage": "0.41"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "25",
+      "ulb_name": "MANDAPET",
+      "month_id": "202606",
+      "target": "1204",
+      "achievement": "54",
+      "achievement_percentage": "115.61"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "25",
+      "ulb_name": "MANDAPET",
+      "month_id": "202605",
+      "target": "1204",
+      "achievement": "277",
+      "achievement_percentage": "111.13"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "25",
+      "ulb_name": "MANDAPET",
+      "month_id": "202603",
+      "target": "1204",
+      "achievement": "784",
+      "achievement_percentage": "65.12"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "25",
+      "ulb_name": "MANDAPET",
+      "month_id": "202604",
+      "target": "1204",
+      "achievement": "277",
+      "achievement_percentage": "88.12"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "25",
+      "ulb_name": "MANDAPET",
+      "month_id": "202607",
+      "target": "1204",
+      "achievement": "0",
+      "achievement_percentage": "115.61"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "120",
+      "ulb_name": "NIDADAVOLE",
+      "month_id": "202605",
+      "target": "704",
+      "achievement": "0",
+      "achievement_percentage": "93.89"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "120",
+      "ulb_name": "NIDADAVOLE",
+      "month_id": "202606",
+      "target": "704",
+      "achievement": "0",
+      "achievement_percentage": "93.89"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "120",
+      "ulb_name": "NIDADAVOLE",
+      "month_id": "202604",
+      "target": "704",
+      "achievement": "0",
+      "achievement_percentage": "93.89"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "120",
+      "ulb_name": "NIDADAVOLE",
+      "month_id": "202607",
+      "target": "704",
+      "achievement": "0",
+      "achievement_percentage": "93.89"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "120",
+      "ulb_name": "NIDADAVOLE",
+      "month_id": "202603",
+      "target": "704",
+      "achievement": "661",
+      "achievement_percentage": "93.89"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "28",
+      "ulb_name": "RAJAHMUNDRY",
+      "month_id": "202607",
+      "target": "8956",
+      "achievement": "8",
+      "achievement_percentage": "104.31"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "28",
+      "ulb_name": "RAJAHMUNDRY",
+      "month_id": "202606",
+      "target": "8956",
+      "achievement": "93",
+      "achievement_percentage": "104.22"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "28",
+      "ulb_name": "RAJAHMUNDRY",
+      "month_id": "202604",
+      "target": "8956",
+      "achievement": "0",
+      "achievement_percentage": "103.18"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "28",
+      "ulb_name": "RAJAHMUNDRY",
+      "month_id": "202605",
+      "target": "8956",
+      "achievement": "0",
+      "achievement_percentage": "103.18"
+    },
+    {
+      "district_id": "4",
+      "district_name": "EAST GODAVARI",
+      "ulb_id": "28",
+      "ulb_name": "RAJAHMUNDRY",
+      "month_id": "202603",
+      "target": "8956",
+      "achievement": "9241",
+      "achievement_percentage": "103.18"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "170",
+      "ulb_name": "\"JANGAREDDY GUDEM\"",
+      "month_id": "202603",
+      "target": "931",
+      "achievement": "8",
+      "achievement_percentage": "0.86"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "170",
+      "ulb_name": "\"JANGAREDDY GUDEM\"",
+      "month_id": "202604",
+      "target": "931",
+      "achievement": "9",
+      "achievement_percentage": "1.83"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "170",
+      "ulb_name": "\"JANGAREDDY GUDEM\"",
+      "month_id": "202605",
+      "target": "931",
+      "achievement": "9",
+      "achievement_percentage": "2.79"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "170",
+      "ulb_name": "\"JANGAREDDY GUDEM\"",
+      "month_id": "202607",
+      "target": "931",
+      "achievement": "7",
+      "achievement_percentage": "7.20"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "170",
+      "ulb_name": "\"JANGAREDDY GUDEM\"",
+      "month_id": "202606",
+      "target": "931",
+      "achievement": "34",
+      "achievement_percentage": "6.44"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "216",
+      "ulb_name": "CHINTALAPUDI",
+      "month_id": "202604",
+      "target": "598",
+      "achievement": "0",
+      "achievement_percentage": "25.59"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "216",
+      "ulb_name": "CHINTALAPUDI",
+      "month_id": "202603",
+      "target": "598",
+      "achievement": "153",
+      "achievement_percentage": "25.59"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "216",
+      "ulb_name": "CHINTALAPUDI",
+      "month_id": "202605",
+      "target": "598",
+      "achievement": "0",
+      "achievement_percentage": "25.59"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "216",
+      "ulb_name": "CHINTALAPUDI",
+      "month_id": "202607",
+      "target": "598",
+      "achievement": "0",
+      "achievement_percentage": "25.75"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "216",
+      "ulb_name": "CHINTALAPUDI",
+      "month_id": "202606",
+      "target": "598",
+      "achievement": "1",
+      "achievement_percentage": "25.75"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "117",
+      "ulb_name": "ELURU",
+      "month_id": "202604",
+      "target": "4901",
+      "achievement": "0",
+      "achievement_percentage": "4.94"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "117",
+      "ulb_name": "ELURU",
+      "month_id": "202603",
+      "target": "4901",
+      "achievement": "242",
+      "achievement_percentage": "4.94"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "117",
+      "ulb_name": "ELURU",
+      "month_id": "202607",
+      "target": "4901",
+      "achievement": "198",
+      "achievement_percentage": "14.26"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "117",
+      "ulb_name": "ELURU",
+      "month_id": "202605",
+      "target": "4901",
+      "achievement": "0",
+      "achievement_percentage": "4.94"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "117",
+      "ulb_name": "ELURU",
+      "month_id": "202606",
+      "target": "4901",
+      "achievement": "259",
+      "achievement_percentage": "10.22"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "67",
+      "ulb_name": "NUZIVID",
+      "month_id": "202604",
+      "target": "965",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "67",
+      "ulb_name": "NUZIVID",
+      "month_id": "202605",
+      "target": "965",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "67",
+      "ulb_name": "NUZIVID",
+      "month_id": "202603",
+      "target": "965",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "67",
+      "ulb_name": "NUZIVID",
+      "month_id": "202606",
+      "target": "965",
+      "achievement": "239",
+      "achievement_percentage": "24.77"
+    },
+    {
+      "district_id": "19",
+      "district_name": "ELURU",
+      "ulb_id": "67",
+      "ulb_name": "NUZIVID",
+      "month_id": "202607",
+      "target": "965",
+      "achievement": "384",
+      "achievement_percentage": "64.56"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "34",
+      "ulb_name": "GUNTUR",
+      "month_id": "202607",
+      "target": "10012",
+      "achievement": "0",
+      "achievement_percentage": "2.04"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "34",
+      "ulb_name": "GUNTUR",
+      "month_id": "202606",
+      "target": "10012",
+      "achievement": "140",
+      "achievement_percentage": "2.04"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "34",
+      "ulb_name": "GUNTUR",
+      "month_id": "202604",
+      "target": "10012",
+      "achievement": "32",
+      "achievement_percentage": "0.32"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "34",
+      "ulb_name": "GUNTUR",
+      "month_id": "202605",
+      "target": "10012",
+      "achievement": "32",
+      "achievement_percentage": "0.64"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "34",
+      "ulb_name": "GUNTUR",
+      "month_id": "202603",
+      "target": "10012",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "36",
+      "ulb_name": "MANGALAGIRI",
+      "month_id": "202606",
+      "target": "2929",
+      "achievement": "883",
+      "achievement_percentage": "36.60"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "36",
+      "ulb_name": "MANGALAGIRI",
+      "month_id": "202607",
+      "target": "2929",
+      "achievement": "537",
+      "achievement_percentage": "54.93"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "36",
+      "ulb_name": "MANGALAGIRI",
+      "month_id": "202605",
+      "target": "2929",
+      "achievement": "94",
+      "achievement_percentage": "6.45"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "36",
+      "ulb_name": "MANGALAGIRI",
+      "month_id": "202604",
+      "target": "2929",
+      "achievement": "94",
+      "achievement_percentage": "3.24"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "36",
+      "ulb_name": "MANGALAGIRI",
+      "month_id": "202603",
+      "target": "2929",
+      "achievement": "1",
+      "achievement_percentage": "0.03"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "39",
+      "ulb_name": "PONNUR",
+      "month_id": "202607",
+      "target": "1579",
+      "achievement": "0",
+      "achievement_percentage": "2.91"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "39",
+      "ulb_name": "PONNUR",
+      "month_id": "202604",
+      "target": "1579",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "39",
+      "ulb_name": "PONNUR",
+      "month_id": "202605",
+      "target": "1579",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "39",
+      "ulb_name": "PONNUR",
+      "month_id": "202603",
+      "target": "1579",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "39",
+      "ulb_name": "PONNUR",
+      "month_id": "202606",
+      "target": "1579",
+      "achievement": "46",
+      "achievement_percentage": "2.91"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "145",
+      "ulb_name": "TADEPALLI",
+      "month_id": "202603",
+      "target": "1931",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "145",
+      "ulb_name": "TADEPALLI",
+      "month_id": "202604",
+      "target": "1931",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "145",
+      "ulb_name": "TADEPALLI",
+      "month_id": "202605",
+      "target": "1931",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "145",
+      "ulb_name": "TADEPALLI",
+      "month_id": "202607",
+      "target": "1931",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "145",
+      "ulb_name": "TADEPALLI",
+      "month_id": "202606",
+      "target": "1931",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "42",
+      "ulb_name": "TENALI",
+      "month_id": "202605",
+      "target": "2605",
+      "achievement": "0",
+      "achievement_percentage": "0.31"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "42",
+      "ulb_name": "TENALI",
+      "month_id": "202606",
+      "target": "2605",
+      "achievement": "430",
+      "achievement_percentage": "16.81"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "42",
+      "ulb_name": "TENALI",
+      "month_id": "202604",
+      "target": "2605",
+      "achievement": "0",
+      "achievement_percentage": "0.31"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "42",
+      "ulb_name": "TENALI",
+      "month_id": "202607",
+      "target": "2605",
+      "achievement": "0",
+      "achievement_percentage": "16.81"
+    },
+    {
+      "district_id": "7",
+      "district_name": "GUNTUR",
+      "ulb_id": "42",
+      "ulb_name": "TENALI",
+      "month_id": "202603",
+      "target": "2605",
+      "achievement": "8",
+      "achievement_percentage": "0.31"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "149",
+      "ulb_name": "GOLLAPROLLU",
+      "month_id": "202604",
+      "target": "559",
+      "achievement": "0",
+      "achievement_percentage": "0.72"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "149",
+      "ulb_name": "GOLLAPROLLU",
+      "month_id": "202605",
+      "target": "559",
+      "achievement": "0",
+      "achievement_percentage": "0.72"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "149",
+      "ulb_name": "GOLLAPROLLU",
+      "month_id": "202606",
+      "target": "559",
+      "achievement": "73",
+      "achievement_percentage": "13.77"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "149",
+      "ulb_name": "GOLLAPROLLU",
+      "month_id": "202603",
+      "target": "559",
+      "achievement": "4",
+      "achievement_percentage": "0.72"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "149",
+      "ulb_name": "GOLLAPROLLU",
+      "month_id": "202607",
+      "target": "559",
+      "achievement": "29",
+      "achievement_percentage": "18.96"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "24",
+      "ulb_name": "KAKINADA",
+      "month_id": "202606",
+      "target": "6410",
+      "achievement": "673",
+      "achievement_percentage": "56.61"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "24",
+      "ulb_name": "KAKINADA",
+      "month_id": "202607",
+      "target": "6410",
+      "achievement": "0",
+      "achievement_percentage": "56.61"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "24",
+      "ulb_name": "KAKINADA",
+      "month_id": "202604",
+      "target": "6410",
+      "achievement": "1386",
+      "achievement_percentage": "24.49"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "24",
+      "ulb_name": "KAKINADA",
+      "month_id": "202603",
+      "target": "6410",
+      "achievement": "184",
+      "achievement_percentage": "2.87"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "24",
+      "ulb_name": "KAKINADA",
+      "month_id": "202605",
+      "target": "6410",
+      "achievement": "1386",
+      "achievement_percentage": "46.12"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "26",
+      "ulb_name": "PEDDAPURAM",
+      "month_id": "202606",
+      "target": "1104",
+      "achievement": "1438",
+      "achievement_percentage": "667.30"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "26",
+      "ulb_name": "PEDDAPURAM",
+      "month_id": "202607",
+      "target": "1104",
+      "achievement": "2",
+      "achievement_percentage": "667.48"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "26",
+      "ulb_name": "PEDDAPURAM",
+      "month_id": "202604",
+      "target": "1104",
+      "achievement": "0",
+      "achievement_percentage": "537.05"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "26",
+      "ulb_name": "PEDDAPURAM",
+      "month_id": "202605",
+      "target": "1104",
+      "achievement": "0",
+      "achievement_percentage": "537.05"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "26",
+      "ulb_name": "PEDDAPURAM",
+      "month_id": "202603",
+      "target": "1104",
+      "achievement": "5929",
+      "achievement_percentage": "537.05"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "27",
+      "ulb_name": "PITHAPURAM",
+      "month_id": "202607",
+      "target": "1018",
+      "achievement": "0",
+      "achievement_percentage": "90.18"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "27",
+      "ulb_name": "PITHAPURAM",
+      "month_id": "202604",
+      "target": "1018",
+      "achievement": "0",
+      "achievement_percentage": "19.94"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "27",
+      "ulb_name": "PITHAPURAM",
+      "month_id": "202605",
+      "target": "1018",
+      "achievement": "0",
+      "achievement_percentage": "19.94"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "27",
+      "ulb_name": "PITHAPURAM",
+      "month_id": "202603",
+      "target": "1018",
+      "achievement": "203",
+      "achievement_percentage": "19.94"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "27",
+      "ulb_name": "PITHAPURAM",
+      "month_id": "202606",
+      "target": "1018",
+      "achievement": "715",
+      "achievement_percentage": "90.18"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "30",
+      "ulb_name": "SAMALKOT",
+      "month_id": "202607",
+      "target": "1159",
+      "achievement": "13",
+      "achievement_percentage": "48.92"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "30",
+      "ulb_name": "SAMALKOT",
+      "month_id": "202604",
+      "target": "1159",
+      "achievement": "219",
+      "achievement_percentage": "19.07"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "30",
+      "ulb_name": "SAMALKOT",
+      "month_id": "202605",
+      "target": "1159",
+      "achievement": "219",
+      "achievement_percentage": "37.96"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "30",
+      "ulb_name": "SAMALKOT",
+      "month_id": "202606",
+      "target": "1159",
+      "achievement": "114",
+      "achievement_percentage": "47.80"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "30",
+      "ulb_name": "SAMALKOT",
+      "month_id": "202603",
+      "target": "1159",
+      "achievement": "2",
+      "achievement_percentage": "0.17"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "31",
+      "ulb_name": "TUNI",
+      "month_id": "202607",
+      "target": "1004",
+      "achievement": "1",
+      "achievement_percentage": "75.50"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "31",
+      "ulb_name": "TUNI",
+      "month_id": "202603",
+      "target": "1004",
+      "achievement": "22",
+      "achievement_percentage": "2.19"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "31",
+      "ulb_name": "TUNI",
+      "month_id": "202605",
+      "target": "1004",
+      "achievement": "0",
+      "achievement_percentage": "2.19"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "31",
+      "ulb_name": "TUNI",
+      "month_id": "202606",
+      "target": "1004",
+      "achievement": "735",
+      "achievement_percentage": "75.40"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "31",
+      "ulb_name": "TUNI",
+      "month_id": "202604",
+      "target": "1004",
+      "achievement": "0",
+      "achievement_percentage": "2.19"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "172",
+      "ulb_name": "YELESWARAM",
+      "month_id": "202604",
+      "target": "740",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "172",
+      "ulb_name": "YELESWARAM",
+      "month_id": "202606",
+      "target": "740",
+      "achievement": "254",
+      "achievement_percentage": "34.32"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "172",
+      "ulb_name": "YELESWARAM",
+      "month_id": "202603",
+      "target": "740",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "172",
+      "ulb_name": "YELESWARAM",
+      "month_id": "202605",
+      "target": "740",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "17",
+      "district_name": "KAKINADA",
+      "ulb_id": "172",
+      "ulb_name": "YELESWARAM",
+      "month_id": "202607",
+      "target": "740",
+      "achievement": "4",
+      "achievement_percentage": "34.86"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "217",
+      "ulb_name": "\"YSR TADIGADAPA\"",
+      "month_id": "202605",
+      "target": "1897",
+      "achievement": "0",
+      "achievement_percentage": "8.17"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "217",
+      "ulb_name": "\"YSR TADIGADAPA\"",
+      "month_id": "202606",
+      "target": "1897",
+      "achievement": "522",
+      "achievement_percentage": "35.69"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "217",
+      "ulb_name": "\"YSR TADIGADAPA\"",
+      "month_id": "202604",
+      "target": "1897",
+      "achievement": "0",
+      "achievement_percentage": "8.17"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "217",
+      "ulb_name": "\"YSR TADIGADAPA\"",
+      "month_id": "202603",
+      "target": "1897",
+      "achievement": "155",
+      "achievement_percentage": "8.17"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "217",
+      "ulb_name": "\"YSR TADIGADAPA\"",
+      "month_id": "202607",
+      "target": "1897",
+      "achievement": "0",
+      "achievement_percentage": "35.69"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "64",
+      "ulb_name": "GUDIVADA",
+      "month_id": "202607",
+      "target": "2418",
+      "achievement": "2",
+      "achievement_percentage": "55.17"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "64",
+      "ulb_name": "GUDIVADA",
+      "month_id": "202606",
+      "target": "2418",
+      "achievement": "1093",
+      "achievement_percentage": "55.09"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "64",
+      "ulb_name": "GUDIVADA",
+      "month_id": "202603",
+      "target": "2418",
+      "achievement": "237",
+      "achievement_percentage": "9.80"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "64",
+      "ulb_name": "GUDIVADA",
+      "month_id": "202604",
+      "target": "2418",
+      "achievement": "1",
+      "achievement_percentage": "9.84"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "64",
+      "ulb_name": "GUDIVADA",
+      "month_id": "202605",
+      "target": "2418",
+      "achievement": "1",
+      "achievement_percentage": "9.88"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "66",
+      "ulb_name": "MACHILIPATNAM",
+      "month_id": "202606",
+      "target": "3354",
+      "achievement": "714",
+      "achievement_percentage": "21.88"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "66",
+      "ulb_name": "MACHILIPATNAM",
+      "month_id": "202605",
+      "target": "3354",
+      "achievement": "10",
+      "achievement_percentage": "0.60"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "66",
+      "ulb_name": "MACHILIPATNAM",
+      "month_id": "202607",
+      "target": "3354",
+      "achievement": "10",
+      "achievement_percentage": "22.18"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "66",
+      "ulb_name": "MACHILIPATNAM",
+      "month_id": "202603",
+      "target": "3354",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "66",
+      "ulb_name": "MACHILIPATNAM",
+      "month_id": "202604",
+      "target": "3354",
+      "achievement": "10",
+      "achievement_percentage": "0.30"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "68",
+      "ulb_name": "PEDANA",
+      "month_id": "202607",
+      "target": "677",
+      "achievement": "0",
+      "achievement_percentage": "144.76"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "68",
+      "ulb_name": "PEDANA",
+      "month_id": "202603",
+      "target": "677",
+      "achievement": "980",
+      "achievement_percentage": "144.76"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "68",
+      "ulb_name": "PEDANA",
+      "month_id": "202604",
+      "target": "677",
+      "achievement": "0",
+      "achievement_percentage": "144.76"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "68",
+      "ulb_name": "PEDANA",
+      "month_id": "202605",
+      "target": "677",
+      "achievement": "0",
+      "achievement_percentage": "144.76"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "68",
+      "ulb_name": "PEDANA",
+      "month_id": "202606",
+      "target": "677",
+      "achievement": "0",
+      "achievement_percentage": "144.76"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "174",
+      "ulb_name": "VUYYURU",
+      "month_id": "202606",
+      "target": "878",
+      "achievement": "57",
+      "achievement_percentage": "46.47"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "174",
+      "ulb_name": "VUYYURU",
+      "month_id": "202604",
+      "target": "878",
+      "achievement": "0",
+      "achievement_percentage": "39.98"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "174",
+      "ulb_name": "VUYYURU",
+      "month_id": "202603",
+      "target": "878",
+      "achievement": "351",
+      "achievement_percentage": "39.98"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "174",
+      "ulb_name": "VUYYURU",
+      "month_id": "202605",
+      "target": "878",
+      "achievement": "0",
+      "achievement_percentage": "39.98"
+    },
+    {
+      "district_id": "6",
+      "district_name": "KRISHNA",
+      "ulb_id": "174",
+      "ulb_name": "VUYYURU",
+      "month_id": "202607",
+      "target": "878",
+      "achievement": "0",
+      "achievement_percentage": "46.47"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "70",
+      "ulb_name": "ADONI",
+      "month_id": "202606",
+      "target": "2864",
+      "achievement": "124",
+      "achievement_percentage": "62.15"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "70",
+      "ulb_name": "ADONI",
+      "month_id": "202607",
+      "target": "2864",
+      "achievement": "3",
+      "achievement_percentage": "62.26"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "70",
+      "ulb_name": "ADONI",
+      "month_id": "202605",
+      "target": "2864",
+      "achievement": "43",
+      "achievement_percentage": "57.82"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "70",
+      "ulb_name": "ADONI",
+      "month_id": "202603",
+      "target": "2864",
+      "achievement": "1570",
+      "achievement_percentage": "54.82"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "70",
+      "ulb_name": "ADONI",
+      "month_id": "202604",
+      "target": "2864",
+      "achievement": "43",
+      "achievement_percentage": "56.32"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "156",
+      "ulb_name": "GUDUR_KURNOOL",
+      "month_id": "202604",
+      "target": "557",
+      "achievement": "0",
+      "achievement_percentage": "410.77"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "156",
+      "ulb_name": "GUDUR_KURNOOL",
+      "month_id": "202605",
+      "target": "557",
+      "achievement": "0",
+      "achievement_percentage": "410.77"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "156",
+      "ulb_name": "GUDUR_KURNOOL",
+      "month_id": "202606",
+      "target": "557",
+      "achievement": "24",
+      "achievement_percentage": "415.08"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "156",
+      "ulb_name": "GUDUR_KURNOOL",
+      "month_id": "202603",
+      "target": "557",
+      "achievement": "2288",
+      "achievement_percentage": "410.77"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "156",
+      "ulb_name": "GUDUR_KURNOOL",
+      "month_id": "202607",
+      "target": "557",
+      "achievement": "0",
+      "achievement_percentage": "415.08"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "72",
+      "ulb_name": "KURNOOL",
+      "month_id": "202606",
+      "target": "9262",
+      "achievement": "212",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "72",
+      "ulb_name": "KURNOOL",
+      "month_id": "202607",
+      "target": "9262",
+      "achievement": "0",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "72",
+      "ulb_name": "KURNOOL",
+      "month_id": "202605",
+      "target": "9262",
+      "achievement": "19",
+      "achievement_percentage": "0.52"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "72",
+      "ulb_name": "KURNOOL",
+      "month_id": "202603",
+      "target": "9262",
+      "achievement": "10",
+      "achievement_percentage": "0.11"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "72",
+      "ulb_name": "KURNOOL",
+      "month_id": "202604",
+      "target": "9262",
+      "achievement": "19",
+      "achievement_percentage": "0.31"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "74",
+      "ulb_name": "YEMMIGANUR",
+      "month_id": "202607",
+      "target": "2099",
+      "achievement": "0",
+      "achievement_percentage": "10.86"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "74",
+      "ulb_name": "YEMMIGANUR",
+      "month_id": "202605",
+      "target": "2099",
+      "achievement": "0",
+      "achievement_percentage": "4.76"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "74",
+      "ulb_name": "YEMMIGANUR",
+      "month_id": "202606",
+      "target": "2099",
+      "achievement": "128",
+      "achievement_percentage": "10.86"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "74",
+      "ulb_name": "YEMMIGANUR",
+      "month_id": "202603",
+      "target": "2099",
+      "achievement": "100",
+      "achievement_percentage": "4.76"
+    },
+    {
+      "district_id": "13",
+      "district_name": "KURNOOL",
+      "ulb_id": "74",
+      "ulb_name": "YEMMIGANUR",
+      "month_id": "202604",
+      "target": "2099",
+      "achievement": "0",
+      "achievement_percentage": "4.76"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "165",
+      "ulb_name": "GIDDALUR",
+      "month_id": "202603",
+      "target": "896",
+      "achievement": "2",
+      "achievement_percentage": "0.22"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "165",
+      "ulb_name": "GIDDALUR",
+      "month_id": "202607",
+      "target": "896",
+      "achievement": "1",
+      "achievement_percentage": "1.79"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "165",
+      "ulb_name": "GIDDALUR",
+      "month_id": "202604",
+      "target": "896",
+      "achievement": "0",
+      "achievement_percentage": "0.22"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "165",
+      "ulb_name": "GIDDALUR",
+      "month_id": "202605",
+      "target": "896",
+      "achievement": "0",
+      "achievement_percentage": "0.22"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "165",
+      "ulb_name": "GIDDALUR",
+      "month_id": "202606",
+      "target": "896",
+      "achievement": "13",
+      "achievement_percentage": "1.67"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "166",
+      "ulb_name": "KANIGIRI",
+      "month_id": "202603",
+      "target": "927",
+      "achievement": "4",
+      "achievement_percentage": "0.43"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "166",
+      "ulb_name": "KANIGIRI",
+      "month_id": "202605",
+      "target": "927",
+      "achievement": "0",
+      "achievement_percentage": "0.43"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "166",
+      "ulb_name": "KANIGIRI",
+      "month_id": "202607",
+      "target": "927",
+      "achievement": "31",
+      "achievement_percentage": "7.34"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "166",
+      "ulb_name": "KANIGIRI",
+      "month_id": "202606",
+      "target": "927",
+      "achievement": "33",
+      "achievement_percentage": "3.99"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "166",
+      "ulb_name": "KANIGIRI",
+      "month_id": "202604",
+      "target": "927",
+      "achievement": "0",
+      "achievement_percentage": "0.43"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "98",
+      "ulb_name": "MARKAPUR",
+      "month_id": "202603",
+      "target": "1549",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "98",
+      "ulb_name": "MARKAPUR",
+      "month_id": "202604",
+      "target": "1549",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "98",
+      "ulb_name": "MARKAPUR",
+      "month_id": "202605",
+      "target": "1549",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "98",
+      "ulb_name": "MARKAPUR",
+      "month_id": "202606",
+      "target": "1549",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "27",
+      "district_name": "MARKAPURAM",
+      "ulb_id": "98",
+      "ulb_name": "MARKAPUR",
+      "month_id": "202607",
+      "target": "1549",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "177",
+      "ulb_name": "ALLAGADDA",
+      "month_id": "202603",
+      "target": "1083",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "177",
+      "ulb_name": "ALLAGADDA",
+      "month_id": "202604",
+      "target": "1083",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "177",
+      "ulb_name": "ALLAGADDA",
+      "month_id": "202606",
+      "target": "1083",
+      "achievement": "192",
+      "achievement_percentage": "17.73"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "177",
+      "ulb_name": "ALLAGADDA",
+      "month_id": "202607",
+      "target": "1083",
+      "achievement": "63",
+      "achievement_percentage": "23.55"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "177",
+      "ulb_name": "ALLAGADDA",
+      "month_id": "202605",
+      "target": "1083",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "176",
+      "ulb_name": "ATMAKUR-KURNOOL",
+      "month_id": "202606",
+      "target": "956",
+      "achievement": "36",
+      "achievement_percentage": "3.77"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "176",
+      "ulb_name": "ATMAKUR-KURNOOL",
+      "month_id": "202605",
+      "target": "956",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "176",
+      "ulb_name": "ATMAKUR-KURNOOL",
+      "month_id": "202607",
+      "target": "956",
+      "achievement": "47",
+      "achievement_percentage": "8.68"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "176",
+      "ulb_name": "ATMAKUR-KURNOOL",
+      "month_id": "202603",
+      "target": "956",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "176",
+      "ulb_name": "ATMAKUR-KURNOOL",
+      "month_id": "202604",
+      "target": "956",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "210",
+      "ulb_name": "BETHAMCHERLA",
+      "month_id": "202606",
+      "target": "835",
+      "achievement": "158",
+      "achievement_percentage": "23.47"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "210",
+      "ulb_name": "BETHAMCHERLA",
+      "month_id": "202603",
+      "target": "835",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "210",
+      "ulb_name": "BETHAMCHERLA",
+      "month_id": "202607",
+      "target": "835",
+      "achievement": "31",
+      "achievement_percentage": "27.19"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "210",
+      "ulb_name": "BETHAMCHERLA",
+      "month_id": "202604",
+      "target": "835",
+      "achievement": "19",
+      "achievement_percentage": "2.28"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "210",
+      "ulb_name": "BETHAMCHERLA",
+      "month_id": "202605",
+      "target": "835",
+      "achievement": "19",
+      "achievement_percentage": "4.55"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "71",
+      "ulb_name": "DHONE",
+      "month_id": "202607",
+      "target": "1211",
+      "achievement": "76",
+      "achievement_percentage": "124.44"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "71",
+      "ulb_name": "DHONE",
+      "month_id": "202606",
+      "target": "1211",
+      "achievement": "197",
+      "achievement_percentage": "118.17"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "71",
+      "ulb_name": "DHONE",
+      "month_id": "202604",
+      "target": "1211",
+      "achievement": "0",
+      "achievement_percentage": "101.90"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "71",
+      "ulb_name": "DHONE",
+      "month_id": "202605",
+      "target": "1211",
+      "achievement": "0",
+      "achievement_percentage": "101.90"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "71",
+      "ulb_name": "DHONE",
+      "month_id": "202603",
+      "target": "1211",
+      "achievement": "1234",
+      "achievement_percentage": "101.90"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "185",
+      "ulb_name": "NANDIKOTKUR",
+      "month_id": "202604",
+      "target": "1059",
+      "achievement": "0",
+      "achievement_percentage": "95.66"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "185",
+      "ulb_name": "NANDIKOTKUR",
+      "month_id": "202603",
+      "target": "1059",
+      "achievement": "1013",
+      "achievement_percentage": "95.66"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "185",
+      "ulb_name": "NANDIKOTKUR",
+      "month_id": "202607",
+      "target": "1059",
+      "achievement": "0",
+      "achievement_percentage": "109.63"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "185",
+      "ulb_name": "NANDIKOTKUR",
+      "month_id": "202605",
+      "target": "1059",
+      "achievement": "0",
+      "achievement_percentage": "95.66"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "185",
+      "ulb_name": "NANDIKOTKUR",
+      "month_id": "202606",
+      "target": "1059",
+      "achievement": "148",
+      "achievement_percentage": "109.63"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "73",
+      "ulb_name": "NANDYAL",
+      "month_id": "202606",
+      "target": "4010",
+      "achievement": "333",
+      "achievement_percentage": "40.07"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "73",
+      "ulb_name": "NANDYAL",
+      "month_id": "202607",
+      "target": "4010",
+      "achievement": "182",
+      "achievement_percentage": "44.61"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "73",
+      "ulb_name": "NANDYAL",
+      "month_id": "202604",
+      "target": "4010",
+      "achievement": "2",
+      "achievement_percentage": "31.72"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "73",
+      "ulb_name": "NANDYAL",
+      "month_id": "202605",
+      "target": "4010",
+      "achievement": "2",
+      "achievement_percentage": "31.77"
+    },
+    {
+      "district_id": "26",
+      "district_name": "NANDYAL",
+      "ulb_id": "73",
+      "ulb_name": "NANDYAL",
+      "month_id": "202603",
+      "target": "4010",
+      "achievement": "1270",
+      "achievement_percentage": "31.67"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "65",
+      "ulb_name": "JAGGIAHPET",
+      "month_id": "202606",
+      "target": "1147",
+      "achievement": "0",
+      "achievement_percentage": "67.65"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "65",
+      "ulb_name": "JAGGIAHPET",
+      "month_id": "202607",
+      "target": "1147",
+      "achievement": "1",
+      "achievement_percentage": "67.74"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "65",
+      "ulb_name": "JAGGIAHPET",
+      "month_id": "202603",
+      "target": "1147",
+      "achievement": "776",
+      "achievement_percentage": "67.65"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "65",
+      "ulb_name": "JAGGIAHPET",
+      "month_id": "202604",
+      "target": "1147",
+      "achievement": "0",
+      "achievement_percentage": "67.65"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "65",
+      "ulb_name": "JAGGIAHPET",
+      "month_id": "202605",
+      "target": "1147",
+      "achievement": "0",
+      "achievement_percentage": "67.65"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "211",
+      "ulb_name": "KONDAPALLI",
+      "month_id": "202607",
+      "target": "1258",
+      "achievement": "0",
+      "achievement_percentage": "6.84"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "211",
+      "ulb_name": "KONDAPALLI",
+      "month_id": "202603",
+      "target": "1258",
+      "achievement": "86",
+      "achievement_percentage": "6.84"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "211",
+      "ulb_name": "KONDAPALLI",
+      "month_id": "202604",
+      "target": "1258",
+      "achievement": "0",
+      "achievement_percentage": "6.84"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "211",
+      "ulb_name": "KONDAPALLI",
+      "month_id": "202605",
+      "target": "1258",
+      "achievement": "0",
+      "achievement_percentage": "6.84"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "211",
+      "ulb_name": "KONDAPALLI",
+      "month_id": "202606",
+      "target": "1258",
+      "achievement": "0",
+      "achievement_percentage": "6.84"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "175",
+      "ulb_name": "NANDIGAMA",
+      "month_id": "202605",
+      "target": "967",
+      "achievement": "0",
+      "achievement_percentage": "6.93"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "175",
+      "ulb_name": "NANDIGAMA",
+      "month_id": "202603",
+      "target": "967",
+      "achievement": "67",
+      "achievement_percentage": "6.93"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "175",
+      "ulb_name": "NANDIGAMA",
+      "month_id": "202604",
+      "target": "967",
+      "achievement": "0",
+      "achievement_percentage": "6.93"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "175",
+      "ulb_name": "NANDIGAMA",
+      "month_id": "202607",
+      "target": "967",
+      "achievement": "0",
+      "achievement_percentage": "6.93"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "175",
+      "ulb_name": "NANDIGAMA",
+      "month_id": "202606",
+      "target": "967",
+      "achievement": "0",
+      "achievement_percentage": "6.93"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "173",
+      "ulb_name": "TIRUVURU",
+      "month_id": "202605",
+      "target": "739",
+      "achievement": "0",
+      "achievement_percentage": "14.75"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "173",
+      "ulb_name": "TIRUVURU",
+      "month_id": "202606",
+      "target": "739",
+      "achievement": "0",
+      "achievement_percentage": "14.75"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "173",
+      "ulb_name": "TIRUVURU",
+      "month_id": "202607",
+      "target": "739",
+      "achievement": "0",
+      "achievement_percentage": "14.75"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "173",
+      "ulb_name": "TIRUVURU",
+      "month_id": "202603",
+      "target": "739",
+      "achievement": "109",
+      "achievement_percentage": "14.75"
+    },
+    {
+      "district_id": "20",
+      "district_name": "NTR",
+      "ulb_id": "173",
+      "ulb_name": "TIRUVURU",
+      "month_id": "202604",
+      "target": "739",
+      "achievement": "0",
+      "achievement_percentage": "14.75"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "33",
+      "ulb_name": "CHILAKALURIPET",
+      "month_id": "202603",
+      "target": "2150",
+      "achievement": "117",
+      "achievement_percentage": "5.44"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "33",
+      "ulb_name": "CHILAKALURIPET",
+      "month_id": "202604",
+      "target": "2150",
+      "achievement": "0",
+      "achievement_percentage": "5.44"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "33",
+      "ulb_name": "CHILAKALURIPET",
+      "month_id": "202607",
+      "target": "2150",
+      "achievement": "0",
+      "achievement_percentage": "5.44"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "33",
+      "ulb_name": "CHILAKALURIPET",
+      "month_id": "202605",
+      "target": "2150",
+      "achievement": "0",
+      "achievement_percentage": "5.44"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "33",
+      "ulb_name": "CHILAKALURIPET",
+      "month_id": "202606",
+      "target": "2150",
+      "achievement": "0",
+      "achievement_percentage": "5.44"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "207",
+      "ulb_name": "DACHEPALLI",
+      "month_id": "202604",
+      "target": "696",
+      "achievement": "0",
+      "achievement_percentage": "18.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "207",
+      "ulb_name": "DACHEPALLI",
+      "month_id": "202605",
+      "target": "696",
+      "achievement": "0",
+      "achievement_percentage": "18.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "207",
+      "ulb_name": "DACHEPALLI",
+      "month_id": "202606",
+      "target": "696",
+      "achievement": "0",
+      "achievement_percentage": "18.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "207",
+      "ulb_name": "DACHEPALLI",
+      "month_id": "202603",
+      "target": "696",
+      "achievement": "127",
+      "achievement_percentage": "18.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "207",
+      "ulb_name": "DACHEPALLI",
+      "month_id": "202607",
+      "target": "696",
+      "achievement": "0",
+      "achievement_percentage": "18.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "206",
+      "ulb_name": "GURAJALA",
+      "month_id": "202603",
+      "target": "557",
+      "achievement": "205",
+      "achievement_percentage": "36.80"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "206",
+      "ulb_name": "GURAJALA",
+      "month_id": "202604",
+      "target": "557",
+      "achievement": "0",
+      "achievement_percentage": "36.80"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "206",
+      "ulb_name": "GURAJALA",
+      "month_id": "202605",
+      "target": "557",
+      "achievement": "0",
+      "achievement_percentage": "36.80"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "206",
+      "ulb_name": "GURAJALA",
+      "month_id": "202607",
+      "target": "557",
+      "achievement": "0",
+      "achievement_percentage": "37.52"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "206",
+      "ulb_name": "GURAJALA",
+      "month_id": "202606",
+      "target": "557",
+      "achievement": "4",
+      "achievement_percentage": "37.52"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "35",
+      "ulb_name": "MACHERLA",
+      "month_id": "202607",
+      "target": "979",
+      "achievement": "0",
+      "achievement_percentage": "42.49"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "35",
+      "ulb_name": "MACHERLA",
+      "month_id": "202606",
+      "target": "979",
+      "achievement": "134",
+      "achievement_percentage": "42.49"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "35",
+      "ulb_name": "MACHERLA",
+      "month_id": "202605",
+      "target": "979",
+      "achievement": "25",
+      "achievement_percentage": "28.80"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "35",
+      "ulb_name": "MACHERLA",
+      "month_id": "202603",
+      "target": "979",
+      "achievement": "232",
+      "achievement_percentage": "23.70"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "35",
+      "ulb_name": "MACHERLA",
+      "month_id": "202604",
+      "target": "979",
+      "achievement": "25",
+      "achievement_percentage": "26.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "37",
+      "ulb_name": "NARASARAOPET",
+      "month_id": "202607",
+      "target": "2015",
+      "achievement": "0",
+      "achievement_percentage": "7.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "37",
+      "ulb_name": "NARASARAOPET",
+      "month_id": "202605",
+      "target": "2015",
+      "achievement": "0",
+      "achievement_percentage": "7.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "37",
+      "ulb_name": "NARASARAOPET",
+      "month_id": "202606",
+      "target": "2015",
+      "achievement": "0",
+      "achievement_percentage": "7.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "37",
+      "ulb_name": "NARASARAOPET",
+      "month_id": "202603",
+      "target": "2015",
+      "achievement": "146",
+      "achievement_percentage": "7.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "37",
+      "ulb_name": "NARASARAOPET",
+      "month_id": "202604",
+      "target": "2015",
+      "achievement": "0",
+      "achievement_percentage": "7.25"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "38",
+      "ulb_name": "PIDUGURALLA",
+      "month_id": "202605",
+      "target": "941",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "38",
+      "ulb_name": "PIDUGURALLA",
+      "month_id": "202606",
+      "target": "941",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "38",
+      "ulb_name": "PIDUGURALLA",
+      "month_id": "202604",
+      "target": "941",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "38",
+      "ulb_name": "PIDUGURALLA",
+      "month_id": "202607",
+      "target": "941",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "38",
+      "ulb_name": "PIDUGURALLA",
+      "month_id": "202603",
+      "target": "941",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "41",
+      "ulb_name": "SATTENAPALLI",
+      "month_id": "202606",
+      "target": "1073",
+      "achievement": "0",
+      "achievement_percentage": "0.93"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "41",
+      "ulb_name": "SATTENAPALLI",
+      "month_id": "202605",
+      "target": "1073",
+      "achievement": "5",
+      "achievement_percentage": "0.93"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "41",
+      "ulb_name": "SATTENAPALLI",
+      "month_id": "202607",
+      "target": "1073",
+      "achievement": "0",
+      "achievement_percentage": "0.93"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "41",
+      "ulb_name": "SATTENAPALLI",
+      "month_id": "202603",
+      "target": "1073",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "41",
+      "ulb_name": "SATTENAPALLI",
+      "month_id": "202604",
+      "target": "1073",
+      "achievement": "5",
+      "achievement_percentage": "0.47"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "43",
+      "ulb_name": "VINUKONDA",
+      "month_id": "202607",
+      "target": "1229",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "43",
+      "ulb_name": "VINUKONDA",
+      "month_id": "202606",
+      "target": "1229",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "43",
+      "ulb_name": "VINUKONDA",
+      "month_id": "202603",
+      "target": "1229",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "43",
+      "ulb_name": "VINUKONDA",
+      "month_id": "202604",
+      "target": "1229",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "22",
+      "district_name": "PALNADU",
+      "ulb_id": "43",
+      "ulb_name": "VINUKONDA",
+      "month_id": "202605",
+      "target": "1229",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "203",
+      "ulb_name": "PALAKONDA",
+      "month_id": "202607",
+      "target": "698",
+      "achievement": "581",
+      "achievement_percentage": "85.67"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "203",
+      "ulb_name": "PALAKONDA",
+      "month_id": "202606",
+      "target": "698",
+      "achievement": "17",
+      "achievement_percentage": "2.44"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "203",
+      "ulb_name": "PALAKONDA",
+      "month_id": "202603",
+      "target": "698",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "203",
+      "ulb_name": "PALAKONDA",
+      "month_id": "202604",
+      "target": "698",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "203",
+      "ulb_name": "PALAKONDA",
+      "month_id": "202605",
+      "target": "698",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "111",
+      "ulb_name": "PARVATHIPURAM",
+      "month_id": "202607",
+      "target": "1157",
+      "achievement": "120",
+      "achievement_percentage": "11.41"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "111",
+      "ulb_name": "PARVATHIPURAM",
+      "month_id": "202604",
+      "target": "1157",
+      "achievement": "0",
+      "achievement_percentage": "0.61"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "111",
+      "ulb_name": "PARVATHIPURAM",
+      "month_id": "202605",
+      "target": "1157",
+      "achievement": "0",
+      "achievement_percentage": "0.61"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "111",
+      "ulb_name": "PARVATHIPURAM",
+      "month_id": "202603",
+      "target": "1157",
+      "achievement": "7",
+      "achievement_percentage": "0.61"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "111",
+      "ulb_name": "PARVATHIPURAM",
+      "month_id": "202606",
+      "target": "1157",
+      "achievement": "5",
+      "achievement_percentage": "1.04"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "112",
+      "ulb_name": "SALUR",
+      "month_id": "202606",
+      "target": "1298",
+      "achievement": "12",
+      "achievement_percentage": "1.08"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "112",
+      "ulb_name": "SALUR",
+      "month_id": "202607",
+      "target": "1298",
+      "achievement": "308",
+      "achievement_percentage": "24.81"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "112",
+      "ulb_name": "SALUR",
+      "month_id": "202603",
+      "target": "1298",
+      "achievement": "2",
+      "achievement_percentage": "0.15"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "112",
+      "ulb_name": "SALUR",
+      "month_id": "202604",
+      "target": "1298",
+      "achievement": "0",
+      "achievement_percentage": "0.15"
+    },
+    {
+      "district_id": "14",
+      "district_name": "PARVATHIPURAM MANYAM",
+      "ulb_id": "112",
+      "ulb_name": "SALUR",
+      "month_id": "202605",
+      "target": "1298",
+      "achievement": "0",
+      "achievement_percentage": "0.15"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "164",
+      "ulb_name": "CHIMAKURTHY",
+      "month_id": "202607",
+      "target": "591",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "164",
+      "ulb_name": "CHIMAKURTHY",
+      "month_id": "202603",
+      "target": "591",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "164",
+      "ulb_name": "CHIMAKURTHY",
+      "month_id": "202606",
+      "target": "591",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "164",
+      "ulb_name": "CHIMAKURTHY",
+      "month_id": "202604",
+      "target": "591",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "164",
+      "ulb_name": "CHIMAKURTHY",
+      "month_id": "202605",
+      "target": "591",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "213",
+      "ulb_name": "DARSI",
+      "month_id": "202603",
+      "target": "782",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "213",
+      "ulb_name": "DARSI",
+      "month_id": "202605",
+      "target": "782",
+      "achievement": "7",
+      "achievement_percentage": "1.79"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "213",
+      "ulb_name": "DARSI",
+      "month_id": "202606",
+      "target": "782",
+      "achievement": "0",
+      "achievement_percentage": "1.79"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "213",
+      "ulb_name": "DARSI",
+      "month_id": "202607",
+      "target": "782",
+      "achievement": "0",
+      "achievement_percentage": "1.79"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "213",
+      "ulb_name": "DARSI",
+      "month_id": "202604",
+      "target": "782",
+      "achievement": "7",
+      "achievement_percentage": "0.90"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "97",
+      "ulb_name": "KANDUKUR",
+      "month_id": "202607",
+      "target": "1306",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "97",
+      "ulb_name": "KANDUKUR",
+      "month_id": "202604",
+      "target": "1306",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "97",
+      "ulb_name": "KANDUKUR",
+      "month_id": "202605",
+      "target": "1306",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "97",
+      "ulb_name": "KANDUKUR",
+      "month_id": "202603",
+      "target": "1306",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "97",
+      "ulb_name": "KANDUKUR",
+      "month_id": "202606",
+      "target": "1306",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "99",
+      "ulb_name": "ONGOLE",
+      "month_id": "202605",
+      "target": "4337",
+      "achievement": "0",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "99",
+      "ulb_name": "ONGOLE",
+      "month_id": "202606",
+      "target": "4337",
+      "achievement": "0",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "99",
+      "ulb_name": "ONGOLE",
+      "month_id": "202604",
+      "target": "4337",
+      "achievement": "0",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "99",
+      "ulb_name": "ONGOLE",
+      "month_id": "202607",
+      "target": "4337",
+      "achievement": "0",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "8",
+      "district_name": "PRAKASAM",
+      "ulb_id": "99",
+      "ulb_name": "ONGOLE",
+      "month_id": "202603",
+      "target": "4337",
+      "achievement": "122",
+      "achievement_percentage": "2.81"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "183",
+      "ulb_name": "ATMAKUR-N",
+      "month_id": "202604",
+      "target": "738",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "183",
+      "ulb_name": "ATMAKUR-N",
+      "month_id": "202605",
+      "target": "738",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "183",
+      "ulb_name": "ATMAKUR-N",
+      "month_id": "202603",
+      "target": "738",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "183",
+      "ulb_name": "ATMAKUR-N",
+      "month_id": "202606",
+      "target": "738",
+      "achievement": "2",
+      "achievement_percentage": "0.27"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "183",
+      "ulb_name": "ATMAKUR-N",
+      "month_id": "202607",
+      "target": "738",
+      "achievement": "0",
+      "achievement_percentage": "0.27"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "209",
+      "ulb_name": "BUCHIREDDYPALEM",
+      "month_id": "202603",
+      "target": "643",
+      "achievement": "7",
+      "achievement_percentage": "1.09"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "209",
+      "ulb_name": "BUCHIREDDYPALEM",
+      "month_id": "202604",
+      "target": "643",
+      "achievement": "0",
+      "achievement_percentage": "1.09"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "209",
+      "ulb_name": "BUCHIREDDYPALEM",
+      "month_id": "202605",
+      "target": "643",
+      "achievement": "0",
+      "achievement_percentage": "1.09"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "209",
+      "ulb_name": "BUCHIREDDYPALEM",
+      "month_id": "202606",
+      "target": "643",
+      "achievement": "1",
+      "achievement_percentage": "1.24"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "209",
+      "ulb_name": "BUCHIREDDYPALEM",
+      "month_id": "202607",
+      "target": "643",
+      "achievement": "0",
+      "achievement_percentage": "1.24"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "88",
+      "ulb_name": "GUDUR",
+      "month_id": "202605",
+      "target": "1853",
+      "achievement": "39",
+      "achievement_percentage": "5.77"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "88",
+      "ulb_name": "GUDUR",
+      "month_id": "202606",
+      "target": "1853",
+      "achievement": "17",
+      "achievement_percentage": "6.69"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "88",
+      "ulb_name": "GUDUR",
+      "month_id": "202604",
+      "target": "1853",
+      "achievement": "39",
+      "achievement_percentage": "3.67"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "88",
+      "ulb_name": "GUDUR",
+      "month_id": "202607",
+      "target": "1853",
+      "achievement": "0",
+      "achievement_percentage": "6.69"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "88",
+      "ulb_name": "GUDUR",
+      "month_id": "202603",
+      "target": "1853",
+      "achievement": "29",
+      "achievement_percentage": "1.57"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "89",
+      "ulb_name": "KAVALI",
+      "month_id": "202607",
+      "target": "1945",
+      "achievement": "0",
+      "achievement_percentage": "2.26"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "89",
+      "ulb_name": "KAVALI",
+      "month_id": "202605",
+      "target": "1945",
+      "achievement": "0",
+      "achievement_percentage": "2.26"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "89",
+      "ulb_name": "KAVALI",
+      "month_id": "202606",
+      "target": "1945",
+      "achievement": "0",
+      "achievement_percentage": "2.26"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "89",
+      "ulb_name": "KAVALI",
+      "month_id": "202603",
+      "target": "1945",
+      "achievement": "44",
+      "achievement_percentage": "2.26"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "89",
+      "ulb_name": "KAVALI",
+      "month_id": "202604",
+      "target": "1945",
+      "achievement": "0",
+      "achievement_percentage": "2.26"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "90",
+      "ulb_name": "NELLORE",
+      "month_id": "202606",
+      "target": "8766",
+      "achievement": "12",
+      "achievement_percentage": "2.66"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "90",
+      "ulb_name": "NELLORE",
+      "month_id": "202607",
+      "target": "8766",
+      "achievement": "0",
+      "achievement_percentage": "2.66"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "90",
+      "ulb_name": "NELLORE",
+      "month_id": "202603",
+      "target": "8766",
+      "achievement": "221",
+      "achievement_percentage": "2.52"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "90",
+      "ulb_name": "NELLORE",
+      "month_id": "202604",
+      "target": "8766",
+      "achievement": "0",
+      "achievement_percentage": "2.52"
+    },
+    {
+      "district_id": "9",
+      "district_name": "SPSR NELLORE",
+      "ulb_id": "90",
+      "ulb_name": "NELLORE",
+      "month_id": "202605",
+      "target": "8766",
+      "achievement": "0",
+      "achievement_percentage": "2.52"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "9",
+      "ulb_name": "DHARMAVARAM",
+      "month_id": "202603",
+      "target": "2067",
+      "achievement": "274",
+      "achievement_percentage": "13.26"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "9",
+      "ulb_name": "DHARMAVARAM",
+      "month_id": "202605",
+      "target": "2067",
+      "achievement": "0",
+      "achievement_percentage": "13.26"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "9",
+      "ulb_name": "DHARMAVARAM",
+      "month_id": "202607",
+      "target": "2067",
+      "achievement": "144",
+      "achievement_percentage": "47.61"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "9",
+      "ulb_name": "DHARMAVARAM",
+      "month_id": "202604",
+      "target": "2067",
+      "achievement": "0",
+      "achievement_percentage": "13.26"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "9",
+      "ulb_name": "DHARMAVARAM",
+      "month_id": "202606",
+      "target": "2067",
+      "achievement": "566",
+      "achievement_percentage": "40.64"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "11",
+      "ulb_name": "HINDUPUR",
+      "month_id": "202606",
+      "target": "2553",
+      "achievement": "1064",
+      "achievement_percentage": "48.53"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "11",
+      "ulb_name": "HINDUPUR",
+      "month_id": "202607",
+      "target": "2553",
+      "achievement": "66",
+      "achievement_percentage": "51.12"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "11",
+      "ulb_name": "HINDUPUR",
+      "month_id": "202605",
+      "target": "2553",
+      "achievement": "11",
+      "achievement_percentage": "6.85"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "11",
+      "ulb_name": "HINDUPUR",
+      "month_id": "202603",
+      "target": "2553",
+      "achievement": "153",
+      "achievement_percentage": "5.99"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "11",
+      "ulb_name": "HINDUPUR",
+      "month_id": "202604",
+      "target": "2553",
+      "achievement": "11",
+      "achievement_percentage": "6.42"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "12",
+      "ulb_name": "KADIRI",
+      "month_id": "202606",
+      "target": "1597",
+      "achievement": "483",
+      "achievement_percentage": "35.57"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "12",
+      "ulb_name": "KADIRI",
+      "month_id": "202607",
+      "target": "1597",
+      "achievement": "17",
+      "achievement_percentage": "36.63"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "12",
+      "ulb_name": "KADIRI",
+      "month_id": "202605",
+      "target": "1597",
+      "achievement": "0",
+      "achievement_percentage": "5.32"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "12",
+      "ulb_name": "KADIRI",
+      "month_id": "202603",
+      "target": "1597",
+      "achievement": "85",
+      "achievement_percentage": "5.32"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "12",
+      "ulb_name": "KADIRI",
+      "month_id": "202604",
+      "target": "1597",
+      "achievement": "0",
+      "achievement_percentage": "5.32"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "147",
+      "ulb_name": "MADAKASIRA",
+      "month_id": "202606",
+      "target": "529",
+      "achievement": "188",
+      "achievement_percentage": "324.76"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "147",
+      "ulb_name": "MADAKASIRA",
+      "month_id": "202607",
+      "target": "529",
+      "achievement": "30",
+      "achievement_percentage": "330.43"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "147",
+      "ulb_name": "MADAKASIRA",
+      "month_id": "202603",
+      "target": "529",
+      "achievement": "1530",
+      "achievement_percentage": "289.22"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "147",
+      "ulb_name": "MADAKASIRA",
+      "month_id": "202604",
+      "target": "529",
+      "achievement": "0",
+      "achievement_percentage": "289.22"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "147",
+      "ulb_name": "MADAKASIRA",
+      "month_id": "202605",
+      "target": "529",
+      "achievement": "0",
+      "achievement_percentage": "289.22"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "212",
+      "ulb_name": "PENUKONDA",
+      "month_id": "202603",
+      "target": "612",
+      "achievement": "2636",
+      "achievement_percentage": "430.72"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "212",
+      "ulb_name": "PENUKONDA",
+      "month_id": "202604",
+      "target": "612",
+      "achievement": "0",
+      "achievement_percentage": "430.72"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "212",
+      "ulb_name": "PENUKONDA",
+      "month_id": "202605",
+      "target": "612",
+      "achievement": "0",
+      "achievement_percentage": "430.72"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "212",
+      "ulb_name": "PENUKONDA",
+      "month_id": "202606",
+      "target": "612",
+      "achievement": "109",
+      "achievement_percentage": "448.53"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "212",
+      "ulb_name": "PENUKONDA",
+      "month_id": "202607",
+      "target": "612",
+      "achievement": "0",
+      "achievement_percentage": "448.53"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "148",
+      "ulb_name": "PUTTAPARTHY",
+      "month_id": "202605",
+      "target": "652",
+      "achievement": "0",
+      "achievement_percentage": "65.18"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "148",
+      "ulb_name": "PUTTAPARTHY",
+      "month_id": "202604",
+      "target": "652",
+      "achievement": "0",
+      "achievement_percentage": "65.18"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "148",
+      "ulb_name": "PUTTAPARTHY",
+      "month_id": "202606",
+      "target": "652",
+      "achievement": "94",
+      "achievement_percentage": "79.60"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "148",
+      "ulb_name": "PUTTAPARTHY",
+      "month_id": "202603",
+      "target": "652",
+      "achievement": "425",
+      "achievement_percentage": "65.18"
+    },
+    {
+      "district_id": "25",
+      "district_name": "SRI SATYA SAI",
+      "ulb_id": "148",
+      "ulb_name": "PUTTAPARTHY",
+      "month_id": "202607",
+      "target": "652",
+      "achievement": "0",
+      "achievement_percentage": "79.60"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "102",
+      "ulb_name": "AMADALAVALASA",
+      "month_id": "202607",
+      "target": "742",
+      "achievement": "0",
+      "achievement_percentage": "142.72"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "102",
+      "ulb_name": "AMADALAVALASA",
+      "month_id": "202606",
+      "target": "742",
+      "achievement": "17",
+      "achievement_percentage": "142.72"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "102",
+      "ulb_name": "AMADALAVALASA",
+      "month_id": "202603",
+      "target": "742",
+      "achievement": "1034",
+      "achievement_percentage": "139.35"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "102",
+      "ulb_name": "AMADALAVALASA",
+      "month_id": "202604",
+      "target": "742",
+      "achievement": "4",
+      "achievement_percentage": "139.89"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "102",
+      "ulb_name": "AMADALAVALASA",
+      "month_id": "202605",
+      "target": "742",
+      "achievement": "4",
+      "achievement_percentage": "140.43"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "103",
+      "ulb_name": "ICHAPURAM",
+      "month_id": "202607",
+      "target": "813",
+      "achievement": "94",
+      "achievement_percentage": "101.97"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "103",
+      "ulb_name": "ICHAPURAM",
+      "month_id": "202603",
+      "target": "813",
+      "achievement": "26",
+      "achievement_percentage": "3.20"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "103",
+      "ulb_name": "ICHAPURAM",
+      "month_id": "202604",
+      "target": "813",
+      "achievement": "0",
+      "achievement_percentage": "3.20"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "103",
+      "ulb_name": "ICHAPURAM",
+      "month_id": "202605",
+      "target": "813",
+      "achievement": "0",
+      "achievement_percentage": "3.20"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "103",
+      "ulb_name": "ICHAPURAM",
+      "month_id": "202606",
+      "target": "813",
+      "achievement": "709",
+      "achievement_percentage": "90.41"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "104",
+      "ulb_name": "PALASA-KASSIBUGGA",
+      "month_id": "202604",
+      "target": "1208",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "104",
+      "ulb_name": "PALASA-KASSIBUGGA",
+      "month_id": "202605",
+      "target": "1208",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "104",
+      "ulb_name": "PALASA-KASSIBUGGA",
+      "month_id": "202603",
+      "target": "1208",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "104",
+      "ulb_name": "PALASA-KASSIBUGGA",
+      "month_id": "202606",
+      "target": "1208",
+      "achievement": "30",
+      "achievement_percentage": "2.48"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "104",
+      "ulb_name": "PALASA-KASSIBUGGA",
+      "month_id": "202607",
+      "target": "1208",
+      "achievement": "0",
+      "achievement_percentage": "2.48"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "106",
+      "ulb_name": "SRIKAKULAM",
+      "month_id": "202605",
+      "target": "2893",
+      "achievement": "24",
+      "achievement_percentage": "11.86"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "106",
+      "ulb_name": "SRIKAKULAM",
+      "month_id": "202606",
+      "target": "2893",
+      "achievement": "74",
+      "achievement_percentage": "14.41"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "106",
+      "ulb_name": "SRIKAKULAM",
+      "month_id": "202604",
+      "target": "2893",
+      "achievement": "24",
+      "achievement_percentage": "11.03"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "106",
+      "ulb_name": "SRIKAKULAM",
+      "month_id": "202607",
+      "target": "2893",
+      "achievement": "66",
+      "achievement_percentage": "16.70"
+    },
+    {
+      "district_id": "1",
+      "district_name": "SRIKAKULAM",
+      "ulb_id": "106",
+      "ulb_name": "SRIKAKULAM",
+      "month_id": "202603",
+      "target": "2893",
+      "achievement": "295",
+      "achievement_percentage": "10.20"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "200",
+      "ulb_name": "NAIDUPET",
+      "month_id": "202605",
+      "target": "958",
+      "achievement": "9",
+      "achievement_percentage": "94.57"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "200",
+      "ulb_name": "NAIDUPET",
+      "month_id": "202606",
+      "target": "958",
+      "achievement": "58",
+      "achievement_percentage": "100.63"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "200",
+      "ulb_name": "NAIDUPET",
+      "month_id": "202603",
+      "target": "958",
+      "achievement": "888",
+      "achievement_percentage": "92.69"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "200",
+      "ulb_name": "NAIDUPET",
+      "month_id": "202607",
+      "target": "958",
+      "achievement": "0",
+      "achievement_percentage": "100.63"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "200",
+      "ulb_name": "NAIDUPET",
+      "month_id": "202604",
+      "target": "958",
+      "achievement": "9",
+      "achievement_percentage": "93.63"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "20",
+      "ulb_name": "PUTTUR",
+      "month_id": "202603",
+      "target": "1144",
+      "achievement": "330",
+      "achievement_percentage": "28.85"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "20",
+      "ulb_name": "PUTTUR",
+      "month_id": "202604",
+      "target": "1144",
+      "achievement": "5",
+      "achievement_percentage": "29.28"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "20",
+      "ulb_name": "PUTTUR",
+      "month_id": "202607",
+      "target": "1144",
+      "achievement": "2",
+      "achievement_percentage": "108.83"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "20",
+      "ulb_name": "PUTTUR",
+      "month_id": "202606",
+      "target": "1144",
+      "achievement": "903",
+      "achievement_percentage": "108.65"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "20",
+      "ulb_name": "PUTTUR",
+      "month_id": "202605",
+      "target": "1144",
+      "achievement": "5",
+      "achievement_percentage": "29.72"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "21",
+      "ulb_name": "SRIKALAHASTHI",
+      "month_id": "202606",
+      "target": "1523",
+      "achievement": "465",
+      "achievement_percentage": "32.76"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "21",
+      "ulb_name": "SRIKALAHASTHI",
+      "month_id": "202607",
+      "target": "1523",
+      "achievement": "0",
+      "achievement_percentage": "32.76"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "21",
+      "ulb_name": "SRIKALAHASTHI",
+      "month_id": "202603",
+      "target": "1523",
+      "achievement": "8",
+      "achievement_percentage": "0.53"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "21",
+      "ulb_name": "SRIKALAHASTHI",
+      "month_id": "202604",
+      "target": "1523",
+      "achievement": "13",
+      "achievement_percentage": "1.38"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "21",
+      "ulb_name": "SRIKALAHASTHI",
+      "month_id": "202605",
+      "target": "1523",
+      "achievement": "13",
+      "achievement_percentage": "2.23"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "184",
+      "ulb_name": "SULLURPET",
+      "month_id": "202605",
+      "target": "729",
+      "achievement": "1",
+      "achievement_percentage": "0.27"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "184",
+      "ulb_name": "SULLURPET",
+      "month_id": "202606",
+      "target": "729",
+      "achievement": "4",
+      "achievement_percentage": "0.82"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "184",
+      "ulb_name": "SULLURPET",
+      "month_id": "202604",
+      "target": "729",
+      "achievement": "1",
+      "achievement_percentage": "0.14"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "184",
+      "ulb_name": "SULLURPET",
+      "month_id": "202603",
+      "target": "729",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "184",
+      "ulb_name": "SULLURPET",
+      "month_id": "202607",
+      "target": "729",
+      "achievement": "7",
+      "achievement_percentage": "1.78"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "22",
+      "ulb_name": "TIRUPATHI",
+      "month_id": "202607",
+      "target": "4689",
+      "achievement": "60",
+      "achievement_percentage": "25.04"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "22",
+      "ulb_name": "TIRUPATHI",
+      "month_id": "202606",
+      "target": "4689",
+      "achievement": "1070",
+      "achievement_percentage": "23.76"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "22",
+      "ulb_name": "TIRUPATHI",
+      "month_id": "202603",
+      "target": "4689",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "22",
+      "ulb_name": "TIRUPATHI",
+      "month_id": "202604",
+      "target": "4689",
+      "achievement": "22",
+      "achievement_percentage": "0.47"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "22",
+      "ulb_name": "TIRUPATHI",
+      "month_id": "202605",
+      "target": "4689",
+      "achievement": "22",
+      "achievement_percentage": "0.94"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "91",
+      "ulb_name": "VENKATAGIRI",
+      "month_id": "202604",
+      "target": "1065",
+      "achievement": "22",
+      "achievement_percentage": "2.07"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "91",
+      "ulb_name": "VENKATAGIRI",
+      "month_id": "202605",
+      "target": "1065",
+      "achievement": "22",
+      "achievement_percentage": "4.13"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "91",
+      "ulb_name": "VENKATAGIRI",
+      "month_id": "202606",
+      "target": "1065",
+      "achievement": "182",
+      "achievement_percentage": "21.22"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "91",
+      "ulb_name": "VENKATAGIRI",
+      "month_id": "202603",
+      "target": "1065",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "23",
+      "district_name": "TIRUPATI",
+      "ulb_id": "91",
+      "ulb_name": "VENKATAGIRI",
+      "month_id": "202607",
+      "target": "1065",
+      "achievement": "0",
+      "achievement_percentage": "21.22"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "107",
+      "ulb_name": "ANAKAPALLE",
+      "month_id": "202606",
+      "target": "1615",
+      "achievement": "0",
+      "achievement_percentage": "1.05"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "107",
+      "ulb_name": "ANAKAPALLE",
+      "month_id": "202607",
+      "target": "1615",
+      "achievement": "0",
+      "achievement_percentage": "1.05"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "107",
+      "ulb_name": "ANAKAPALLE",
+      "month_id": "202605",
+      "target": "1615",
+      "achievement": "0",
+      "achievement_percentage": "1.05"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "107",
+      "ulb_name": "ANAKAPALLE",
+      "month_id": "202603",
+      "target": "1615",
+      "achievement": "17",
+      "achievement_percentage": "1.05"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "107",
+      "ulb_name": "ANAKAPALLE",
+      "month_id": "202604",
+      "target": "1615",
+      "achievement": "0",
+      "achievement_percentage": "1.05"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "108",
+      "ulb_name": "BHEEMUNIPATNAM",
+      "month_id": "202605",
+      "target": "1610",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "108",
+      "ulb_name": "BHEEMUNIPATNAM",
+      "month_id": "202606",
+      "target": "1610",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "108",
+      "ulb_name": "BHEEMUNIPATNAM",
+      "month_id": "202607",
+      "target": "1610",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "108",
+      "ulb_name": "BHEEMUNIPATNAM",
+      "month_id": "202603",
+      "target": "1610",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "108",
+      "ulb_name": "BHEEMUNIPATNAM",
+      "month_id": "202604",
+      "target": "1610",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "109",
+      "ulb_name": "GVMC",
+      "month_id": "202604",
+      "target": "31562",
+      "achievement": "12",
+      "achievement_percentage": "0.04"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "109",
+      "ulb_name": "GVMC",
+      "month_id": "202605",
+      "target": "31562",
+      "achievement": "12",
+      "achievement_percentage": "0.08"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "109",
+      "ulb_name": "GVMC",
+      "month_id": "202603",
+      "target": "31562",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "109",
+      "ulb_name": "GVMC",
+      "month_id": "202606",
+      "target": "31562",
+      "achievement": "134",
+      "achievement_percentage": "0.50"
+    },
+    {
+      "district_id": "3",
+      "district_name": "VISAKHAPATNAM",
+      "ulb_id": "109",
+      "ulb_name": "GVMC",
+      "month_id": "202607",
+      "target": "31562",
+      "achievement": "29",
+      "achievement_percentage": "0.59"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "110",
+      "ulb_name": "BOBBILLI",
+      "month_id": "202607",
+      "target": "1399",
+      "achievement": "0",
+      "achievement_percentage": "54.11"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "110",
+      "ulb_name": "BOBBILLI",
+      "month_id": "202604",
+      "target": "1399",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "110",
+      "ulb_name": "BOBBILLI",
+      "month_id": "202605",
+      "target": "1399",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "110",
+      "ulb_name": "BOBBILLI",
+      "month_id": "202606",
+      "target": "1399",
+      "achievement": "757",
+      "achievement_percentage": "54.11"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "110",
+      "ulb_name": "BOBBILLI",
+      "month_id": "202603",
+      "target": "1399",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "202",
+      "ulb_name": "NELLIMARLA",
+      "month_id": "202607",
+      "target": "603",
+      "achievement": "0",
+      "achievement_percentage": "1549.92"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "202",
+      "ulb_name": "NELLIMARLA",
+      "month_id": "202603",
+      "target": "603",
+      "achievement": "9334",
+      "achievement_percentage": "1547.93"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "202",
+      "ulb_name": "NELLIMARLA",
+      "month_id": "202604",
+      "target": "603",
+      "achievement": "0",
+      "achievement_percentage": "1547.93"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "202",
+      "ulb_name": "NELLIMARLA",
+      "month_id": "202605",
+      "target": "603",
+      "achievement": "0",
+      "achievement_percentage": "1547.93"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "202",
+      "ulb_name": "NELLIMARLA",
+      "month_id": "202606",
+      "target": "603",
+      "achievement": "12",
+      "achievement_percentage": "1549.92"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "105",
+      "ulb_name": "RAJAM",
+      "month_id": "202603",
+      "target": "869",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "105",
+      "ulb_name": "RAJAM",
+      "month_id": "202604",
+      "target": "869",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "105",
+      "ulb_name": "RAJAM",
+      "month_id": "202605",
+      "target": "869",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "105",
+      "ulb_name": "RAJAM",
+      "month_id": "202606",
+      "target": "869",
+      "achievement": "268",
+      "achievement_percentage": "30.84"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "105",
+      "ulb_name": "RAJAM",
+      "month_id": "202607",
+      "target": "869",
+      "achievement": "0",
+      "achievement_percentage": "30.84"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "113",
+      "ulb_name": "VIZIANAGARAM",
+      "month_id": "202606",
+      "target": "5089",
+      "achievement": "209",
+      "achievement_percentage": "4.21"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "113",
+      "ulb_name": "VIZIANAGARAM",
+      "month_id": "202607",
+      "target": "5089",
+      "achievement": "0",
+      "achievement_percentage": "4.21"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "113",
+      "ulb_name": "VIZIANAGARAM",
+      "month_id": "202605",
+      "target": "5089",
+      "achievement": "0",
+      "achievement_percentage": "0.10"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "113",
+      "ulb_name": "VIZIANAGARAM",
+      "month_id": "202603",
+      "target": "5089",
+      "achievement": "5",
+      "achievement_percentage": "0.10"
+    },
+    {
+      "district_id": "2",
+      "district_name": "VIZIANAGARAM",
+      "ulb_id": "113",
+      "ulb_name": "VIZIANAGARAM",
+      "month_id": "202604",
+      "target": "5089",
+      "achievement": "0",
+      "achievement_percentage": "0.10"
+    },
+    {
+      "district_id": "20",
+      "district_name": "VMC",
+      "ulb_id": "69",
+      "ulb_name": "VMC",
+      "month_id": "202603",
+      "target": "13998",
+      "achievement": "2256",
+      "achievement_percentage": "16.12"
+    },
+    {
+      "district_id": "20",
+      "district_name": "VMC",
+      "ulb_id": "69",
+      "ulb_name": "VMC",
+      "month_id": "202604",
+      "target": "13998",
+      "achievement": "0",
+      "achievement_percentage": "16.12"
+    },
+    {
+      "district_id": "20",
+      "district_name": "VMC",
+      "ulb_id": "69",
+      "ulb_name": "VMC",
+      "month_id": "202605",
+      "target": "13998",
+      "achievement": "0",
+      "achievement_percentage": "16.12"
+    },
+    {
+      "district_id": "20",
+      "district_name": "VMC",
+      "ulb_id": "69",
+      "ulb_name": "VMC",
+      "month_id": "202606",
+      "target": "13998",
+      "achievement": "0",
+      "achievement_percentage": "16.12"
+    },
+    {
+      "district_id": "20",
+      "district_name": "VMC",
+      "ulb_id": "69",
+      "ulb_name": "VMC",
+      "month_id": "202607",
+      "target": "13998",
+      "achievement": "0",
+      "achievement_percentage": "16.12"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "208",
+      "ulb_name": "AKIVEEDU",
+      "month_id": "202603",
+      "target": "663",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "208",
+      "ulb_name": "AKIVEEDU",
+      "month_id": "202604",
+      "target": "663",
+      "achievement": "9",
+      "achievement_percentage": "1.36"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "208",
+      "ulb_name": "AKIVEEDU",
+      "month_id": "202605",
+      "target": "663",
+      "achievement": "9",
+      "achievement_percentage": "2.71"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "208",
+      "ulb_name": "AKIVEEDU",
+      "month_id": "202606",
+      "target": "663",
+      "achievement": "0",
+      "achievement_percentage": "2.71"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "208",
+      "ulb_name": "AKIVEEDU",
+      "month_id": "202607",
+      "target": "663",
+      "achievement": "15",
+      "achievement_percentage": "4.98"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "116",
+      "ulb_name": "BHIMAVARAM",
+      "month_id": "202606",
+      "target": "2309",
+      "achievement": "96",
+      "achievement_percentage": "4.68"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "116",
+      "ulb_name": "BHIMAVARAM",
+      "month_id": "202607",
+      "target": "2309",
+      "achievement": "2",
+      "achievement_percentage": "4.76"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "116",
+      "ulb_name": "BHIMAVARAM",
+      "month_id": "202604",
+      "target": "2309",
+      "achievement": "6",
+      "achievement_percentage": "0.26"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "116",
+      "ulb_name": "BHIMAVARAM",
+      "month_id": "202605",
+      "target": "2309",
+      "achievement": "6",
+      "achievement_percentage": "0.52"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "116",
+      "ulb_name": "BHIMAVARAM",
+      "month_id": "202603",
+      "target": "2309",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "119",
+      "ulb_name": "NARSAPUR",
+      "month_id": "202605",
+      "target": "853",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "119",
+      "ulb_name": "NARSAPUR",
+      "month_id": "202604",
+      "target": "853",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "119",
+      "ulb_name": "NARSAPUR",
+      "month_id": "202606",
+      "target": "853",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "119",
+      "ulb_name": "NARSAPUR",
+      "month_id": "202603",
+      "target": "853",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "119",
+      "ulb_name": "NARSAPUR",
+      "month_id": "202607",
+      "target": "853",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "121",
+      "ulb_name": "PALAKOL",
+      "month_id": "202607",
+      "target": "1672",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "121",
+      "ulb_name": "PALAKOL",
+      "month_id": "202606",
+      "target": "1672",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "121",
+      "ulb_name": "PALAKOL",
+      "month_id": "202605",
+      "target": "1672",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "121",
+      "ulb_name": "PALAKOL",
+      "month_id": "202603",
+      "target": "1672",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "121",
+      "ulb_name": "PALAKOL",
+      "month_id": "202604",
+      "target": "1672",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "122",
+      "ulb_name": "TADEPALLIGUDEM",
+      "month_id": "202606",
+      "target": "1922",
+      "achievement": "0",
+      "achievement_percentage": "10.72"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "122",
+      "ulb_name": "TADEPALLIGUDEM",
+      "month_id": "202607",
+      "target": "1922",
+      "achievement": "0",
+      "achievement_percentage": "10.72"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "122",
+      "ulb_name": "TADEPALLIGUDEM",
+      "month_id": "202603",
+      "target": "1922",
+      "achievement": "206",
+      "achievement_percentage": "10.72"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "122",
+      "ulb_name": "TADEPALLIGUDEM",
+      "month_id": "202604",
+      "target": "1922",
+      "achievement": "0",
+      "achievement_percentage": "10.72"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "122",
+      "ulb_name": "TADEPALLIGUDEM",
+      "month_id": "202605",
+      "target": "1922",
+      "achievement": "0",
+      "achievement_percentage": "10.72"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "123",
+      "ulb_name": "TANUKU",
+      "month_id": "202607",
+      "target": "1492",
+      "achievement": "2",
+      "achievement_percentage": "2.75"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "123",
+      "ulb_name": "TANUKU",
+      "month_id": "202605",
+      "target": "1492",
+      "achievement": "0",
+      "achievement_percentage": "0.27"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "123",
+      "ulb_name": "TANUKU",
+      "month_id": "202606",
+      "target": "1492",
+      "achievement": "35",
+      "achievement_percentage": "2.61"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "123",
+      "ulb_name": "TANUKU",
+      "month_id": "202604",
+      "target": "1492",
+      "achievement": "0",
+      "achievement_percentage": "0.27"
+    },
+    {
+      "district_id": "5",
+      "district_name": "WEST GODAVARI",
+      "ulb_id": "123",
+      "ulb_name": "TANUKU",
+      "month_id": "202603",
+      "target": "1492",
+      "achievement": "4",
+      "achievement_percentage": "0.27"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "44",
+      "ulb_name": "BADVEL",
+      "month_id": "202606",
+      "target": "1361",
+      "achievement": "0",
+      "achievement_percentage": "70.54"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "44",
+      "ulb_name": "BADVEL",
+      "month_id": "202607",
+      "target": "1361",
+      "achievement": "0",
+      "achievement_percentage": "70.54"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "44",
+      "ulb_name": "BADVEL",
+      "month_id": "202605",
+      "target": "1361",
+      "achievement": "124",
+      "achievement_percentage": "70.54"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "44",
+      "ulb_name": "BADVEL",
+      "month_id": "202603",
+      "target": "1361",
+      "achievement": "712",
+      "achievement_percentage": "52.31"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "44",
+      "ulb_name": "BADVEL",
+      "month_id": "202604",
+      "target": "1361",
+      "achievement": "124",
+      "achievement_percentage": "61.43"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "45",
+      "ulb_name": "JAMMULAAMADUGU",
+      "month_id": "202603",
+      "target": "834",
+      "achievement": "66",
+      "achievement_percentage": "7.91"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "45",
+      "ulb_name": "JAMMULAAMADUGU",
+      "month_id": "202604",
+      "target": "834",
+      "achievement": "0",
+      "achievement_percentage": "7.91"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "45",
+      "ulb_name": "JAMMULAAMADUGU",
+      "month_id": "202605",
+      "target": "834",
+      "achievement": "0",
+      "achievement_percentage": "7.91"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "45",
+      "ulb_name": "JAMMULAAMADUGU",
+      "month_id": "202606",
+      "target": "834",
+      "achievement": "0",
+      "achievement_percentage": "7.91"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "45",
+      "ulb_name": "JAMMULAAMADUGU",
+      "month_id": "202607",
+      "target": "834",
+      "achievement": "0",
+      "achievement_percentage": "7.91"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "46",
+      "ulb_name": "KADAPA",
+      "month_id": "202604",
+      "target": "5225",
+      "achievement": "31",
+      "achievement_percentage": "0.59"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "46",
+      "ulb_name": "KADAPA",
+      "month_id": "202605",
+      "target": "5225",
+      "achievement": "31",
+      "achievement_percentage": "1.19"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "46",
+      "ulb_name": "KADAPA",
+      "month_id": "202603",
+      "target": "5225",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "46",
+      "ulb_name": "KADAPA",
+      "month_id": "202606",
+      "target": "5225",
+      "achievement": "482",
+      "achievement_percentage": "10.41"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "46",
+      "ulb_name": "KADAPA",
+      "month_id": "202607",
+      "target": "5225",
+      "achievement": "0",
+      "achievement_percentage": "10.41"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "205",
+      "ulb_name": "KAMALAPURAM",
+      "month_id": "202603",
+      "target": "345",
+      "achievement": "5",
+      "achievement_percentage": "1.45"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "205",
+      "ulb_name": "KAMALAPURAM",
+      "month_id": "202604",
+      "target": "345",
+      "achievement": "0",
+      "achievement_percentage": "1.45"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "205",
+      "ulb_name": "KAMALAPURAM",
+      "month_id": "202605",
+      "target": "345",
+      "achievement": "0",
+      "achievement_percentage": "1.45"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "205",
+      "ulb_name": "KAMALAPURAM",
+      "month_id": "202606",
+      "target": "345",
+      "achievement": "0",
+      "achievement_percentage": "1.45"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "205",
+      "ulb_name": "KAMALAPURAM",
+      "month_id": "202607",
+      "target": "345",
+      "achievement": "0",
+      "achievement_percentage": "1.45"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "186",
+      "ulb_name": "MYDUKUR",
+      "month_id": "202606",
+      "target": "1063",
+      "achievement": "11",
+      "achievement_percentage": "3.76"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "186",
+      "ulb_name": "MYDUKUR",
+      "month_id": "202603",
+      "target": "1063",
+      "achievement": "29",
+      "achievement_percentage": "2.73"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "186",
+      "ulb_name": "MYDUKUR",
+      "month_id": "202604",
+      "target": "1063",
+      "achievement": "0",
+      "achievement_percentage": "2.73"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "186",
+      "ulb_name": "MYDUKUR",
+      "month_id": "202605",
+      "target": "1063",
+      "achievement": "0",
+      "achievement_percentage": "2.73"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "186",
+      "ulb_name": "MYDUKUR",
+      "month_id": "202607",
+      "target": "1063",
+      "achievement": "0",
+      "achievement_percentage": "3.76"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "47",
+      "ulb_name": "PRODDATUR",
+      "month_id": "202607",
+      "target": "2800",
+      "achievement": "0",
+      "achievement_percentage": "34.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "47",
+      "ulb_name": "PRODDATUR",
+      "month_id": "202606",
+      "target": "2800",
+      "achievement": "12",
+      "achievement_percentage": "34.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "47",
+      "ulb_name": "PRODDATUR",
+      "month_id": "202603",
+      "target": "2800",
+      "achievement": "576",
+      "achievement_percentage": "20.57"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "47",
+      "ulb_name": "PRODDATUR",
+      "month_id": "202604",
+      "target": "2800",
+      "achievement": "182",
+      "achievement_percentage": "27.07"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "47",
+      "ulb_name": "PRODDATUR",
+      "month_id": "202605",
+      "target": "2800",
+      "achievement": "182",
+      "achievement_percentage": "33.57"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "48",
+      "ulb_name": "PULIVENDULA",
+      "month_id": "202607",
+      "target": "1111",
+      "achievement": "0",
+      "achievement_percentage": "3.96"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "48",
+      "ulb_name": "PULIVENDULA",
+      "month_id": "202603",
+      "target": "1111",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "48",
+      "ulb_name": "PULIVENDULA",
+      "month_id": "202604",
+      "target": "1111",
+      "achievement": "22",
+      "achievement_percentage": "1.98"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "48",
+      "ulb_name": "PULIVENDULA",
+      "month_id": "202605",
+      "target": "1111",
+      "achievement": "22",
+      "achievement_percentage": "3.96"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "48",
+      "ulb_name": "PULIVENDULA",
+      "month_id": "202606",
+      "target": "1111",
+      "achievement": "0",
+      "achievement_percentage": "3.96"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "49",
+      "ulb_name": "RAJAMPET",
+      "month_id": "202603",
+      "target": "664",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "49",
+      "ulb_name": "RAJAMPET",
+      "month_id": "202604",
+      "target": "664",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "49",
+      "ulb_name": "RAJAMPET",
+      "month_id": "202605",
+      "target": "664",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "49",
+      "ulb_name": "RAJAMPET",
+      "month_id": "202606",
+      "target": "664",
+      "achievement": "2",
+      "achievement_percentage": "0.30"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "49",
+      "ulb_name": "RAJAMPET",
+      "month_id": "202607",
+      "target": "664",
+      "achievement": "0",
+      "achievement_percentage": "0.30"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "191",
+      "ulb_name": "YERRAGUNTLA",
+      "month_id": "202603",
+      "target": "637",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "191",
+      "ulb_name": "YERRAGUNTLA",
+      "month_id": "202604",
+      "target": "637",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "191",
+      "ulb_name": "YERRAGUNTLA",
+      "month_id": "202605",
+      "target": "637",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "191",
+      "ulb_name": "YERRAGUNTLA",
+      "month_id": "202606",
+      "target": "637",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    },
+    {
+      "district_id": "11",
+      "district_name": "YSR",
+      "ulb_id": "191",
+      "ulb_name": "YERRAGUNTLA",
+      "month_id": "202607",
+      "target": "637",
+      "achievement": "0",
+      "achievement_percentage": "0.00"
+    }
+  ]
+}

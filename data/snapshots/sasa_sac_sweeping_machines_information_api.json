@@ -1,0 +1,150 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "c9718ca0-c9ca-442c-a6d8-a400167f774c",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_sweeping_machines_information_api",
+    "filters": {
+      "month_number": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-ac7f1c07-d576-42da-beda-ff7f126e636f",
+    "generatedAt": "2026-08-28T03:28:20.763467+00:00",
+    "totalRecordCount": 14,
+    "returnedRecordCount": 14,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_sweeping_machines_information_api",
+    "tableName": "ap_citizen360.sasa_sac_sweeping_machines_information_api"
+  },
+  "records": [
+    {
+      "district_name": "Anantapur",
+      "ulb_name": "Anantapur",
+      "no_of_machines_supplied": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Chittoor",
+      "ulb_name": "Chittoor",
+      "no_of_machines_supplied": "3",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "East Godavari",
+      "ulb_name": "Rajamahendravaram",
+      "no_of_machines_supplied": "3",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Eluru",
+      "ulb_name": "Eluru",
+      "no_of_machines_supplied": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Guntur",
+      "ulb_name": "Guntur",
+      "no_of_machines_supplied": "14",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Kurnool",
+      "ulb_name": "Kurnool",
+      "no_of_machines_supplied": "3",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "ulb_name": "Vijayawada",
+      "no_of_machines_supplied": "11",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Prakasam",
+      "ulb_name": "Ongole",
+      "no_of_machines_supplied": "4",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Nellore",
+      "no_of_machines_supplied": "19",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SPSR Nellore",
+      "ulb_name": "Nellore",
+      "no_of_machines_supplied": "4",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Srikakulam",
+      "ulb_name": "Srikakulam",
+      "no_of_machines_supplied": "1",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Visakhapatnam",
+      "ulb_name": "Visakhapatnam",
+      "no_of_machines_supplied": "8",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Vizianagaram",
+      "ulb_name": "Vizianagaram",
+      "no_of_machines_supplied": "2",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "YSR Kadapa",
+      "ulb_name": "Kadapa",
+      "no_of_machines_supplied": "5",
+      "month_number": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}

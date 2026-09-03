@@ -1,0 +1,49 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "53e87e42-ef7c-4f53-aaa3-39b55ac06600",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_100_percent_clearance_of_legacy_waste_api",
+    "filters": {
+      "dstrt_nm": "Anakapalli",
+      "mnth_no": "6",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-56b7280c-91a3-4b08-8fce-a12c8ecf3aa7",
+    "generatedAt": "2026-08-28T03:27:52.099163+00:00",
+    "totalRecordCount": 2,
+    "returnedRecordCount": 2,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_100_percent_clearance_of_legacy_waste_api",
+    "tableName": "ap_citizen360.sasa_100_percent_clearance_of_legacy_waste_api"
+  },
+  "records": [
+    {
+      "dstrt_nm": "Anakapalli",
+      "ulb_nm": "Narsipatnam ",
+      "mnth_no": "6",
+      "mnth_nm": "JUNE",
+      "fin_year": "2026-2027",
+      "year": "2026",
+      "overall_quantity": "\"36,400\"",
+      "overall_quantity_remediated_in_lmt": "\"36,400\"",
+      "balance": "0",
+      "percentage_of_completion": "100%"
+    },
+    {
+      "dstrt_nm": "Anakapalli",
+      "ulb_nm": "Yelamanchili",
+      "mnth_no": "6",
+      "mnth_nm": "JUNE",
+      "fin_year": "2026-2027",
+      "year": "2026",
+      "overall_quantity": "\"8,719\"",
+      "overall_quantity_remediated_in_lmt": "\"8,719\"",
+      "balance": "0",
+      "percentage_of_completion": "100%"
+    }
+  ]
+}

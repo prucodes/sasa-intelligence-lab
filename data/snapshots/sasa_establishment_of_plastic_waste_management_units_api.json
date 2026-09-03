@@ -1,0 +1,36 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "4540a7ae-c256-4bb5-9754-969165579dfb",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_establishment_of_plastic_waste_management_units_api",
+    "filters": {
+      "dstrt_id": "14",
+      "mnth_no": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-592671b2-0ace-41ae-b8c5-32733c30874d",
+    "generatedAt": "2026-08-28T03:27:24.474764+00:00",
+    "totalRecordCount": 1,
+    "returnedRecordCount": 1,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_establishment_of_plastic_waste_management_units_api",
+    "tableName": "ap_citizen360.sasa_establishment_of_plastic_waste_management_units_api"
+  },
+  "records": [
+    {
+      "dstrt_id": "14",
+      "dstrt_nm": "ALLURI SITHARAMA RAJU",
+      "mnth_no": "7",
+      "mnth_nm": "JULY",
+      "fin_year": "2026-2027",
+      "year": "2026",
+      "pwm_units_trgt_units": "4",
+      "pwm_units_achvmnt": "4",
+      "pwm_units_achvmnt_prcntge": "100"
+    }
+  ]
+}

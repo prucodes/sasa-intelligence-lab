@@ -1,0 +1,54 @@
+{
+  "name": "sasa-intelligence-lab",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "vinext dev --port 3000",
+    "build": "vinext build",
+    "start": "vinext start --port 3000",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern artifacts --ignore-pattern dist-static",
+    "test": "vitest run",
+    "validate:data": "node scripts/validate-snapshots.mjs",
+    "fingerprint": "node scripts/record-fingerprints.mjs",
+    "ingest": "node scripts/ingest.mjs",
+    "aggregate": "node scripts/aggregate.mjs",
+    "verify": "npm run validate:data && npm run lint && npm run test && npm run build",
+    "screenshots": "node scripts/capture-screenshots.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "build:static": "node scripts/build-static.mjs",
+    "check:live": "node scripts/check-live.mjs"
+  },
+  "dependencies": {
+    "next": "16.3.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.37.1",
+    "@cloudflare/workers-types": "4.20260515.1",
+    "@openai/sites-vite-plugin": "^0.2.0",
+    "@playwright/test": "^1.55.0",
+    "@tailwindcss/postcss": "4.2.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-rsc": "0.5.26",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "jsdom": "^26.1.0",
+    "react-server-dom-webpack": "19.2.6",
+    "tailwindcss": "4.2.1",
+    "typescript": "5.9.3",
+    "vinext": "1.0.0-beta.3",
+    "vite": "8.0.13",
+    "vitest": "^3.2.4",
+    "wrangler": "4.92.0"
+  },
+  "type": "module"
+}

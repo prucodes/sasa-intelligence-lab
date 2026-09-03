@@ -1,0 +1,255 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "73785bc3-7b53-4d21-9668-a8054fb3794e",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_cdma_ulbs_ewaste_collection_mechanism_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-65287ffd-4780-43a2-9df7-234f52d3fd9a",
+    "generatedAt": "2026-08-28T15:26:42.399724+00:00",
+    "totalRecordCount": 26,
+    "returnedRecordCount": 26,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_cdma_ulbs_ewaste_collection_mechanism_api",
+    "tableName": "ap_citizen360.sasa_cdma_ulbs_ewaste_collection_mechanism_api"
+  },
+  "records": [
+    {
+      "district_id": "6",
+      "district_name": "Anakapalli",
+      "target": "2",
+      "achievement": "0",
+      "achievement_percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "21",
+      "district_name": "Anantapuram",
+      "target": "6",
+      "achievement": "1",
+      "achievement_percentage": "16.67",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "24",
+      "district_name": "Annamayya",
+      "target": "4",
+      "achievement": "1",
+      "achievement_percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "16",
+      "district_name": "Bapatla",
+      "target": "3",
+      "achievement": "2",
+      "achievement_percentage": "66.67",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "26",
+      "district_name": "Chittoor",
+      "target": "4",
+      "achievement": "1",
+      "achievement_percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "9",
+      "district_name": "Dr. B.R. Ambedkar Konaseema",
+      "target": "3",
+      "achievement": "2",
+      "achievement_percentage": "66.67",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "8",
+      "district_name": "East Godavari",
+      "target": "4",
+      "achievement": "3",
+      "achievement_percentage": "75.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "10",
+      "district_name": "Eluru",
+      "target": "4",
+      "achievement": "1",
+      "achievement_percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "15",
+      "district_name": "Guntur",
+      "target": "4",
+      "achievement": "4",
+      "achievement_percentage": "100.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "7",
+      "district_name": "Kakinada",
+      "target": "7",
+      "achievement": "4",
+      "achievement_percentage": "57.14",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "13",
+      "district_name": "Krishna",
+      "target": "5",
+      "achievement": "2",
+      "achievement_percentage": "40.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "19",
+      "district_name": "Kurnool",
+      "target": "4",
+      "achievement": "1",
+      "achievement_percentage": "25.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "28",
+      "district_name": "Markapuram",
+      "target": "4",
+      "achievement": "0",
+      "achievement_percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "12",
+      "district_name": "NTR",
+      "target": "5",
+      "achievement": "1",
+      "achievement_percentage": "20.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "20",
+      "district_name": "Nandyal",
+      "target": "6",
+      "achievement": "3",
+      "achievement_percentage": "50.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "14",
+      "district_name": "Palnadu",
+      "target": "8",
+      "achievement": "7",
+      "achievement_percentage": "87.50",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "2",
+      "district_name": "Parvathipuram Manyam",
+      "target": "3",
+      "achievement": "0",
+      "achievement_percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "17",
+      "district_name": "Prakasam",
+      "target": "5",
+      "achievement": "1",
+      "achievement_percentage": "20.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "18",
+      "district_name": "Sri Potti Sriramulu Nellore",
+      "target": "6",
+      "achievement": "3",
+      "achievement_percentage": "50.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "22",
+      "district_name": "Sri Sathya Sai",
+      "target": "6",
+      "achievement": "0",
+      "achievement_percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "1",
+      "district_name": "Srikakulam",
+      "target": "4",
+      "achievement": "0",
+      "achievement_percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "25",
+      "district_name": "Tirupati",
+      "target": "6",
+      "achievement": "3",
+      "achievement_percentage": "50.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "4",
+      "district_name": "Visakhapatnam",
+      "target": "1",
+      "achievement": "1",
+      "achievement_percentage": "100.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "3",
+      "district_name": "Vizianagaram",
+      "target": "4",
+      "achievement": "0",
+      "achievement_percentage": "0.00",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "11",
+      "district_name": "West Godavari",
+      "target": "6",
+      "achievement": "4",
+      "achievement_percentage": "66.67",
+      "month": "8",
+      "year": "2026"
+    },
+    {
+      "district_id": "23",
+      "district_name": "YSR Kadapa",
+      "target": "9",
+      "achievement": "7",
+      "achievement_percentage": "77.78",
+      "month": "8",
+      "year": "2026"
+    }
+  ]
+}

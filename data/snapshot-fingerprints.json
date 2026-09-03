@@ -1,0 +1,552 @@
+{
+  "version": 1,
+  "datasets": {
+    "sasa_100_percent_clearance_of_legacy_waste_api": {
+      "tableKey": "sasa_100_percent_clearance_of_legacy_waste_api",
+      "retrievedAt": "2026-08-28T15:24:52.235490+00:00",
+      "rows": 246,
+      "content": "51ddee138c518302",
+      "periods": {
+        "2026-06": {
+          "rows": 126,
+          "content": "284fa16cc7fb547d",
+          "entities": "d615134752cd23b6"
+        },
+        "2026-07": {
+          "rows": 120,
+          "content": "edb918c7434a6fdb",
+          "entities": "86da54a747086309"
+        }
+      }
+    },
+    "sasa_50_percent_green_spaces_api": {
+      "tableKey": "sasa_50_percent_green_spaces_api",
+      "retrievedAt": "2026-08-28T15:25:27.977448+00:00",
+      "rows": 244,
+      "content": "d3be1b0e638d6d02",
+      "periods": {
+        "2026-06": {
+          "rows": 120,
+          "content": "b80892584821ae0a",
+          "entities": "9fcc132859136e01"
+        },
+        "2026-07": {
+          "rows": 124,
+          "content": "72a58950df6b9b44",
+          "entities": "35f4523c0b6a2818"
+        }
+      }
+    },
+    "sasa_50_percent_greencover_api": {
+      "tableKey": "sasa_50_percent_greencover_api",
+      "retrievedAt": "2026-08-28T15:25:05.248480+00:00",
+      "rows": 244,
+      "content": "20907a41908fd293",
+      "periods": {
+        "2026-06": {
+          "rows": 120,
+          "content": "c73c3165b64b8810",
+          "entities": "9fcc132859136e01"
+        },
+        "2026-07": {
+          "rows": 124,
+          "content": "bb3e08a7f089583c",
+          "entities": "35f4523c0b6a2818"
+        }
+      }
+    },
+    "sasa_50_percent_rejuvenation_api": {
+      "tableKey": "sasa_50_percent_rejuvenation_api",
+      "retrievedAt": "2026-08-28T15:25:20.450543+00:00",
+      "rows": 244,
+      "content": "e168270e8c70ad94",
+      "periods": {
+        "2026-06": {
+          "rows": 120,
+          "content": "d3ab33f39e7b8451",
+          "entities": "9fcc132859136e01"
+        },
+        "2026-07": {
+          "rows": 124,
+          "content": "05e6738648f21f39",
+          "entities": "35f4523c0b6a2818"
+        }
+      }
+    },
+    "sasa_cdma_ulbs_ewaste_collection_mechanism_api": {
+      "tableKey": "sasa_cdma_ulbs_ewaste_collection_mechanism_api",
+      "retrievedAt": "2026-08-28T15:26:42.399724+00:00",
+      "rows": 26,
+      "content": "66865bc580faac55",
+      "periods": {
+        "2026-08": {
+          "rows": 26,
+          "content": "66865bc580faac55",
+          "entities": "6f2d650c25027755"
+        }
+      }
+    },
+    "sasa_cdma_ulbs_single_use_plastic_ban_api": {
+      "tableKey": "sasa_cdma_ulbs_single_use_plastic_ban_api",
+      "retrievedAt": "2026-08-28T15:26:38.882692+00:00",
+      "rows": 26,
+      "content": "f80d4119351601ad",
+      "periods": {
+        "2026-08": {
+          "rows": 26,
+          "content": "f80d4119351601ad",
+          "entities": "6f2d650c25027755"
+        }
+      }
+    },
+    "sasa_declaration_of_odf_plus_model_villages_api": {
+      "tableKey": "sasa_declaration_of_odf_plus_model_villages_api",
+      "retrievedAt": "2026-08-28T15:10:20.809946+00:00",
+      "rows": 84,
+      "content": "d4e43ce573311320",
+      "periods": {
+        "2026-05": {
+          "rows": 56,
+          "content": "608e1f204301d544",
+          "entities": "583641b2bbd5d056"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "d81994844a0f0318",
+          "entities": "583641b2bbd5d056"
+        }
+      }
+    },
+    "sasa_establishment_of_plastic_waste_management_units_api": {
+      "tableKey": "sasa_establishment_of_plastic_waste_management_units_api",
+      "retrievedAt": "2026-08-28T15:03:02.789287+00:00",
+      "rows": 84,
+      "content": "3a746969acb500f4",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "4fbfa246b5c9bb86",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "913bbf9f1837fc7c",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "065990dc9b81431f",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
+    "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api": {
+      "tableKey": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+      "retrievedAt": "2026-08-28T15:13:39.746286+00:00",
+      "rows": 615,
+      "content": "116fbfa0bc2a738c",
+      "periods": {
+        "no-year-202603": {
+          "rows": 123,
+          "content": "e713a4d1d2a590e3",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202604": {
+          "rows": 123,
+          "content": "ae7ea8b7e55242d4",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202605": {
+          "rows": 123,
+          "content": "a1d20f918ba556b8",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202606": {
+          "rows": 123,
+          "content": "870b19a6a9992c55",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202607": {
+          "rows": 123,
+          "content": "6f4071b185019f59",
+          "entities": "76318bd6de501668"
+        }
+      }
+    },
+    "sasa_itc_wow_program_in_schools_api": {
+      "tableKey": "sasa_itc_wow_program_in_schools_api",
+      "retrievedAt": "2026-08-28T15:04:09.814130+00:00",
+      "rows": 48,
+      "content": "5e5d7b1a0d7cb2cf",
+      "periods": {
+        "2026-06": {
+          "rows": 24,
+          "content": "6a69c38fc8074c40",
+          "entities": "1da7faba8152395e"
+        },
+        "2026-07": {
+          "rows": 24,
+          "content": "faa17035abfb43cc",
+          "entities": "1da7faba8152395e"
+        }
+      }
+    },
+    "sasa_mepma_entrepreneurs_promoted_for_circular_economy_api": {
+      "tableKey": "sasa_mepma_entrepreneurs_promoted_for_circular_economy_api",
+      "retrievedAt": "2026-08-28T14:59:09.812167+00:00",
+      "rows": 615,
+      "content": "4bfe6a94ab3cfe2b",
+      "periods": {
+        "no-year-202603": {
+          "rows": 123,
+          "content": "6717aef83031be7f",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202604": {
+          "rows": 123,
+          "content": "47a0519ed28bb082",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202605": {
+          "rows": 123,
+          "content": "156c38e5e022958d",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202606": {
+          "rows": 123,
+          "content": "3d6ca4780894ad0d",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202607": {
+          "rows": 123,
+          "content": "722d4e38581442ff",
+          "entities": "76318bd6de501668"
+        }
+      }
+    },
+    "sasa_mepma_households_promoted_for_home_composite_api": {
+      "tableKey": "sasa_mepma_households_promoted_for_home_composite_api",
+      "retrievedAt": "2026-08-28T15:24:17.983223+00:00",
+      "rows": 615,
+      "content": "2f09405b1e21434f",
+      "periods": {
+        "no-year-202603": {
+          "rows": 123,
+          "content": "29c4d69b71d1e9cb",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202604": {
+          "rows": 123,
+          "content": "3be05dad6fae8f69",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202605": {
+          "rows": 123,
+          "content": "0393065796882404",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202606": {
+          "rows": 123,
+          "content": "61fcde725d82cc7b",
+          "entities": "76318bd6de501668"
+        },
+        "no-year-202607": {
+          "rows": 123,
+          "content": "00369c8d8ac78c64",
+          "entities": "76318bd6de501668"
+        }
+      }
+    },
+    "sasa_sac_c_d_waste_processing_api": {
+      "tableKey": "sasa_sac_c_d_waste_processing_api",
+      "retrievedAt": "2026-08-28T15:26:35.158484+00:00",
+      "rows": 6,
+      "content": "7d8099727ccc2a35",
+      "periods": {
+        "2026-06": {
+          "rows": 3,
+          "content": "2856675de731945b",
+          "entities": "ea3b871cf8f58305"
+        },
+        "2026-07": {
+          "rows": 3,
+          "content": "e5c8c503925eecc4",
+          "entities": "ea3b871cf8f58305"
+        }
+      }
+    },
+    "sasa_sac_door_to_door_e_autos_api": {
+      "tableKey": "sasa_sac_door_to_door_e_autos_api",
+      "retrievedAt": "2026-08-28T15:12:30.006225+00:00",
+      "rows": 84,
+      "content": "682006f838121328",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "4551f954119d17da",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "1eabd2cc60a1bb39",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "2298fa8b5253239b",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
+    "sasa_sac_door_to_door_push_carts_api": {
+      "tableKey": "sasa_sac_door_to_door_push_carts_api",
+      "retrievedAt": "2026-08-28T15:12:43.919091+00:00",
+      "rows": 84,
+      "content": "e82e0d7a5c999bad",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "dbeafb08e53c6904",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "26803140080cb3b4",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "6257a3d4807bbfbc",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
+    "sasa_sac_door_to_door_tri_cycles_api": {
+      "tableKey": "sasa_sac_door_to_door_tri_cycles_api",
+      "retrievedAt": "2026-08-28T15:12:57.291308+00:00",
+      "rows": 84,
+      "content": "04b6387170570d88",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "7dac591fb8f3e278",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "15e8717a67104306",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "c7efb4b17a00dfbf",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
+    "sasa_sac_establishing_fstps_information_api": {
+      "tableKey": "sasa_sac_establishing_fstps_information_api",
+      "retrievedAt": "2026-08-28T15:04:37.260954+00:00",
+      "rows": 70,
+      "content": "9bcafdbabcc8bb04",
+      "periods": {
+        "2026-06": {
+          "rows": 35,
+          "content": "61fc3fa00f29aa9c",
+          "entities": "a6d9f8fd63b9ee74"
+        },
+        "2026-07": {
+          "rows": 35,
+          "content": "d18668b9d6088326",
+          "entities": "a6d9f8fd63b9ee74"
+        }
+      }
+    },
+    "sasa_sac_identification_of_new_ihhls_api": {
+      "tableKey": "sasa_sac_identification_of_new_ihhls_api",
+      "retrievedAt": "2026-08-28T15:24:58.838091+00:00",
+      "rows": 246,
+      "content": "cab66ffc8098a214",
+      "periods": {
+        "2026-06": {
+          "rows": 127,
+          "content": "aff24862dd51d000",
+          "entities": "084e8bdedc90eeea"
+        },
+        "2026-07": {
+          "rows": 119,
+          "content": "7f7c3a214cdea96a",
+          "entities": "20419202f9637b12"
+        }
+      }
+    },
+    "sasa_sac_machinery_compactors_api": {
+      "tableKey": "sasa_sac_machinery_compactors_api",
+      "retrievedAt": "2026-08-28T15:05:05.557108+00:00",
+      "rows": 24,
+      "content": "e755bb122b826352",
+      "periods": {
+        "2026-06": {
+          "rows": 12,
+          "content": "3b19950b894325df",
+          "entities": "257a4bc2e673786a"
+        },
+        "2026-07": {
+          "rows": 12,
+          "content": "818c979880a5377c",
+          "entities": "257a4bc2e673786a"
+        }
+      }
+    },
+    "sasa_sac_machinery_e_autos_service_model_api": {
+      "tableKey": "sasa_sac_machinery_e_autos_service_model_api",
+      "retrievedAt": "2026-08-28T15:13:12.152585+00:00",
+      "rows": 166,
+      "content": "c4c694f66bda6688",
+      "periods": {
+        "2026-06": {
+          "rows": 82,
+          "content": "e2e2cc590c96853a",
+          "entities": "fd8c25f193b85293"
+        },
+        "2026-07": {
+          "rows": 84,
+          "content": "73e6385a71c355e2",
+          "entities": "67d7d10e26bf3ad8"
+        }
+      }
+    },
+    "sasa_sac_msw_processing_facilities_cbg_units_api": {
+      "tableKey": "sasa_sac_msw_processing_facilities_cbg_units_api",
+      "retrievedAt": "2026-08-28T15:25:50.091960+00:00",
+      "rows": 12,
+      "content": "ed5b90f69601016d",
+      "periods": {
+        "2026-06": {
+          "rows": 6,
+          "content": "ee099c39ada49c99",
+          "entities": "3e18f9b16d916b53"
+        },
+        "2026-07": {
+          "rows": 6,
+          "content": "053b4c802f28c70f",
+          "entities": "3e18f9b16d916b53"
+        }
+      }
+    },
+    "sasa_sac_msw_processing_facilities_iswm_facilities_api": {
+      "tableKey": "sasa_sac_msw_processing_facilities_iswm_facilities_api",
+      "retrievedAt": "2026-08-28T15:25:34.615991+00:00",
+      "rows": 216,
+      "content": "342984ee47ff8bae",
+      "periods": {
+        "2026-06": {
+          "rows": 108,
+          "content": "16d7e22b4ce604a1",
+          "entities": "8251458c70afcb3b"
+        },
+        "2026-07": {
+          "rows": 108,
+          "content": "abb6dcebe49fe659",
+          "entities": "8251458c70afcb3b"
+        }
+      }
+    },
+    "sasa_sac_swacch_survekshan_information_gfc_status_api": {
+      "tableKey": "sasa_sac_swacch_survekshan_information_gfc_status_api",
+      "retrievedAt": "2026-08-28T15:25:53.368707+00:00",
+      "rows": 5,
+      "content": "ba71c43cd40e3234",
+      "periods": {
+        "2024-no-month": {
+          "rows": 5,
+          "content": "ba71c43cd40e3234",
+          "entities": "cfb71c2f6edc1608"
+        }
+      }
+    },
+    "sasa_sac_swacch_survekshan_information_national_rank_api": {
+      "tableKey": "sasa_sac_swacch_survekshan_information_national_rank_api",
+      "retrievedAt": "2026-08-28T15:26:00.868199+00:00",
+      "rows": 74,
+      "content": "a8d06737d48ea2bc",
+      "periods": {
+        "2024-no-month": {
+          "rows": 74,
+          "content": "a8d06737d48ea2bc",
+          "entities": "b83628dac26b26d5"
+        }
+      }
+    },
+    "sasa_sac_swacch_survekshan_information_odf_status_api": {
+      "tableKey": "sasa_sac_swacch_survekshan_information_odf_status_api",
+      "retrievedAt": "2026-08-28T15:25:56.798684+00:00",
+      "rows": 85,
+      "content": "5c10cfc30143ae56",
+      "periods": {
+        "2024-no-month": {
+          "rows": 85,
+          "content": "5c10cfc30143ae56",
+          "entities": "f18e4091e10e7626"
+        }
+      }
+    },
+    "sasa_sac_sweeping_machines_information_api": {
+      "tableKey": "sasa_sac_sweeping_machines_information_api",
+      "retrievedAt": "2026-08-28T15:26:31.493110+00:00",
+      "rows": 28,
+      "content": "9949133f3b2922c4",
+      "periods": {
+        "2026-06": {
+          "rows": 14,
+          "content": "5ca7aba4d6e2fe65",
+          "entities": "754be3571b53ceb4"
+        },
+        "2026-07": {
+          "rows": 14,
+          "content": "6441eee93dd5a424",
+          "entities": "754be3571b53ceb4"
+        }
+      }
+    },
+    "serp_circular_economy_api": {
+      "tableKey": "serp_circular_economy_api",
+      "retrievedAt": "2026-08-28T15:12:15.309791+00:00",
+      "rows": 28,
+      "content": "fcfe064380cff728",
+      "periods": {
+        "2026-07": {
+          "rows": 28,
+          "content": "fcfe064380cff728",
+          "entities": "834d3230e012f4fc"
+        }
+      }
+    },
+    "serp_kitchen_garden_api": {
+      "tableKey": "serp_kitchen_garden_api",
+      "retrievedAt": "2026-08-28T15:10:38.256821+00:00",
+      "rows": 28,
+      "content": "46662b7ac6094b51",
+      "periods": {
+        "2026-07": {
+          "rows": 28,
+          "content": "46662b7ac6094b51",
+          "entities": "834d3230e012f4fc"
+        }
+      }
+    },
+    "serp_swachhata_awareness_api": {
+      "tableKey": "serp_swachhata_awareness_api",
+      "retrievedAt": "2026-08-28T15:10:51.670217+00:00",
+      "rows": 28,
+      "content": "5e1c515ad3bdfd73",
+      "periods": {
+        "2026-07": {
+          "rows": 28,
+          "content": "5e1c515ad3bdfd73",
+          "entities": "834d3230e012f4fc"
+        }
+      }
+    }
+  }
+}

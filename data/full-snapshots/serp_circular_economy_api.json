@@ -1,0 +1,301 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "1d690359-51ce-4476-90d0-cb5078dc9c37",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "serp_circular_economy_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-5bc888c0-4aaf-4fc0-a663-9769ba759600",
+    "generatedAt": "2026-08-28T15:12:15.309791+00:00",
+    "totalRecordCount": 28,
+    "returnedRecordCount": 28,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "serp_circular_economy_api",
+    "tableName": "ap_citizen360.serp_circular_economy_api"
+  },
+  "records": [
+    {
+      "district_id": "011501",
+      "district_name": "Alluri Sitharama Raju",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "100",
+      "circular_economy_entrepreneurs_previous_month_achievement": "50",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "50"
+    },
+    {
+      "district_id": "011601",
+      "district_name": "Anakapalli",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "339",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "356"
+    },
+    {
+      "district_id": "011201",
+      "district_name": "Anantapur",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "266",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "416"
+    },
+    {
+      "district_id": "012401",
+      "district_name": "Annamayya",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "385",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "925"
+    },
+    {
+      "district_id": "012101",
+      "district_name": "Bapatla",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "661",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "823"
+    },
+    {
+      "district_id": "011001",
+      "district_name": "Chittoor",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "450",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "449"
+    },
+    {
+      "district_id": "010401",
+      "district_name": "East Godavari",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "330",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "369"
+    },
+    {
+      "district_id": "011901",
+      "district_name": "Eluru",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "233",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "393"
+    },
+    {
+      "district_id": "010701",
+      "district_name": "Guntur",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "498",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "505"
+    },
+    {
+      "district_id": "011701",
+      "district_name": "Kakinada",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "139",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "139"
+    },
+    {
+      "district_id": "011801",
+      "district_name": "Konaseema",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "270",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "323"
+    },
+    {
+      "district_id": "010601",
+      "district_name": "Krishna",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "476",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "478"
+    },
+    {
+      "district_id": "011301",
+      "district_name": "Kurnool",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "64",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "307"
+    },
+    {
+      "district_id": "012801",
+      "district_name": "Markapuram",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July ",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "100",
+      "circular_economy_entrepreneurs_previous_month_achievement": "0",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "65"
+    },
+    {
+      "district_id": "012001",
+      "district_name": "NTR",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "117",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "150"
+    },
+    {
+      "district_id": "012601",
+      "district_name": "Nandyal",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "131",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "344"
+    },
+    {
+      "district_id": "010901",
+      "district_name": "Nellore",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "409",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "409"
+    },
+    {
+      "district_id": "012201",
+      "district_name": "Palnadu",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "150",
+      "circular_economy_entrepreneurs_previous_month_achievement": "230",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "253"
+    },
+    {
+      "district_id": "011401",
+      "district_name": "Parvathipuram Manyam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "196",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "196"
+    },
+    {
+      "district_id": "012701",
+      "district_name": "Polavaram",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July ",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "100",
+      "circular_economy_entrepreneurs_previous_month_achievement": "506",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "673"
+    },
+    {
+      "district_id": "010801",
+      "district_name": "Prakasam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "100",
+      "circular_economy_entrepreneurs_previous_month_achievement": "495",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "500"
+    },
+    {
+      "district_id": "012501",
+      "district_name": "Sri Sathya Sai",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "484",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "558"
+    },
+    {
+      "district_id": "010101",
+      "district_name": "Srikakulam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "225",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "225"
+    },
+    {
+      "district_id": "012301",
+      "district_name": "Tirupati",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "390",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "398"
+    },
+    {
+      "district_id": "010301",
+      "district_name": "Visakhapatanam",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "50",
+      "circular_economy_entrepreneurs_previous_month_achievement": "120",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "120"
+    },
+    {
+      "district_id": "010201",
+      "district_name": "Vizianagaram",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "575",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "575"
+    },
+    {
+      "district_id": "010501",
+      "district_name": "West Godavari",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "75",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "75"
+    },
+    {
+      "district_id": "011101",
+      "district_name": "Y.S.R",
+      "kpi_month": "KPI-July-28Districts-2026 ",
+      "month": "July ",
+      "year": "2026",
+      "circular_economy_entrepreneurs_target_units": "200",
+      "circular_economy_entrepreneurs_previous_month_achievement": "789",
+      "circular_economy_entrepreneurs_cummulative_achievement_till_current_month": "1010"
+    }
+  ]
+}

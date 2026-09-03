@@ -1,0 +1,304 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "308af14c-d42f-4111-9b24-90b930b8bde4",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_sac_door_to_door_push_carts_api",
+    "filters": {
+      "mnth_no": "7",
+      "year": "2026"
+    }
+  },
+  "responseMetadata": {
+    "responseId": "resp-27aded8a-adf3-4480-871e-d6bdde3d2dad",
+    "generatedAt": "2026-08-28T03:27:18.188747+00:00",
+    "totalRecordCount": 28,
+    "returnedRecordCount": 28,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_sac_door_to_door_push_carts_api",
+    "tableName": "ap_citizen360.sasa_sac_door_to_door_push_carts_api"
+  },
+  "records": [
+    {
+      "district_name": "ALLURI SITHARAMA RAJU",
+      "push_carts_target": "185",
+      "push_carts_achievement": "185",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANAKAPALLI",
+      "push_carts_target": "89",
+      "push_carts_achievement": "89",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANANTHAPURAMU",
+      "push_carts_target": "254",
+      "push_carts_achievement": "254",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ANNAMAYYA",
+      "push_carts_target": "139",
+      "push_carts_achievement": "139",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "BAPATLA",
+      "push_carts_target": "288",
+      "push_carts_achievement": "288",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "CHITTOOR",
+      "push_carts_target": "249",
+      "push_carts_achievement": "249",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "DR. B.R.AMBEDKAR KONASEEMA",
+      "push_carts_target": "65",
+      "push_carts_achievement": "65",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "EAST GODAVARI",
+      "push_carts_target": "91",
+      "push_carts_achievement": "91",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "ELURU",
+      "push_carts_target": "128",
+      "push_carts_achievement": "128",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "GUNTUR",
+      "push_carts_target": "173",
+      "push_carts_achievement": "173",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KAKINADA",
+      "push_carts_target": "132",
+      "push_carts_achievement": "132",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KRISHNA",
+      "push_carts_target": "171",
+      "push_carts_achievement": "171",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "KURNOOL",
+      "push_carts_target": "105",
+      "push_carts_achievement": "105",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "MARKAPURAM",
+      "push_carts_target": "174",
+      "push_carts_achievement": "174",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NANDYAL",
+      "push_carts_target": "442",
+      "push_carts_achievement": "442",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "NTR",
+      "push_carts_target": "15",
+      "push_carts_achievement": "15",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PALNADU",
+      "push_carts_target": "337",
+      "push_carts_achievement": "337",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PARVATHIPURAM MANYAM",
+      "push_carts_target": "172",
+      "push_carts_achievement": "172",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "POLAVARAM",
+      "push_carts_target": "141",
+      "push_carts_achievement": "141",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "PRAKASAM",
+      "push_carts_target": "137",
+      "push_carts_achievement": "137",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI POTTI SRIRAMULU NELLORE",
+      "push_carts_target": "101",
+      "push_carts_achievement": "101",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRI SATHYASAI",
+      "push_carts_target": "483",
+      "push_carts_achievement": "483",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "SRIKAKULAM",
+      "push_carts_target": "339",
+      "push_carts_achievement": "339",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "TIRUPATI",
+      "push_carts_target": "156",
+      "push_carts_achievement": "156",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "VISAKHAPATNAM",
+      "push_carts_target": "71",
+      "push_carts_achievement": "71",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "VIZIANAGARAM",
+      "push_carts_target": "194",
+      "push_carts_achievement": "194",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "WEST GODAVARI",
+      "push_carts_target": "68",
+      "push_carts_achievement": "68",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    },
+    {
+      "district_name": "Y.S.R. KADAPA",
+      "push_carts_target": "101",
+      "push_carts_achievement": "101",
+      "push_carts_achievement_percentage": "100",
+      "mnth_no": "7",
+      "month_name": "july",
+      "year": "2026",
+      "fin_year": "2026-2027"
+    }
+  ]
+}
