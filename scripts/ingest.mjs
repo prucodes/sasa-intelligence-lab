@@ -8,13 +8,24 @@
  * refreshes mid-run and can resume: pages already on disk are skipped, and an
  * interrupted pull continues from the last offset rather than starting over.
  *
- * Credentials are never read from, or written to, the repository. Supply a refresh
- * token in the environment for the run only:
+ * Credentials are never read from, or written to, the repository. Mint a refresh
+ * token yourself with the documented password grant (datalakes.ailivinglabs.ap.gov.in
+ * /docs#authentication) — the password goes only to the identity endpoint, never here —
+ * then supply the refresh_token in the environment for the run only:
  *
- *   export AILAB_REFRESH_TOKEN=...      # from the platform identity endpoint
+ *   # you run this; it prints access_token + refresh_token
+ *   curl -s --request POST \
+ *     'https://auth.ailivinglabs.ap.gov.in/auth/realms/ap-soverign-stack/protocol/openid-connect/token' \
+ *     --data-urlencode 'grant_type=password' --data-urlencode 'client_id=data-lake-cli' \
+ *     --data-urlencode 'username=<USER>' --data-urlencode 'password=<PASS>' \
+ *     --data-urlencode 'scope=openid profile email'
+ *
+ *   export AILAB_REFRESH_TOKEN=<refresh_token from that response>
  *   node scripts/ingest.mjs msw_door_to_door_collection_api
  *
- * Nothing is persisted except the governed response payloads themselves.
+ * The refresh token lives ~30 minutes (refresh_expires_in 1800) and rotates on every
+ * use; this script keeps the newest one, so a continuous pull stays authenticated well
+ * past the 300s access-token window. Nothing is persisted except the governed payloads.
  */
 
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
