@@ -94,6 +94,43 @@ convention for zero versus not-reported is still unconfirmed.
 column names tried in order, so the expected rename to LGD master columns is a one-line edit
 rather than a pipeline change. Raw pages and the detail aggregate are git-ignored.
 
+## Deployment and roadmap
+
+The app is a vinext (Next App Router + RSC) project. It has no request-time server
+features — every screen reads local evidence and runs in the browser — so it is built
+as a fully static site and hosted on **GitHub Pages**.
+
+```bash
+node scripts/build-static.mjs --base /<repo-name>   # emits dist-static/
+```
+
+`.github/workflows/deploy-pages.yml` runs this on every push to `main` and deploys
+`dist-static/`. The base path is derived from the repo name, so the site works under
+`username.github.io/<repo>/`. Live at: https://prucodes.github.io/sasa-intelligence-lab/
+
+**Mode labels vs. internal names.** The **SAMPLE** mode is presented to viewers as
+**"Governed data"** with the URL `?mode=governed`, because "sample" wrongly implied mock
+data in a shared link — it is real authenticated government data, retained as snapshots.
+The internal enum stays `SAMPLE` and legacy `?mode=sample` links still resolve.
+
+### Roadmap: Governed data today, Live next
+
+- **Today — Governed data (on GitHub Pages).** Real Data Lake data, pulled once and
+  retained as snapshots committed to the repo. Refreshing the numbers is a manual
+  re-pull + push. A static host cannot hold a credential or make authenticated calls,
+  so this is the correct mode for a public demo.
+- **Next — Live (requires a server host, e.g. Cloudflare Workers).** A Worker can hold
+  credentials server-side and pull from the Data Lake on a schedule into a cache the
+  page reads, so the data auto-updates with no manual step. **The front end, analytics,
+  evidence gates and layout do not change** — only the data source swaps from retained
+  JSON to governed API calls (via the shared `SasaDataProvider` interface). Multi-period
+  live data would also enable trend views that single-period snapshots keep disabled.
+- **The blocker is access, not code.** The Playground access token lives ~300 seconds
+  (a standard short-lived OIDC access token) and is issued from an interactive login, so
+  a server cannot renew it unattended. Live requires a **durable service credential**
+  (a client-credentials/service-account flow or a non-expiring refresh token) provisioned
+  by the platform/identity owner of the AI Living Labs Data Lake.
+
 ## Evidence and limitations
 
 The authoritative assessments remain:
