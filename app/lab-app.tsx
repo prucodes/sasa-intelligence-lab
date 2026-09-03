@@ -90,7 +90,7 @@ function GlossaryText({ text }: { text: string }) {
   })}</>;
 }
 
-type IconName = 'home' | 'chart' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun';
+type IconName = 'home' | 'chart' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play';
 
 function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
@@ -110,6 +110,7 @@ function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
       {name === 'alert' && <><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5m0 3h.01"/></>}
       {name === 'clock' && <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>}
       {name === 'arrow' && <><path d="M5 12h14m-5-5 5 5-5 5"/></>}
+      {name === 'play' && <><path d="M7 5v14l11-7z"/></>}
       {name === 'moon' && <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/>}
       {name === 'sun' && <><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></>}
     </svg>
@@ -187,6 +188,19 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
   // real mode/theme are applied on mount. Keep the shell hidden until that resolves so a
   // shared ?mode=governed link never flashes synthetic DEMO values before hydration.
   const [booted, setBooted] = useState(false);
+  // Presenter (Briefing) mode: a focused, chrome-free walk through the governed evidence.
+  const [presenting, setPresenting] = useState(false);
+  function togglePresent(on: boolean) {
+    setPresenting(on);
+    try {
+      const url = new URL(window.location.href);
+      if (on) url.searchParams.set('present', '1');
+      else url.searchParams.delete('present');
+      window.history.replaceState({}, '', url);
+    } catch {
+      // URL sync is optional; the overlay still opens/closes.
+    }
+  }
   // Set when a reviewer arrived from a table row, so the page can offer a way back.
   const cameFrom = useSyncExternalStore(
     () => () => {},
@@ -212,6 +226,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
       else if (initialUlbKey?.startsWith('sample-')) setMode('SAMPLE');
       else if (initialUlbKey?.startsWith('live-')) setMode('LIVE');
       if (params.get('theme') === 'dark') setColorTheme('dark');
+      if (params.get('present') === '1') setPresenting(true);
     } catch {
       // A malformed URL should never take the app down; defaults stay in place.
     }
@@ -249,7 +264,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} />
       <div className="app-main">
-        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} />
+        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} />
         <main id="main-content" className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
@@ -260,6 +275,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
         <ProductFooter mode={mode}/>
       </div>
       <AboutPanel open={aboutOpen} onClose={() => setAboutOpen(false)} />
+      {presenting && <PresenterMode colorTheme={colorTheme} onExit={() => togglePresent(false)} />}
     </div>
   );
 }
@@ -287,13 +303,14 @@ function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: 
   );
 }
 
-function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean }) {
+function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void }) {
   return (
     <header className="topbar">
       <div className="header-brand"><b><GlossaryText text="SASA Intelligence Lab"/></b><span className="lab-tag"><span>◇</span> Decision-intelligence concept</span><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status"><Icon name="shield" size={17}/>{datasets[mode].banner}</span></div>
       <div className="header-actions">
         <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
+        <button className="icon-button present-button" aria-label="Open presenter briefing" onClick={onPresent}><Icon name="play" size={17}/><span>Present</span></button>
         <button className="icon-button" aria-label="About SASA Intelligence Lab and glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={20}/></button>
         <span className="header-avatar">AP</span>
       </div>
@@ -574,6 +591,95 @@ const shortfallLabels: Record<string, string> = {
   'undelivered-orders': 'received none',
   'legacy-balance': 'cleared none',
 };
+
+/**
+ * Presenter (Briefing) mode — a focused, chrome-free walk through the governed evidence
+ * in three beats: the signals, the named entities behind them, and what the evidence
+ * cannot yet establish. It reuses the same selectors the screens do, so nothing here is
+ * a new claim; it is the existing evidence, staged for a room. Not a sixth screen — an
+ * overlay over any page, keyboard-navigable, and deep-linkable via ?present=1.
+ */
+function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit: () => void }) {
+  const findings = useMemo(() => getNamedFindings(), []);
+  const disputed = useMemo(() => getDisputedValues(), []);
+  const [beat, setBeat] = useState(0);
+  const beatCount = 3;
+  const primary = [...findings].sort((a, b) => b.affected - a.affected)[0];
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onExit();
+      else if (event.key === 'ArrowRight' || event.key === 'PageDown') setBeat((current) => Math.min(beatCount - 1, current + 1));
+      else if (event.key === 'ArrowLeft' || event.key === 'PageUp') setBeat((current) => Math.max(0, current - 1));
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onExit]);
+
+  const beatTitles = ['What needs attention', 'Who is behind it', 'What the evidence cannot establish'];
+
+  return <div className={`presenter theme-${colorTheme}`} role="dialog" aria-modal="true" aria-label="Presenter briefing">
+    <div className="presenter-top">
+      <span className="presenter-brand"><Icon name="shield" size={16}/> SASA · Governed evidence briefing</span>
+      <div className="presenter-progress" role="tablist" aria-label="Briefing beats">
+        {beatTitles.map((title, index) => <button key={title} role="tab" aria-selected={index === beat}
+          className={index === beat ? 'active' : ''} onClick={() => setBeat(index)}><span/></button>)}
+      </div>
+      <button className="presenter-exit" onClick={onExit} aria-label="Exit briefing (Esc)">Exit <span aria-hidden="true">✕</span></button>
+    </div>
+
+    <div className="presenter-stage" key={beat}>
+      <span className="presenter-eyebrow">Beat {beat + 1} of {beatCount} · {beatTitles[beat]}</span>
+
+      {beat === 0 && <div className="presenter-signals">
+        <h1>What needs attention now</h1>
+        <p className="presenter-lede">Three source-backed signals from the current governed evidence.</p>
+        <div className="presenter-signal-grid">{findings.map((finding) => {
+          const [amount, ...rest] = finding.headline.split(' ');
+          return <article key={finding.id} className={`presenter-signal tone-${finding.tone}`}>
+            <strong>{amount}</strong>
+            <span className="ps-unit">{rest.join(' ')}</span>
+            <p>{finding.statement}</p>
+            <small>{formatCoverage(finding.coverage)} {finding.coverage.unit} returned · {finding.period}</small>
+          </article>;
+        })}</div>
+      </div>}
+
+      {beat === 1 && primary && <div className="presenter-entities">
+        <h1>{primary.headline}</h1>
+        <p className="presenter-lede">{primary.statement} These are named, source-reported entities — not a score.</p>
+        <ol className="presenter-rank">{primary.entities.slice(0, 6).map((entity) => {
+          const peak = Math.max(...primary.entities.map((item) => item.value), 1);
+          return <li key={`${entity.ulb}-${entity.district}`}>
+            <div className="pr-name"><b>{entity.ulb}</b><small>{entity.district}</small></div>
+            <div className="pr-bar"><span style={{ width: `${Math.max(6, (entity.value / peak) * 100)}%` }} className={`tone-${primary.tone}`}/></div>
+            <div className="pr-value"><b>{entity.display}</b><small>{entity.detail}</small></div>
+          </li>;
+        })}</ol>
+        <p className="presenter-foot">{primary.affected} of {primary.reporting} reporting {primary.unit} · {primary.stalled} reporting no progress at all.</p>
+      </div>}
+
+      {beat === 2 && <div className="presenter-limits">
+        <h1>What the evidence cannot yet establish</h1>
+        <p className="presenter-lede">Stated plainly, so the signals above are never over-read.</p>
+        <ul className="presenter-limit-list">
+          <li><Icon name="database" size={20}/><div><b>Coverage is partial.</b><span>Each signal counts only the ULBs that returned a value; the rest are shown as not returned, never as zero.</span></div></li>
+          <li><Icon name="alert" size={20}/><div><b>{disputed.total} disputed {disputed.total === 1 ? 'value is' : 'values are'} excluded.</b><span>Where one place reported two different figures for the same period, it is left out of the total rather than counted — across {disputed.datasets} {disputed.datasets === 1 ? 'dataset' : 'datasets'}.</span></div></li>
+          <li><Icon name="clock" size={20}/><div><b>No cross-year scoring.</b><span>2024 Swachh outcomes are kept separate from 2026 operations, not compared as if contemporaneous.</span></div></li>
+          <li><Icon name="target" size={20}/><div><b>No Gap Radar yet.</b><span>A genuine performance gap needs current-year outcomes and an authoritative ULB crosswalk with an approved policy. Until those arrive, entities stay UNSCORED.</span></div></li>
+        </ul>
+      </div>}
+    </div>
+
+    <div className="presenter-nav">
+      <button onClick={() => setBeat((current) => Math.max(0, current - 1))} disabled={beat === 0} className="presenter-prev">← Back</button>
+      <span className="presenter-hint">Arrow keys to move · Esc to exit</span>
+      {beat < beatCount - 1
+        ? <button onClick={() => setBeat((current) => Math.min(beatCount - 1, current + 1))} className="presenter-next">Next →</button>
+        : <button onClick={onExit} className="presenter-next">Done</button>}
+    </div>
+  </div>;
+}
 
 function SampleOverview({ colorTheme }: { colorTheme: ColorTheme }) {
   const collection = getCollectionProcurementSummary();
