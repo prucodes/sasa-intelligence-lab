@@ -43,7 +43,8 @@ describe('operational analytics selectors', () => {
     expect(summary.assets.map((item) => [item.target, item.achievement])).toEqual([[200, 200], [5000, 5000], [12000, 12000]]);
     expect(summary.rows.every((row) => row.grain === 'District')).toBe(true);
     expect(summary.compactors).toBe(25);
-    expect(summary.sweepingMachines).toBe(81);
+    // Dispute-excluded: Nellore's conflicting 19 and 4 are dropped, not summed to 23.
+    expect(summary.sweepingMachines).toBe(58);
     expect(summary.sweepingAmbiguities).toBe(2);
   });
 

@@ -117,6 +117,8 @@ export interface DistrictCollectionAssetSummary {
   }>;
   compactors: number;
   sweepingMachines: number;
+  /** Places dropped from `sweepingMachines` because they reported conflicting figures. */
+  sweepingDisputedExcluded: number;
   sweepingAmbiguities: number;
 }
 
@@ -557,6 +559,7 @@ export function getDistrictCollectionAssetSummary(): DistrictCollectionAssetSumm
   });
   const compactorsSource = snapshot(keys.compactors);
   const sweepingSource = snapshot(keys.sweeping);
+  const sweepingUsable = excludeDisputed(currentSnapshotRecords(sweepingSource), 'no_of_machines_supplied');
   const sweepingGroups = sweepingSource.records.reduce<Map<string, Set<string>>>((map, record) => {
     const key = `${sourceCandidateKey(record) ?? record.district_name}|${recordPeriodLabel(record)}`;
     if (!map.has(key)) map.set(key, new Set());
@@ -567,8 +570,12 @@ export function getDistrictCollectionAssetSummary(): DistrictCollectionAssetSumm
     period: snapshotPeriod(snapshot(keys.doorEAutos)),
     rows,
     assets,
-    compactors: sum(currentSnapshotRecords(compactorsSource).map((record) => numberValue(record.no_of_units))),
-    sweepingMachines: sum(currentSnapshotRecords(sweepingSource).map((record) => numberValue(record.no_of_machines_supplied))),
+    // These headline sums obey the same rule as the asset table: a place reported
+    // twice with different figures is excluded, never summed. Without this, Nellore's
+    // 19 and 4 were both counted as 23 — a number no source stated.
+    compactors: sum(excludeDisputed(currentSnapshotRecords(compactorsSource), 'no_of_units').records.map((record) => numberValue(record.no_of_units))),
+    sweepingMachines: sum(sweepingUsable.records.map((record) => numberValue(record.no_of_machines_supplied))),
+    sweepingDisputedExcluded: sweepingUsable.excludedEntities,
     sweepingAmbiguities: [...sweepingGroups.values()].filter((signatures) => signatures.size > 1).length,
   };
 }

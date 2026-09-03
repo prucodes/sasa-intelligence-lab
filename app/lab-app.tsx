@@ -1064,7 +1064,7 @@ function DistrictCollectionAssets({ data }: { data: ReturnType<typeof getDistric
       <div><span className="eyebrow">Separate district-grain source</span><h2>Three collection asset programmes report target achievement in full.</h2><p>These are source-reported district measures. They are not merged with the ULB procurement funnel because definitions and grain differ.</p></div>
       <div className="asset-programme-grid">{data.assets.map((asset) => <article key={asset.asset}><span>{asset.asset}</span><strong>{asset.achievement.toLocaleString('en-IN')} <small>/ {asset.target.toLocaleString('en-IN')}</small></strong><RatioBar value={asset.achievementRatio}/><small>{asset.districts} district rows · {asset.returnedPeriods.join(' · ')}</small></article>)}</div>
     </article>
-    <div className="analytics-kpis"><MiniKpi icon="building" label="District programmes" value="3" detail={`${data.period} latest evidence`} tone="teal"/><MiniKpi icon="database" label="Compactors reported" value={data.compactors.toLocaleString('en-IN')} detail="ULB-grain inventory" tone="blue"/><MiniKpi icon="chart" label="Sweeping machines" value={data.sweepingMachines.toLocaleString('en-IN')} detail={`${data.sweepingAmbiguities} ambiguous entity-period cases`} tone="violet"/></div>
+    <div className="analytics-kpis"><MiniKpi icon="building" label="District programmes" value="3" detail={`${data.period} latest evidence`} tone="teal"/><MiniKpi icon="database" label="Compactors reported" value={data.compactors.toLocaleString('en-IN')} detail="ULB-grain inventory" tone="blue"/><MiniKpi icon="chart" label="Sweeping machines" value={data.sweepingMachines.toLocaleString('en-IN')} detail={`${data.sweepingDisputedExcluded} disputed ${data.sweepingDisputedExcluded === 1 ? 'place' : 'places'} excluded`} tone="violet"/></div>
     <article className="panel source-reconciliation-callout"><span><Icon name="link" size={23}/></span><div><small>Where to review</small><h3>Resolve the source-definition difference before comparison.</h3><p>District collection sources report target achievement, while the separate ULB E-Auto procurement source reports {formatPercent(getCollectionProcurementSummary().deliveryRatio)} supplied against target. Both are retained; neither overrides the other.</p></div><ReviewChip tone="review" label="Definition review"/></article>
     <article className="panel analytics-table-panel primary-review-table"><PanelTitle icon="database" title="Returned district programme evidence" subtitle="Latest governed period · one compact source summary"/><div className="table-scroll"><table><thead><tr><th>Programme</th><th>Grain</th><th>District rows</th><th>Target</th><th>Achievement</th><th>Reported coverage</th><th>Period history</th></tr></thead><tbody>{data.assets.map((asset) => <tr key={asset.tableKey}><td><b>{asset.asset}</b></td><td><ReadinessBadge value="District"/></td><td>{asset.districts}</td><td>{asset.target.toLocaleString('en-IN')}</td><td>{asset.achievement.toLocaleString('en-IN')}</td><td><RatioBar value={asset.achievementRatio}/></td><td>{asset.returnedPeriods.join(' · ')} <small className="cell-sub">{asset.unchangedAcrossReturnedPeriods} unchanged candidates</small></td></tr>)}</tbody></table></div></article>
     <MeaningFooter>District achievement, ULB procurement, and reported inventory are distinct measures. None shows whether an asset is operational or utilized.</MeaningFooter>
@@ -2093,18 +2093,15 @@ function PeriodsView({ mode }: { mode: DataMode }) {
  * the finding: somewhere in that span is the real number, and nothing in the
  * data says where.
  */
-function DisputeMark({ values, counted }: { values: number[]; counted: number }) {
+function DisputeMark({ values }: { values: number[] }) {
   const low = Math.min(...values), high = Math.max(...values);
   const span = high - low || 1;
   const at = (value: number) => 6 + ((value - low) / span) * 88;
-  const countedOff = counted > high;
   return <svg className="dispute-mark" viewBox="0 0 100 20" role="img"
-    aria-label={`Reported as ${values.join(' or ')}; the total currently counts ${counted}`}>
+    aria-label={`Reported as ${values.join(' or ')}; excluded from the total`}>
     <line className="dm-span" x1={at(low)} y1="10" x2={at(high)} y2="10"/>
     <circle className="dm-end" cx={at(low)} cy="10" r="3.6"/>
     <circle className="dm-end" cx={at(high)} cy="10" r="3.6"/>
-    {!countedOff && <line className="dm-counted" x1={at(counted)} y1="4" x2={at(counted)} y2="16"/>}
-    {countedOff && <g className="dm-over"><line x1={at(high) + 4} y1="10" x2="96" y2="10"/><path d="M92 6 L97 10 L92 14"/></g>}
   </svg>;
 }
 
@@ -2118,7 +2115,7 @@ function DisputedValues() {
       <span className="catalogue-count">{total} across {datasets} datasets</span>
     </div>
     <p className="disputed-lede">
-      Both rows survive deduplication and both reach the total, so each of these entities is counted twice.
+      Both figures survive deduplication, so this place is excluded from the total rather than counted twice.
       With no record ID, submission date or revision number, neither row is newer or better sourced.
       <b> These need a person, not a rule.</b>
     </p>
@@ -2132,8 +2129,8 @@ function DisputedValues() {
         </div>
         <code className="dv-field">{field.field}</code>
         <div className="dv-values">{field.values.map((value) => <span key={value}>{value}</span>)}</div>
-        {impact && <DisputeMark values={[impact.low, impact.high]} counted={impact.counted}/>}
-        {impact && <div className="dv-impact"><b>{impact.counted.toLocaleString('en-IN')}</b><small>counted, should be {impact.low.toLocaleString('en-IN')}–{impact.high.toLocaleString('en-IN')}</small></div>}
+        {impact && <DisputeMark values={[impact.low, impact.high]}/>}
+        {impact && <div className="dv-impact"><b>Excluded</b><small>reported as {impact.low.toLocaleString('en-IN')} or {impact.high.toLocaleString('en-IN')}</small></div>}
       </li>;
     })}</ul>
   </article>;
