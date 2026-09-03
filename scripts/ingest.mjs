@@ -1,7 +1,7 @@
 /**
  * Paginated ingestion for large Data Lake datasets.
  *
- *   node scripts/ingest.mjs <tableKey> [--district <code>] [--fresh]
+ *   node scripts/ingest.mjs <tableKey> [--month <YYYYMM>] [--year <YYYY>] [--fresh]
  *
  * The CDMA datasets are ~64,000 rows at a fixed page size of 100, which is ~644
  * sequential requests, while a platform access token lives for 300 seconds. So this
@@ -121,12 +121,19 @@ async function completedOffsets(dir) {
 async function main() {
   const [tableKey, ...rest] = process.argv.slice(2);
   if (!tableKey) {
-    console.error('Usage: node scripts/ingest.mjs <tableKey> [--district <code>] [--fresh]');
+    console.error('Usage: node scripts/ingest.mjs <tableKey> [--month <YYYYMM>] [--year <YYYY>] [--fresh]');
     console.error(`Known keys: ${Object.keys(datasets).join(', ')}`);
     process.exit(1);
   }
-  const districtIndex = rest.indexOf('--district');
-  const filters = districtIndex >= 0 ? { district_code: rest[districtIndex + 1] } : {};
+  // The live API accepts only `month_id` (YYYYMM, e.g. 202607) and `year` as filters —
+  // confirmed by the platform audit on 2026-09-03. The source document's per-dataset
+  // filter names (mnth_no, dstrt_id, district_id, ulb_id, dstrt_nm) are rejected with a
+  // 400, and there is no general district filter. Default to a full unfiltered export.
+  const filters = {};
+  const monthIndex = rest.indexOf('--month');
+  if (monthIndex >= 0) filters.month_id = rest[monthIndex + 1];
+  const yearIndex = rest.indexOf('--year');
+  if (yearIndex >= 0) filters.year = rest[yearIndex + 1];
   const fresh = rest.includes('--fresh');
 
   const refreshToken = process.env.AILAB_REFRESH_TOKEN;

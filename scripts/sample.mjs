@@ -3,7 +3,7 @@
  * committing to a full ingest.
  *
  *   AILAB_ACCESS_TOKEN=<300s accessToken from /playground/token> \
- *   node scripts/sample.mjs <tableKey> [--pages 25] [--district <code>]
+ *   node scripts/sample.mjs <tableKey> [--pages 25] [--month <YYYYMM>] [--year <YYYY>]
  *
  * A 64,000-row dataset is ~640 pages of 100. Paging through all of them needs a
  * refresh token and ten-plus minutes; but the only question here — is the measure
@@ -43,10 +43,15 @@ const num = (value) => Number(String(value ?? '').replace(/,/g, ''));
 
 async function main() {
   const [tableKey, ...rest] = process.argv.slice(2);
-  if (!tableKey) { console.error('Usage: node scripts/sample.mjs <tableKey> [--pages N] [--district code]'); process.exit(1); }
+  if (!tableKey) { console.error('Usage: node scripts/sample.mjs <tableKey> [--pages N] [--month YYYYMM] [--year YYYY]'); process.exit(1); }
   const pagesWanted = rest.includes('--pages') ? Number(rest[rest.indexOf('--pages') + 1]) : 25;
-  const districtIndex = rest.indexOf('--district');
-  const filters = districtIndex >= 0 ? { district_code: rest[districtIndex + 1] } : {};
+  // Live API accepts only month_id (YYYYMM) and year as filters (platform audit 2026-09-03);
+  // documented per-dataset names are rejected. Default to unfiltered.
+  const filters = {};
+  const monthIndex = rest.indexOf('--month');
+  if (monthIndex >= 0) filters.month_id = rest[monthIndex + 1];
+  const yearIndex = rest.indexOf('--year');
+  if (yearIndex >= 0) filters.year = rest[yearIndex + 1];
 
   const accessToken = process.env.AILAB_ACCESS_TOKEN;
   if (!accessToken) { console.error('AILAB_ACCESS_TOKEN is not set. Paste the 300s token from /playground/token for this run only.'); process.exit(1); }
