@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 86" role="img" aria-label="Signal radar">
+  <circle cx="43" cy="43" r="34" fill="none" stroke="#14b8a6" stroke-opacity="0.32" stroke-width="1.4"/>
+  <circle cx="43" cy="43" r="24" fill="none" stroke="#14b8a6" stroke-opacity="0.52" stroke-width="1.4"/>
+  <circle cx="43" cy="43" r="14" fill="none" stroke="#14b8a6" stroke-opacity="0.8" stroke-width="1.4"/>
+  <circle cx="43" cy="43" r="3.6" fill="#0f9488"/>
+  <circle cx="77" cy="43" r="2.8" fill="#14b8a6"/>
+  <circle cx="27" cy="19" r="2.8" fill="#2dd4bf"/>
+  <circle cx="60" cy="65" r="2.8" fill="#5eead4"/>
+</svg>
