@@ -688,18 +688,21 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
       id: 'collection', tone: 'teal', label: 'Collection procurement', period: findings.find((item) => item.tab === 'collection')?.period ?? 'Current period',
       ratio: collection.deliveryRatio, ratioLabel: 'supplied / target', numerator: collection.supplied, denominator: collection.target,
       pressureBasis: 'ordered − supplied',
+      stages: [['Target', collection.target], ['Work orders', collection.workOrders], ['Supplied', collection.supplied]] as Array<[string, number]>,
       gap: findings.find((item) => item.tab === 'collection'),
     },
     {
       id: 'sanitation', tone: 'violet', label: 'IHHL delivery', period: findings.find((item) => item.tab === 'sanitation')?.period ?? 'Current period',
       ratio: ihhl.completionRatio, ratioLabel: 'completed / approved', numerator: ihhl.completed, denominator: ihhl.approved,
       pressureBasis: 'approved − completed',
+      stages: [['Approved', ihhl.approved], ['Under construction', ihhl.underConstruction], ['Completed', ihhl.completed]] as Array<[string, number]>,
       gap: findings.find((item) => item.tab === 'sanitation'),
     },
     {
       id: 'legacy', tone: 'blue', label: 'Legacy-waste clearance', period: legacy.period,
       ratio: legacy.clearanceRatio, ratioLabel: 'reported cleared / target', numerator: legacy.achievement, denominator: legacy.target,
-      pressureBasis: `source-reported balance · ${legacy.balanceConflicts} conflict excluded`,
+      pressureBasis: `source-reported balance · ${legacy.balanceConflicts} arithmetic conflict flagged`,
+      stages: [['Target', legacy.target], ['Reported cleared', legacy.achievement], ['Reported balance', legacy.balance]] as Array<[string, number]>,
       gap: findings.find((item) => item.tab === 'processing'),
     },
   ];
@@ -707,13 +710,16 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
   return <div className="presenter-aperture">
     <div className="presenter-title-row"><div><h1>One operating picture. Three sharply different realities.</h1><p className="presenter-lede">Each instrument has its own source, period, and denominator. Read the contrast—never combine the dials.</p></div><div className="aperture-status"><span>Current evidence state</span><b>3 source signals</b><small>0 composite scores</small></div></div>
     <section className="aperture-canvas" aria-label="Three source-separated operational instruments">
-      {lanes.map((lane) => {
+      {lanes.map((lane, laneIndex) => {
         const ratio = lane.ratio === null ? null : Math.max(0, Math.min(lane.ratio, 1));
         const lead = lane.gap?.entities[0];
+        const stageBase = Math.max(lane.stages[0]?.[1] ?? 0, 1);
         return <article key={lane.id} className={`aperture-lane tone-${lane.tone}`}>
+          <span className="aperture-lane-number">0{laneIndex + 1}</span>
           <header><span>{lane.label}</span><small>{lane.period}</small></header>
           <div className="aperture-dial">
             <svg viewBox="0 0 164 164" role="img" aria-label={`${formatPercent(ratio)} ${lane.ratioLabel}`}>
+              <circle className="dial-guides" cx="82" cy="82" r="75" pathLength="100"/>
               <circle className="dial-track" cx="82" cy="82" r="64"/>
               <circle className="dial-value" cx="82" cy="82" r="64" pathLength="100" strokeDasharray={ratio === null ? '0 100' : `${ratio * 100} ${100 - ratio * 100}`} transform="rotate(-90 82 82)"/>
               <circle className="dial-cap" cx="82" cy="18" r="3.5"/>
@@ -721,6 +727,10 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
             <div><strong>{ratio === null ? 'Not returned' : formatPercent(ratio)}</strong><span>{lane.ratioLabel}</span></div>
           </div>
           <div className="aperture-fraction"><b>{lane.numerator.toLocaleString('en-IN')}</b><span>of</span><b>{lane.denominator.toLocaleString('en-IN')}</b></div>
+          <div className="aperture-trajectory" role="img" aria-label={`${lane.label} returned source path: ${lane.stages.map(([label, value]) => `${label} ${value.toLocaleString('en-IN')}`).join(', ')}`}>
+            <small>Returned source path · each rail uses this lane&rsquo;s first figure</small>
+            {lane.stages.map(([label, value]) => <span key={label}><b>{label}</b><i><em style={{ width: `${Math.max(1.2, value / stageBase * 100)}%` }}/></i><strong>{compactMetric(value)}</strong></span>)}
+          </div>
           <div className="aperture-pressure"><small>Operational pressure · {lane.pressureBasis}</small><strong>{lane.gap?.headline}</strong>{lead && <span><b>{lead.ulb}</b> is the largest returned item · {lead.display}</span>}</div>
           <footer><span>{lane.gap ? formatCoverage(lane.gap.coverage) : '—'} ULBs returned</span><b>{lane.gap ? notReturned(lane.gap.coverage) : '—'} absent</b></footer>
         </article>;
@@ -794,15 +804,13 @@ function PresenterStageFlow({ groups }: { groups: OperationalStageCohorts[] }) {
   const nodeGap = 14;
   const nodeHeights = group.cohorts.map((cohort) => cohort.count > 0 ? Math.max(24, cohort.count / Math.max(group.classified, 1) * 246) : 13);
   const stackHeight = nodeHeights.reduce((sum, value) => sum + value, 0) + nodeGap * (group.cohorts.length - 1);
-  let nodeCursor = Math.max(22, (H - stackHeight) / 2);
-  let sourceCursor = rootTop;
+  const nodeStart = Math.max(22, (H - stackHeight) / 2);
+  const sourceHeights = group.cohorts.map((cohort) => cohort.count / Math.max(group.classified, 1) * rootHeight);
   const nodes = group.cohorts.map((cohort, index) => {
     const height = nodeHeights[index];
-    const y = nodeCursor;
-    nodeCursor += height + nodeGap;
-    const sourceHeight = cohort.count / Math.max(group.classified, 1) * rootHeight;
-    const sourceY = sourceCursor;
-    sourceCursor += sourceHeight;
+    const y = nodeStart + nodeHeights.slice(0, index).reduce((sum, value) => sum + value, 0) + nodeGap * index;
+    const sourceHeight = sourceHeights[index];
+    const sourceY = rootTop + sourceHeights.slice(0, index).reduce((sum, value) => sum + value, 0);
     return { cohort, height, y, sourceHeight, sourceY };
   });
   return <div className="presenter-flow-story">
@@ -905,7 +913,7 @@ function SampleOverview({ colorTheme }: { colorTheme: ColorTheme }) {
   ];
 
   return <>
-    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="What needs attention?" description="Three source-backed signals show what stands out now, where officers should review, and what the evidence cannot yet establish."></PageIntro>
+    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="Where reported delivery is falling short" description="Vehicle supply and IHHL completion are the clearest shortfalls in the retained 2026 sources; legacy-waste records show higher reported clearance, with 1.35M tonnes still remaining."></PageIntro>
     <section className="metric-grid" aria-label="Core KPI categories">{domainCards.map((metric, index) => <MetricCard key={metric.label} metric={metric} icon={domainIcons[index]} />)}</section>
     <NamedFindings colorTheme={colorTheme}/>
     <OperationalDistrictSignalMap/>
@@ -1330,7 +1338,7 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
     review: `${legacy.positiveBalanceCandidates} ULBs report a positive balance; ${getFacilityStatusReviewQueue().length} facility statuses need review.`,
     limit: 'Reported clearance and configured capacity are not throughput, uptime, utilization, or verified environmental impact.',
   } : {
-    metric: outcomes.odfRecords.toLocaleString('en-IN'), metricLabel: 'ODF records', coverage: `${outcomes.rows.length} / 123 outcome candidates observed`,
+    metric: outcomes.odfRecords.toLocaleString('en-IN'), metricLabel: 'ODF records', coverage: `${outcomes.outcomeCandidateCount} distinct 2024 candidate signatures`,
     headline: '2024 outcomes are a historical baseline—not current performance',
     evidence: `${outcomes.odfRecords} ODF records · ${outcomes.rankRecords} rank records · only ${outcomes.gfcRecords} GFC records`,
     meaning: 'ODF and rank distributions can be described, but GFC coverage is too limited for a broad outcome view.',
@@ -1484,15 +1492,41 @@ function OutcomeAnalytics() {
   const rows = data.rows.slice(0, 8);
   return <>
     <section className="analytics-view outcome-view">
+      <OutcomeEvidenceLandscape data={data}/>
       <div className="outcome-visual-grid">
         <article className="panel outcome-distribution-panel"><PanelTitle icon="chart" title="ODF distribution" subtitle={`${data.odfRecords} source records · reporting year 2024`}/><DistributionSection title="ODF category" items={data.odfDistribution}/></article>
         <article className="panel rank-panel"><PanelTitle icon="chart" title="National rank distribution" subtitle="Parsed 2024 ranks only"/><HorizontalBarChart items={data.rankDistribution.map((item) => ({ label: item.label, value: item.count }))}/><p className="chart-scope"><Icon name="info" size={14}/>Buckets appear only where parsed rank records were returned.</p></article>
       </div>
-      <aside className="gfc-limited-note"><Icon name="info" size={17}/><b>Limited GFC evidence</b><span>Only {data.gfcRecords} GFC records are available, so GFC is not emphasized in the visual summary.</span></aside>
-      <article className="panel analytics-table-panel primary-review-table"><PanelTitle icon="database" title="Outcome record explorer" subtitle="Observed normalized-name candidates · crosswalk review pending"/><div className="table-scroll"><table><thead><tr><th>Observed name candidate</th><th>District</th><th>ODF</th><th>GFC</th><th>National rank</th><th>Year</th><th>Match state</th></tr></thead><tbody>{rows.map((row) => <tr key={row.candidateKey}><td><b>{row.ulb}</b></td><td>{row.district}</td><td>{row.odfStatus ?? 'Not returned'}</td><td>{row.gfcStatus ?? 'Not returned'}</td><td>{row.nationalRank ?? 'Not returned'}</td><td>2024</td><td><ReadinessBadge value="Candidate only"/></td></tr>)}</tbody></table></div></article>
+      <article className="panel analytics-table-panel primary-review-table"><PanelTitle icon="database" title="Outcome record explorer" subtitle="Source names retained · no performance attribution"/><div className="table-scroll"><table><thead><tr><th>Observed name candidate</th><th>District</th><th>ODF</th><th>GFC</th><th>National rank</th><th>Year</th><th>Match state</th></tr></thead><tbody>{rows.map((row) => <tr key={row.candidateKey}><td><b>{row.ulb}</b></td><td>{row.district}</td><td>{row.odfStatus ?? 'Not returned'}</td><td>{row.gfcStatus ?? 'Not returned'}</td><td>{row.nationalRank ?? 'Not returned'}</td><td>2024</td><td><ReadinessBadge value="Candidate only"/></td></tr>)}</tbody></table></div></article>
       <MeaningFooter>These outcomes are not attributed to or directly compared with 2026 operations.</MeaningFooter>
     </section>
   </>;
+}
+
+function OutcomeEvidenceLandscape({ data }: { data: ReturnType<typeof getSwachhOutcomeSummary> }) {
+  const odfRank = data.sourceCombinations
+    .filter((item) => item.id === 'odf-rank' || item.id === 'all-three')
+    .reduce((total, item) => total + item.count, 0);
+  const allThree = data.sourceCombinations.find((item) => item.id === 'all-three')?.count ?? 0;
+  return <article className="panel outcome-evidence-landscape">
+    <header className="outcome-evidence-head">
+      <div><span className="eyebrow">2024 outcome evidence footprint</span><h2>See what overlaps before reading the distributions.</h2><p>{data.outcomeCandidateCount} observed ULB-name candidates appear across the three outcome sources. This is a source-derived frame, not an official statewide denominator.</p></div>
+      <div className="outcome-overlap-callout"><span>Most usable overlap</span><strong>{odfRank}</strong><b>ODF + rank candidates</b><small>{allThree} of them also carry GFC</small></div>
+    </header>
+    <section className="outcome-source-rails" aria-label={`Source presence among ${data.outcomeCandidateCount} observed outcome candidates`}>
+      {data.sourcePresence.map((source) => <div key={source.id} className={`outcome-source source-${source.id}`}>
+        <span><b>{source.label}</b><small>source returned</small></span><strong>{source.count}<small> / {data.outcomeCandidateCount}</small></strong>
+        <i role="img" aria-label={`${source.count} of ${data.outcomeCandidateCount} observed outcome candidates`}><em style={{ width: `${source.count / Math.max(data.outcomeCandidateCount, 1) * 100}%` }}/></i>
+      </div>)}
+    </section>
+    <section className="outcome-composition" aria-label="Exact outcome-source combinations">
+      <header><span>Exact source combinations</span><small>Each observed candidate appears once · total {data.outcomeCandidateCount}</small></header>
+      <div className="outcome-composition-bar" role="img" aria-label={data.sourceCombinations.map((item) => `${item.label}: ${item.count}`).join(', ')}>
+        {data.sourceCombinations.map((item) => <i key={item.id} className={`combo-${item.id}`} style={{ flexGrow: item.count }}/>)}</div>
+      <div className="outcome-combination-legend">{data.sourceCombinations.map((item) => <span key={item.id} className={`combo-${item.id}`}><i/><b>{item.count}</b><small>{item.label}</small></span>)}</div>
+    </section>
+    <footer><Icon name="shield" size={15}/><span>Source presence is not outcome quality. GFC remains too thin for a broad distribution: <b>{data.gfcRecords} returned records</b>.</span><strong>Scoring remains gated</strong></footer>
+  </article>;
 }
 
 function ConversionJourney({ stages }: { stages: Array<[string, number, string]> }) {
@@ -1819,31 +1853,44 @@ function ClearanceRankContrast() {
       IHHL completion is zero for 58 of 59 ULBs and collection delivery for 80 of 83.
       <b> The two axes here are two years apart, so position shows contrast, never cause.</b>
     </p>
-    <div className="contrast-plot">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img"
-        aria-label={`Scatter of reported legacy waste clearance against 2024 national rank for ${data.points.length} ULBs`}>
-        {[0, 0.25, 0.5, 0.75, 1].map((tick) => <g key={tick}>
-          <line className="cp-grid" x1={x(tick)} y1={padT} x2={x(tick)} y2={H - padB}/>
-          <text className="cp-axis" x={x(tick)} y={H - padB + 15} textAnchor="middle">{Math.round(tick * 100)}%</text>
-        </g>)}
-        {[1, rankTop / 2, rankTop].map((tick) => <g key={tick}>
-          <line className="cp-grid" x1={padL} y1={y(tick)} x2={W - padR} y2={y(tick)}/>
-          <text className="cp-axis" x={padL - 8} y={y(tick) + 3} textAnchor="end">{Math.round(tick)}</text>
-        </g>)}
-        {data.points.map((point) => <circle key={point.ulb + point.rank}
-          className={`cp-dot${hover?.ulb === point.ulb ? ' is-hover' : ''}${point.clearance >= 1 ? ' at-ceiling' : ''}`}
-          cx={x(point.clearance)} cy={y(point.rank)} r={4}
-          onMouseEnter={() => setHover(point)} onMouseLeave={() => setHover(null)}/>)}
-        <text className="cp-label" x={padL} y={H - 6}>Reported legacy-waste clearance · {data.clearancePeriod}</text>
-        <text className="cp-label cp-rot" x={-(H / 2)} y={14} transform="rotate(-90)" textAnchor="middle">National rank · {data.rankYear} · 1 is best</text>
-      </svg>
-      {hover && <div className="cp-tip"><b>{hover.ulb}</b><span>{hover.district}</span>
-        <em>{formatPercent(hover.clearance)} cleared · rank {hover.rank}</em></div>}
+    <div className="contrast-body">
+      <div className="contrast-plot">
+        <svg viewBox={`0 0 ${W} ${H}`} role="img"
+          aria-label={`Scatter of reported legacy waste clearance against 2024 national rank for ${data.points.length} ULBs`}>
+          {[0, 0.25, 0.5, 0.75, 1].map((tick) => <g key={tick}>
+            <line className="cp-grid" x1={x(tick)} y1={padT} x2={x(tick)} y2={H - padB}/>
+            <text className="cp-axis" x={x(tick)} y={H - padB + 15} textAnchor="middle">{Math.round(tick * 100)}%</text>
+          </g>)}
+          {[1, rankTop / 2, rankTop].map((tick) => <g key={tick}>
+            <line className="cp-grid" x1={padL} y1={y(tick)} x2={W - padR} y2={y(tick)}/>
+            <text className="cp-axis" x={padL - 8} y={y(tick) + 3} textAnchor="end">{Math.round(tick)}</text>
+          </g>)}
+          {data.points.map((point) => <circle key={point.ulb + point.district + point.rank}
+            className={`cp-dot${hover?.ulb === point.ulb && hover?.district === point.district ? ' is-hover' : ''}${point.clearance >= 1 ? ' at-ceiling' : ''}`}
+            cx={x(point.clearance)} cy={y(point.rank)} r={4}
+            onMouseEnter={() => setHover(point)} onMouseLeave={() => setHover(null)}/>)}
+          <text className="cp-label" x={padL} y={H - 6}>Reported legacy-waste clearance · {data.clearancePeriod}</text>
+          <text className="cp-label cp-rot" x={-(H / 2)} y={14} transform="rotate(-90)" textAnchor="middle">National rank · {data.rankYear} · 1 is best</text>
+        </svg>
+        {hover && <div className="cp-tip"><b>{hover.ulb}</b><span>{hover.district}</span>
+          <em>{formatPercent(hover.clearance)} cleared · rank {hover.rank}</em></div>}
+      </div>
+      <aside className="contrast-pairing" aria-label="Pairing eligibility ledger">
+        <header><span>Pairing ledger</span><b>{data.points.length}</b><small>exact district + ULB signatures carry both figures</small></header>
+        <div className="pairing-sources">
+          <div><span><b>2026 clearance</b><small>{data.clearancePeriod}</small></span><strong>{data.clearanceCandidates}</strong><i><em style={{ width: '100%' }}/></i></div>
+          <div><span><b>2024 rank</b><small>parsed values</small></span><strong>{data.rankCandidates}</strong><i><em style={{ width: `${data.rankCandidates / Math.max(data.clearanceCandidates, 1) * 100}%` }}/></i></div>
+          <div className="is-paired"><span><b>Exact-name pair</b><small>{data.points.length} / {data.clearanceCandidates} clearance candidates</small></span><strong>{data.points.length}</strong><i><em style={{ width: `${data.points.length / Math.max(data.clearanceCandidates, 1) * 100}%` }}/></i></div>
+        </div>
+        <div className="pairing-ceiling"><span><small>At reported ceiling</small><b>{data.atCeiling}</b></span><i/><span><small>Below 100%</small><b>{data.points.length - data.atCeiling}</b></span></div>
+        <p><Icon name="info" size={14}/>This is eligibility accounting for the chart, not a statewide rate or a performance cohort.</p>
+      </aside>
     </div>
     <footer className="contrast-foot">
       <span><b>{data.atCeiling}</b> sit at exactly 100% cleared, which is worth questioning before it is read as success.</span>
-      <span><b>{data.excludedZeroRank}</b> excluded: rank returned as 0, which means unranked, not first.</span>
       <span><b>{data.excludedNoRank}</b> excluded: a clearance figure but no rank record at all.</span>
+      <span><b>{data.excludedNoClearance}</b> excluded: a rank record but no usable exact-signature clearance pair.</span>
+      <span><b>{data.excludedZeroRank}</b> parsed rank records returned zero; missing ranks remain “not returned.”</span>
     </footer>
   </article>;
 }
@@ -1888,8 +1935,9 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
   const reviewed = decided.filter((decision) => decision.state !== 'deferred').length;
   const remaining = stats.residualNames - reviewed;
 
+  const localIdentityReviewComplete = reviewed >= stats.residualNames;
   const blockers: Array<[IconName, string, string, boolean]> = [
-    ['link', 'ULB identity not reviewed', `${stats.residualNames - reviewed} of ${stats.residualNames} observed names still need a review decision.`, reviewed >= stats.residualNames],
+    ['link', localIdentityReviewComplete ? 'Working crosswalk reviewed locally' : 'ULB identity not reviewed', localIdentityReviewComplete ? `${reviewed} of ${stats.residualNames} residual names carry a local decision; formal sign-off is still required.` : `${stats.residualNames - reviewed} of ${stats.residualNames} observed names still need a review decision.`, localIdentityReviewComplete],
     ['calendar', 'Periods not aligned', 'Operations and outcomes are from different months, so they cannot be compared.', false],
     ['clock', 'Outcome data is older', 'The only outcome data we have is from 2024. Operations are from 2026.', false],
     ['shield', 'Scoring policy not approved', 'Nobody has agreed the thresholds yet, so there is nothing to score against.', false],
@@ -1901,7 +1949,7 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
     <section className="panel sample-radar-state">
       <div className="radar-zero"><span><Icon name="target" size={30}/></span><small>Current state</small><strong>0</strong><b>entities eligible for scoring</b><p>Real entities stay unscored until there is enough evidence to score them.</p></div>
       <div className="radar-blockers"><h2>What is blocking activation?</h2>{blockers.map(([icon, title, detail, done]) => <div key={title} className={done ? 'blocker-cleared' : undefined}><span><Icon name={done ? 'check' : icon} size={18}/></span><p><b>{title}</b><small>{detail}</small></p></div>)}</div>
-      <div className="radar-next"><span className="eyebrow">Next</span><b>Reviewed identity + aligned current outcomes</b><p>Gate one is workable now. The remaining three require source-owner action.</p><a href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>Inspect readiness evidence <Icon name="arrow" size={15}/></a></div>
+      <div className="radar-next"><span className="eyebrow">Next</span><b>Formal crosswalk sign-off + aligned current outcomes</b><p>The working review is complete locally. Formal approval and current outcome evidence still require owner action.</p><a href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>Inspect readiness evidence <Icon name="arrow" size={15}/></a></div>
     </section>
     <CrosswalkWorkbench stats={stats} queue={queue} decisions={decisions} approved={approved} reviewed={reviewed} remaining={remaining} onDecide={decide} onClear={clearDecision} onApproveBulk={approveBulk}/>
     <ClearanceRankContrast/>
@@ -2190,7 +2238,7 @@ function EntityPicker({ diagnostic, allKeys, mode, colorTheme }: {
 
   const choose = (key: string) => {
     setOpen(false);
-    window.location.href = withMode(`/diagnostics/${key}`, mode, colorTheme);
+    window.location.assign(withMode(`/diagnostics/${key}`, mode, colorTheme));
   };
 
   return <div className="entity-picker" ref={root}>

@@ -47,7 +47,7 @@ describe('application shell and screens', () => {
     fireEvent.change(screen.getByRole('combobox', { name: /data mode/i }), { target: { value: 'SAMPLE' } });
     expect(screen.getByText(/authenticated, governed SASA evidence/i)).toBeInTheDocument();
     expect(screen.getAllByText(/4,359/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { name: /what needs attention/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /where reported delivery is falling short/i })).toBeInTheDocument();
     expect(screen.getByText(/reported vehicle delivery is substantially behind procurement target/i)).toBeInTheDocument();
     expect(screen.getByText(/reported ihhl completion is very low relative to approvals/i)).toBeInTheDocument();
     expect(screen.queryByText('84%')).not.toBeInTheDocument();
@@ -125,7 +125,8 @@ describe('application shell and screens', () => {
     fireEvent.click(screen.getByRole('tab', { name: /swachh outcomes/i }));
     expect(screen.getByRole('heading', { name: /2024 outcomes are a historical baseline/i })).toBeInTheDocument();
     expect(screen.getAllByText(/2024 Swachh Outcomes/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/only 5 GFC records are available/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /see what overlaps before reading the distributions/i })).toBeInTheDocument();
+    expect(screen.getByText(/ODF \+ rank candidates/i)).toBeInTheDocument();
   });
 
   it('keeps coverage, periods, and quality inside Data Readiness', () => {
@@ -153,7 +154,7 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /scoring starts once the operational and outcome data line up/i })).toBeInTheDocument();
     expect(screen.getByText('0', { selector: '.radar-zero strong' })).toBeInTheDocument();
     expect(screen.getByText(/entities eligible for scoring/i)).toBeInTheDocument();
-    expect(screen.getByText(/ULB identity not reviewed/i)).toBeInTheDocument();
+    expect(screen.getByText(/working crosswalk reviewed locally/i)).toBeInTheDocument();
     expect(screen.queryByLabelText(/two by two performance gap matrix/i)).not.toBeInTheDocument();
   });
 });

@@ -339,6 +339,13 @@ export interface SwachhOutcomeSummary {
   odfRecords: number;
   gfcRecords: number;
   rankRecords: number;
+  outcomeCandidateCount: number;
+  sourcePresence: Array<{ id: 'odf' | 'rank' | 'gfc'; label: string; count: number }>;
+  sourceCombinations: Array<{
+    id: 'all-three' | 'odf-rank' | 'odf-gfc' | 'rank-gfc' | 'odf-only' | 'rank-only' | 'gfc-only';
+    label: string;
+    count: number;
+  }>;
   exactCandidateOverlap: number;
   odfDistribution: Array<{ label: string; count: number }>;
   gfcDistribution: Array<{ label: string; count: number }>;
@@ -1115,6 +1122,26 @@ export function getSwachhOutcomeSummary(): SwachhOutcomeSummary {
   });
   const baseline = new Set(getIHHLFunnel().rows.map((row) => sourceCandidateKey(row.raw)).filter(Boolean));
   const exactCandidateOverlap = rows.filter((row) => baseline.has(row.candidateKey)).length;
+  const combinationConfigs: Array<{
+    id: SwachhOutcomeSummary['sourceCombinations'][number]['id'];
+    label: string;
+    includes: Array<'odf' | 'rank' | 'gfc'>;
+    excludes: Array<'odf' | 'rank' | 'gfc'>;
+  }> = [
+    { id: 'all-three', label: 'All three', includes: ['odf', 'rank', 'gfc'], excludes: [] },
+    { id: 'odf-rank', label: 'ODF + rank', includes: ['odf', 'rank'], excludes: ['gfc'] },
+    { id: 'odf-gfc', label: 'ODF + GFC', includes: ['odf', 'gfc'], excludes: ['rank'] },
+    { id: 'rank-gfc', label: 'Rank + GFC', includes: ['rank', 'gfc'], excludes: ['odf'] },
+    { id: 'odf-only', label: 'ODF only', includes: ['odf'], excludes: ['rank', 'gfc'] },
+    { id: 'rank-only', label: 'Rank only', includes: ['rank'], excludes: ['odf', 'gfc'] },
+    { id: 'gfc-only', label: 'GFC only', includes: ['gfc'], excludes: ['odf', 'rank'] },
+  ];
+  const sourceCombinations = combinationConfigs.map(({ id, label, includes, excludes }) => ({
+    id,
+    label,
+    count: [...sourceByKey.values()].filter((value) => includes.every((kind) => Boolean(value[kind]))
+      && excludes.every((kind) => !value[kind])).length,
+  })).filter((item) => item.count > 0);
   const rankBuckets = rank.records.map((record) => numberValue(record.national_rank)).filter((value): value is number => value !== null).map((value) =>
     value <= 100 ? 'Top 100' : value <= 300 ? '101–300' : value <= 600 ? '301–600' : value <= 1000 ? '601–1000' : '> 1000');
   return {
@@ -1122,6 +1149,13 @@ export function getSwachhOutcomeSummary(): SwachhOutcomeSummary {
     odfRecords: odf.records.length,
     gfcRecords: gfc.records.length,
     rankRecords: rank.records.length,
+    outcomeCandidateCount: rows.length,
+    sourcePresence: [
+      { id: 'odf', label: 'ODF status', count: new Set(odf.records.map(sourceCandidateKey).filter(Boolean)).size },
+      { id: 'rank', label: 'National rank', count: new Set(rank.records.map(sourceCandidateKey).filter(Boolean)).size },
+      { id: 'gfc', label: 'GFC status', count: new Set(gfc.records.map(sourceCandidateKey).filter(Boolean)).size },
+    ],
+    sourceCombinations,
     exactCandidateOverlap,
     odfDistribution: distribution(odf.records.map((record) => record.odf_status || 'Not reported')),
     gfcDistribution: distribution(gfc.records.map((record) => record.gfc_status || 'Not reported')),
@@ -1658,8 +1692,14 @@ export interface ClearanceRankContrast {
   points: ContrastPoint[];
   clearancePeriod: string;
   rankYear: number;
+  /** Candidate signatures carrying a usable clearance ratio. */
+  clearanceCandidates: number;
+  /** Candidate signatures carrying a parsed rank. */
+  rankCandidates: number;
   /** ULBs with a clearance figure but no rank record at all. */
   excludedNoRank: number;
+  /** Ranked candidate signatures with no usable clearance figure. */
+  excludedNoClearance: number;
   /** ULBs whose rank came back as 0, which means unranked rather than first. */
   excludedZeroRank: number;
   /** Points sitting exactly at 100% clearance, which is worth a second look. */
@@ -1683,26 +1723,29 @@ export interface ClearanceRankContrast {
  * applied to the only outcome axis that works.
  */
 export function getClearanceRankContrast(): ClearanceRankContrast {
-  const key = (value: unknown) => String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const outcomes = getSwachhOutcomeSummary();
 
-  const rankByUlb = new Map<string, number>();
+  const rankByCandidate = new Map<string, number>();
   let excludedZeroRank = 0;
   outcomes.rows.forEach((row) => {
-    const name = key(row.ulb);
-    const value = Number(row.nationalRank);
-    if (!name || !Number.isFinite(value)) return;
+    const value = row.nationalRank;
+    // A missing rank must remain missing. Number(null) is 0 in JavaScript, which
+    // previously mislabeled 28 absent rank rows as source-returned zeroes.
+    if (value === null || !Number.isFinite(value)) return;
     if (value <= 0) { excludedZeroRank += 1; return; }
-    rankByUlb.set(name, value);
+    rankByCandidate.set(row.candidateKey, value);
   });
 
   const legacy = getLegacyWasteSummary();
   const points: ContrastPoint[] = [];
   let excludedNoRank = 0;
+  const clearanceCandidateKeys = new Set<string>();
   legacy.rows.forEach((row) => {
     if (row.clearanceRatio === null) return;
-    const name = key(row.ulb);
-    const rank = rankByUlb.get(name);
+    const candidateKey = sourceCandidateKey(row.raw);
+    if (!candidateKey) return;
+    clearanceCandidateKeys.add(candidateKey);
+    const rank = rankByCandidate.get(candidateKey);
     if (rank === undefined) { excludedNoRank += 1; return; }
     points.push({ ulb: String(row.ulb ?? ''), district: String(row.district ?? ''), clearance: row.clearanceRatio, rank });
   });
@@ -1712,7 +1755,10 @@ export function getClearanceRankContrast(): ClearanceRankContrast {
     points,
     clearancePeriod: legacy.period,
     rankYear: outcomes.reportingYear,
+    clearanceCandidates: clearanceCandidateKeys.size,
+    rankCandidates: rankByCandidate.size,
     excludedNoRank,
+    excludedNoClearance: [...rankByCandidate.keys()].filter((candidateKey) => !clearanceCandidateKeys.has(candidateKey)).length,
     excludedZeroRank,
     atCeiling: points.filter((point) => point.clearance >= 1).length,
   };

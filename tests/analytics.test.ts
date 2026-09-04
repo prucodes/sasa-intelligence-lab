@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   getCollectionProcurementSummary,
   getCollectionStageCohorts,
+  getClearanceRankContrast,
   getCommunityProgrammeSummary,
   getCommunityProgrammeHistory,
   getDataQualityIssues,
@@ -144,7 +145,22 @@ describe('operational analytics selectors', () => {
     expect(outcomes.odfRecords).toBe(85);
     expect(outcomes.gfcRecords).toBe(5);
     expect(outcomes.rankRecords).toBe(74);
+    expect(outcomes.outcomeCandidateCount).toBe(102);
+    expect(outcomes.sourceCombinations.reduce((total, item) => total + item.count, 0)).toBe(102);
+    expect(outcomes.sourceCombinations.find((item) => item.id === 'odf-rank')?.count).toBe(55);
+    expect(outcomes.sourceCombinations.find((item) => item.id === 'all-three')?.count).toBe(2);
     expect(outcomes.rows.every((row) => row.period === '2024')).toBe(true);
+  });
+
+  it('keeps absent ranks distinct from source-returned zeroes in the cross-period contrast', () => {
+    const contrast = getClearanceRankContrast();
+    expect(contrast.clearanceCandidates).toBe(120);
+    expect(contrast.rankCandidates).toBe(74);
+    expect(contrast.points).toHaveLength(64);
+    expect(contrast.atCeiling).toBe(29);
+    expect(contrast.excludedNoRank).toBe(56);
+    expect(contrast.excludedNoClearance).toBe(10);
+    expect(contrast.excludedZeroRank).toBe(0);
   });
 
   it('builds overlap counts from returned candidate records', () => {
