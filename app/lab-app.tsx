@@ -146,10 +146,24 @@ function modeFromUrl(value: string | null | undefined): DataMode | null {
   }
 }
 
+/**
+ * The Pages project subpath, injected at build time (window.__SASA_BASE__). Route
+ * literals are prefixed in the built output, but a runtime-built link to a bare path
+ * like '/' is not — so withMode prepends the base only when the href is not already
+ * under it. Empty in dev and at the domain root, so those are unaffected.
+ */
+function siteBase(): string {
+  if (typeof window === 'undefined') return '';
+  const value = (window as { __SASA_BASE__?: string }).__SASA_BASE__;
+  return typeof value === 'string' ? value : '';
+}
+
 function withMode(href: string, mode: DataMode, colorTheme: ColorTheme = 'light') {
+  const base = siteBase();
+  const path = base && href.startsWith('/') && href !== base && !href.startsWith(`${base}/`) ? `${base}${href}` : href;
   const params = new URLSearchParams({ mode: MODE_URL[mode] });
   if (colorTheme === 'dark') params.set('theme', 'dark');
-  return `${href}?${params.toString()}`;
+  return `${path}?${params.toString()}`;
 }
 
 /**

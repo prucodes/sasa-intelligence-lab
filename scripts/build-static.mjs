@@ -113,6 +113,11 @@ async function rewriteBase(dir, base) {
     }
     // The home link: href="/?..." and a bare href="/".
     text = text.split('="/?').join(`="${base}/?`).split('="/"').join(`="${base}/"`);
+    // Expose the base to runtime code (withMode) so client-built links to bare paths
+    // like '/' resolve under the subpath instead of the domain root.
+    if (rel.endsWith('.html') && !text.includes('window.__SASA_BASE__')) {
+      text = text.replace('</head>', `<script>window.__SASA_BASE__=${JSON.stringify(base)}</script></head>`);
+    }
     if (text !== before) { await writeFile(path, text); changed += 1; }
   }
   console.log(`   rewrote ${changed} files`);
