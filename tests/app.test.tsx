@@ -50,6 +50,9 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /where reported delivery is falling short/i })).toBeInTheDocument();
     expect(screen.getByText(/reported vehicle delivery is substantially behind procurement target/i)).toBeInTheDocument();
     expect(screen.getByText(/reported ihhl completion is very low relative to approvals/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/executive quick read/i)).toHaveTextContent(/7.0%.*0.2%.*91%.*unscored/i);
+    expect(screen.getByText('102 candidates')).toBeInTheDocument();
+    expect(screen.queryByText(/102 ULBs rated/i)).not.toBeInTheDocument();
     expect(screen.queryByText('84%')).not.toBeInTheDocument();
   });
 
@@ -173,6 +176,8 @@ describe('application shell and screens', () => {
     fireEvent.change(districtPicker, { target: { value: district } });
     expect(screen.getByText(/sources returning evidence/i)).toBeInTheDocument();
     expect(JSON.parse(window.localStorage.getItem('sasa-compare-ulbs-v1') ?? '[]')).toHaveLength(1);
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog', { name: /ulb comparison tray/i })).not.toBeInTheDocument();
   });
 
   it('exposes a governed evidence brief action without changing the evidence state', () => {

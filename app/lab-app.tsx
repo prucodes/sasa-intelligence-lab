@@ -546,7 +546,8 @@ function NamedFindings({ colorTheme }: { colorTheme: ColorTheme }) {
   const active = findings.find((finding) => finding.id === activeId) ?? findings[0];
   if (!active) return null;
 
-  const peak = Math.max(...active.entities.map((entity) => entity.value), 1);
+  const visibleEntities = active.entities.slice(0, 5);
+  const peak = Math.max(...visibleEntities.map((entity) => entity.value), 1);
   const [amount, ...rest] = active.headline.split(' ');
 
   return <section className={`panel named-findings tone-${active.tone}`} aria-label="Where the shortfall sits">
@@ -580,8 +581,8 @@ function NamedFindings({ colorTheme }: { colorTheme: ColorTheme }) {
         </a>
       </div>
 
-      <ol className="nf-list">
-        {active.entities.map((entity, index) => <li key={`${entity.ulb}-${entity.district}`} className={entity.stalled ? 'is-stalled' : ''}>
+      <ol className="nf-list" aria-label="Largest returned shortfalls">
+        {visibleEntities.map((entity, index) => <li key={`${entity.ulb}-${entity.district}`} className={entity.stalled ? 'is-stalled' : ''}>
           <span className="nf-rank">{index + 1}</span>
           <span className="nf-name"><b>{entity.ulb}</b><small>{entity.district}</small></span>
           <span className="nf-bar" aria-hidden="true"><i style={{ width: `${Math.max((entity.value / peak) * 100, 4)}%` }}/></span>
@@ -908,8 +909,8 @@ function SampleOverview({ colorTheme }: { colorTheme: ColorTheme }) {
     },
     {
       label: 'Swachh Outcomes',
-      value: `${outcomes.rows.length} ULBs rated`,
-      detail: `ODF ${outcomes.odfRecords} · GFC ${outcomes.gfcRecords} · rank ${outcomes.rankRecords}`,
+      value: `${outcomes.rows.length} candidates`,
+      detail: `2024 outcome records · ODF ${outcomes.odfRecords} · GFC ${outcomes.gfcRecords} · rank ${outcomes.rankRecords}`,
       tone: 'orange',
       coverage: {
         reported: outcomes.rows.length,
@@ -921,7 +922,15 @@ function SampleOverview({ colorTheme }: { colorTheme: ColorTheme }) {
   ];
 
   return <>
-    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="Where reported delivery is falling short" description="Vehicle supply and IHHL completion are the clearest shortfalls in the retained 2026 sources; legacy-waste records show higher reported clearance, with 1.35M tonnes still remaining."></PageIntro>
+    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="Where reported delivery is falling short" description="Vehicle supply and IHHL completion are the clearest shortfalls in the retained 2026 sources; legacy-waste records show higher reported clearance, with 1.35M tonnes still remaining.">
+      <div className="overview-quick-read" aria-label="Executive quick read">
+        <span className="quick-read-label">Quick read</span>
+        <span className="quick-read-signal tone-teal"><small>Review now</small><b>{formatPercent(collection.deliveryRatio)}</b><em>vehicle supply / target</em></span>
+        <span className="quick-read-signal tone-violet"><small>Review now</small><b>{formatPercent(ihhl.completionRatio)}</b><em>IHHL completed / approved</em></span>
+        <span className="quick-read-signal tone-blue"><small>Reported context</small><b>{formatPercent(legacyWaste.clearanceRatio)}</b><em>legacy waste cleared / target</em></span>
+        <span className="quick-read-signal is-held"><small>Decision boundary</small><b>UNSCORED</b><em>0 entities clear every gate</em></span>
+      </div>
+    </PageIntro>
     <section className="metric-grid" aria-label="Core KPI categories">{domainCards.map((metric, index) => <MetricCard key={metric.label} metric={metric} icon={domainIcons[index]} />)}</section>
     <NamedFindings colorTheme={colorTheme}/>
     <OperationalDistrictSignalMap/>
@@ -2744,6 +2753,17 @@ function CrossScreenCompareTray({ mode, open, onClose }: { mode: DataMode; open:
   const districts = useMemo(() => [...new Set(grid.rows.map((row) => row.district))].sort(), [grid]);
   const add = (id: string) => { if (pinned.length < 6) setPinned([...pinned, id]); setQuery(''); };
   const browse = (district: string) => { const first = grid.rows.find((row) => row.district === district && !pinned.includes(row.ulbId)); if (first) add(first.ulbId); };
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [onClose, open]);
   if (!open) return null;
   return <div className="compare-tray-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <aside className="compare-tray" role="dialog" aria-modal="true" aria-labelledby="compare-tray-title">
