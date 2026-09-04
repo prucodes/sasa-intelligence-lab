@@ -84,8 +84,11 @@ describe('application shell and screens', () => {
 
   it('shows and filters all authorized snapshots without implying scoring eligibility', () => {
     render(<LabApp page="data-readiness" initialMode="SAMPLE" />);
-    expect(screen.getByText(/29 complete working exports/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /operational review signals/i })).toBeInTheDocument();
+    const activationPipeline = screen.getByLabelText(/evidence activation pipeline/i);
+    expect(activationPipeline).toHaveTextContent(/complete retained/i);
+    expect(activationPipeline).toHaveTextContent(/29/);
+    expect(activationPipeline).toHaveTextContent(/scoring eligible/i);
+    expect(activationPipeline).toHaveTextContent(/unscored/i);
     expect(screen.getAllByText(/complete governed snapshot/i)).toHaveLength(29);
     
     // Thirteen are documented on paper only (3 PR + 10 CDMA whose keys 404 on live).

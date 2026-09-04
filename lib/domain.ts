@@ -514,7 +514,7 @@ const sampleData: ModeDataset = {
       { label: 'ULB candidates', value: String(governedSnapshotStats.baselineUlbCandidates), detail: `${governedSnapshotStats.baselineUlbRows} latest-period IHHL rows · ${currentIhhlCandidateCount} current candidates`, tone: 'violet' },
     ], rows: sampleReadinessRows,
     gates: [
-      { title: 'Governed source access', detail: '30 of 30 endpoints authorized in the signed-in account', state: 'met' },
+      { title: 'Governed source access', detail: `${readinessCatalogueStats.platformAvailable} account-granted endpoints; ${readinessCatalogueStats.liveNotIngestedDatasets} readable CDMA responses await complete retention`, state: 'met' },
       { title: 'Complete paginated snapshots', detail: '29 complete; Gobardhan export currently fails', state: 'blocked' },
       { title: 'Documented PR integrations', detail: 'Three additional schemas are known; full authenticated exports and semantic review remain pending', state: 'blocked' },
       { title: 'Reviewed ULB crosswalk', detail: 'Required because selected sources expose names only', state: 'blocked' },

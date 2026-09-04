@@ -1,17 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import {
   getCollectionProcurementSummary,
+  getCollectionStageCohorts,
   getCommunityProgrammeSummary,
   getCommunityProgrammeHistory,
   getDataQualityIssues,
   getDatasetUsageAudit,
   getDatasetPeriodAvailability,
   getDistrictCollectionAssetSummary,
+  getDistrictSignalMaps,
   getEntityEvidenceBreadth,
   getEntityCoverageMatrix,
   getFacilityStatusReviewQueue,
   getIHHLFunnel,
+  getIHHLStageCohorts,
   getLegacyWasteSummary,
+  getLegacyWasteStageCohorts,
   getProcessingRegistry,
   getSourceReconciliationIssues,
   getSupportingProgrammePortfolio,
@@ -71,6 +75,36 @@ describe('operational analytics selectors', () => {
     expect(funnel.identified).toBe(8499);
     expect(funnel.approved).toBe(8499);
     expect(funnel.completed).toBe(20);
+  });
+
+  it('classifies returned operational records into mutually exclusive evidence stages', () => {
+    const collection = getCollectionStageCohorts();
+    const ihhl = getIHHLStageCohorts();
+    const legacy = getLegacyWasteStageCohorts();
+    const counts = (group: typeof collection) => Object.fromEntries(group.cohorts.map((cohort) => [cohort.id, cohort.count]));
+
+    expect(counts(collection)).toMatchObject({ 'no-order': 5, 'ordered-none': 75, partial: 2, met: 0, above: 1 });
+    expect(collection.classified).toBe(83);
+    expect(collection.coverage).toMatchObject({ reported: 83, expected: 123 });
+
+    expect(counts(ihhl)).toMatchObject({ 'no-approvals': 58, 'approved-none': 58, 'underway-none': 0, completion: 1, met: 0 });
+    expect(ihhl.classified).toBe(117);
+    expect(ihhl.coverage).toMatchObject({ reported: 117, expected: 123 });
+
+    expect(counts(legacy)).toMatchObject({ none: 1, partial: 46, met: 72, above: 0 });
+    expect(legacy.classified).toBe(119);
+    expect(legacy.excluded).toBe(1);
+    expect(legacy.coverage).toMatchObject({ reported: 119, expected: 123 });
+  });
+
+  it('builds source-separated district signal maps without merging domains', () => {
+    const maps = getDistrictSignalMaps();
+    const total = (id: typeof maps[number]['id']) => maps.find((map) => map.id === id)!.districts.reduce((sum, district) => sum + district.value, 0);
+    expect(maps.map((map) => map.id)).toEqual(['collection', 'ihhl', 'legacy']);
+    expect(total('collection')).toBe(1019);
+    expect(total('ihhl')).toBe(8479);
+    expect(total('legacy')).toBe(1353366);
+    expect(maps.every((map) => map.rule.length > 20 && map.coverage.expected === 123)).toBe(true);
   });
 
   it('uses the latest governed period for complete MEPMA programme exports', () => {

@@ -1,4 +1,4 @@
-import { anchorRegistry } from '@/lib/crosswalk';
+import { anchorRegistry, sameDistrict } from '@/lib/crosswalk';
 import type { Coverage } from '@/lib/coverage';
 import { excludeDisputed, findDisputedGroups, type DisputedGroup } from '@/lib/disputes';
 import { documentedIntegrationCatalogue, readinessCatalogue } from '@/lib/catalogue';
@@ -176,6 +176,48 @@ export interface IhhlFunnel {
   duplicateRowsExcluded: number;
   backlogRule: string;
   rows: IhhlRow[];
+}
+
+export type StageCohortTone = 'blocked' | 'review' | 'progress' | 'met';
+
+export interface StageCohort {
+  id: string;
+  label: string;
+  count: number;
+  tone: StageCohortTone;
+  detail: string;
+  examples: Array<{ ulb: string; district: string }>;
+}
+
+export interface OperationalStageCohorts {
+  title: string;
+  period: string;
+  coverage: Coverage;
+  classified: number;
+  excluded: number;
+  excludedDetail: string;
+  rule: string;
+  cohorts: StageCohort[];
+}
+
+export interface DistrictSignal {
+  district: string;
+  value: number;
+  returned: number;
+  expected: number;
+  affected: number;
+  topEntity: { ulb: string; value: number } | null;
+}
+
+export interface DistrictSignalMap {
+  id: 'collection' | 'ihhl' | 'legacy';
+  label: string;
+  title: string;
+  unit: string;
+  period: string;
+  coverage: Coverage;
+  rule: string;
+  districts: DistrictSignal[];
 }
 
 export interface CommunityProgrammeSummary {
@@ -671,6 +713,181 @@ export function getIHHLFunnel(periodId?: string | null): IhhlFunnel {
     backlogRule: 'Review flag when reported approved minus completed is at least 100; this is not a root-cause finding.',
     rows,
   };
+}
+
+function cohortExamples<T extends { ulb: string | null; district: string }>(
+  rows: T[],
+  weight: (row: T) => number,
+): Array<{ ulb: string; district: string }> {
+  return [...rows]
+    .filter((row) => Boolean(row.ulb))
+    .sort((left, right) => weight(right) - weight(left) || String(left.ulb).localeCompare(String(right.ulb)))
+    .slice(0, 3)
+    .map((row) => ({ ulb: row.ulb as string, district: row.district }));
+}
+
+/**
+ * Mutually exclusive, count-only operating stages. These turn a statewide ratio
+ * into a reviewable pattern without inventing a score or treating missing fields
+ * as zero. `classified` is the honest denominator for the cohort counts; source
+ * coverage remains visible separately against the 123-ULB anchor registry.
+ */
+export function getCollectionStageCohorts(periodId?: string | null): OperationalStageCohorts {
+  const summary = getCollectionProcurementSummary(periodId);
+  const eligible = summary.rows.filter((row) => row.target !== null && row.workOrders !== null && row.supplied !== null);
+  const noOrder = eligible.filter((row) => (row.target ?? 0) > 0 && row.workOrders === 0 && row.supplied === 0);
+  const orderedNone = eligible.filter((row) => (row.workOrders ?? 0) > 0 && row.supplied === 0);
+  const partial = eligible.filter((row) => (row.supplied ?? 0) > 0 && (row.target ?? 0) > 0 && (row.supplied ?? 0) < (row.target ?? 0));
+  const met = eligible.filter((row) => (row.target ?? 0) > 0 && row.supplied === row.target);
+  const above = eligible.filter((row) => (row.target ?? 0) > 0 && (row.supplied ?? 0) > (row.target ?? 0));
+  const zeroTarget = eligible.filter((row) => row.target === 0);
+  const classified = noOrder.length + orderedNone.length + partial.length + met.length + above.length + zeroTarget.length;
+  const excluded = summary.rows.length - classified;
+  return {
+    title: 'Procurement stage pattern',
+    period: summary.rows[0]?.period ?? periodId ?? 'Not returned',
+    coverage: summary.coverage,
+    classified,
+    excluded,
+    excludedDetail: 'records missing target, work-order, or supplied values',
+    rule: 'Each returned ULB record appears once: no order, ordered with none supplied, partial supply, target met, above target, or zero-target review.',
+    cohorts: [
+      { id: 'no-order', label: 'No order issued', count: noOrder.length, tone: 'blocked', detail: 'Positive target; no work order or supply reported.', examples: cohortExamples(noOrder, (row) => row.target ?? 0) },
+      { id: 'ordered-none', label: 'Ordered · none supplied', count: orderedNone.length, tone: 'blocked', detail: 'Work order reported; supplied count is zero.', examples: cohortExamples(orderedNone, (row) => (row.workOrders ?? 0) - (row.supplied ?? 0)) },
+      { id: 'partial', label: 'Partially supplied', count: partial.length, tone: 'progress', detail: 'Some vehicles supplied; reported target not yet met.', examples: cohortExamples(partial, (row) => (row.target ?? 0) - (row.supplied ?? 0)) },
+      { id: 'met', label: 'Target matched', count: met.length, tone: 'met', detail: 'Supplied count equals the reported target.', examples: cohortExamples(met, (row) => row.target ?? 0) },
+      { id: 'above', label: 'Above target', count: above.length, tone: 'review', detail: 'Supply exceeds the reported target; retain for review.', examples: cohortExamples(above, (row) => (row.supplied ?? 0) - (row.target ?? 0)) },
+      { id: 'zero-target', label: 'Zero-target review', count: zeroTarget.length, tone: 'review', detail: 'A rate is not computed where the denominator is zero.', examples: cohortExamples(zeroTarget, (row) => row.supplied ?? 0) },
+    ],
+  };
+}
+
+export function getIHHLStageCohorts(periodId?: string | null): OperationalStageCohorts {
+  const summary = getIHHLFunnel(periodId);
+  const eligible = summary.rows.filter((row) => row.approved !== null && row.underConstruction !== null && row.completed !== null);
+  const noApprovals = eligible.filter((row) => row.approved === 0);
+  const approvedNone = eligible.filter((row) => (row.approved ?? 0) > 0 && row.underConstruction === 0 && row.completed === 0);
+  const underwayNone = eligible.filter((row) => (row.approved ?? 0) > 0 && (row.underConstruction ?? 0) > 0 && row.completed === 0);
+  const completion = eligible.filter((row) => (row.completed ?? 0) > 0 && (row.completed ?? 0) < (row.approved ?? 0));
+  const met = eligible.filter((row) => (row.approved ?? 0) > 0 && (row.completed ?? 0) >= (row.approved ?? 0));
+  const classified = noApprovals.length + approvedNone.length + underwayNone.length + completion.length + met.length;
+  const excluded = summary.rows.length - classified;
+  return {
+    title: 'IHHL delivery stage pattern',
+    period: summary.rows[0]?.period ?? periodId ?? 'Not returned',
+    coverage: summary.coverage,
+    classified,
+    excluded,
+    excludedDetail: 'records missing approved, under-construction, or completed values',
+    rule: 'Each returned ULB record appears once, based only on reported approved, under-construction, and completed counts.',
+    cohorts: [
+      { id: 'no-approvals', label: 'No approvals reported', count: noApprovals.length, tone: 'review', detail: 'Approved count is explicitly zero; this is not a missing value.', examples: cohortExamples(noApprovals, (row) => row.identified ?? 0) },
+      { id: 'approved-none', label: 'Approved · no activity', count: approvedNone.length, tone: 'blocked', detail: 'Approvals reported; construction and completion are both zero.', examples: cohortExamples(approvedNone, (row) => row.approved ?? 0) },
+      { id: 'underway-none', label: 'Under way · none complete', count: underwayNone.length, tone: 'progress', detail: 'Construction is reported, with no completed units yet.', examples: cohortExamples(underwayNone, (row) => row.underConstruction ?? 0) },
+      { id: 'completion', label: 'Completion reported', count: completion.length, tone: 'progress', detail: 'Some units completed; reported approvals remain open.', examples: cohortExamples(completion, (row) => row.openApprovals ?? 0) },
+      { id: 'met', label: 'Approvals matched', count: met.length, tone: 'met', detail: 'Completed count meets or exceeds reported approvals.', examples: cohortExamples(met, (row) => row.completed ?? 0) },
+    ],
+  };
+}
+
+export function getLegacyWasteStageCohorts(periodId?: string | null): OperationalStageCohorts {
+  const summary = getLegacyWasteSummary(periodId);
+  const complete = summary.rows.filter((row) => row.target !== null && row.achievement !== null && row.balance !== null);
+  const eligible = complete.filter((row) => row.balanceCheck !== 'conflict');
+  const none = eligible.filter((row) => (row.target ?? 0) > 0 && row.achievement === 0);
+  const partial = eligible.filter((row) => (row.achievement ?? 0) > 0 && (row.target ?? 0) > 0 && (row.achievement ?? 0) < (row.target ?? 0));
+  const met = eligible.filter((row) => (row.target ?? 0) > 0 && row.achievement === row.target);
+  const above = eligible.filter((row) => (row.target ?? 0) > 0 && (row.achievement ?? 0) > (row.target ?? 0));
+  const zeroTarget = eligible.filter((row) => row.target === 0);
+  const classified = none.length + partial.length + met.length + above.length + zeroTarget.length;
+  const excluded = summary.rows.length - classified;
+  return {
+    title: 'Legacy-waste clearance pattern',
+    period: summary.rows[0]?.period ?? periodId ?? 'Not returned',
+    coverage: { reported: classified, expected: anchorRegistry.length, unit: 'ULBs', basis: 'ULBs with a complete, internally consistent target / cleared / balance record.' },
+    classified,
+    excluded,
+    excludedDetail: 'incomplete or internally conflicting records',
+    rule: 'Each internally consistent returned ULB record appears once. Arithmetic conflicts are excluded, never averaged or forced into a stage.',
+    cohorts: [
+      { id: 'none', label: 'No clearance reported', count: none.length, tone: 'blocked', detail: 'Positive target; cleared count is explicitly zero.', examples: cohortExamples(none, (row) => row.target ?? 0) },
+      { id: 'partial', label: 'Partially cleared', count: partial.length, tone: 'progress', detail: 'Some clearance reported; a balance remains.', examples: cohortExamples(partial, (row) => row.balance ?? 0) },
+      { id: 'met', label: 'Target matched', count: met.length, tone: 'met', detail: 'Reported cleared count equals target.', examples: cohortExamples(met, (row) => row.target ?? 0) },
+      { id: 'above', label: 'Above target', count: above.length, tone: 'review', detail: 'Reported clearance exceeds target; retain for review.', examples: cohortExamples(above, (row) => (row.achievement ?? 0) - (row.target ?? 0)) },
+      { id: 'zero-target', label: 'Zero-target review', count: zeroTarget.length, tone: 'review', detail: 'A clearance rate is not computed where target is zero.', examples: cohortExamples(zeroTarget, (row) => row.achievement ?? 0) },
+    ],
+  };
+}
+
+function districtSignals(
+  rows: Array<{ district: string; ulb: string | null; value: number | null }>,
+): DistrictSignal[] {
+  const groups = new Map<string, typeof rows>();
+  rows.filter((row) => row.value !== null).forEach((row) => {
+    if (!groups.has(row.district)) groups.set(row.district, []);
+    groups.get(row.district)!.push(row);
+  });
+  return [...groups.entries()].map(([district, districtRows]) => {
+    const anchors = anchorRegistry.filter((anchor) => sameDistrict(anchor.district, district));
+    const returned = new Set(districtRows.map((row) => row.ulb?.trim().toLowerCase()).filter(Boolean)).size;
+    const ranked = [...districtRows].sort((left, right) => (right.value ?? 0) - (left.value ?? 0));
+    return {
+      district,
+      value: districtRows.reduce((total, row) => total + (row.value ?? 0), 0),
+      returned,
+      expected: new Set(anchors.map((anchor) => anchor.id)).size,
+      affected: districtRows.filter((row) => (row.value ?? 0) > 0).length,
+      topEntity: ranked[0]?.ulb ? { ulb: ranked[0].ulb as string, value: ranked[0].value ?? 0 } : null,
+    };
+  }).sort((left, right) => right.value - left.value || left.district.localeCompare(right.district));
+}
+
+/**
+ * Three single-source district maps. Each lane is aggregated only inside its own
+ * ULB-grain dataset; the maps are switchable but never merged. District-name
+ * matching is used only to attach a returned source label to a boundary/anchor,
+ * and is therefore disclosed in the visualization rather than treated as an ID join.
+ */
+export function getDistrictSignalMaps(): DistrictSignalMap[] {
+  const collection = getCollectionProcurementSummary();
+  const ihhl = getIHHLFunnel();
+  const legacy = getLegacyWasteSummary();
+  return [
+    {
+      id: 'collection',
+      label: 'Ordered vehicles',
+      title: 'Ordered vehicles not yet supplied',
+      unit: 'vehicles',
+      period: collection.rows[0]?.period ?? 'Not returned',
+      coverage: collection.coverage,
+      rule: 'Sum of max(work orders − supplied, 0) inside the E-Auto procurement source.',
+      districts: districtSignals(collection.rows.map((row) => ({
+        district: row.district,
+        ulb: row.ulb,
+        value: row.workOrders === null || row.supplied === null ? null : Math.max(row.workOrders - row.supplied, 0),
+      }))),
+    },
+    {
+      id: 'ihhl',
+      label: 'Open IHHL approvals',
+      title: 'Approved toilets not yet completed',
+      unit: 'approvals',
+      period: ihhl.rows[0]?.period ?? 'Not returned',
+      coverage: ihhl.coverage,
+      rule: 'Sum of max(approved − completed, 0) inside the IHHL source.',
+      districts: districtSignals(ihhl.rows.map((row) => ({ district: row.district, ulb: row.ulb, value: row.openApprovals }))),
+    },
+    {
+      id: 'legacy',
+      label: 'Legacy-waste balance',
+      title: 'Source-reported legacy-waste balance',
+      unit: 'tonnes',
+      period: legacy.period,
+      coverage: { reported: legacy.rows.filter((row) => row.balance !== null && row.balanceCheck !== 'conflict').length, expected: anchorRegistry.length, unit: 'ULBs', basis: 'Internally conflicting balances excluded.' },
+      rule: 'Sum of source-reported balance inside the legacy-waste source; arithmetic conflicts excluded.',
+      districts: districtSignals(legacy.rows.map((row) => ({ district: row.district, ulb: row.ulb, value: row.balanceCheck === 'conflict' ? null : row.balance }))),
+    },
+  ];
 }
 
 export function getCommunityProgrammeSummary(): CommunityProgrammeSummary {
