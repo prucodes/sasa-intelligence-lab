@@ -39,7 +39,7 @@ button { color: inherit; }
 
 .app-shell { min-height: 100vh; display: grid; grid-template-columns: 254px minmax(0, 1fr); }
 .app-main { min-width: 0; }
-.sidebar { position: sticky; top: 0; height: 100vh; z-index: 20; display: flex; flex-direction: column; background: rgba(255,255,255,.96); border-right: 1px solid var(--line); overflow: hidden; }
+.sidebar { position: sticky; top: 0; height: 100vh; z-index: 41; display: flex; flex-direction: column; background: rgba(255,255,255,.96); border-right: 1px solid var(--line); overflow: hidden; }
 .brand { height: 92px; padding: 13px 22px; display: flex; align-items: center; gap: 9px; border-bottom: 1px solid var(--line); }
 .brand img { width: 63px; height: 61px; object-fit: contain; }
 .brand span { display: flex; flex-direction: column; line-height: 1.06; }
@@ -58,7 +58,7 @@ button { color: inherit; }
 .profile small { font-size: 11px; color: var(--muted); }
 .avatar, .header-avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(145deg, #253d79, #0d1f52); color: #fff; font-weight: 700; font-size: 13px; }
 
-.topbar { height: 92px; padding: 0 34px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.95); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 15; backdrop-filter: blur(14px); }
+.topbar { height: 92px; padding: 0 34px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.95); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 40; backdrop-filter: blur(14px); }
 .topbar > div:first-child { display: flex; align-items: center; gap: 16px; }
 .topbar b { color: var(--navy); font-size: 22px; letter-spacing: -.025em; }
 .lab-tag { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #ded0ff; color: #6834da; background: #f8f3ff; padding: 7px 12px; border-radius: 999px; font-size: 12px; font-weight: 650; }
@@ -353,7 +353,9 @@ td b { color: var(--navy); }
   .quadrant-label span { display: none; }
   .quadrant-guide { grid-template-columns: 1fr; }
   .selected-ulb { grid-template-columns: 1fr; }
-  .diagnostic-heading { align-items: flex-start; flex-wrap: wrap; }
+  .diagnostic-heading { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; column-gap: 12px; row-gap: 9px; }
+  .diagnostic-heading > div:nth-child(2) { grid-row: 1; grid-column: 2; }
+  .diagnostic-heading .status-pill { grid-column: 1 / -1; grid-row: 2; justify-self: start; margin-left: 0; }
   .diagnostic-metric { grid-template-columns: 38px 1fr; }
   .diagnostic-metric > strong { grid-column: 2; }
   .process-strip { grid-template-columns: 1fr; }
@@ -1175,7 +1177,7 @@ th { background: linear-gradient(180deg,#f4f8fc,#f8fbfe); }
   .header-brand > b, .lab-tag { display: none; }
   .mode-disclosure { max-width: none; min-width: 0; flex: 1 1 auto; padding-inline: 9px; }
   .header-actions { flex: 0 0 auto; }
-  .header-avatar, .icon-button { display: none; }
+  .header-avatar, .icon-button:not(.present-button) { display: none; }
   .mode-control select { min-height: 34px; padding: 0 27px 0 9px; }
   .content { min-height: calc(100vh - 126px); padding: 13px 12px 24px; }
   .page-intro { min-height: auto; display: block; padding: 15px 16px; border-radius: 15px; }
@@ -1209,7 +1211,7 @@ th { background: linear-gradient(180deg,#f4f8fc,#f8fbfe); }
   .primary-link { width: 100%; }
   .diagnostic-heading { min-height: 0; padding: 15px; }
   .diagnostic-heading h2 { font-size: 20px; }
-  .diagnostic-heading .status-pill { margin-left: 65px; }
+  .diagnostic-heading .status-pill { margin-left: 0; }
   .diagnostic-metrics { margin-inline: 10px; }
   .diagnostic-metric { grid-template-columns: 45px minmax(0,1fr) auto; gap: 8px; padding: 8px; }
   .diagnostic-metric > strong { grid-column: auto; font-size: 14px; text-align: right; }
@@ -1234,7 +1236,7 @@ th { background: linear-gradient(180deg,#f4f8fc,#f8fbfe); }
   .quadrant { height: 325px; }
   .quadrant-label b { font-size: 10px; }
   .diagnostic-heading .municipal-icon { width: 46px; height: 46px; }
-  .diagnostic-heading .status-pill { margin-left: 58px; }
+  .diagnostic-heading .status-pill { margin-left: 0; }
   .process-strip { grid-template-columns: 1fr; }
 }
 
@@ -5818,9 +5820,6 @@ table td, table th { font-variant-numeric: tabular-nums; }
 @media (max-width: 1240px) {
   .topbar .present-button { width: 35px; min-width: 35px; padding: 0; }
   .topbar .present-button span { display: none; }
-}
-@media (max-width: 620px) {
-  .topbar .present-button { display: none; }
 }
 
 /* Data Readiness v3 — one activation narrative before the detailed evidence. */
