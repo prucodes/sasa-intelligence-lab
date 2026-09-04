@@ -4710,6 +4710,33 @@ table td, table th { font-variant-numeric: tabular-nums; }
 .theme-dark .compare-source { color: #b3c4dc; }
 .theme-dark .compare-empty { color: #8fa0ba; border-color: rgba(120,160,220,.2); }
 
+/* Persistent comparison tray: a quiet, high-signal workspace that survives route changes. */
+.compare-button { border-color: #cfe0ef; color: var(--navy-2); }
+.compare-button svg { color: var(--teal-dark); }
+.compare-tray-backdrop { position: fixed; inset: 0; z-index: 120; display: flex; justify-content: flex-end; align-items: stretch; padding: 18px; background: rgba(18,33,62,.24); backdrop-filter: blur(3px); }
+.compare-tray { width: min(680px, 100%); display: flex; flex-direction: column; gap: 15px; padding: 24px; border: 1px solid #d3e0ef; border-radius: 18px; background: rgba(255,255,255,.98); box-shadow: 0 24px 70px rgba(21,49,95,.22); overflow: auto; }
+.compare-tray > header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
+.compare-tray h2 { margin: 3px 0 5px; color: var(--navy); font-size: 23px; letter-spacing: -.025em; }
+.compare-tray header p { margin: 0; max-width: 500px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.tray-controls { display: grid; grid-template-columns: minmax(0,1fr) 190px; gap: 10px; }
+.tray-controls input, .tray-controls select { width: 100%; min-height: 40px; padding: 0 12px; border: 1px solid #cdd9eb; border-radius: 9px; background: #fff; color: var(--ink); font-size: 12.5px; }
+.tray-browse { display: flex; flex-direction: column; gap: 4px; }
+.tray-browse span { font-size: 9.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.tray-pinned { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 750; color: var(--muted); }
+.tray-pinned button { border: 0; background: transparent; color: var(--navy-2); font-size: 11px; font-weight: 750; cursor: pointer; }
+.tray-notice { display: flex; gap: 10px; align-items: flex-start; padding: 15px; border: 1px solid #dce6f1; border-radius: 12px; background: #f7fafd; color: var(--navy-2); }
+.tray-notice svg { flex: 0 0 auto; color: var(--teal-dark); }
+.tray-notice b { font-size: 13px; }
+.tray-notice p { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.tray-matches { margin-top: -4px; }
+@media (max-width: 700px) { .compare-tray-backdrop { align-items: flex-end; padding: 0; } .compare-tray { width: 100%; max-height: 88vh; border-radius: 18px 18px 0 0; padding: 20px 15px 18px; } .tray-controls { grid-template-columns: 1fr; } }
+.theme-dark .compare-button { background: rgba(10,24,56,.6); border-color: rgba(120,160,220,.2); color: #cfe0f4; }
+.theme-dark .compare-tray { background: rgba(10,24,56,.98); border-color: rgba(120,160,220,.22); box-shadow: 0 24px 70px rgba(0,0,0,.4); }
+.theme-dark .compare-tray h2 { color: #e8f1fb; }
+.theme-dark .compare-tray header p, .theme-dark .tray-pinned { color: #93a5c0; }
+.theme-dark .tray-controls input, .theme-dark .tray-controls select { background: rgba(14,32,72,.7); border-color: rgba(120,160,220,.22); color: #dceaf8; }
+.theme-dark .tray-notice { background: rgba(14,32,72,.6); border-color: rgba(120,160,220,.18); }
+
 /* Peer context: where one reported value sits among the entities that reported a
    comparable figure. Position, never performance. */
 .peer-strip { display: flex; flex-direction: column; gap: 5px; min-width: 132px; }
@@ -5911,6 +5938,9 @@ table td, table th { font-variant-numeric: tabular-nums; }
   background: linear-gradient(135deg, #18566e, #1c456d 68%, #333f7d);
   box-shadow: 0 8px 19px rgba(20,59,94,.2), inset 0 1px rgba(255,255,255,.17);
 }
+.topbar .compare-button, .topbar .evidence-pack { min-height: 35px; padding: 0 10px; border-radius: 9px; font-size: 11px; }
+.topbar .compare-button span, .topbar .evidence-pack span { display: inline; }
+@media (max-width: 1180px) { .topbar .compare-button span, .topbar .evidence-pack span { display: none; } .topbar .compare-button, .topbar .evidence-pack { width: 35px; min-width: 35px; padding: 0; justify-content: center; } }
 .theme-dark .topbar .present-button {
   color: #edfaff;
   border-color: rgba(83,181,217,.32);

@@ -94,7 +94,7 @@ function GlossaryText({ text }: { text: string }) {
   })}</>;
 }
 
-type IconName = 'home' | 'chart' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play';
+type IconName = 'home' | 'chart' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
 
 function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
@@ -114,6 +114,7 @@ function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
       {name === 'alert' && <><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5m0 3h.01"/></>}
       {name === 'clock' && <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>}
       {name === 'arrow' && <><path d="M5 12h14m-5-5 5 5-5 5"/></>}
+      {name === 'download' && <><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 20h14"/></>}
       {name === 'play' && <><path d="M7 5v14l11-7z"/></>}
       {name === 'moon' && <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/>}
       {name === 'sun' && <><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></>}
@@ -208,6 +209,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
   const [booted, setBooted] = useState(false);
   // Presenter (Briefing) mode: a focused, chrome-free walk through the governed evidence.
   const [presenting, setPresenting] = useState(false);
+  const [compareOpen, setCompareOpen] = useState(false);
   function togglePresent(on: boolean) {
     setPresenting(on);
     try {
@@ -282,7 +284,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} />
       <div className="app-main">
-        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} />
+        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} />
         <main id="main-content" className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
@@ -293,6 +295,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
         <ProductFooter mode={mode}/>
       </div>
       <AboutPanel open={aboutOpen} onClose={() => setAboutOpen(false)} />
+      <CrossScreenCompareTray mode={mode} open={compareOpen} onClose={() => setCompareOpen(false)} />
       {presenting && <PresenterMode colorTheme={colorTheme} onExit={() => togglePresent(false)} />}
     </div>
   );
@@ -321,7 +324,8 @@ function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: 
   );
 }
 
-function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void }) {
+function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent, onCompare }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void; onCompare: () => void }) {
+  const [compareIds] = useCompareSelection();
   return (
     <header className="topbar">
       <div className="header-brand"><b><GlossaryText text="SASA Intelligence Lab"/></b><span className="lab-tag"><span>◇</span> Decision-intelligence concept</span><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status"><Icon name="shield" size={17}/>{datasets[mode].banner}</span></div>
@@ -329,6 +333,8 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
         <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
         <button className="icon-button present-button" aria-label="Open presenter briefing" title="Open presenter briefing" onClick={onPresent}><Icon name="play" size={15}/><span>Briefing</span></button>
+        <button className="icon-button compare-button" aria-label="Open ULB comparison tray" title="Compare selected ULBs" onClick={onCompare}><Icon name="building" size={17}/><span>Compare{compareIds.length ? ` · ${compareIds.length}` : ''}</span></button>
+        <button className="icon-button evidence-pack" aria-label="Download evidence brief" title="Download evidence brief" onClick={() => downloadEvidenceBrief(mode)}><Icon name="download" size={16}/><span>Brief</span></button>
         <button className="icon-button" aria-label="About SASA Intelligence Lab and glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={20}/></button>
         <span className="header-avatar">AP</span>
       </div>
@@ -1224,6 +1230,61 @@ function compactMetric(value: number) {
   if (Math.abs(value) >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`;
   if (Math.abs(value) >= 1_000) return `${(value / 1_000).toFixed(value >= 100_000 ? 0 : 1)}K`;
   return value.toLocaleString('en-IN');
+}
+
+function downloadEvidenceBrief(mode: DataMode) {
+  const generated = new Date().toISOString().slice(0, 10);
+  const lines = mode === 'SAMPLE'
+    ? (() => {
+      const collection = getCollectionProcurementSummary();
+      const ihhl = getIHHLFunnel();
+      const legacy = getLegacyWasteSummary();
+      const outcomes = getSwachhOutcomeSummary();
+      return [
+        'SASA INTELLIGENCE LAB — GOVERNED EVIDENCE BRIEF',
+        `Prepared ${generated} · retained static snapshots · client-side export`,
+        '',
+        'DECISION STATE',
+        'UNSCORED — descriptive review is available; performance scoring is held by identity, period, quality and policy gates.',
+        '',
+        'CURRENT EVIDENCE FOOTPRINT',
+        `29 complete retained datasets · ${governedSnapshotStats.records.toLocaleString('en-IN')} retained rows · 123 observed ULB-name candidates (not an official statewide denominator).`,
+        '',
+        'OPERATIONAL SIGNALS (2026)',
+        `Collection: ${formatValue(collection.supplied)} supplied against ${formatValue(collection.target)} target; ${formatPercent(collection.deliveryRatio)} reported delivery ratio; ${formatCoverage(collection.coverage)} returned coverage.`,
+        `IHHL: ${formatValue(ihhl.completed)} completed against ${formatValue(ihhl.approved)} approved; ${formatPercent(ihhl.completionRatio)} completion ratio; ${formatCoverage(ihhl.coverage)} returned coverage.`,
+        `Legacy waste: ${compactNumber(legacy.achievement)} cleared against ${compactNumber(legacy.target)} target; ${compactNumber(legacy.balance)} reported balance; ${formatCoverage(legacy.coverage)} returned coverage.`,
+        '',
+        'OUTCOME CONTEXT (2024)',
+        `${outcomes.odfRecords.toLocaleString('en-IN')} ODF records · ${outcomes.gfcRecords.toLocaleString('en-IN')} GFC records · ${outcomes.rankRecords.toLocaleString('en-IN')} rank records. Kept separate from 2026 operations; not a combined performance score.`,
+        '',
+        'EVIDENCE RULES',
+        'Blank / not returned is not counted as zero. Ratios retain their stated denominator. Source grain is not silently merged. Disputed values are excluded rather than averaged. No score or causal claim is produced without all gates.',
+        '',
+        'NEXT UNLOCK',
+        'Approve an authoritative ULB registry and reviewed name-to-ID crosswalk, then obtain aligned repeated periods and a documented scoring policy.',
+      ];
+    })()
+    : [
+      'SASA INTELLIGENCE LAB — CAPABILITY BRIEF',
+      `Prepared ${generated} · ${mode === 'DEMO' ? 'Demo mode uses synthetic fixtures.' : 'Live mode is a roadmap marker; no runtime connector is present.'}`,
+      '',
+      'This export is a presentation aid, not an authenticated source record. Switch to Governed data for retained evidence and provenance.',
+    ];
+  const text = `${lines.join('\n')}\n`;
+  try {
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `sasa-${mode === 'SAMPLE' ? 'governed-evidence' : mode.toLowerCase()}-brief-${generated}.txt`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  } catch {
+    // Download is a convenience; the visible evidence remains usable if a browser blocks it.
+  }
 }
 
 function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab: AnalyticsTab }) {
@@ -2584,11 +2645,41 @@ function SourceEvidenceReadiness({ data }: { data: ReturnType<typeof getEntityCo
  * Previously an entity could only be seen alone in Diagnostics, or lost in a statewide
  * table — there was nothing in between, which is the view a reviewer actually wants.
  */
+const COMPARE_STORAGE_KEY = 'sasa-compare-ulbs-v1';
+const COMPARE_EVENT = 'sasa-compare-changed';
+
+function readCompareIds(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(COMPARE_STORAGE_KEY) ?? '[]');
+    return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === 'string').slice(0, 6) : [];
+  } catch { return []; }
+}
+
+function useCompareSelection(): [string[], (ids: string[]) => void] {
+  const [ids, setIds] = useState<string[]>([]);
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setIds(readCompareIds());
+    /* eslint-enable react-hooks/set-state-in-effect */
+    const sync = () => setIds(readCompareIds());
+    window.addEventListener('storage', sync);
+    window.addEventListener(COMPARE_EVENT, sync);
+    return () => { window.removeEventListener('storage', sync); window.removeEventListener(COMPARE_EVENT, sync); };
+  }, []);
+  const update = (next: string[]) => {
+    const clean = [...new Set(next)].slice(0, 6);
+    setIds(clean);
+    try { window.localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(clean)); window.dispatchEvent(new Event(COMPARE_EVENT)); } catch { /* optional persistence */ }
+  };
+  return [ids, update];
+}
+
 function EntityComparison() {
   const decisions = useSyncExternalStore(subscribeDecisions, readDecisions, serverDecisions);
   const aliases = useMemo(() => approvedAliases(decisions), [decisions]);
   const grid = useMemo(() => getEvidenceCoverageGrid(aliases), [aliases]);
-  const [pinned, setPinned] = useState<string[]>([]);
+  const [pinned, setPinned] = useCompareSelection();
   const [query, setQuery] = useState('');
 
   const byId = useMemo(() => new Map(grid.rows.map((row) => [row.ulbId, row])), [grid]);
@@ -2640,6 +2731,32 @@ function EntityComparison() {
       </table></div>}
     <p className="table-note"><Icon name="info" size={15}/>A blank cell means that source returned no row for the entity. It is never a reported zero, and breadth is not performance.</p>
   </article>;
+}
+
+function CrossScreenCompareTray({ mode, open, onClose }: { mode: DataMode; open: boolean; onClose: () => void }) {
+  const [pinned, setPinned] = useCompareSelection();
+  const decisions = useSyncExternalStore(subscribeDecisions, readDecisions, serverDecisions);
+  const grid = useMemo(() => getEvidenceCoverageGrid(approvedAliases(decisions)), [decisions]);
+  const [query, setQuery] = useState('');
+  const byId = useMemo(() => new Map(grid.rows.map((row) => [row.ulbId, row])), [grid]);
+  const rows = pinned.map((id) => byId.get(id)).filter(Boolean) as typeof grid.rows;
+  const matches = query.trim() ? grid.rows.filter((row) => !pinned.includes(row.ulbId) && `${row.ulb} ${row.district}`.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 6) : [];
+  const districts = useMemo(() => [...new Set(grid.rows.map((row) => row.district))].sort(), [grid]);
+  const add = (id: string) => { if (pinned.length < 6) setPinned([...pinned, id]); setQuery(''); };
+  const browse = (district: string) => { const first = grid.rows.find((row) => row.district === district && !pinned.includes(row.ulbId)); if (first) add(first.ulbId); };
+  if (!open) return null;
+  return <div className="compare-tray-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+    <aside className="compare-tray" role="dialog" aria-modal="true" aria-labelledby="compare-tray-title">
+      <header><div><span className="eyebrow">Cross-screen workspace</span><h2 id="compare-tray-title">ULB comparison tray</h2><p>Keep a small, source-locked set while moving between analytics, diagnostics and readiness.</p></div><button className="about-close" onClick={onClose} aria-label="Close comparison tray">×</button></header>
+      {mode !== 'SAMPLE' ? <div className="tray-notice"><Icon name="shield" size={18}/><div><b>Governed data mode required</b><p>Switch to Governed data to compare retained source evidence. Demo and Live never fabricate a comparison.</p></div></div> : <>
+        <div className="tray-controls"><label><span className="sr-only">Search ULBs to add</span><input type="search" value={query} placeholder="Search by ULB or district…" onChange={(event) => setQuery(event.target.value)} disabled={pinned.length >= 6}/></label><label className="tray-browse"><span>Browse a district</span><select aria-label="Browse a district to add" value="" onChange={(event) => browse(event.target.value)} disabled={pinned.length >= 6}><option value="">Choose…</option>{districts.map((district) => <option key={district} value={district}>{district}</option>)}</select></label></div>
+        {matches.length > 0 && <div className="compare-matches tray-matches">{matches.map((row) => <button key={row.ulbId} onClick={() => add(row.ulbId)}><b>{row.ulb.toLowerCase()}</b><small>{row.district.toLowerCase()}</small></button>)}</div>}
+        <div className="tray-pinned"><span>{pinned.length} / 6 pinned</span>{pinned.length > 0 && <button onClick={() => setPinned([])}>Clear all</button>}</div>
+        {rows.length === 0 ? <p className="compare-empty">Choose a district or search a ULB to start. The tray compares returned evidence only; it is not a ranking or score.</p> : <div className="table-scroll"><table className="compare-table"><thead><tr><th>Source</th>{rows.map((row) => <th key={row.ulbId} className="compare-entity"><b>{row.ulb.toLowerCase()}</b><small>{row.district.toLowerCase()}</small><button onClick={() => setPinned(pinned.filter((id) => id !== row.ulbId))} aria-label={`Remove ${row.ulb}`}>×</button></th>)}</tr></thead><tbody>{grid.sources.map((source, index) => <tr key={source.tableKey}><td className="compare-source">{source.label}</td>{rows.map((row) => <td key={row.ulbId} className="compare-cell"><CoverageMark state={row.cells[index] === 'recovered' ? 'returned' : row.cells[index]}/></td>)}</tr>)}<tr className="compare-total"><td>Sources returning evidence</td>{rows.map((row) => <td key={row.ulbId}><b>{row.returned}</b> / {grid.sources.length}</td>)}</tr></tbody></table></div>}
+        <p className="table-note"><Icon name="shield" size={14}/>Blank means not returned, never zero. Approved name matches are marked as recovered; no scoring is implied.</p>
+      </>}
+    </aside>
+  </div>;
 }
 
 function EvidenceCoverageGrid() {

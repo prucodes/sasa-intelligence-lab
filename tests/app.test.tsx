@@ -162,6 +162,26 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /activation details/i })).toBeInTheDocument();
   });
 
+  it('opens a browse-first comparison tray that persists selected ULBs', () => {
+    render(<LabApp page="operational-analytics" initialMode="SAMPLE" />);
+    fireEvent.click(screen.getByRole('button', { name: /open ulb comparison tray/i }));
+    expect(screen.getByRole('dialog', { name: /ulb comparison tray/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /browse a district to add/i })).toBeInTheDocument();
+    const districtPicker = screen.getByRole('combobox', { name: /browse a district to add/i }) as unknown as HTMLSelectElement;
+    const district = districtPicker.options[1]?.value;
+    expect(district).toBeTruthy();
+    fireEvent.change(districtPicker, { target: { value: district } });
+    expect(screen.getByText(/sources returning evidence/i)).toBeInTheDocument();
+    expect(JSON.parse(window.localStorage.getItem('sasa-compare-ulbs-v1') ?? '[]')).toHaveLength(1);
+  });
+
+  it('exposes a governed evidence brief action without changing the evidence state', () => {
+    render(<LabApp page="overview" initialMode="SAMPLE" />);
+    expect(screen.getByRole('button', { name: /download evidence brief/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /download evidence brief/i }));
+    expect(screen.getByText(/authenticated, governed sasa evidence/i)).toBeInTheDocument();
+  });
+
   it('explains why authenticated sample entities remain unscored', () => {
     render(<LabApp page="gap-radar" initialMode="SAMPLE" />);
     expect(screen.getByRole('heading', { name: /scoring starts once the operational and outcome data line up/i })).toBeInTheDocument();
