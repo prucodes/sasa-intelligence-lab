@@ -115,6 +115,9 @@ describe('application shell and screens', () => {
     render(<LabApp page="operational-analytics" initialMode="SAMPLE" />);
     expect(screen.getByRole('heading', { name: /reported delivery is far behind procurement intent/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /collection procurement funnel/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /compare returned ulbs without mixing the evidence/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/same-source ulb comparison/i)).toHaveTextContent(/E-Auto Service Model.*ULB grain/i);
+    expect(screen.getByRole('combobox', { name: /browse another ulb/i })).toBeDisabled();
     expect(screen.getAllByText('1,910').length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole('tab', { name: /sanitation delivery/i }));
     expect(screen.getByRole('heading', { name: /approvals are not converting into reported completions/i })).toBeInTheDocument();
@@ -148,6 +151,8 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /full operational evidence breadth/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: 'Periods' }));
     expect(screen.getByRole('heading', { name: /period availability/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /new file becomes evidence only after it clears four checks/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/next retained snapshot acceptance gate/i)).toHaveTextContent(/Trend still requires comparable repeated periods/i);
     fireEvent.click(screen.getByRole('tab', { name: 'Quality' }));
     expect(screen.getByRole('heading', { name: /evidence reconciliation workspace/i })).toBeInTheDocument();
     // The condition appears twice by design: once in the prioritised review inbox and

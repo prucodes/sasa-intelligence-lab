@@ -764,16 +764,18 @@ function PresenterSignalMap({ maps }: { maps: DistrictSignalMap[] }) {
   const { shapes, failed } = useDistrictShapes();
   const [activeId, setActiveId] = useState<DistrictSignalMap['id']>(maps[0]?.id ?? 'collection');
   const [hover, setHover] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
   const active = maps.find((map) => map.id === activeId) ?? maps[0];
   if (!active) return null;
   const peak = Math.max(...active.districts.map((district) => district.value), 1);
   const expand = (name: string) => name.toUpperCase().replace(/[^A-Z]/g, '') === 'SPSRNELLORE' ? 'SRI POTTI SRIRAMULU NELLORE' : name;
   const match = (name: string) => active.districts.find((district) => sameDistrict(expand(district.district), expand(name))) ?? null;
-  const focused = (hover ? match(hover) : null) ?? active.districts[0] ?? null;
+  const focusName = hover ?? pinned;
+  const focused = (focusName ? match(focusName) : null) ?? active.districts[0] ?? null;
   const total = active.districts.reduce((sum, district) => sum + district.value, 0);
   return <div className="presenter-map-story">
     <div className="presenter-title-row"><div><h1>See where the operational signal sits.</h1><p className="presenter-lede">One source at a time. Switch the measure to change the geography—never to combine it.</p></div>
-      <div className="presenter-map-tabs" role="tablist" aria-label="District signal map measure">{maps.map((map) => <button key={map.id} role="tab" aria-selected={map.id === active.id} className={map.id === active.id ? 'active' : ''} onClick={() => { setActiveId(map.id); setHover(null); }}><span>{map.label}</span><b>{compactMetric(map.districts.reduce((sum, district) => sum + district.value, 0))}</b><small>{map.unit}</small></button>)}</div>
+      <div className="presenter-map-tabs" role="tablist" aria-label="District signal map measure">{maps.map((map) => <button key={map.id} role="tab" aria-selected={map.id === active.id} className={map.id === active.id ? 'active' : ''} onClick={() => { setActiveId(map.id); setHover(null); setPinned(null); }}><span>{map.label}</span><b>{compactMetric(map.districts.reduce((sum, district) => sum + district.value, 0))}</b><small>{map.unit}</small></button>)}</div>
     </div>
     <div className="presenter-map-layout">
       <section className="presenter-map-canvas">
@@ -781,9 +783,9 @@ function PresenterSignalMap({ maps }: { maps: DistrictSignalMap[] }) {
         {!failed && !shapes && <p>Loading district boundaries…</p>}
         {shapes && <svg viewBox="0 0 560 470" role="img" aria-label={`Andhra Pradesh district map of ${active.title}`}>
           <defs><pattern id="presenter-map-absent" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--absence-ink)" strokeWidth="2.2"/></pattern></defs>
-          {shapes.map((shape) => { const district = match(shape.d); const intensity = district ? Math.sqrt(district.value / peak) : null; return <path key={shape.d} d={shape.path} tabIndex={0} aria-label={district ? `${district.district}: ${district.value.toLocaleString('en-IN')} ${active.unit}` : `${shape.d}: not returned in this source`} className={`presenter-map-district${hover && sameDistrict(expand(hover), expand(shape.d)) ? ' is-active' : ''}${district ? '' : ' is-absent'}`} fill={district ? `color-mix(in oklab, var(--teal) ${Math.round(16 + (intensity ?? 0) * 84)}%, var(--surface))` : 'url(#presenter-map-absent)'} onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(shape.d)} onBlur={() => setHover(null)}/>; })}
+          {shapes.map((shape) => { const district = match(shape.d); const intensity = district ? Math.sqrt(district.value / peak) : null; const isActive = Boolean(focusName && sameDistrict(expand(focusName), expand(shape.d))); return <path key={shape.d} d={shape.path} tabIndex={0} role="button" aria-pressed={Boolean(pinned && sameDistrict(expand(pinned), expand(shape.d)))} aria-label={district ? `${district.district}: ${district.value.toLocaleString('en-IN')} ${active.unit}. Activate to pin.` : `${shape.d}: not returned in this source. Activate to pin.`} className={`presenter-map-district${isActive ? ' is-active' : ''}${district ? '' : ' is-absent'}`} fill={district ? `color-mix(in oklab, var(--teal) ${Math.round(16 + (intensity ?? 0) * 84)}%, var(--surface))` : 'url(#presenter-map-absent)'} onClick={() => setPinned((current) => current === shape.d ? null : shape.d)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPinned((current) => current === shape.d ? null : shape.d); } }} onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(shape.d)} onBlur={() => setHover(null)}/>; })}
         </svg>}
-        <div className="presenter-map-legend"><span>District signal volume</span><i/><div><b>0</b><b>{compactMetric(peak)}</b></div><small>Square-root colour scale · absence hatched</small></div>
+        <div className="presenter-map-legend"><span>District signal volume</span><i/><div><b>0</b><b>{compactMetric(peak)}</b></div><small>Square-root colour scale · tap a district to pin · absence hatched</small></div>
         {focused && <div className="presenter-map-focus"><small>{focused.district}</small><b>{focused.value.toLocaleString('en-IN')} {active.unit}</b><span>{focused.expected > 0 && focused.returned <= focused.expected ? `${focused.returned} / ${focused.expected} registry ULBs returned` : `${focused.returned} returned candidates · registry anchor ${focused.expected || 'unmapped'} · label review`}</span>{focused.topEntity && <em>Largest: {focused.topEntity.ulb} · {focused.topEntity.value.toLocaleString('en-IN')}</em>}</div>}
       </section>
       <aside className="presenter-map-ranking"><header><span><small>{active.period} · source-separated</small><h2>{active.title}</h2></span><strong>{total.toLocaleString('en-IN')}<small>{active.unit}</small></strong></header>
@@ -1355,6 +1357,91 @@ function InsightCell({ icon, label, text }: { icon: IconName; label: string; tex
   return <div className="insight-cell"><span><Icon name={icon} size={17}/></span><div><b>{label}</b><p>{text}</p></div></div>;
 }
 
+type OperationalCompareDomain = 'collection' | 'sanitation' | 'processing';
+type OperationalCompareRow = {
+  key: string;
+  ulb: string;
+  district: string;
+  period: string;
+  stages: Array<{ label: string; value: number | null }>;
+  ratio: number | null;
+  signal: number | null;
+};
+
+/**
+ * A deliberately narrow comparison: one source, one period, one grain and one unit.
+ * The selector is browse-first because an officer should not need to remember the
+ * spelling of every ULB. Default cards are deterministic review gaps, not ranks.
+ */
+function OperationalEntityComparison({ domain, period }: { domain: OperationalCompareDomain; period: string | null }) {
+  const model = useMemo(() => {
+    const meta = domain === 'collection' ? {
+      source: 'E-Auto Service Model',
+      signalLabel: 'reported delivery gap',
+      signalUnit: 'vehicles',
+      ratioLabel: 'supplied / target',
+      boundary: 'Procurement and delivery status only—not utilization or service quality.',
+      rows: getCollectionProcurementSummary(period).rows.filter((row) => Boolean(row.ulb)).map<OperationalCompareRow>((row) => ({
+        key: `${row.district}|${row.ulb}`, ulb: row.ulb as string, district: row.district, period: row.period,
+        stages: [{ label: 'Target', value: row.target }, { label: 'Work orders', value: row.workOrders }, { label: 'Supplied', value: row.supplied }],
+        ratio: row.deliveryRatio, signal: row.deliveryGap,
+      })),
+    } : domain === 'sanitation' ? {
+      source: 'Identification of New IHHLs',
+      signalLabel: 'open approvals',
+      signalUnit: 'households',
+      ratioLabel: 'completed / approved',
+      boundary: 'Reported delivery conversion only—not a diagnosis of why work remains open.',
+      rows: getIHHLFunnel(period).rows.filter((row) => Boolean(row.ulb)).map<OperationalCompareRow>((row) => ({
+        key: `${row.district}|${row.ulb}`, ulb: row.ulb, district: row.district, period: row.period,
+        stages: [{ label: 'Identified', value: row.identified }, { label: 'Approved', value: row.approved }, { label: 'Construction', value: row.underConstruction }, { label: 'Completed', value: row.completed }],
+        ratio: row.completionRatio, signal: row.openApprovals,
+      })),
+    } : {
+      source: '100% Clearance of Legacy Waste',
+      signalLabel: 'reported balance',
+      signalUnit: 'tonnes',
+      ratioLabel: 'cleared / target',
+      boundary: 'Reported stock clearance only—not daily throughput, utilization, or verified remediation.',
+      rows: getLegacyWasteSummary(period).rows.filter((row) => Boolean(row.ulb)).map<OperationalCompareRow>((row) => ({
+        key: `${row.district}|${row.ulb}`, ulb: row.ulb, district: row.district, period: row.period,
+        stages: [{ label: 'Target', value: row.target }, { label: 'Cleared', value: row.achievement }, { label: 'Balance', value: row.balance }],
+        ratio: row.clearanceRatio, signal: row.balance,
+      })),
+    };
+    return { ...meta, rows: [...meta.rows].sort((left, right) => (right.signal ?? -1) - (left.signal ?? -1) || left.ulb.localeCompare(right.ulb)) };
+  }, [domain, period]);
+  const defaults = model.rows.slice(0, 3).map((row) => row.key);
+  const [selectedKeys, setSelectedKeys] = useState(defaults);
+  const selected = selectedKeys.map((key) => model.rows.find((row) => row.key === key)).filter((row): row is OperationalCompareRow => Boolean(row));
+  const available = model.rows.filter((row) => !selectedKeys.includes(row.key));
+  const districts = [...new Set(available.map((row) => row.district))].sort((left, right) => left.localeCompare(right));
+  const sharedMax = Math.max(1, ...selected.flatMap((row) => row.stages.map((stage) => stage.value ?? 0)));
+  const periodLabel = selected[0]?.period ?? model.rows[0]?.period ?? 'No returned period';
+
+  return <article className="panel operational-compare" aria-label="Same-source ULB comparison">
+    <header className="operational-compare-head">
+      <div><span className="eyebrow">Source-locked comparison</span><h2>Compare returned ULBs without mixing the evidence.</h2><p>{model.source} · {periodLabel} · ULB grain. Default cards show the largest source-reported gaps; they are not a score.</p></div>
+      <div className="operational-compare-picker">
+        <label htmlFor={`compare-${domain}`}>Browse another ULB</label>
+        <select id={`compare-${domain}`} value="" disabled={selected.length >= 3 || available.length === 0} onChange={(event) => { if (event.target.value) setSelectedKeys((current) => [...current, event.target.value].slice(0, 3)); }}>
+          <option value="">{selected.length >= 3 ? 'Remove one to add another' : 'Choose by district…'}</option>
+          {districts.map((district) => <optgroup key={district} label={district}>{available.filter((row) => row.district === district).map((row) => <option key={row.key} value={row.key}>{row.ulb}</option>)}</optgroup>)}
+        </select>
+        <button type="button" onClick={() => setSelectedKeys(defaults)} disabled={selectedKeys.join('|') === defaults.join('|')}>Reset review set</button>
+      </div>
+    </header>
+    <div className="operational-compare-scale"><span><i/><b>Shared absolute scale</b> across the selected cards</span><em>{selected.length} of 3 shown</em></div>
+    <div className="operational-compare-grid">{selected.map((row, index) => <section className="operational-compare-card" key={row.key}>
+      <header><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{row.ulb}</h3><small>{row.district}</small></div>{selected.length > 1 && <button type="button" aria-label={`Remove ${row.ulb} from comparison`} onClick={() => setSelectedKeys((current) => current.filter((key) => key !== row.key))}>×</button>}</header>
+      <div className="operational-compare-read"><span><small>{model.ratioLabel}</small><strong>{formatPercent(row.ratio)}</strong></span><span><small>{model.signalLabel}</small><strong>{row.signal === null ? 'Not returned' : row.signal.toLocaleString('en-IN')}<em>{row.signal === null ? '' : model.signalUnit}</em></strong></span></div>
+      <div className="operational-compare-stages">{row.stages.map((stage) => <div className={stage.value === null ? 'is-missing' : stage.value === 0 ? 'is-zero' : ''} key={stage.label}><span><b>{stage.label}</b><strong>{stage.value === null ? 'Not returned' : stage.value.toLocaleString('en-IN')}</strong></span><i aria-hidden="true">{stage.value !== null && <em style={{ width: `${stage.value / sharedMax * 100}%` }}/>}</i></div>)}</div>
+      <footer><span><Icon name="shield" size={13}/>{periodLabel} · one retained source</span><DrillLink ulb={row.ulb} district={row.district} from={`${model.source} comparison`}/></footer>
+    </section>)}</div>
+    <p className="operational-compare-boundary"><Icon name="info" size={14}/><b>Reading boundary</b><span>{model.boundary} “Not returned” remains distinct from a reported zero.</span></p>
+  </article>;
+}
+
 function StageCohortAnalytics({ group }: { group: OperationalStageCohorts }) {
   const peak = Math.max(...group.cohorts.map((cohort) => cohort.count), 1);
   return <article className="panel stage-cohort-panel">
@@ -1383,6 +1470,7 @@ function CollectionAnalytics({ period }: { period: string | null }) {
       <div className="analytics-kpis"><MiniKpi icon="chart" label="Delivery ratio" value={formatPercent(data.deliveryRatio)} detail="supplied / target" tone="teal" coverage={data.coverage}/><MiniKpi icon="database" label="Work-order ratio" value={formatPercent(data.workOrderRatio)} detail="work orders / target" tone="blue" coverage={data.coverage}/><MiniKpi icon="alert" label="Reported shortfall" value={data.deliveryGap.toLocaleString('en-IN')} detail="target minus supplied" tone="violet"/></div>
       <StageCohortAnalytics group={getCollectionStageCohorts(period)}/>
       <CollectionSourceContrast procurement={data} districts={districtAssets}/>
+      <OperationalEntityComparison key={`collection-${period ?? 'latest'}`} domain="collection" period={period}/>
       <article className="panel analytics-table-panel primary-review-table"><PanelTitle icon="target" title="Where to review" subtitle="Largest deterministic reported delivery gaps · not a performance score"/><div className="table-scroll"><table><thead><tr><th>ULB / District</th><th>Target</th><th>Work orders</th><th>Supplied</th><th>Delivery ratio</th><th>Against peers</th><th>Reported gap</th><th></th></tr></thead><tbody>{topRows.map((row) => <tr key={`${row.district}-${row.ulb}`}><td><b>{row.ulb}</b><small className="cell-sub">{row.district}</small></td><td>{formatValue(row.target)}</td><td>{formatValue(row.workOrders)}</td><td>{formatValue(row.supplied)}</td><td><RatioBar value={row.deliveryRatio}/></td><td><PeerStrip value={row.deliveryRatio} distribution={deliveryPeers}/></td><td><b className="gap-value">{formatValue(row.deliveryGap)}</b></td><td><DrillLink ulb={row.ulb ?? ''} district={row.district} from="Collection"/></td></tr>)}</tbody></table></div></article>
       <MeaningFooter>Measures procurement and reported delivery, not fleet utilization. Null or zero targets remain “Not computable.”</MeaningFooter>
     </> : <DistrictCollectionAssets data={districtAssets}/>} 
@@ -1426,6 +1514,7 @@ function SanitationAnalytics({ period }: { period: string | null }) {
     <article className="panel analytical-hero funnel-panel primary-visual conversion-hero sanitation-conversion"><PanelTitle icon="chart" title="IHHL delivery funnel" subtitle="Four-stage sanitation pipeline · exact duplicates excluded and retained as quality evidence"/><ConversionJourney stages={[["Identified", data.identified, "teal"], ["Approved", data.approved, "blue"], ["Under construction", data.underConstruction, "violet"], ["Completed", data.completed, "teal"]]}/></article>
     <div className="analytics-kpis"><MiniKpi icon="check" label="Completion ratio" value={formatPercent(data.completionRatio)} detail="completed / approved" tone="teal" coverage={data.coverage}/><MiniKpi icon="target" label="Identified coverage" value={formatPercent(data.identifiedCoverage)} detail="completed / identified" tone="blue" coverage={data.coverage}/><MiniKpi icon="clock" label="Open approvals" value={data.openApprovals.toLocaleString('en-IN')} detail="approved minus completed" tone="violet"/></div>
     <StageCohortAnalytics group={getIHHLStageCohorts(period)}/>
+    <OperationalEntityComparison key={`sanitation-${period ?? 'latest'}`} domain="sanitation" period={period}/>
     <article className="panel pipeline-dropoff-compact"><PanelTitle icon="chart" title="Pipeline drop-off" subtitle="Reported reduction from each previous stage"/><PipelineDropoff values={[['Identified', data.identified], ['Approved', data.approved], ['Under construction', data.underConstruction], ['Completed', data.completed]]}/></article>
     <article className="panel analytics-table-panel primary-review-table"><PanelTitle icon="target" title="Where to review" subtitle="Largest approval-to-completion reported gaps · flag rule: open approvals ≥ 100"/><div className="table-scroll"><table><thead><tr><th>ULB / District</th><th>Approved</th><th>Under construction</th><th>Completed</th><th>Completion ratio</th><th>Against peers</th><th>Open approvals</th><th></th></tr></thead><tbody>{topRows.map((row) => <tr key={`${row.district}-${row.ulb}`}><td><b>{row.ulb}</b><small className="cell-sub">{row.district}</small></td><td>{formatValue(row.approved)}</td><td>{formatValue(row.underConstruction)}</td><td>{formatValue(row.completed)}</td><td><RatioBar value={row.completionRatio}/></td><td><PeerStrip value={row.completionRatio} distribution={completionPeers}/></td><td><b className="gap-value">{formatValue(row.openApprovals)}</b></td><td><DrillLink ulb={row.ulb} district={row.district} from="Sanitation delivery"/></td></tr>)}</tbody></table></div></article>
     <MeaningFooter>This is a reporting and delivery conversion signal; it does not establish why completion is low.</MeaningFooter>
@@ -1463,6 +1552,7 @@ function LegacyWasteAnalytics({ data, period }: { data: ReturnType<typeof getLeg
     </article><LegacyBalancePareto rows={reviewRows} total={data.balance}/></div>
     <div className="analytics-kpis four"><MiniKpi icon="alert" label="Positive balances" value={String(data.positiveBalanceCandidates)} detail="observed ULB-name candidates" tone="orange"/><MiniKpi icon="check" label="Zero balances" value={String(data.zeroBalanceCandidates)} detail="source-reported balance = 0" tone="teal"/><MiniKpi icon="chart" label="Higher than June" value={String(data.increasedSincePreviousPeriod)} detail={`${data.unchangedSincePreviousPeriod} unchanged values`} tone="blue"/><MiniKpi icon="shield" label="Balance conflicts" value={String(data.balanceConflicts)} detail="target − cleared ≠ balance" tone="violet"/></div>
     <StageCohortAnalytics group={getLegacyWasteStageCohorts(period)}/>
+    <OperationalEntityComparison key={`processing-${period ?? 'latest'}`} domain="processing" period={period}/>
     <article className="panel analytics-table-panel primary-review-table"><PanelTitle icon="target" title="Where to review" subtitle="Largest source-reported remaining balances · deterministic ordering only"/><div className="table-scroll"><table><thead><tr><th>ULB name as reported</th><th>District</th><th>Target</th><th>Reported cleared</th><th>Clearance ratio</th><th>Against peers</th><th>Reported balance</th><th></th></tr></thead><tbody>{reviewRows.map((row) => <tr key={row.tableKey + row.district + row.ulb}><td><b>{row.ulb}</b></td><td>{row.district}</td><td>{formatValue(row.target)}</td><td>{formatValue(row.achievement)}</td><td><RatioBar value={row.clearanceRatio}/></td><td><PeerStrip value={row.clearanceRatio} distribution={clearancePeers}/></td><td><b className="gap-value">{formatValue(row.balance)}</b></td><td><DrillLink ulb={row.ulb} district={row.district} from="Legacy waste"/></td></tr>)}</tbody></table></div></article>
     <MeaningFooter>Reported clearance is not daily processing, facility throughput, utilization, or verified remediation impact. A zero balance is preserved as a reported source value.</MeaningFooter>
   </>;
@@ -1690,21 +1780,23 @@ function OperationalDistrictSignalMap() {
   const { shapes, failed } = useDistrictShapes();
   const [activeId, setActiveId] = useState<DistrictSignalMap['id']>(maps[0]?.id ?? 'collection');
   const [hover, setHover] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
   const active = maps.find((map) => map.id === activeId) ?? maps[0];
   if (!active) return null;
   const expand = (name: string) => name.toUpperCase().replace(/[^A-Z]/g, '') === 'SPSRNELLORE' ? 'SRI POTTI SRIRAMULU NELLORE' : name;
   const match = (name: string) => active.districts.find((district) => sameDistrict(expand(district.district), expand(name))) ?? null;
   const peak = Math.max(...active.districts.map((district) => district.value), 1);
-  const focused = (hover ? match(hover) : null) ?? active.districts[0] ?? null;
+  const focusName = hover ?? pinned;
+  const focused = (focusName ? match(focusName) : null) ?? active.districts[0] ?? null;
   const total = active.districts.reduce((sum, district) => sum + district.value, 0);
   return <article className="panel district-signal-panel">
-    <header className="district-signal-head"><PanelTitle icon="building" title="District operational signal map" subtitle="Switchable, single-source geography · absolute signal volume, never a combined score"/><div className="presenter-map-tabs" role="tablist" aria-label="District operational measure">{maps.map((map) => <button key={map.id} role="tab" aria-selected={map.id === active.id} className={map.id === active.id ? 'active' : ''} onClick={() => { setActiveId(map.id); setHover(null); }}><span>{map.label}</span><b>{compactMetric(map.districts.reduce((sum, district) => sum + district.value, 0))}</b><small>{map.unit}</small></button>)}</div></header>
+    <header className="district-signal-head"><PanelTitle icon="building" title="District operational signal map" subtitle="Switchable, single-source geography · absolute signal volume, never a combined score"/><div className="presenter-map-tabs" role="tablist" aria-label="District operational measure">{maps.map((map) => <button key={map.id} role="tab" aria-selected={map.id === active.id} className={map.id === active.id ? 'active' : ''} onClick={() => { setActiveId(map.id); setHover(null); setPinned(null); }}><span>{map.label}</span><b>{compactMetric(map.districts.reduce((sum, district) => sum + district.value, 0))}</b><small>{map.unit}</small></button>)}</div></header>
     <div className="district-signal-layout">
       <section className="presenter-map-canvas">
         {failed && <p className="map-fallback">District boundaries could not be loaded.</p>}
         {!failed && !shapes && <p className="map-fallback">Loading district boundaries…</p>}
-        {shapes && <svg viewBox="0 0 560 470" role="img" aria-label={`Andhra Pradesh district map of ${active.title}`}><defs><pattern id="overview-map-absent" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--absence-ink)" strokeWidth="2.2"/></pattern></defs>{shapes.map((shape) => { const district = match(shape.d); const intensity = district ? Math.sqrt(district.value / peak) : null; return <path key={shape.d} d={shape.path} tabIndex={0} aria-label={district ? `${district.district}: ${district.value.toLocaleString('en-IN')} ${active.unit}` : `${shape.d}: not returned in this source`} className={`presenter-map-district${hover && sameDistrict(expand(hover), expand(shape.d)) ? ' is-active' : ''}${district ? '' : ' is-absent'}`} fill={district ? `color-mix(in oklab, var(--teal) ${Math.round(16 + (intensity ?? 0) * 84)}%, var(--surface))` : 'url(#overview-map-absent)'} onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(shape.d)} onBlur={() => setHover(null)}/>; })}</svg>}
-        <div className="presenter-map-legend"><span>District signal volume</span><i/><div><b>0</b><b>{compactMetric(peak)}</b></div><small>Square-root colour scale · absence hatched</small></div>
+        {shapes && <svg viewBox="0 0 560 470" role="img" aria-label={`Andhra Pradesh district map of ${active.title}`}><defs><pattern id="overview-map-absent" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--absence-ink)" strokeWidth="2.2"/></pattern></defs>{shapes.map((shape) => { const district = match(shape.d); const intensity = district ? Math.sqrt(district.value / peak) : null; const isActive = Boolean(focusName && sameDistrict(expand(focusName), expand(shape.d))); return <path key={shape.d} d={shape.path} tabIndex={0} role="button" aria-pressed={Boolean(pinned && sameDistrict(expand(pinned), expand(shape.d)))} aria-label={district ? `${district.district}: ${district.value.toLocaleString('en-IN')} ${active.unit}. Activate to pin.` : `${shape.d}: not returned in this source. Activate to pin.`} className={`presenter-map-district${isActive ? ' is-active' : ''}${district ? '' : ' is-absent'}`} fill={district ? `color-mix(in oklab, var(--teal) ${Math.round(16 + (intensity ?? 0) * 84)}%, var(--surface))` : 'url(#overview-map-absent)'} onClick={() => setPinned((current) => current === shape.d ? null : shape.d)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPinned((current) => current === shape.d ? null : shape.d); } }} onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(shape.d)} onBlur={() => setHover(null)}/>; })}</svg>}
+        <div className="presenter-map-legend"><span>District signal volume</span><i/><div><b>0</b><b>{compactMetric(peak)}</b></div><small>Square-root colour scale · tap a district to pin · absence hatched</small></div>
         {focused && <div className="presenter-map-focus"><small>{focused.district}</small><b>{focused.value.toLocaleString('en-IN')} {active.unit}</b><span>{focused.expected > 0 && focused.returned <= focused.expected ? `${focused.returned} / ${focused.expected} registry ULBs returned` : `${focused.returned} returned candidates · registry anchor ${focused.expected || 'unmapped'} · label review`}</span>{focused.topEntity && <em>Largest: {focused.topEntity.ulb} · {focused.topEntity.value.toLocaleString('en-IN')}</em>}</div>}
       </section>
       <aside className="presenter-map-ranking"><header><span><small>{active.period} · one retained source</small><h2>{active.title}</h2></span><strong>{total.toLocaleString('en-IN')}<small>{active.unit}</small></strong></header><ol>{active.districts.slice(0,6).map((district,index) => <li key={district.district} onMouseEnter={() => setHover(district.district)} onMouseLeave={() => setHover(null)}><span>{String(index+1).padStart(2,'0')}</span><div><b>{district.district}</b><i><em style={{width:`${Math.max(3,district.value/peak*100)}%`}}/></i><small>{district.affected} affected · {district.expected > 0 && district.returned <= district.expected ? `${district.returned}/${district.expected} registry ULBs returned` : `${district.returned} returned · registry ${district.expected || 'unmapped'} · label review`}</small></div><strong>{compactMetric(district.value)}</strong></li>)}</ol><footer><Icon name="shield" size={15}/><span><b>{formatCoverage(active.coverage)} {active.coverage.unit} returned.</b> {active.rule} District labels are candidate matches to the 2022 boundary file.</span></footer></aside>
@@ -1732,6 +1824,7 @@ function OperationalDistrictSignalMap() {
 function DistrictEvidenceMap() {
   const { shapes, failed } = useDistrictShapes();
   const [hover, setHover] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
   const coverage = useMemo(() => getDistrictCoverage(), []);
 
   // The registry and the boundary file spell districts differently — "YSR" against
@@ -1748,7 +1841,8 @@ function DistrictEvidenceMap() {
   const matchDistrict = (name: string) =>
     coverage.districts.find((entry) => sameDistrict(expand(entry.district), expand(name))) ?? null;
   const peak = Math.max(1, ...coverage.districts.map((entry) => entry.sources));
-  const active = hover ? matchDistrict(hover) : null;
+  const focusName = hover ?? pinned;
+  const active = focusName ? matchDistrict(focusName) : null;
   const offMap = shapes
     ? coverage.districts.filter((entry) => !shapes.some((shape) => sameDistrict(expand(shape.d), expand(entry.district))))
     : [];
@@ -1778,16 +1872,21 @@ function DistrictEvidenceMap() {
           {shapes.map((shape) => {
             const entry = matchDistrict(shape.d);
             const ratio = entry ? entry.sources / peak : null;
-            return <path key={shape.d} d={shape.path}
-              className={`map-district${hover === shape.d ? ' is-hover' : ''}${entry ? '' : ' is-absent'}`}
+            return <path key={shape.d} d={shape.path} tabIndex={0} role="button"
+              aria-pressed={Boolean(pinned && sameDistrict(expand(pinned), expand(shape.d)))}
+              aria-label={entry ? `${entry.district}: ${entry.sources} retained sources. Activate to pin.` : `${shape.d}: no retained row. Activate to pin.`}
+              className={`map-district${focusName && sameDistrict(expand(focusName), expand(shape.d)) ? ' is-hover' : ''}${entry ? '' : ' is-absent'}`}
               fill={entry ? `color-mix(in oklab, var(--teal) ${Math.round(18 + (ratio ?? 0) * 82)}%, var(--surface))` : 'url(#map-absent)'}
-              onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)}/>;
+              onClick={() => setPinned((current) => current === shape.d ? null : shape.d)}
+              onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPinned((current) => current === shape.d ? null : shape.d); } }}
+              onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(shape.d)} onBlur={() => setHover(null)}/>;
           })}
         </svg>}
         {shapes && <div className="map-legend">
           <span className="ml-title">Sources per district</span>
           <div className="ml-ramp"><i/><i/><i/><i/><i/></div>
           <div className="ml-ends"><span>3</span><span>{peak}</span></div>
+          <small>Tap a district to pin</small>
           <span className="ml-absent"><i/>No retained row</span>
         </div>}
         {active && <div className="map-tip"><b>{active.district}</b>
@@ -2639,7 +2738,7 @@ const monthInitials = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', '
 function PeriodsView({ mode }: { mode: DataMode }) {
   if (mode !== 'SAMPLE') return <ReadinessModeNotice mode={mode}/>;
   const rows = getDatasetPeriodAvailability();
-  return <section className="periods-workspace"><TemporalReadinessSummary rows={rows}/><article className="panel period-panel"><div className="catalogue-heading"><PanelTitle icon="calendar" title="Period availability matrix" subtitle="Marked only when a governed response for that filter period was retained"/><span className="catalogue-count">{rows.filter((row) => row.retrieved).length} retrieved</span></div><div className="table-scroll period-table"><table><thead><tr><th>Dataset</th><th>2024</th><th>2025</th><th>2026</th>{monthInitials.map((month) => <th key={month}>{month}</th>)}<th>Quality</th></tr></thead><tbody>{rows.map((row) => <tr key={row.tableKey}><td><b>{row.dataset}</b><small className="cell-sub">{row.period}</small></td>{[2024, 2025, 2026].map((year) => <td key={year}>{row.years.includes(year) ? <CoverageMark state="returned"/> : <CoverageMark state="not-returned"/>}</td>)}{monthInitials.map((_, index) => <td key={index}>{row.months.includes(index + 1) ? <CoverageMark state={row.conflict ? 'quality-issue' : 'returned'}/> : <CoverageMark state="not-returned"/>}</td>)}<td><ReadinessBadge value={!row.retrieved ? 'Unavailable' : row.conflict ? 'Period conflict' : 'Retrieved'}/></td></tr>)}</tbody></table></div><p className="table-note"><Icon name="info" size={15}/>Catalogue frequency, snapshot-generation timestamps, and inserted dates do not create historical availability.</p></article></section>;
+  return <section className="periods-workspace"><TemporalReadinessSummary rows={rows}/><SnapshotAcceptanceGate rows={rows}/><article className="panel period-panel"><div className="catalogue-heading"><PanelTitle icon="calendar" title="Period availability matrix" subtitle="Marked only when a governed response for that filter period was retained"/><span className="catalogue-count">{rows.filter((row) => row.retrieved).length} retrieved</span></div><div className="table-scroll period-table"><table><thead><tr><th>Dataset</th><th>2024</th><th>2025</th><th>2026</th>{monthInitials.map((month) => <th key={month}>{month}</th>)}<th>Quality</th></tr></thead><tbody>{rows.map((row) => <tr key={row.tableKey}><td><b>{row.dataset}</b><small className="cell-sub">{row.period}</small></td>{[2024, 2025, 2026].map((year) => <td key={year}>{row.years.includes(year) ? <CoverageMark state="returned"/> : <CoverageMark state="not-returned"/>}</td>)}{monthInitials.map((_, index) => <td key={index}>{row.months.includes(index + 1) ? <CoverageMark state={row.conflict ? 'quality-issue' : 'returned'}/> : <CoverageMark state="not-returned"/>}</td>)}<td><ReadinessBadge value={!row.retrieved ? 'Unavailable' : row.conflict ? 'Period conflict' : 'Retrieved'}/></td></tr>)}</tbody></table></div><p className="table-note"><Icon name="info" size={15}/>Catalogue frequency, snapshot-generation timestamps, and inserted dates do not create historical availability.</p></article></section>;
 }
 
 function TemporalReadinessSummary({ rows }: { rows: ReturnType<typeof getDatasetPeriodAvailability> }) {
@@ -2660,6 +2759,22 @@ function TemporalReadinessSummary({ rows }: { rows: ReturnType<typeof getDataset
       <div className="temporal-facts"><div><b>{singlePeriod}</b><small>single-period retained datasets</small></div><div><b>{vintageSummary.multiPeriodDatasets}</b><small>datasets spanning 2+ periods</small></div><div><b>{vintageSummary.periods}</b><small>retained source-periods</small></div><div className={conflictCount ? 'has-conflict' : ''}><b>{conflictCount}</b><small>datasets with a period conflict</small></div></div>
     </div>
     <footer><Icon name="shield" size={15}/>2024 outcomes are descriptive context; 2026 operations are not paired with them for a score or causal claim.</footer>
+  </article>;
+}
+
+function SnapshotAcceptanceGate({ rows }: { rows: ReturnType<typeof getDatasetPeriodAvailability> }) {
+  const conflictCount = rows.filter((row) => row.retrieved && row.conflict).length;
+  const steps = [
+    { icon: 'database' as IconName, label: '01 · Contract', title: 'Reconcile the pull', detail: 'Pagination, source totals and required fields must pass.' },
+    { icon: 'building' as IconName, label: '02 · Identity', title: 'Compare entity signatures', detail: 'New names remain candidates until the crosswalk is reviewed.' },
+    { icon: 'calendar' as IconName, label: '03 · Period', title: 'Verify reported time', detail: 'Use the source period—not retrieval or insertion time.' },
+    { icon: 'shield' as IconName, label: '04 · Quality', title: 'Rerun exclusions', detail: 'Duplicates, disputes and period conflicts stay visible.' },
+  ];
+  return <article className="panel snapshot-gate" aria-label="Next retained snapshot acceptance gate">
+    <header><div><span className="eyebrow">Next governed snapshot</span><h2>A new file becomes evidence only after it clears four checks.</h2><p>The current retained vintage is the comparison baseline. A later pull does not become a trend merely because its filename or retrieval date is newer.</p></div><span className="snapshot-wait"><i/><b>WAITING FOR NEXT PULL</b><small>manual governed refresh</small></span></header>
+    <div className="snapshot-baseline"><span><small>Accepted baseline</small><strong>{governedSnapshotStats.completeDatasets}</strong><em>complete exports</em></span><span><small>Retained evidence</small><strong>{governedSnapshotStats.records.toLocaleString('en-IN')}</strong><em>source rows</em></span><span><small>Time footprint</small><strong>{vintageSummary.periods}</strong><em>source-period fingerprints</em></span><span className={conflictCount ? 'has-review' : ''}><small>Visible now</small><strong>{conflictCount}</strong><em>period-conflict datasets</em></span></div>
+    <ol className="snapshot-steps">{steps.map((step, index) => <li key={step.label}><span><Icon name={step.icon} size={17}/></span><div><small>{step.label}</small><b>{step.title}</b><p>{step.detail}</p></div>{index < steps.length - 1 && <Icon name="arrow" size={16}/>}</li>)}</ol>
+    <footer><span><Icon name="check" size={16}/><b>After all four pass:</b> admit the snapshot to a same-source longitudinal view.</span><strong>Trend still requires comparable repeated periods.</strong></footer>
   </article>;
 }
 
