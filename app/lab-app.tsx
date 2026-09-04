@@ -2292,7 +2292,7 @@ function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnT
       </article>
       <aside className="panel gates-panel"><PanelTitle icon="target" title="Activation gates" subtitle="Requirements, not current capabilities"/><div className="gates-list">{readiness.gates.map((gate, index) => <div className={`gate gate-${gate.state}`} key={gate.title}><span className="gate-state"><Icon name={gate.state === 'met' ? 'check' : gate.state === 'blocked' ? 'alert' : 'clock'} size={18}/></span><span className="gate-index">{index + 1}</span><div><b>{gate.title}</b><small>{gate.detail}</small></div></div>)}</div></aside>
     </section>
-    {mode === 'SAMPLE' && <><DatasetUsageRegister/><SupportingProgrammePortfolio/></>}
+    {mode === 'SAMPLE' && <><DatasetUsageRegister/><details className="supporting-portfolio-disclosure"><summary><span><Icon name="chart" size={17}/><span><b>Supporting programme portfolio</b><small>Secondary source-level coverage context · expand for 13 retained sources</small></span></span><Icon name="arrow" size={17}/></summary><SupportingProgrammePortfolio/></details></>}
     <section className="quality-strip"><WhyItem icon="database" title="Completeness" text="Pagination reconciled before use"/><WhyItem icon="clock" title="Timeliness" text="Source period, not ingestion date"/><WhyItem icon="shield" title="Schema validity" text="Strings parsed with quality flags"/><WhyItem icon="link" title="Evidence traceability" text="Every value retains provenance"/></section></>}
     {view === 'coverage' && <CoverageView mode={mode}/>} 
     {view === 'periods' && <PeriodsView mode={mode}/>} 
@@ -2355,6 +2355,7 @@ function ReadinessCommandCenter({ readiness }: { readiness: ReturnType<ReturnTyp
         <div><span className="exception-orange"><Icon name="alert" size={15}/></span><b>{audit.unavailable}</b><small>granted, response unavailable</small></div>
       </aside>
     </div>
+    <div className="activation-next"><span><Icon name="target" size={17}/></span><div><small>First required data action</small><b>Approve an authoritative ULB registry and name-to-ID crosswalk</b><p>This unlocks trusted joins across the observed name candidates. Period alignment and quality gates still remain, so scoring stays held.</p></div><em>{readiness.gates.filter((gate) => gate.state === 'blocked').length} blocked gates remain</em></div>
     <footer><span><Icon name="check" size={14}/>Available now: source-backed operational review</span><span><Icon name="alert" size={14}/>Held: cross-source scoring and forward-looking claims</span></footer>
   </section>;
 }
@@ -2373,8 +2374,9 @@ function CoverageView({ mode }: { mode: DataMode }) {
   return <section className="coverage-view">
     <div className="analytics-kpis four coverage-kpis"><MiniKpi icon="building" label="Observed ULB-name candidates" value={data.candidateCount.toLocaleString('en-IN')} detail="not an official statewide count" tone="teal"/><MiniKpi icon="database" label="Datasets compared" value="6" detail="E-Auto, ISWM, IHHL, ODF, GFC, Rank" tone="blue"/><MiniKpi icon="target" label="Exact overlap candidates" value={exactAll.toLocaleString('en-IN')} detail="all six returned without a quality flag" tone="violet"/><MiniKpi icon="shield" label="Scoring eligible today" value="0" detail="evidence gates remain active" tone="orange"/></div>
     <DistrictEvidenceMap/>
+    <SourceEvidenceReadiness data={data}/>
     <div className="coverage-dashboard">
-      <article className="panel coverage-panel"><div className="catalogue-heading"><PanelTitle icon="database" title="Evidence coverage matrix" subtitle="One row per observed ULB name. A blank means the source returned nothing, not a zero."/><span className="catalogue-count">Showing 12 of {data.candidateCount}</span></div><div className="table-scroll coverage-table"><table><thead><tr><th>ULB name as reported</th><th>District</th><th>E-Auto</th><th>ISWM</th><th>IHHL</th><th>ODF</th><th>GFC</th><th>Rank</th><th>Coverage</th></tr></thead><tbody>{data.rows.slice(0, 12).map((row) => <tr key={row.candidateKey}><td><b>{row.ulb}</b></td><td>{row.district}</td>{(['eAuto', 'iswm', 'ihhl', 'odf', 'gfc', 'rank'] as const).map((key) => <td key={key}><CoverageMark state={row.states[key]}/></td>)}<td><span className="coverage-score">{row.returnedCount} / 6</span></td></tr>)}</tbody></table></div><div className="coverage-legend"><span><CoverageMark state="returned"/> returned</span><span><CoverageMark state="not-returned"/> not returned</span><span><CoverageMark state="quality-issue"/> quality issue</span><small>These name matches have not been confirmed by anyone yet.</small></div></article>
+      <details className="panel coverage-panel coverage-audit"><summary><span><Icon name="database" size={17}/><span><b>Inspect candidate-level evidence matrix</b><small>12 preview rows from {data.candidateCount} observed-name candidates · audit evidence, not the opening visual</small></span></span><span>Open matrix <Icon name="arrow" size={15}/></span></summary><div className="table-scroll coverage-table"><table><thead><tr><th>ULB name as reported</th><th>District</th><th>E-Auto</th><th>ISWM</th><th>IHHL</th><th>ODF</th><th>GFC</th><th>Rank</th><th>Coverage</th></tr></thead><tbody>{data.rows.slice(0, 12).map((row) => <tr key={row.candidateKey}><td><b>{row.ulb}</b></td><td>{row.district}</td>{(['eAuto', 'iswm', 'ihhl', 'odf', 'gfc', 'rank'] as const).map((key) => <td key={key}><CoverageMark state={row.states[key]}/></td>)}<td><span className="coverage-score">{row.returnedCount} / 6</span></td></tr>)}</tbody></table></div><div className="coverage-legend"><span><CoverageMark state="returned"/> returned</span><span><CoverageMark state="not-returned"/> not returned</span><span><CoverageMark state="quality-issue"/> quality issue</span><small>These name matches have not been confirmed by anyone yet.</small></div></details>
       <aside className="coverage-side">
         <article className="panel overlap-panel"><PanelTitle icon="link" title="Overlap summaries" subtitle="Recomputed from retained records"/>{data.overlaps.map((item) => <div className="overlap-row" key={item.label}><span className="overlap-mark" style={{ '--overlap-tone': 'var(--teal)' } as React.CSSProperties}><i/><i/></span><span><b>{item.label}</b><small>{item.count} of {data.candidateCount} candidates</small></span><strong>{Math.round(item.count / data.candidateCount * 100)}%</strong><em><b style={{ width: `${item.count / data.candidateCount * 100}%` }}/></em></div>)}</article>
         <article className="panel blocker-panel"><PanelTitle icon="shield" title="Why not scored yet" subtitle="Current source-backed blockers"/><ScoringBlocker icon="link" label="Identity review missing" count={data.candidateCount} detail="candidate identities"/><ScoringBlocker icon="calendar" label="Periods not aligned" count={crossPeriodCandidates} detail="cross-period candidates"/><ScoringBlocker icon="building" label="Missing shared stable IDs" count={identityIssue?.count ?? 0} detail="retained snapshots"/><ScoringBlocker icon="clock" label="Outcome year mismatch" count={outcomeCandidates} detail="2024 outcome candidates"/><ScoringBlocker icon="alert" label="Quality issue" count={qualityCandidates} detail="candidate rows"/></article>
@@ -2389,6 +2391,29 @@ function CoverageView({ mode }: { mode: DataMode }) {
       <p className="table-note"><Icon name="info" size={15}/>Breadth indicates where evidence was returned. It is not completeness, performance, official identity, or scoring eligibility.</p>
     </article>
   </section>;
+}
+
+function SourceEvidenceReadiness({ data }: { data: ReturnType<typeof getEntityCoverageMatrix> }) {
+  const sourceDefs = [
+    ['eAuto', 'E-Auto', '2026 operations'], ['iswm', 'ISWM', '2026 operations'], ['ihhl', 'IHHL', '2026 operations'],
+    ['odf', 'ODF', '2024 outcome context'], ['gfc', 'GFC', '2024 outcome context'], ['rank', 'Rank', '2024 outcome context'],
+  ] as const;
+  const sources = sourceDefs.map(([key, label, period]) => {
+    const clean = data.rows.filter((row) => row.states[key] === 'returned').length;
+    const flagged = data.rows.filter((row) => row.states[key] === 'quality-issue').length;
+    const absent = data.rows.filter((row) => row.states[key] === 'not-returned').length;
+    return { key, label, period, clean, flagged, absent };
+  }).sort((left, right) => (right.absent + right.flagged) - (left.absent + left.flagged));
+  return <article className="panel source-readiness-panel">
+    <header><PanelTitle icon="chart" title="Limiting evidence sources" subtitle={`Every bar uses the same ${data.candidateCount} observed ULB-name candidates · source return status, never performance`}/><div className="source-key"><span><i className="is-clean"/>returned</span><span><i className="is-flagged"/>quality-flagged</span><span><i className="is-absent"/>not returned</span></div></header>
+    <div className="source-readiness-list">{sources.map((source, index) => <div className="source-readiness-row" key={source.key}>
+      <span className="source-rank">{String(index + 1).padStart(2, '0')}</span>
+      <span className="source-name"><b>{source.label}</b><small>{source.period}</small></span>
+      <span className="source-stack" aria-label={`${source.label}: ${source.clean} returned, ${source.flagged} quality-flagged, ${source.absent} not returned, from ${data.candidateCount} candidates`}><i className="is-clean" style={{ width: `${source.clean / data.candidateCount * 100}%` }}/><i className="is-flagged" style={{ width: `${source.flagged / data.candidateCount * 100}%` }}/><i className="is-absent" style={{ width: `${source.absent / data.candidateCount * 100}%` }}/></span>
+      <span className="source-counts"><b>{source.clean}</b><em>{source.flagged}</em><small>{source.absent}</small></span>
+    </div>)}</div>
+    <footer><Icon name="shield" size={15}/>Ranks the largest evidence limitation first. “Not returned” is kept distinct from zero, and candidate names remain unreviewed until crosswalk approval.</footer>
+  </article>;
 }
 
 /**
@@ -2460,6 +2485,16 @@ function EvidenceCoverageGrid() {
   const grid = useMemo(() => getEvidenceCoverageGrid(aliases), [aliases]);
   const [hovered, setHovered] = useState<string>('');
   const absentPercent = Math.round((grid.totals.absent / grid.totals.cells) * 100);
+  const sourceProfiles = grid.sources.map((source, index) => {
+    const cells = grid.rows.map((row) => row.cells[index]);
+    return {
+      source,
+      returned: cells.filter((cell) => cell === 'returned').length,
+      flagged: cells.filter((cell) => cell === 'quality-issue').length,
+      recovered: cells.filter((cell) => cell === 'recovered').length,
+      absent: cells.filter((cell) => cell === 'not-returned').length,
+    };
+  }).sort((left, right) => right.absent - left.absent);
   return <article className="panel coverage-grid-panel">
     <div className="catalogue-heading">
       <PanelTitle icon="database" title="Anchored coverage grid" subtitle={`${grid.rows.length} registry entities × ${grid.sources.length} ULB-grain sources · every cell traces to a retained governed row`}/>
@@ -2471,30 +2506,38 @@ function EvidenceCoverageGrid() {
       <div className="total-absent"><b>{grid.totals.absent.toLocaleString('en-IN')}</b><small>never returned — {absentPercent}% of the grid</small></div>
       <div className="total-recovered"><b>{grid.totals.recovered.toLocaleString('en-IN')}</b><small>{grid.totals.recovered === 0 ? 'recoverable by approving name matches' : 'recovered by your approved crosswalk'}</small></div>
     </div>
+    <div className="anchor-source-profile" aria-label="Anchored coverage by source">
+      <header><div><span className="eyebrow">Fast read</span><h3>Which sources limit anchored evidence?</h3></div><small>Each row uses {grid.rows.length} registry entities</small></header>
+      <div>{sourceProfiles.map(({ source, returned, flagged, recovered, absent }) => <div className="anchor-source-row" key={source.tableKey}>
+        <b>{source.label}</b>
+        <span className="anchor-source-track" aria-label={`${source.label}: ${returned} returned, ${flagged} quality-flagged, ${recovered} recovered, ${absent} not returned`}><i className="cell-returned" style={{ width: `${returned / grid.rows.length * 100}%` }}/><i className="cell-quality-issue" style={{ width: `${flagged / grid.rows.length * 100}%` }}/><i className="cell-recovered" style={{ width: `${recovered / grid.rows.length * 100}%` }}/><i className="cell-not-returned" style={{ width: `${absent / grid.rows.length * 100}%` }}/></span>
+        <span><strong>{returned + flagged + recovered}</strong><small> returned</small><em>{absent} not returned</em></span>
+      </div>)}</div>
+    </div>
     {grid.totals.recovered === 0
       ? <p className="grid-prompt"><Icon name="link" size={16}/><span>These cells are blank because the source spells the entity differently, not because the evidence is missing. Approve name matches in the <a href={withMode('/gap-radar', 'SAMPLE', 'light')}>crosswalk workbench</a> and they fill in here.</span></p>
       : <p className="grid-prompt is-recovered"><Icon name="check" size={16}/><span><b>{grid.totals.recovered} observations recovered.</b> These were unreachable until you approved the name matches that connect them. They are marked below.</span></p>}
-    <div className="grid-scroll">
-      <div className="coverage-grid" style={{ gridTemplateColumns: `132px repeat(${grid.sources.length}, minmax(9px, 1fr))` }}>
-        <span className="grid-corner"/>
-        {grid.sources.map((source) => <span className="grid-head" key={source.tableKey} title={source.tableKey}>{source.label}</span>)}
-        {grid.rows.map((row) => <Fragment key={row.ulbId}>
-          <span className="grid-label" title={`${row.ulb} — ${row.district}`}>{row.ulb.toLowerCase()}</span>
-          {row.cells.map((cell, index) => <i
-            key={grid.sources[index].tableKey}
-            className={`grid-cell cell-${cell}`}
-            onMouseEnter={() => setHovered(`${row.ulb} · ${grid.sources[index].label} · ${cell === 'returned' ? 'returned' : cell === 'quality-issue' ? 'returned, quality condition' : cell === 'recovered' ? 'recovered by an approved name match' : 'not returned'}`)}
-          />)}
-        </Fragment>)}
+    <details className="anchor-grid-audit"><summary><span><Icon name="database" size={16}/><span><b>Inspect every anchored evidence cell</b><small>{grid.rows.length} entities × {grid.sources.length} sources · retained row-level audit view</small></span></span><span>Open grid <Icon name="arrow" size={14}/></span></summary><div className="grid-scroll">
+        <div className="coverage-grid" style={{ gridTemplateColumns: `132px repeat(${grid.sources.length}, minmax(9px, 1fr))` }}>
+          <span className="grid-corner"/>
+          {grid.sources.map((source) => <span className="grid-head" key={source.tableKey} title={source.tableKey}>{source.label}</span>)}
+          {grid.rows.map((row) => <Fragment key={row.ulbId}>
+            <span className="grid-label" title={`${row.ulb} — ${row.district}`}>{row.ulb.toLowerCase()}</span>
+            {row.cells.map((cell, index) => <i
+              key={grid.sources[index].tableKey}
+              className={`grid-cell cell-${cell}`}
+              onMouseEnter={() => setHovered(`${row.ulb} · ${grid.sources[index].label} · ${cell === 'returned' ? 'returned' : cell === 'quality-issue' ? 'returned, quality condition' : cell === 'recovered' ? 'recovered by an approved name match' : 'not returned'}`)}
+            />)}
+          </Fragment>)}
+        </div>
       </div>
-    </div>
-    <div className="grid-legend">
-      <span><i className="cell-returned"/>Returned</span>
-      <span><i className="cell-quality-issue"/>Returned, quality condition</span>
-      <span><i className="cell-recovered"/>Recovered by an approved match</span>
-      <span><i className="cell-not-returned"/>Not returned — never zero</span>
-      <b className="grid-readout">{hovered || '\u00a0'}</b>
-    </div>
+      <div className="grid-legend">
+        <span><i className="cell-returned"/>Returned</span>
+        <span><i className="cell-quality-issue"/>Returned, quality condition</span>
+        <span><i className="cell-recovered"/>Recovered by an approved match</span>
+        <span><i className="cell-not-returned"/>Not returned — never zero</span>
+        <b className="grid-readout">{hovered || '\u00a0'}</b>
+      </div></details>
     <p className="table-note"><Icon name="info" size={15}/>An empty cell means the source returned no row for that registry entity. It is not a reported zero, and it is not evidence of absence in the world.</p>
   </article>;
 }
@@ -2537,13 +2580,20 @@ function PeriodsView({ mode }: { mode: DataMode }) {
 
 function TemporalReadinessSummary({ rows }: { rows: ReturnType<typeof getDatasetPeriodAvailability> }) {
   const retrieved = rows.filter((row) => row.retrieved);
-  const years = [2024, 2025, 2026].map((year) => ({ year, returned: retrieved.filter((row) => row.years.includes(year)).length }));
+  const singlePeriod = retrieved.length - vintageSummary.multiPeriodDatasets;
+  const outcomeContext = retrieved.filter((row) => row.years.includes(2024)).length;
+  const operational2026 = retrieved.filter((row) => row.years.includes(2026)).length;
+  const years = [
+    { label: '2024 outcomes', returned: outcomeContext, detail: 'ODF · GFC · Rank context' },
+    { label: '2025 gap', returned: retrieved.filter((row) => row.years.includes(2025)).length, detail: 'no returned source period' },
+    { label: 'Mar–Aug 2026', returned: operational2026, detail: 'operational months vary' },
+  ];
   const conflictCount = retrieved.filter((row) => row.conflict).length;
   return <article className="panel temporal-readiness">
-    <header><div><span className="eyebrow">Temporal readiness</span><h2>Returned periods are evidence windows, not a trend.</h2><p>Only {vintageSummary.multiPeriodDatasets} of {retrieved.length} retained datasets span more than one reported period. Operations and outcomes remain visibly separate.</p></div><span className="temporal-held"><Icon name="calendar" size={15}/>NO TIME-SERIES SCORE</span></header>
+    <header><div><span className="eyebrow">Temporal readiness</span><h2>The time runway is broken, so trend claims remain held.</h2><p>{singlePeriod} retained datasets have one reported period; {vintageSummary.multiPeriodDatasets} have two or more. The {outcomeContext} outcome-context datasets from 2024 are not paired with the 2026 operational evidence.</p></div><span className="temporal-held"><Icon name="calendar" size={15}/>NO TIME-SERIES SCORE</span></header>
     <div className="temporal-layout">
-      <div className="temporal-runway" aria-label="Returned datasets by source year">{years.map((item) => <div className={`temporal-year${item.returned === 0 ? ' is-empty' : ''}`} key={item.year}><small>{item.year}</small><b>{item.returned}</b><span>{item.returned === 1 ? 'dataset returned' : 'datasets returned'}</span><i>{Array.from({ length: Math.max(1, Math.min(item.returned, 12)) }, (_, index) => <em key={index}/>)}</i></div>)}</div>
-      <div className="temporal-facts"><div><b>{vintageSummary.periods}</b><small>retained source-periods</small></div><div><b>{vintageSummary.multiPeriodDatasets}</b><small>datasets spanning 2+ periods</small></div><div className={conflictCount ? 'has-conflict' : ''}><b>{conflictCount}</b><small>datasets with a period conflict</small></div></div>
+      <div className="temporal-runway" aria-label="Returned datasets by source time band">{years.map((item) => <div className={`temporal-year${item.returned === 0 ? ' is-empty' : ''}`} key={item.label}><small>{item.label}</small><b>{item.returned}</b><span>{item.detail}</span><i>{Array.from({ length: Math.max(1, Math.min(item.returned, 12)) }, (_, index) => <em key={index}/>)}</i></div>)}</div>
+      <div className="temporal-facts"><div><b>{singlePeriod}</b><small>single-period retained datasets</small></div><div><b>{vintageSummary.multiPeriodDatasets}</b><small>datasets spanning 2+ periods</small></div><div><b>{vintageSummary.periods}</b><small>retained source-periods</small></div><div className={conflictCount ? 'has-conflict' : ''}><b>{conflictCount}</b><small>datasets with a period conflict</small></div></div>
     </div>
     <footer><Icon name="shield" size={15}/>2024 outcomes are descriptive context; 2026 operations are not paired with them for a score or causal claim.</footer>
   </article>;
@@ -2583,7 +2633,7 @@ function DisputedValues() {
       With no record ID, submission date or revision number, neither row is newer or better sourced.
       <b> These need a person, not a rule.</b>
     </p>
-    <ul className="disputed-list">{groups.map((group) => {
+    <details className="disputed-audit"><summary><span><Icon name="search" size={16}/><span><b>Inspect disputed records</b><small>{total} place-period records retained as competing values and excluded from affected totals</small></span></span><span>Open evidence <Icon name="arrow" size={14}/></span></summary><ul className="disputed-list">{groups.map((group) => {
       const field = group.fields[0];
       const impact = disputedSumImpact(group, field.field);
       return <li key={`${group.tableKey}-${group.district}-${group.entity}-${group.period}`}>
@@ -2596,7 +2646,7 @@ function DisputedValues() {
         {impact && <DisputeMark values={[impact.low, impact.high]}/>}
         {impact && <div className="dv-impact"><b>Excluded</b><small>reported as {impact.low.toLocaleString('en-IN')} or {impact.high.toLocaleString('en-IN')}</small></div>}
       </li>;
-    })}</ul>
+    })}</ul></details>
   </article>;
 }
 
@@ -2652,7 +2702,7 @@ function ReviewInbox() {
       : <div className="inbox-lanes">{lanes.map((lane) => {
         const laneItems = visible.filter((item) => item.severity === lane.severity);
         if (!laneItems.length) return null;
-        return <section className={`inbox-lane lane-${lane.severity}`} key={lane.severity}><header><span><Icon name={lane.severity === 'blocked' ? 'alert' : lane.severity === 'review' ? 'search' : 'info'} size={15}/></span><div><b>{lane.title}</b><small>{lane.detail}</small></div><strong>{laneItems.length}</strong></header><ul className="inbox-list">{laneItems.map((item) => {
+        return <details className={`inbox-lane lane-${lane.severity}`} key={lane.severity} open={lane.severity === 'blocked'}><summary><span><Icon name={lane.severity === 'blocked' ? 'alert' : lane.severity === 'review' ? 'search' : 'info'} size={15}/></span><div><b>{lane.title}</b><small>{lane.detail}</small></div><strong>{laneItems.length}</strong><Icon name="arrow" size={14}/></summary><ul className="inbox-list">{laneItems.map((item) => {
           const current = state(item);
           const localLabel = current === 'acknowledged' ? 'reviewed locally' : current === 'resolved' ? 'marked addressed locally' : '';
           return <li key={item.id} className={`inbox-item sev-${item.severity} triage-${current}`}>
@@ -2665,12 +2715,12 @@ function ReviewInbox() {
             </div>
             <div className="inbox-actions">
               {current !== 'open' && <span className={`triage-state triage-${current}`}>{localLabel}</span>}
-              {current === 'open' && <button onClick={() => set(item, 'acknowledged')}>Mark reviewed</button>}
-              {current !== 'resolved' && <button onClick={() => set(item, 'resolved')}>Mark addressed</button>}
+              {current === 'open' && <button onClick={() => set(item, 'acknowledged')}>Mark reviewed locally</button>}
+              {current !== 'resolved' && <button onClick={() => set(item, 'resolved')}>Mark addressed locally</button>}
               {current !== 'open' && <button className="undo" onClick={() => set(item, 'open')}>Reopen</button>}
             </div>
           </li>;
-        })}</ul></section>;
+        })}</ul></details>;
       })}</div>}
     <p className="table-note"><Icon name="info" size={15}/>These controls store local review notes only. They do not alter source data, remove evidence gates, or resolve a programme condition.</p>
   </article>;

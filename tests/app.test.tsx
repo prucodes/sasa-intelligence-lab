@@ -131,8 +131,11 @@ describe('application shell and screens', () => {
   it('keeps coverage, periods, and quality inside Data Readiness', () => {
     render(<LabApp page="data-readiness" initialMode="SAMPLE" />);
     fireEvent.click(screen.getByRole('tab', { name: 'Coverage' }));
-    expect(screen.getByRole('heading', { name: /evidence coverage matrix/i })).toBeInTheDocument();
-    expect(screen.getByText(/a blank means the source returned nothing, not a zero/i)).toBeInTheDocument();
+    const limitingSources = screen.getByRole('heading', { name: /limiting evidence sources/i });
+    expect(limitingSources).toBeInTheDocument();
+    expect(limitingSources.closest('article')).toHaveTextContent(/every bar uses the same 123 observed ulb-name candidates/i);
+    expect(screen.getByText(/“not returned” is kept distinct from zero/i)).toBeInTheDocument();
+    expect(screen.getByText(/inspect candidate-level evidence matrix/i)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /full operational evidence breadth/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: 'Periods' }));
     expect(screen.getByRole('heading', { name: /period availability/i })).toBeInTheDocument();
