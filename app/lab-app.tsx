@@ -1982,19 +1982,18 @@ function CrosswalkPayoff({ decisions }: { decisions: Record<string, Decision> })
   const grid = useMemo(() => getEvidenceCoverageGrid(aliases), [aliases]);
   if (grid.totals.recovered === 0) return null;
   const absentPercent = Math.round((grid.totals.absent / grid.totals.cells) * 100);
-  return <div className="crosswalk-payoff">
-    <div className="payoff-head"><Icon name="check" size={18}/><b>What your approvals unlocked</b></div>
-    <div className="payoff-stats">
-      <div><b>{grid.totals.recovered}</b><small>observations now reachable that were blank before</small></div>
-      <div><b>{absentPercent}%</b><small>of the coverage grid still absent, down from 48%</small></div>
+  return <div className="crosswalk-payoff" aria-label="Crosswalk effect and remaining scoring gates">
+    <div className="payoff-result">
+      <span className="payoff-icon"><Icon name="link" size={20}/></span>
+      <div><small>Evidence links recovered</small><b>{grid.totals.recovered.toLocaleString('en-IN')} <em>observations</em></b><p>Approved aliases make previously disconnected retained rows reachable. <a href={withMode('/data-readiness', 'SAMPLE', 'light')}>Inspect recovered cells</a>.</p></div>
+      <div className="payoff-remaining"><strong>{absentPercent}%</strong><span>still not returned</span><small>kept distinct from zero</small></div>
     </div>
-    <p>Each approval connects one source&rsquo;s spelling to the registry, so rows that were previously invisible to every cross-source view become joinable. <a href={withMode('/data-readiness', 'SAMPLE', 'light')}>See them in the coverage grid</a> — recovered cells are marked.</p>
     <div className="payoff-next">
-      <span className="eyebrow">Still required before scoring</span>
+      <span className="eyebrow">Scoring remains held by</span>
       <ol>
-        <li><b>Sign-off on this crosswalk.</b> Copy the working file above and put it through your approval process. Until then it stays a reviewer working copy.</li>
-        <li><b>Same-year outcome evidence.</b> Operations are 2026; the only outcomes retained are 2024. No approval fixes that — it needs a source request.</li>
-        <li><b>An approved scoring policy.</b> Thresholds and weights are a policy decision, not a data one.</li>
+        <li><i>01</i><span><b>Formal sign-off</b><small>The crosswalk is still a local working copy.</small></span></li>
+        <li><i>02</i><span><b>Aligned outcomes</b><small>Operations are 2026; retained outcomes are 2024.</small></span></li>
+        <li><i>03</i><span><b>Approved policy</b><small>Thresholds and weights remain a policy decision.</small></span></li>
       </ol>
     </div>
   </div>;
@@ -2061,6 +2060,8 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
   const [importResult, setImportResult] = useState<ImportOutcome | null>(null);
 
   const visible = queue.filter((item) => (tier === 'ALL' || item.tier === tier) && !(hideDecided && decisions[item.id]));
+  const complete = remaining === 0 && reviewed >= stats.residualNames;
+  const held = Math.max(reviewed - approved, 0);
 
   function applyImport() {
     const { decisions: incoming, outcome } = parseDecisionArtifact(importText);
@@ -2083,13 +2084,22 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
     }
   }
 
-  return <section className="panel crosswalk-workbench" aria-label="Candidate ULB crosswalk workbench">
+  return <section className={`panel crosswalk-workbench${complete ? ' is-complete' : ''}`} aria-label="Candidate ULB crosswalk workbench">
     <div className="catalogue-heading">
       <PanelTitle icon="link" title="Crosswalk workbench" subtitle="Propose, review and record candidate ULB matches against the source-provided anchor registry"/>
       <span className="catalogue-count">{stats.anchorSize} anchor IDs · {stats.anchorConflicts} conflicts</span>
     </div>
 
-    <div className="crosswalk-progress">
+    {complete ? <div className="crosswalk-complete">
+      <span className="complete-mark"><Icon name="check" size={24}/></span>
+      <div className="complete-copy"><span className="eyebrow">Local working review complete</span><h3>{reviewed} of {stats.residualNames} residual names carry a decision</h3><p>The review queue is closed in this browser. These decisions improve joinability, but they are not an authoritative state crosswalk until formally signed off.</p></div>
+      <div className="complete-facts">
+        <div><b>{stats.resolvedPairs.toLocaleString('en-IN')}</b><small>exact-match occurrences</small></div>
+        <div><b>{approved}</b><small>locally approved aliases</small></div>
+        <div><b>{held}</b><small>held or no-match decisions</small></div>
+        <div className="fact-held"><b>Pending</b><small>formal sign-off</small></div>
+      </div>
+    </div> : <div className="crosswalk-progress">
       <div className="progress-ring" role="img" aria-label={`${reviewed} of ${stats.residualNames} residual names reviewed`}>
         <svg viewBox="0 0 88 88">
           <circle className="ring-track" cx="44" cy="44" r="38"/>
@@ -2105,11 +2115,16 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
         <div className="fig fig-approved"><b>{approved}</b><small>approved by you<i>recorded with evidence</i></small></div>
         <div className="fig fig-open"><b>{remaining}</b><small>awaiting a decision<i>{remaining === 0 ? 'queue complete' : 'of ' + stats.residualNames + ' residual names'}</i></small></div>
       </div>
-    </div>
+    </div>}
 
-    <p className="crosswalk-caution"><Icon name="shield" size={15}/><span><b>Similarity ranks, it never decides.</b> Candidates are district-scoped — <code>Atmakur K</code> in Kurnool scores 0.86 against <code>ATMAKUR-N</code> in Nellore, and is held back rather than matched. Decisions are a local working copy, <GlossaryText text="not an approved crosswalk"/>.</span></p>
+    {complete && <CrosswalkPayoff decisions={decisions}/>}
 
-    <BulkApprove queue={queue} decisions={decisions} onApproveBulk={onApproveBulk}/>
+    <details className={`crosswalk-audit-tools${complete ? '' : ' is-open'}`} open={!complete}>
+      <summary><span><Icon name="database" size={17}/><span><b>{complete ? 'Open decision audit and transfer tools' : 'Working crosswalk controls'}</b><small>{complete ? `${reviewed} local decisions · inspect, revise, copy or import` : 'Review the residual candidate queue'}</small></span></span><Icon name="arrow" size={15}/></summary>
+
+      <p className="crosswalk-caution"><Icon name="shield" size={15}/><span><b>Similarity ranks, it never decides.</b> Candidates are district-scoped — <code>Atmakur K</code> in Kurnool scores 0.86 against <code>ATMAKUR-N</code> in Nellore, and is held back rather than matched. Decisions are a local working copy, <GlossaryText text="not an approved crosswalk"/>.</span></p>
+
+      {!complete && <BulkApprove queue={queue} decisions={decisions} onApproveBulk={onApproveBulk}/>}
 
     <div className="crosswalk-controls">
       <InternalViewSwitch label="Queue filter" value={tier} onChange={setTier} items={[
@@ -2139,7 +2154,7 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
       </ul>}
     </div>}
 
-    <CrosswalkPayoff decisions={decisions}/>
+      {!complete && <CrosswalkPayoff decisions={decisions}/>}
 
     {visible.length === 0
       ? <p className="crosswalk-empty">{queue.length === 0 ? 'Every observed name resolves to the anchor registry.' : 'No queue items match this filter.'}</p>
@@ -2171,6 +2186,7 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
           </div>
         </li>;
       })}</ul>}
+    </details>
   </section>;
 }
 

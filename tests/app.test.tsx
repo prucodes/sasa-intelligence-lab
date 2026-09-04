@@ -59,6 +59,14 @@ describe('application shell and screens', () => {
     expect(screen.getByLabelText(/two by two performance gap matrix/i)).toBeInTheDocument();
   });
 
+  it('turns a completed local crosswalk into a compact governed summary', () => {
+    render(<LabApp page="gap-radar" initialMode="SAMPLE" />);
+    expect(screen.getByRole('heading', { name: /82 of 82 residual names carry a decision/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/crosswalk effect and remaining scoring gates/i)).toHaveTextContent(/235 observations/i);
+    expect(screen.getByText(/open decision audit and transfer tools/i)).toBeInTheDocument();
+    expect(screen.queryByText(/approve the obvious ones in bulk/i)).not.toBeInTheDocument();
+  });
+
   it('shows evidence disclosure in diagnostics', () => {
     render(<LabApp page="diagnostics" initialUlbKey="demo-delta" />);
     expect(screen.getByRole('heading', { level: 2, name: /evidence inspector/i })).toBeInTheDocument();
