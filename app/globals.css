@@ -6086,3 +6086,99 @@ table td, table th { font-variant-numeric: tabular-nums; }
 
 /* Prevent long audit tables from setting the mobile width of their grid siblings. */
 @media (max-width:620px) { .periods-workspace > *, .periods-workspace .temporal-layout, .periods-workspace .temporal-runway, .periods-workspace .temporal-facts { min-width:0; max-width:100%; } .periods-workspace .period-panel { min-width:0; } }
+
+/* Overview/header de-clutter pass. Keep the illustration and the executive read in
+   separate layout zones, and reserve visible header labels for the primary action. */
+.header-actions { flex: 0 0 auto; gap: 8px; }
+.header-brand { flex: 1 1 auto; overflow: hidden; }
+.header-avatar { display: none; }
+.topbar .compare-button,
+.topbar .evidence-pack {
+  width: 35px;
+  min-width: 35px;
+  height: 35px;
+  min-height: 35px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+.topbar .compare-button span,
+.topbar .evidence-pack span { display: none; }
+
+.page-overview .intro-overview {
+  min-height: 132px;
+  display: grid;
+  align-items: center;
+  padding: 17px 220px 18px 0;
+}
+.page-overview .intro-overview > div:first-child { max-width: 790px; }
+.overview-quick-read {
+  margin: -2px 0 14px;
+  min-height: 66px;
+  display: grid;
+  grid-template-columns: minmax(128px,.72fr) repeat(4,minmax(118px,1fr));
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: color-mix(in srgb,var(--surface) 97%,transparent);
+  box-shadow: 0 10px 28px rgba(25,55,92,.055);
+}
+.overview-quick-read > header {
+  padding: 11px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: color-mix(in srgb,var(--background) 54%,var(--surface));
+}
+.overview-quick-read > header small {
+  color: var(--teal-dark);
+  font-size: 7px;
+  font-weight: 820;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.overview-quick-read > header b { margin-top: 3px; color: var(--ink); font-size: 10px; }
+.overview-quick-read .quick-read-signal {
+  min-width: 0;
+  min-height: 64px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr);
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  align-content: center;
+  align-items: baseline;
+  border: 0;
+  border-left: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+.overview-quick-read .quick-read-signal.is-held { background: rgba(239,143,52,.045); }
+.overview-quick-read .quick-read-signal small { grid-column: 1 / -1; font-size: 6.5px; }
+.overview-quick-read .quick-read-signal b { font-size: 17px; }
+.overview-quick-read .quick-read-signal.is-held b { font-size: 10px; }
+.overview-quick-read .quick-read-signal em { margin-top: 3px; font-size: 7px; }
+.theme-dark .overview-quick-read { background: rgba(15,38,63,.9); }
+.theme-dark .overview-quick-read > header { background: rgba(7,24,43,.55); }
+.theme-dark .overview-quick-read .quick-read-signal { background: transparent; }
+.theme-dark .overview-quick-read .quick-read-signal.is-held { background: rgba(239,143,52,.075); }
+
+@media (max-width: 1380px) {
+  .topbar .present-button { width: 35px; min-width: 35px; padding: 0; }
+  .topbar .present-button span { display: none; }
+  .mode-disclosure { max-width: 30vw; }
+}
+@media (max-width: 900px) {
+  .page-overview .intro-overview { padding-right: 170px; }
+  .overview-quick-read { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .overview-quick-read > header { grid-column: 1 / -1; min-height: 38px; padding: 8px 12px; flex-direction: row; align-items: center; justify-content: flex-start; gap: 7px; border-bottom: 1px solid var(--line); }
+  .overview-quick-read > header b { margin: 0; }
+  .overview-quick-read .quick-read-signal:first-of-type { border-left: 0; }
+}
+@media (max-width: 760px) {
+  .page-overview .intro-overview { display: block; min-height: auto; padding: 15px 16px; }
+  .overview-quick-read { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .overview-quick-read .quick-read-signal:nth-of-type(3) { border-left: 0; border-top: 1px solid var(--line); }
+  .overview-quick-read .quick-read-signal:nth-of-type(4) { border-top: 1px solid var(--line); }
+}

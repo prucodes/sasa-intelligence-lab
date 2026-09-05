@@ -336,7 +336,6 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
         <button className="icon-button compare-button" aria-label="Open ULB comparison tray" title="Compare selected ULBs" onClick={onCompare}><Icon name="building" size={17}/><span>Compare{compareIds.length ? ` · ${compareIds.length}` : ''}</span></button>
         <button className="icon-button evidence-pack" aria-label="Download evidence brief" title="Download evidence brief" onClick={() => downloadEvidenceBrief(mode)}><Icon name="download" size={16}/><span>Brief</span></button>
         <button className="icon-button" aria-label="About SASA Intelligence Lab and glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={20}/></button>
-        <span className="header-avatar">AP</span>
       </div>
     </header>
   );
@@ -922,15 +921,14 @@ function SampleOverview({ colorTheme }: { colorTheme: ColorTheme }) {
   ];
 
   return <>
-    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="Where reported delivery is falling short" description="Vehicle supply and IHHL completion are the clearest shortfalls in the retained 2026 sources; legacy-waste records show higher reported clearance, with 1.35M tonnes still remaining.">
-      <div className="overview-quick-read" aria-label="Executive quick read">
-        <span className="quick-read-label">Quick read</span>
-        <span className="quick-read-signal tone-teal"><small>Review now</small><b>{formatPercent(collection.deliveryRatio)}</b><em>vehicle supply / target</em></span>
-        <span className="quick-read-signal tone-violet"><small>Review now</small><b>{formatPercent(ihhl.completionRatio)}</b><em>IHHL completed / approved</em></span>
-        <span className="quick-read-signal tone-blue"><small>Reported context</small><b>{formatPercent(legacyWaste.clearanceRatio)}</b><em>legacy waste cleared / target</em></span>
-        <span className="quick-read-signal is-held"><small>Decision boundary</small><b>UNSCORED</b><em>0 entities clear every gate</em></span>
-      </div>
-    </PageIntro>
+    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="Where reported delivery is falling short" description="Vehicle supply and IHHL completion are the clearest shortfalls in the retained 2026 sources; legacy-waste records show higher reported clearance, with 1.35M tonnes still remaining."/>
+    <section className="overview-quick-read" aria-label="Executive quick read">
+      <header><small>At a glance</small><b>Current decision read</b></header>
+      <span className="quick-read-signal tone-teal"><small>Review now</small><b>{formatPercent(collection.deliveryRatio)}</b><em>vehicle supply / target</em></span>
+      <span className="quick-read-signal tone-violet"><small>Review now</small><b>{formatPercent(ihhl.completionRatio)}</b><em>IHHL completed / approved</em></span>
+      <span className="quick-read-signal tone-blue"><small>Reported context</small><b>{formatPercent(legacyWaste.clearanceRatio)}</b><em>legacy waste cleared / target</em></span>
+      <span className="quick-read-signal is-held"><small>Decision boundary</small><b>UNSCORED</b><em>0 entities clear every gate</em></span>
+    </section>
     <section className="metric-grid" aria-label="Core KPI categories">{domainCards.map((metric, index) => <MetricCard key={metric.label} metric={metric} icon={domainIcons[index]} />)}</section>
     <NamedFindings colorTheme={colorTheme}/>
     <OperationalDistrictSignalMap/>
