@@ -34,6 +34,7 @@ npm run build
 - **DEMO** uses unmistakably synthetic fixtures so every interaction can be demonstrated. Its policy thresholds and trends are illustrative.
 - **SAMPLE** uses authenticated governed JSON exports retrieved through the signed-in AI Living Labs API Playground. It retains 4,359 rows across 29 complete full exports: 26 SASA exports and three SERP exports. The 30th authorized endpoint, Gobardhan, failed to export. The expanded IHHL export contains 246 rows across June and July 2026 and 123 observed normalized district-and-ULB name candidates. The latest July slice contains 119 rows, 117 candidates, and two exact duplicates. Complete payloads do not remove the need for a reviewed crosswalk or same-year outcome evidence, so all source profiles remain unscored.
 - **Documented integrations** lists three additional SASA PR table keys supplied on 2026-08-28. They remain visible in Data Readiness but are excluded from authenticated analytics and totals: two examples are geographically filtered and the door-to-door example retains only 100 of 1,241,643 reported rows with pagination still open.
+- **Live availability audit (2026-09-06)** confirms all 33 granted catalogue entries are visible and the three large CDMA endpoints remain readable at unchanged totals (64,368; 64,528; 64,528 rows). No further documented key is readable by this account: the ten CDMA guide keys return HTTP 403 (the alternate corrected waste-segregation spelling returns 404), the three SASA PR keys return 404, and Gobardhan returns 503. These response states are access/availability evidence, not zero-valued data.
 - **LIVE** is a non-connecting adapter boundary. It performs no government API request and shows the gates needed for future activation.
 
 All frontend reads go through a shared `SasaDataProvider` interface. The retained snapshots are local evidence artifacts; no access token, refresh token, cookie, or password is stored. A future governed connector can implement the same interface without changing the screens, but credentials must remain server-side.
@@ -52,7 +53,14 @@ Validate the snapshot boundary independently with:
 npm run validate:data
 ```
 
-This checks pagination, count reconciliation and credential hygiene, and additionally compares every dataset against the recorded vintage in `data/snapshot-fingerprints.json`. Each reported period is hashed on its content and its entity set, because a source revision that re-dates rows between periods leaves `totalRecordCount`, pagination and local row counts identical — the counts reconcile while the periods have changed underneath. Row order is not significant to the hash.
+With a fresh temporary Playground token, compare all 29 retained payloads directly
+against the live API without writing or accepting any new evidence:
+
+```bash
+AILAB_ACCESS_TOKEN=... npm run audit:live-snapshots
+```
+
+`npm run validate:data` checks pagination, count reconciliation and credential hygiene, and additionally compares every retained dataset against the recorded vintage in `data/snapshot-fingerprints.json`. The live audit uses the same fingerprints against current API responses. Each reported period is hashed on its content and its entity set, because a source revision that re-dates rows between periods leaves `totalRecordCount`, pagination and local row counts identical — the counts reconcile while the periods have changed underneath. Row order is not significant to the hash.
 
 After re-exporting snapshots, read the drift report, then accept the new vintage deliberately:
 

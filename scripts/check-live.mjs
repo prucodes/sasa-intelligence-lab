@@ -14,7 +14,7 @@
 
 const API_BASE = 'https://datalakes.ailivinglabs.ap.gov.in/api/v1';
 
-// Grouped as of the 2026-09-03 cross-check: what was live, what only documented.
+// Grouped as of the 2026-09-06 cross-check: what is readable, what is only documented.
 const KEYS = {
   'CDMA live (secretariat · day)': [
     'msw_door_to_door_collection_api',

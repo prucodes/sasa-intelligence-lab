@@ -19,7 +19,8 @@
     "screenshots": "node scripts/capture-screenshots.mjs",
     "test:browser": "node scripts/browser-smoke.mjs",
     "build:static": "node scripts/build-static.mjs",
-    "check:live": "node scripts/check-live.mjs"
+    "check:live": "node scripts/check-live.mjs",
+    "audit:live-snapshots": "node scripts/audit-live-snapshots.mjs"
   },
   "dependencies": {
     "next": "16.3.3",

@@ -188,11 +188,12 @@ export const documentedIntegrationCatalogue: CatalogueDataset[] = [
 
 /**
  * SASA_CDMA, documented in section 15 of the integration guide. The guide has since
- * grown to 13 datasets, and a live cross-check on 2026-09-03 shows the guide runs
- * ahead of the deployment: only three keys actually resolve on the Data Lake
+ * grown to 13 datasets, and a live cross-check on 2026-09-06 shows the guide runs
+ * ahead of this account's grants: only three keys are readable on the Data Lake
  * (door-to-door collection, bulk-waste generators, on-site wet-waste — ~64,000 rows
- * each, secretariat · day grain). The other ten return `dataset_not_found` (404),
- * so they are catalogued as documented-pending and contribute nothing to analytics.
+ * each, secretariat · day grain). The guide spelling for the other ten returns 403;
+ * the alternate `waste_segregation_api` spelling returns 404. They remain
+ * documented-pending and contribute nothing to analytics.
  *
  * The three that resolve are still not analysable. A stratified sample of each
  * (2026-09-03) found the measure columns almost empty or single-day: door-to-door
@@ -202,8 +203,8 @@ export const documentedIntegrationCatalogue: CatalogueDataset[] = [
  * support a coverage or performance measure — the honest state is UNSCORED.
  *
  * `waste_segregation_api` is listed as `waste_egregation_api` in the section index and
- * as `waste_segregation_api` elsewhere; both spellings return 404, so neither is the
- * deployed key yet.
+ * as `waste_segregation_api` elsewhere; the former returns 403 and the latter 404,
+ * so neither is readable by this account.
  *
  * `ihhl_new_identification_new1_api` re-publishes the same measures as the live
  * `sasa_sac_identification_of_new_ihhls_api`; if it is provisioned it duplicates data
@@ -227,7 +228,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     sourceState: 'AUTHORIZED',
     sourceGrain: 'Secretariat · Day',
     liveRowCount: 64368,
-    liveCheckedOn: '2026-09-03',
+    liveCheckedOn: '2026-09-06',
   },
   {
     catalogueName: 'CDMA Identification of Bulk Waste Generators',
@@ -246,7 +247,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     sourceState: 'AUTHORIZED',
     sourceGrain: 'Secretariat · Day',
     liveRowCount: 64528,
-    liveCheckedOn: '2026-09-03',
+    liveCheckedOn: '2026-09-06',
   },
   {
     catalogueName: 'CDMA On-Site Wet Waste Processing by BWGs',
@@ -265,7 +266,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     sourceState: 'AUTHORIZED',
     sourceGrain: 'Secretariat · Day',
     liveRowCount: 64528,
-    liveCheckedOn: '2026-09-03',
+    liveCheckedOn: '2026-09-06',
   },
   {
     catalogueName: 'CDMA Waste Segregation',
@@ -278,7 +279,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · BOTH SPELLINGS 404 ON LIVE 2026-09-03',
+    payloadEvidence: 'DOCUMENTED · GUIDE KEY 403 / ALTERNATE SPELLING 404 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
     joinEligibility: 'SECRETARIAT · DAY GRAIN · KEY SPELLED TWO WAYS IN SOURCE DOC',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -295,7 +296,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · NOT PROVISIONED',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
     joinEligibility: 'DISTRICT GRAIN · TWO PARALLEL DISTRICT ID SYSTEMS',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -312,7 +313,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · NOT PROVISIONED',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
     joinEligibility: 'DISTRICT GRAIN · PERIOD ENCODING UNCONFIRMED',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -329,7 +330,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · NOT PROVISIONED',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
     joinEligibility: 'DISTRICT GRAIN · PERIOD ENCODING UNCONFIRMED',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -346,7 +347,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · SAMPLE DUPLICATES COMPOST PITS',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · SAMPLE DUPLICATES COMPOST PITS',
     joinEligibility: 'DISTRICT GRAIN · SOURCE SAMPLE NOT SPECIFIC TO THIS DATASET',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -363,7 +364,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · NOT PROVISIONED',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
     joinEligibility: 'DISTRICT GRAIN',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -380,7 +381,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · NOT PROVISIONED',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
     joinEligibility: 'DISTRICT GRAIN · TWO PARALLEL DISTRICT ID SYSTEMS',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -397,7 +398,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · DUPLICATES LIVE sasa_sac_msw_processing_facilities_cbg_units_api',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · DUPLICATES LIVE sasa_sac_msw_processing_facilities_cbg_units_api',
     joinEligibility: 'ULB GRAIN · ULB CODE IS A MANDAL CODE',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -414,7 +415,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · SAME MEASURES AS LIVE sasa_sac_identification_of_new_ihhls_api (DUPLICATE)',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · SAME MEASURES AS LIVE sasa_sac_identification_of_new_ihhls_api (DUPLICATE)',
     joinEligibility: 'ULB GRAIN · ULB CODE IS A MANDAL CODE',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -431,7 +432,7 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
     retainedExcerpt: false,
     completePayload: false,
-    payloadEvidence: 'DOCUMENTED · 404 ON LIVE 2026-09-03 · OVERLAPS LIVE sasa_itc_wow_program_in_schools_api',
+    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · OVERLAPS LIVE sasa_itc_wow_program_in_schools_api',
     joinEligibility: 'DISTRICT GRAIN',
     scoringEligibility: 'UNSCORED',
     sourceState: 'DOCUMENTED — INGESTION PENDING',
@@ -471,8 +472,9 @@ export const readinessCatalogueStats = {
    */
   platformAvailable: readinessCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED').length,
   /**
-   * Keys documented in a source doc but NOT in the account's grant — they return 404 on
-   * the live API. The 3 SASA PR gram-panchayat datasets and 10 further CDMA keys.
+   * Keys documented in a source doc but not readable by this account. The 3 SASA PR
+   * gram-panchayat keys return 404; the 10 further CDMA concepts currently resolve to
+   * 403 using the guide spelling (the alternate waste-segregation spelling is 404).
    */
   notProvisioned: readinessCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING').length,
   /** Derived from completePayload rather than a length sum, so it means what it says. */

@@ -62,7 +62,7 @@ describe('evidence-safe calculations', () => {
     const cdmaLive = cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED');
     expect(cdmaLive).toHaveLength(3);
     expect(cdmaLive.every((dataset) => (dataset.liveRowCount ?? 0) > 0)).toBe(true);
-    expect(cdmaLive.every((dataset) => dataset.liveCheckedOn === '2026-09-03')).toBe(true);
+    expect(cdmaLive.every((dataset) => dataset.liveCheckedOn === '2026-09-06')).toBe(true);
     expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(10);
     // The invariant that matters: reachable is not the same as retained, and
     // neither makes a source scoreable. This must hold for all thirteen.
