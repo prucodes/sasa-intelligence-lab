@@ -3,6 +3,7 @@ import { getIdentityReach, getLgdCrosswalk, sameNameDifferentSpelling, lgdEnrich
 import { getDeliveryPlans, getDistinctDeliveryPlans } from '@/lib/delivery-plan';
 import { governedSnapshotByKey, lgdIdentity, sourceCandidateKey } from '@/lib/snapshots';
 import { getDuplicateSourceGroups, getDuplicateSourceSummary } from '@/lib/duplicate-sources';
+import { getSecretariatCohort } from '@/lib/secretariat-cohort';
 
 describe('LGD crosswalk', () => {
   it('reads the mapping the source supplies, across every enriched dataset', () => {
@@ -169,5 +170,46 @@ describe('plan shapes beyond a monthly series', () => {
     // Reading dstrt_nm would have produced numeric "district" labels.
     expect(itc.districts.every((district) => !Number.isFinite(Number(district.district)))).toBe(true);
     expect(itc.districts.length).toBe(24);
+  });
+});
+
+describe('secretariat cohort', () => {
+  it('establishes identity on a shared numeric key, with nothing inferred', () => {
+    const cohort = getSecretariatCohort();
+    expect(cohort.identity.key).toBe('sachivalayam_code');
+    // Both sources return the same code set on this day; nothing is name-matched.
+    expect(cohort.identity.collectionCodes).toBe(cohort.identity.segregationCodes);
+    expect(cohort.identity.unmatched).toBe(0);
+    expect(cohort.identity.disputed).toBe(0);
+    expect(cohort.identity.denominatorConflicts).toBe(0);
+  });
+
+  it('opens identity, period and denominator — and keeps basis and policy shut', () => {
+    const cohort = getSecretariatCohort();
+    const gate = (id: string) => cohort.gates.find((entry) => entry.id === id)!;
+    expect(gate('identity').passes).toBe(true);
+    expect(gate('period').passes).toBe(true);
+    expect(gate('denominator').passes).toBe(true);
+    // One day is not a performance basis, and no policy exists to score against.
+    expect(gate('basis').passes).toBe(false);
+    expect(gate('policy').passes).toBe(false);
+    expect(cohort.scoreable).toBe(false);
+  });
+
+  it('gives no segregation rate where nothing was collected', () => {
+    const cohort = getSecretariatCohort();
+    const silent = cohort.points.filter((point) => point.collected === 0);
+    expect(silent.length).toBeGreaterThan(0);
+    // No denominator means no rate. A zero rate would assert something the source did not.
+    expect(silent.every((point) => point.segregationOfCollected === null && point.silent)).toBe(true);
+    expect(cohort.silent).toBe(silent.length);
+  });
+
+  it('holds the containment the two measures must obey', () => {
+    const cohort = getSecretariatCohort();
+    // Segregated waste is a subset of collected waste. Not one secretariat breaks it.
+    expect(cohort.containmentBreaches).toBe(0);
+    expect(cohort.points.every((point) => point.segregated <= point.collected)).toBe(true);
+    expect(cohort.points.every((point) => point.segregationOfCollected === null || point.segregationOfCollected <= 1)).toBe(true);
   });
 });
