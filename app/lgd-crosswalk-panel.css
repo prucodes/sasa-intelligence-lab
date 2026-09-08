@@ -1,0 +1,74 @@
+/* Identity evidence: how far the supplied LGD mapping reaches, and where it breaks. */
+.lgd-panel { --lgd-accent: #087f83; --lgd-warn: #b8791f; margin-block: 28px; color: var(--ink); }
+.lgd-panel :is(h2,h3,p) { margin: 0; }
+.lgd-panel :is(button):focus-visible { outline: 3px solid var(--lgd-accent); outline-offset: 4px; }
+.lgd-kicker { display: block; font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; color: var(--lgd-accent); margin-bottom: 10px; }
+
+.lgd-head { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 34px; align-items: start; margin-bottom: 22px; }
+.lgd-head h2 { font-size: clamp(22px,2.3vw,32px); line-height: 1.2; letter-spacing: -.04em; font-weight: 600; margin-bottom: 12px; }
+.lgd-head h2 em { font-style: normal; font-family: Georgia,serif; font-weight: 400; color: var(--lgd-accent); }
+.lgd-head p { font-size: 13px; line-height: 1.75; color: var(--muted); max-width: 60ch; }
+
+.lgd-reach { display: grid; gap: 2px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin: 0; }
+.lgd-reach > div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; background: var(--surface); padding: 13px 18px; }
+.lgd-reach dt { font-size: 11px; color: var(--muted); }
+.lgd-reach dd { margin: 0; font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; text-align: right; }
+.lgd-reach dd span { display: block; font-size: 10px; font-weight: 400; color: var(--muted); }
+
+.lgd-verdict { border: 1px solid #d8b483; border-left: 4px solid var(--lgd-warn); background: color-mix(in srgb, #e8a33d 9%, var(--surface)); border-radius: 12px; padding: 18px 20px; margin-bottom: 22px; }
+.lgd-verdict-tag { display: inline-block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #8a5a12; margin-bottom: 8px; }
+.lgd-verdict p { font-size: 14px; line-height: 1.65; max-width: 96ch; }
+
+.lgd-tabs { display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.lgd-tabs button { display: flex; align-items: center; gap: 8px; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 12px; font-weight: 600; padding: 10px 14px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.lgd-tabs button:hover { color: var(--ink); }
+.lgd-tabs button.is-selected { color: var(--lgd-accent); border-bottom-color: var(--lgd-accent); }
+.lgd-tabs b { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 20px; background: color-mix(in srgb, var(--lgd-accent) 12%, transparent); }
+
+.lgd-lead { font-size: 12px; line-height: 1.75; color: var(--muted); max-width: 88ch; margin-bottom: 18px !important; }
+.lgd-lead b { color: var(--ink); }
+.lgd-empty,.lgd-more { font-size: 12px; color: var(--muted); }
+
+.lgd-contradictions { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.lgd-contradictions li { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1.2fr) auto; align-items: center; gap: 14px; padding: 14px 18px; border: 1px solid #d8b483; border-left: 3px solid var(--lgd-warn); border-radius: 11px; background: color-mix(in srgb, #e8a33d 5%, var(--surface)); }
+.lgd-source-label { font-size: 13px; font-weight: 600; }
+.lgd-arrow { color: var(--muted); }
+.lgd-targets { display: flex; flex-wrap: wrap; gap: 6px; }
+.lgd-targets b { font-size: 11px; font-weight: 650; padding: 3px 9px; border-radius: 6px; background: color-mix(in srgb, var(--lgd-warn) 15%, var(--surface)); }
+.lgd-contradictions small { font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+.lgd-relabel-groups { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
+.lgd-relabel-groups h3 { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 650; margin-bottom: 12px; }
+.lgd-relabel-groups h3 b { font-size: 11px; color: var(--muted); font-weight: 500; }
+.lgd-dot-warn,.lgd-dot-ok { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.lgd-dot-warn { background: var(--lgd-warn); } .lgd-dot-ok { background: var(--lgd-accent); }
+.lgd-relabels { list-style: none; padding: 0; margin: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
+.lgd-relabels li { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; background: var(--surface); padding: 10px 14px; font-size: 12px; }
+.lgd-relabels li.is-unrelated { background: color-mix(in srgb, #e8a33d 6%, var(--surface)); }
+.lgd-relabels i { font-style: normal; color: var(--muted); }
+.lgd-relabels b { font-weight: 650; }
+.lgd-relabels small { margin-left: auto; font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+.lgd-unmapped { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill,minmax(230px,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
+.lgd-unmapped li { background: var(--surface); padding: 11px 14px; display: grid; gap: 2px; }
+.lgd-unmapped b { font-size: 12px; font-weight: 600; }
+.lgd-unmapped span { font-size: 11px; color: var(--muted); }
+.lgd-unmapped small { font-size: 9px; color: var(--muted); }
+
+.lgd-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 10px; color: var(--muted); }
+.lgd-foot b { color: var(--ink); font-size: 12px; }
+
+.theme-dark .lgd-panel { --lgd-accent: #8bcec0; }
+.theme-dark .lgd-verdict { border-color: #7d5a24; border-left-color: #e8a33d; background: color-mix(in srgb, #e8a33d 12%, var(--surface)); }
+.theme-dark .lgd-verdict-tag { color: #efc58b; }
+.theme-dark .lgd-contradictions li { border-color: #7d5a24; border-left-color: #e8a33d; }
+.theme-dark .lgd-dot-warn { background: #efc58b; }
+.theme-dark .lgd-targets b { background: color-mix(in srgb, #e8a33d 22%, var(--surface)); }
+
+@media (max-width: 900px) {
+  .lgd-head { grid-template-columns: 1fr; gap: 20px; }
+  .lgd-relabel-groups { grid-template-columns: 1fr; }
+  .lgd-contradictions li { grid-template-columns: 1fr; gap: 8px; }
+  .lgd-arrow { display: none; }
+  .lgd-contradictions small { white-space: normal; }
+}

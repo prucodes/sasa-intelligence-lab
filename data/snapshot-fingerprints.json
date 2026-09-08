@@ -1,6 +1,273 @@
 {
   "version": 1,
   "datasets": {
+    "cd_waste_process_plants_revival_new1_api": {
+      "tableKey": "cd_waste_process_plants_revival_new1_api",
+      "retrievedAt": "2026-09-08T15:42:48.520041+00:00",
+      "rows": 6,
+      "content": "acc74778b49ece9a",
+      "periods": {
+        "2026-06": {
+          "rows": 3,
+          "content": "291f9f127a596345",
+          "entities": "a023356da90ae32b"
+        },
+        "2026-07": {
+          "rows": 3,
+          "content": "b2bbad3e80110e4c",
+          "entities": "a023356da90ae32b"
+        }
+      }
+    },
+    "compost_pits_api": {
+      "tableKey": "compost_pits_api",
+      "retrievedAt": "2026-09-08T15:42:53.064347+00:00",
+      "rows": 336,
+      "content": "09c27c3cad488014",
+      "periods": {
+        "2026-202604": {
+          "rows": 27,
+          "content": "c39ffa2733dfcaf6",
+          "entities": "43e2ef1a5972909f"
+        },
+        "2026-202605": {
+          "rows": 28,
+          "content": "74e5ec1b35e482c7",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202606": {
+          "rows": 27,
+          "content": "29c2e0aef09ac470",
+          "entities": "43e2ef1a5972909f"
+        },
+        "2026-202607": {
+          "rows": 27,
+          "content": "44f424d756e2d549",
+          "entities": "43e2ef1a5972909f"
+        },
+        "2026-202608": {
+          "rows": 29,
+          "content": "7a17962cf406b0fe",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202609": {
+          "rows": 28,
+          "content": "246c125bd945ae89",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202610": {
+          "rows": 29,
+          "content": "6e108d93ff8df68c",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202611": {
+          "rows": 29,
+          "content": "7dd536b2bf9fb039",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202612": {
+          "rows": 28,
+          "content": "ffea469143c868f7",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202701": {
+          "rows": 28,
+          "content": "29d2d24ee9bf1dcf",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202702": {
+          "rows": 28,
+          "content": "67e51d75df98d6a5",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202703": {
+          "rows": 28,
+          "content": "ce9c6c4d5dbcf6e2",
+          "entities": "834d3230e012f4fc"
+        }
+      }
+    },
+    "construction_of_csc_api": {
+      "tableKey": "construction_of_csc_api",
+      "retrievedAt": "2026-09-08T15:43:21.915534+00:00",
+      "rows": 84,
+      "content": "8996d9a71721c937",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "64eb2c7f7b5909d4",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "1dc300670400e929",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "1a361399688c518d",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
+    "fstps_stps_cotreatment_new1_api": {
+      "tableKey": "fstps_stps_cotreatment_new1_api",
+      "retrievedAt": "2026-09-08T15:42:43.943533+00:00",
+      "rows": 70,
+      "content": "8e49febed4762060",
+      "periods": {
+        "2026-06": {
+          "rows": 35,
+          "content": "7acb1ee4809cbfd2",
+          "entities": "5f5945840873c25b"
+        },
+        "2026-07": {
+          "rows": 35,
+          "content": "7815ee1df47991dd",
+          "entities": "5f5945840873c25b"
+        }
+      }
+    },
+    "housing_construction_of_ihhls_new1_api": {
+      "tableKey": "housing_construction_of_ihhls_new1_api",
+      "retrievedAt": "2026-09-08T14:55:55.976043+00:00",
+      "rows": 84,
+      "content": "418cc5cfec592f67",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "3777d48da128ebdc",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "a870d3e957900bb8",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "64edc9eb65c35e66",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
+    "ihhl_new_identification_new1_api": {
+      "tableKey": "ihhl_new_identification_new1_api",
+      "retrievedAt": "2026-09-08T15:42:29.632551+00:00",
+      "rows": 246,
+      "content": "e0b4406bad9db63c",
+      "periods": {
+        "2026-06": {
+          "rows": 125,
+          "content": "f19a6345bf39954e",
+          "entities": "36ff4b6d2bb6c443"
+        },
+        "2026-07": {
+          "rows": 121,
+          "content": "8b727e6efaf051b8",
+          "entities": "36ff4b6d2bb6c443"
+        }
+      }
+    },
+    "itc_wow_schools_api": {
+      "tableKey": "itc_wow_schools_api",
+      "retrievedAt": "2026-09-08T15:42:51.021452+00:00",
+      "rows": 24,
+      "content": "c98cd85e8e1385ae",
+      "periods": {
+        "unperiodized": {
+          "rows": 24,
+          "content": "c98cd85e8e1385ae",
+          "entities": "9916f5c13a4840e8"
+        }
+      }
+    },
+    "magic_drains_api": {
+      "tableKey": "magic_drains_api",
+      "retrievedAt": "2026-09-08T15:43:02.972576+00:00",
+      "rows": 336,
+      "content": "170c8c7e4750d623",
+      "periods": {
+        "2026-202604": {
+          "rows": 28,
+          "content": "2d7e72c30c7192e3",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202605": {
+          "rows": 28,
+          "content": "86624ecd9af45f06",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202606": {
+          "rows": 28,
+          "content": "89bf182920ac7fd7",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202607": {
+          "rows": 28,
+          "content": "fbcf1a97d6637c5e",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202608": {
+          "rows": 28,
+          "content": "4d01946a14dce3bf",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202609": {
+          "rows": 28,
+          "content": "4b68d6f63be6523e",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202610": {
+          "rows": 27,
+          "content": "3de2f76ddd3a897c",
+          "entities": "4e96ac28d0cde5a8"
+        },
+        "2026-202611": {
+          "rows": 29,
+          "content": "08bd29e34e576b90",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202612": {
+          "rows": 27,
+          "content": "fdbdfcafd20ab61a",
+          "entities": "4e96ac28d0cde5a8"
+        },
+        "2026-202701": {
+          "rows": 29,
+          "content": "f2dc032d365f5dab",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202702": {
+          "rows": 28,
+          "content": "1aad7b7fcedb60c6",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202703": {
+          "rows": 28,
+          "content": "9ff83c0a487d097d",
+          "entities": "834d3230e012f4fc"
+        }
+      }
+    },
+    "msw_cbg_units_new1_api": {
+      "tableKey": "msw_cbg_units_new1_api",
+      "retrievedAt": "2026-09-08T15:42:46.378661+00:00",
+      "rows": 12,
+      "content": "79ab5e8dd2bc34aa",
+      "periods": {
+        "2026-06": {
+          "rows": 6,
+          "content": "73ba4abf0161dcfa",
+          "entities": "ec322b04ee30ff95"
+        },
+        "2026-07": {
+          "rows": 6,
+          "content": "c660a44050b34360",
+          "entities": "ec322b04ee30ff95"
+        }
+      }
+    },
     "sasa_100_percent_clearance_of_legacy_waste_api": {
       "tableKey": "sasa_100_percent_clearance_of_legacy_waste_api",
       "retrievedAt": "2026-08-28T15:24:52.235490+00:00",
@@ -114,6 +381,19 @@
           "rows": 28,
           "content": "d81994844a0f0318",
           "entities": "583641b2bbd5d056"
+        }
+      }
+    },
+    "sasa_establishment_of_gobardhan_units_api": {
+      "tableKey": "sasa_establishment_of_gobardhan_units_api",
+      "retrievedAt": "2026-09-08T15:43:33.177408+00:00",
+      "rows": 28,
+      "content": "adf1422bcbfccdd4",
+      "periods": {
+        "unperiodized": {
+          "rows": 28,
+          "content": "adf1422bcbfccdd4",
+          "entities": "536190fd3d5425e0"
         }
       }
     },
@@ -254,6 +534,19 @@
           "rows": 123,
           "content": "00369c8d8ac78c64",
           "entities": "76318bd6de501668"
+        }
+      }
+    },
+    "sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026": {
+      "tableKey": "sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026",
+      "retrievedAt": "2026-09-08T16:14:13.478529+00:00",
+      "rows": 56,
+      "content": "801b84a669f8998d",
+      "periods": {
+        "unperiodized": {
+          "rows": 56,
+          "content": "801b84a669f8998d",
+          "entities": "cbe5cfdf7c2118a9"
         }
       }
     },
@@ -509,6 +802,29 @@
         }
       }
     },
+    "sbm_construction_of_ihhls_new1_api": {
+      "tableKey": "sbm_construction_of_ihhls_new1_api",
+      "retrievedAt": "2026-09-08T14:55:58.688170+00:00",
+      "rows": 84,
+      "content": "97b944c0e4269739",
+      "periods": {
+        "2026-05": {
+          "rows": 28,
+          "content": "ad12c10a99e287e4",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-06": {
+          "rows": 28,
+          "content": "a423bf064834bd8e",
+          "entities": "536190fd3d5425e0"
+        },
+        "2026-07": {
+          "rows": 28,
+          "content": "66094bcaf321b7f3",
+          "entities": "536190fd3d5425e0"
+        }
+      }
+    },
     "serp_circular_economy_api": {
       "tableKey": "serp_circular_economy_api",
       "retrievedAt": "2026-08-28T15:12:15.309791+00:00",
@@ -545,6 +861,105 @@
           "rows": 28,
           "content": "5e1c515ad3bdfd73",
           "entities": "834d3230e012f4fc"
+        }
+      }
+    },
+    "sewage_treated_qty_new1_api": {
+      "tableKey": "sewage_treated_qty_new1_api",
+      "retrievedAt": "2026-09-08T15:43:24.720851+00:00",
+      "rows": 242,
+      "content": "0cdd9de2795c5b71",
+      "periods": {
+        "2026-06": {
+          "rows": 122,
+          "content": "a0485ed7407976bb",
+          "entities": "2268c14a76055f5c"
+        },
+        "2026-07": {
+          "rows": 120,
+          "content": "886d94ca19b681db",
+          "entities": "2268c14a76055f5c"
+        }
+      }
+    },
+    "soak_pits_api": {
+      "tableKey": "soak_pits_api",
+      "retrievedAt": "2026-09-08T15:43:12.560992+00:00",
+      "rows": 336,
+      "content": "09c27c3cad488014",
+      "periods": {
+        "2026-202604": {
+          "rows": 27,
+          "content": "c39ffa2733dfcaf6",
+          "entities": "43e2ef1a5972909f"
+        },
+        "2026-202605": {
+          "rows": 28,
+          "content": "74e5ec1b35e482c7",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202606": {
+          "rows": 27,
+          "content": "29c2e0aef09ac470",
+          "entities": "43e2ef1a5972909f"
+        },
+        "2026-202607": {
+          "rows": 27,
+          "content": "44f424d756e2d549",
+          "entities": "43e2ef1a5972909f"
+        },
+        "2026-202608": {
+          "rows": 29,
+          "content": "7a17962cf406b0fe",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202609": {
+          "rows": 28,
+          "content": "246c125bd945ae89",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202610": {
+          "rows": 29,
+          "content": "6e108d93ff8df68c",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202611": {
+          "rows": 29,
+          "content": "7dd536b2bf9fb039",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202612": {
+          "rows": 28,
+          "content": "ffea469143c868f7",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202701": {
+          "rows": 28,
+          "content": "29d2d24ee9bf1dcf",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202702": {
+          "rows": 28,
+          "content": "67e51d75df98d6a5",
+          "entities": "834d3230e012f4fc"
+        },
+        "2026-202703": {
+          "rows": 28,
+          "content": "ce9c6c4d5dbcf6e2",
+          "entities": "834d3230e012f4fc"
+        }
+      }
+    },
+    "swacch_survekshan_info_new1_api": {
+      "tableKey": "swacch_survekshan_info_new1_api",
+      "retrievedAt": "2026-09-08T15:42:37.206841+00:00",
+      "rows": 206,
+      "content": "3a3352e2bcbbb394",
+      "periods": {
+        "2024-no-month": {
+          "rows": 206,
+          "content": "3a3352e2bcbbb394",
+          "entities": "886da95c333674e6"
         }
       }
     }

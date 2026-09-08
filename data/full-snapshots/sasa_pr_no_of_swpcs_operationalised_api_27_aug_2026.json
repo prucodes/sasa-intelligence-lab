@@ -1,0 +1,358 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "req-6cc57b65-df1e-4da0-9f3d-d4d448c48d63",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-ea48aa3d-a746-4c40-ba02-9fe4a1d86f54",
+    "generatedAt": "2026-09-08T16:14:13.478529+00:00",
+    "totalRecordCount": 56,
+    "returnedRecordCount": 56,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026",
+    "tableName": "ap_citizen360.sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026",
+    "exportedPageCount": 1
+  },
+  "records": [
+    {
+      "DISTRICT_ID": "745",
+      "DISTRICT_NAME": "Alluri Sitharama Raju",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "11",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "11"
+    },
+    {
+      "DISTRICT_ID": "745",
+      "DISTRICT_NAME": "Alluri Sitharama Raju",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "11",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "11"
+    },
+    {
+      "DISTRICT_ID": "744",
+      "DISTRICT_NAME": "Anakapalli",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "24",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "24"
+    },
+    {
+      "DISTRICT_ID": "744",
+      "DISTRICT_NAME": "Anakapalli",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "24",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "24"
+    },
+    {
+      "DISTRICT_ID": "502",
+      "DISTRICT_NAME": "Ananthapuramu",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "31",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "31"
+    },
+    {
+      "DISTRICT_ID": "502",
+      "DISTRICT_NAME": "Ananthapuramu",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "31",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "31"
+    },
+    {
+      "DISTRICT_ID": "753",
+      "DISTRICT_NAME": "Annamayya",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "25",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "25"
+    },
+    {
+      "DISTRICT_ID": "753",
+      "DISTRICT_NAME": "Annamayya",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "25",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "25"
+    },
+    {
+      "DISTRICT_ID": "750",
+      "DISTRICT_NAME": "Bapatla",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "20",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "20"
+    },
+    {
+      "DISTRICT_ID": "750",
+      "DISTRICT_NAME": "Bapatla",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "20",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "20"
+    },
+    {
+      "DISTRICT_ID": "503",
+      "DISTRICT_NAME": "Chittoor",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "503",
+      "DISTRICT_NAME": "Chittoor",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "747",
+      "DISTRICT_NAME": "Dr. B.R. Ambedkar Konaseema",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "19",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "17"
+    },
+    {
+      "DISTRICT_ID": "747",
+      "DISTRICT_NAME": "Dr. B.R. Ambedkar Konaseema",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "19",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "17"
+    },
+    {
+      "DISTRICT_ID": "505",
+      "DISTRICT_NAME": "East Godavari",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "21",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "21"
+    },
+    {
+      "DISTRICT_ID": "505",
+      "DISTRICT_NAME": "East Godavari",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "21",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "21"
+    },
+    {
+      "DISTRICT_ID": "748",
+      "DISTRICT_NAME": "Eluru",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "748",
+      "DISTRICT_NAME": "Eluru",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "506",
+      "DISTRICT_NAME": "Guntur",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "16",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "12"
+    },
+    {
+      "DISTRICT_ID": "506",
+      "DISTRICT_NAME": "Guntur",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "16",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "12"
+    },
+    {
+      "DISTRICT_ID": "746",
+      "DISTRICT_NAME": "Kakinada",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "20",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "19"
+    },
+    {
+      "DISTRICT_ID": "746",
+      "DISTRICT_NAME": "Kakinada",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "20",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "19"
+    },
+    {
+      "DISTRICT_ID": "510",
+      "DISTRICT_NAME": "Krishna",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "25",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "25"
+    },
+    {
+      "DISTRICT_ID": "510",
+      "DISTRICT_NAME": "Krishna",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "25",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "25"
+    },
+    {
+      "DISTRICT_ID": "511",
+      "DISTRICT_NAME": "Kurnool",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "25",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "25"
+    },
+    {
+      "DISTRICT_ID": "511",
+      "DISTRICT_NAME": "Kurnool",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "25",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "25"
+    },
+    {
+      "DISTRICT_ID": "790",
+      "DISTRICT_NAME": "Markapuram",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "21",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "21"
+    },
+    {
+      "DISTRICT_ID": "790",
+      "DISTRICT_NAME": "Markapuram",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "21",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "21"
+    },
+    {
+      "DISTRICT_ID": "755",
+      "DISTRICT_NAME": "Nandyal",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "28",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "28"
+    },
+    {
+      "DISTRICT_ID": "755",
+      "DISTRICT_NAME": "Nandyal",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "28",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "28"
+    },
+    {
+      "DISTRICT_ID": "749",
+      "DISTRICT_NAME": "Ntr",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "16",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "16"
+    },
+    {
+      "DISTRICT_ID": "749",
+      "DISTRICT_NAME": "Ntr",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "16",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "16"
+    },
+    {
+      "DISTRICT_ID": "751",
+      "DISTRICT_NAME": "Palnadu",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "28",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "28"
+    },
+    {
+      "DISTRICT_ID": "751",
+      "DISTRICT_NAME": "Palnadu",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "28",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "28"
+    },
+    {
+      "DISTRICT_ID": "743",
+      "DISTRICT_NAME": "Parvathipuram Manyam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "15",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "13"
+    },
+    {
+      "DISTRICT_ID": "743",
+      "DISTRICT_NAME": "Parvathipuram Manyam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "15",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "13"
+    },
+    {
+      "DISTRICT_ID": "791",
+      "DISTRICT_NAME": "Polavaram",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "11",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "7"
+    },
+    {
+      "DISTRICT_ID": "791",
+      "DISTRICT_NAME": "Polavaram",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "11",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "7"
+    },
+    {
+      "DISTRICT_ID": "517",
+      "DISTRICT_NAME": "Prakasam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "517",
+      "DISTRICT_NAME": "Prakasam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "515",
+      "DISTRICT_NAME": "Sri Potti Sriramulu Nellore",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "35",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "34"
+    },
+    {
+      "DISTRICT_ID": "515",
+      "DISTRICT_NAME": "Sri Potti Sriramulu Nellore",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "35",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "34"
+    },
+    {
+      "DISTRICT_ID": "754",
+      "DISTRICT_NAME": "Sri Sathya Sai",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "32",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "32"
+    },
+    {
+      "DISTRICT_ID": "754",
+      "DISTRICT_NAME": "Sri Sathya Sai",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "32",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "32"
+    },
+    {
+      "DISTRICT_ID": "519",
+      "DISTRICT_NAME": "Srikakulam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "30",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "30"
+    },
+    {
+      "DISTRICT_ID": "519",
+      "DISTRICT_NAME": "Srikakulam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "30",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "30"
+    },
+    {
+      "DISTRICT_ID": "752",
+      "DISTRICT_NAME": "Tirupati",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "36",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "35"
+    },
+    {
+      "DISTRICT_ID": "752",
+      "DISTRICT_NAME": "Tirupati",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "36",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "35"
+    },
+    {
+      "DISTRICT_ID": "520",
+      "DISTRICT_NAME": "Visakhapatnam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "4",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "4"
+    },
+    {
+      "DISTRICT_ID": "520",
+      "DISTRICT_NAME": "Visakhapatnam",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "4",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "4"
+    },
+    {
+      "DISTRICT_ID": "521",
+      "DISTRICT_NAME": "Vizianagaram",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "521",
+      "DISTRICT_NAME": "Vizianagaram",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "27",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "27"
+    },
+    {
+      "DISTRICT_ID": "523",
+      "DISTRICT_NAME": "West Godavari",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "20",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "20"
+    },
+    {
+      "DISTRICT_ID": "523",
+      "DISTRICT_NAME": "West Godavari",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "20",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "20"
+    },
+    {
+      "DISTRICT_ID": "504",
+      "DISTRICT_NAME": "Y.S.R. Kadapa",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "39",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "39"
+    },
+    {
+      "DISTRICT_ID": "504",
+      "DISTRICT_NAME": "Y.S.R. Kadapa",
+      "SWACHCH_RATHAM_MANDAL_OPERATORS": "39",
+      "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS": "39"
+    }
+  ]
+}

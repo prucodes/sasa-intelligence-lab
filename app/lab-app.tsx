@@ -1,6 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import { OverviewReview } from './overview-review';
+import { EvidenceRecordBrowser } from './evidence-record-browser';
+import { DiagnosticReadings } from './diagnostic-readings';
+import { VehiclePairing } from './vehicle-pairing';
+import { ExecutiveBrief } from './executive-brief';
+import { AnchoredSourceBrowser } from './anchored-source-browser';
+import { SourceReconciliationScreen } from './source-reconciliation';
+import { LgdCrosswalkPanel } from './lgd-crosswalk-panel';
+import { EvidenceIntegrity } from './evidence-integrity';
+import { DeliveryPlans } from './delivery-plans';
+import { RuralSanitation } from './rural-sanitation';
+import './screen-features.css';
+import './evidence-content.css';
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { DataMode, GapAssessment, GapState, MetricRow } from '@/lib/domain';
 import { createProvider, datasets, diagnosticsKeyFor, reasonLabels, stateLabels } from '@/lib/domain';
@@ -31,6 +44,7 @@ import {
   getLegacyWasteSummary,
   getLegacyWasteStageCohorts,
   getProcessingRegistry,
+  getReportedMovement,
   getSourceReconciliationIssues,
   getSupportingProgrammePortfolio,
   getSwachhOutcomeSummary,
@@ -41,8 +55,9 @@ import {
   getDistrictSignalMaps,
 } from '@/lib/analytics';
 import { disputedSumImpact } from '@/lib/disputes';
-import type { CollectionProcurementSummary, ContrastPoint, DistrictSignalMap, IhhlFunnel, LegacyWasteSummary, OperationalStageCohorts } from '@/lib/analytics';
-import { governedSnapshotStats, operationalPeriodOptions } from '@/lib/snapshots';
+import type { CollectionProcurementSummary, ContrastPoint, DistrictSignalMap, IhhlFunnel, LegacyWasteSummary, OperationalStageCohorts, ReportedMovement } from '@/lib/analytics';
+import { governedSnapshotByKey, governedSnapshotStats, operationalPeriodOptions } from '@/lib/snapshots';
+import { getIdentityReach, getLgdCrosswalk } from '@/lib/lgd-crosswalk';
 import { readinessCatalogueStats } from '@/lib/catalogue';
 import { distributionOf, ordinal, peerContext, type Distribution } from '@/lib/comparison';
 import { datasetVintages, formatPeriodLabel, formatRetrievalDate, vintageSummary } from '@/lib/vintage';
@@ -66,14 +81,16 @@ import {
 } from '@/lib/crosswalk';
 import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
 
-type Page = 'overview' | 'operational-analytics' | 'gap-radar' | 'diagnostics' | 'data-readiness';
+type Page = 'overview' | 'operational-analytics' | 'gap-radar' | 'reconciliation' | 'diagnostics' | 'data-readiness';
 type ColorTheme = 'light' | 'dark';
-type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'outcomes';
+type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'delivery' | 'rural' | 'outcomes';
+type AnalyticsLens = 'snapshot' | 'movement';
 
 const navItems: { page: Page; label: string; href: string; icon: IconName }[] = [
   { page: 'overview', label: 'Overview', href: '/', icon: 'home' },
   { page: 'operational-analytics', label: 'Operational Analytics', href: '/operational-analytics', icon: 'chart' },
   { page: 'gap-radar', label: 'Gap Radar', href: '/gap-radar', icon: 'target' },
+  { page: 'reconciliation', label: 'Source Reconciliation', href: '/reconciliation', icon: 'link' },
   { page: 'diagnostics', label: 'ULB Diagnostics', href: '/diagnostics/demo-delta', icon: 'building' },
   { page: 'data-readiness', label: 'Data Readiness', href: '/data-readiness', icon: 'database' },
 ];
@@ -210,6 +227,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
   // Presenter (Briefing) mode: a focused, chrome-free walk through the governed evidence.
   const [presenting, setPresenting] = useState(false);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [briefOpen, setBriefOpen] = useState(false);
   function togglePresent(on: boolean) {
     setPresenting(on);
     try {
@@ -284,11 +302,12 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} />
       <div className="app-main">
-        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} />
-        <main id="main-content" className={`content page-${page}`}>
+        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} onBrief={() => setBriefOpen(true)} />
+        <main id="main-content" data-mode={mode} className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
           {page === 'gap-radar' && <GapRadar mode={mode} colorTheme={colorTheme} radar={provider.getGapAssessments()} />}
+          {page === 'reconciliation' && <SourceReconciliationScreen mode={mode} href={(path) => withMode(path, mode, colorTheme)} />}
           {page === 'diagnostics' && <Diagnostics mode={mode} colorTheme={colorTheme} cameFrom={cameFrom} diagnostic={provider.getDiagnostic(currentUlbKey)} allKeys={datasets[mode].diagnostics.map((d) => ({ key: d.ulbKey, name: mode === 'SAMPLE' ? `${d.name} — ${d.district}` : d.name }))} />}
           {page === 'data-readiness' && <DataReadiness mode={mode} readiness={provider.getReadiness()} />}
         </main>
@@ -296,6 +315,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColor
       </div>
       <AboutPanel open={aboutOpen} onClose={() => setAboutOpen(false)} />
       <CrossScreenCompareTray mode={mode} open={compareOpen} onClose={() => setCompareOpen(false)} />
+      {briefOpen && <ExecutiveBrief mode={mode} onClose={() => setBriefOpen(false)} />}
       {presenting && <PresenterMode colorTheme={colorTheme} onExit={() => togglePresent(false)} />}
     </div>
   );
@@ -324,7 +344,7 @@ function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: 
   );
 }
 
-function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent, onCompare }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void; onCompare: () => void }) {
+function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent, onCompare, onBrief }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void; onCompare: () => void; onBrief: () => void }) {
   const [compareIds] = useCompareSelection();
   return (
     <header className="topbar">
@@ -334,7 +354,7 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
         <button className="icon-button present-button" aria-label="Open presenter briefing" title="Open presenter briefing" onClick={onPresent}><Icon name="play" size={15}/><span>Briefing</span></button>
         <button className="icon-button compare-button" aria-label="Open ULB comparison tray" title="Compare selected ULBs" onClick={onCompare}><Icon name="building" size={17}/><span>Compare{compareIds.length ? ` · ${compareIds.length}` : ''}</span></button>
-        <button className="icon-button evidence-pack" aria-label="Download evidence brief" title="Download evidence brief" onClick={() => downloadEvidenceBrief(mode)}><Icon name="download" size={16}/><span>Brief</span></button>
+        <button className="icon-button evidence-pack" aria-label="Open executive evidence brief" aria-haspopup="dialog" title="Preview and export executive brief" onClick={onBrief}><Icon name="download" size={16}/><span>Brief</span></button>
         <button className="icon-button" aria-label="About SASA Intelligence Lab and glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={20}/></button>
       </div>
     </header>
@@ -444,32 +464,6 @@ function Overview({ mode, colorTheme, metrics, radar }: { mode: DataMode; colorT
   </>;
 }
 
-function UnscoredReasons({ radar, href }: { radar: GapAssessment[]; href: string }) {
-  const counts = new Map<string, number>();
-  radar.forEach((item) => (item.reasons ?? []).forEach((reason) => counts.set(reason, (counts.get(reason) ?? 0) + 1)));
-  const ranked = [...counts.entries()].sort(([, left], [, right]) => right - left);
-  const total = radar.length;
-  return <>
-    <div className="unscored-headline"><strong>{total}</strong><span>entities, none scoreable yet</span></div>
-    <ul className="unscored-reasons">{ranked.map(([reason, count]) => <li key={reason}>
-      <span className="ur-label">{reasonLabels[reason as keyof typeof reasonLabels] ?? reason}</span>
-      <span className="ur-bar"><i style={{ width: `${Math.max(3, count / total * 100)}%` }}/></span>
-      <b>{count}</b>
-    </li>)}</ul>
-    <p className="unscored-note">An entity can be blocked by more than one condition, so these do not sum to {total}.</p>
-    <a className="text-link" href={href}>View gap radar <Icon name="arrow" size={16}/></a>
-  </>;
-}
-
-/**
- * S6, the evidence label. Fixed slots, same order on every screen, generated
- * from the retained snapshots rather than written by hand.
- *
- * The datasheet idea is well established on paper and almost never rendered into
- * the interface where the numbers are actually read. The last three rows are the
- * ones that stop a figure being misquoted, so they are always shown even when
- * the answer is an uncomfortable "no".
- */
 function EvidenceLabel({ mode = 'SAMPLE' }: { mode?: DataMode }) {
   // Only SAMPLE rests on retained government evidence. Saying nothing on the
   // other modes would be worse than saying what they actually are.
@@ -497,13 +491,13 @@ function EvidenceLabel({ mode = 'SAMPLE' }: { mode?: DataMode }) {
   }
   const disputed = getDisputedValues();
   const rows: Array<{ label: string; value: string; state?: 'ok' | 'warn' | 'stop' }> = [
-    { label: 'Datasets retained', value: `${governedSnapshotStats.completeDatasets} / ${governedSnapshotStats.authorizedDatasets} authorized`, state: 'warn' },
+    { label: 'Datasets retained', value: `${governedSnapshotStats.completeDatasets} / ${readinessCatalogueStats.platformAvailable} granted`, state: 'warn' },
     { label: 'Rows retained', value: governedSnapshotStats.records.toLocaleString('en-IN') },
     { label: 'Entities observed', value: `${governedSnapshotStats.baselineUlbCandidates} ULB candidates` },
     { label: 'Source grain', value: 'Mixed · ULB and district' },
     { label: 'Disputed values', value: `${disputed.total} across ${disputed.datasets} datasets`, state: disputed.total ? 'stop' : 'ok' },
-    { label: 'Zero separable from blank', value: 'No', state: 'stop' },
-    { label: 'Safe to compare across months', value: 'No · single-period snapshots', state: 'stop' },
+    { label: 'Missing measurements', value: 'Held out · never counted as zero', state: 'warn' },
+    { label: 'Cross-month comparisons', value: 'Selected same-source pairs only', state: 'warn' },
     { label: 'Scoring eligible', value: '0 entities · gates unmet', state: 'warn' },
   ];
   return <section className="evidence-label" aria-label="Evidence label for this screen">
@@ -514,114 +508,6 @@ function EvidenceLabel({ mode = 'SAMPLE' }: { mode?: DataMode }) {
   </section>;
 }
 
-/**
- * One pill per unmet evidence gate, read from the gate list rather than
- * hardcoded, so unblocking a gate is visible here instead of silently wrong.
- */
-function GateDots() {
-  const blocked = createProvider('SAMPLE').getReadiness().gates.filter((gate) => gate.state === 'blocked');
-  return <div className="gate-dots" aria-label={`${blocked.length} unmet evidence gates`}>
-    {blocked.map((gate) => <i key={gate.title} title={gate.title}/>)}
-  </div>;
-}
-
-/**
- * Who is carrying the shortfall.
- *
- * Every other panel on this screen reports a statewide quantity. A statewide
- * quantity cannot be acted on: "0.2% completion" tells an officer that something
- * is wrong everywhere, which is the same as telling them nothing. The retained
- * rows are at ULB grain, so the product can name the places instead, and that is
- * the difference between a status report and a review list.
- *
- * The ranking basis is stated on the panel rather than assumed, because the two
- * are not interchangeable — one list is ordered by the size of the shortfall, the
- * other by the share of that ULB's own target still outstanding, and a reader who
- * mistakes the second for the first will draw the wrong conclusion about scale.
- */
-function NamedFindings({ colorTheme }: { colorTheme: ColorTheme }) {
-  const findings = useMemo(() => getNamedFindings(), []);
-  const [activeId, setActiveId] = useState(findings[0]?.id ?? '');
-  const active = findings.find((finding) => finding.id === activeId) ?? findings[0];
-  if (!active) return null;
-
-  const visibleEntities = active.entities.slice(0, 5);
-  const peak = Math.max(...visibleEntities.map((entity) => entity.value), 1);
-  const [amount, ...rest] = active.headline.split(' ');
-
-  return <section className={`panel named-findings tone-${active.tone}`} aria-label="Where the shortfall sits">
-    <header className="nf-head">
-      <div>
-        <span className="eyebrow">Where the shortfall sits</span>
-        <h2>Named entities behind each current signal</h2>
-      </div>
-      <div className="nf-tabs" role="tablist" aria-label="Current shortfalls">
-        {findings.map((finding) => <button key={finding.id} role="tab" type="button"
-          aria-selected={finding.id === active.id}
-          className={`nf-tab tone-${finding.tone} ${finding.id === active.id ? 'active' : ''}`}
-          onClick={() => setActiveId(finding.id)}>
-          <b>{finding.stalled}</b><span>{`ULB${finding.stalled === 1 ? '' : 's'} ${shortfallLabels[finding.id] ?? finding.unit}`}</span>
-        </button>)}
-      </div>
-    </header>
-
-    <div className="nf-body">
-      <div className="nf-summary">
-        <strong className="nf-total">{amount}</strong>
-        <span className="nf-total-unit">{rest.join(' ')}</span>
-        <p className="nf-statement">{active.statement}</p>
-        <dl className="nf-facts">
-          {active.concentration && <div><dt>Top {active.concentration.count} hold</dt><dd>{Math.round(active.concentration.share * 100)}% of the total</dd></div>}
-          <div><dt>Returned a value</dt><dd>{formatCoverage(active.coverage)} {active.coverage.unit}</dd></div>
-          <div><dt>Reported period</dt><dd>{active.period}</dd></div>
-        </dl>
-        <a className="primary-link" href={`${withMode('/operational-analytics', 'SAMPLE', colorTheme)}&tab=${active.tab}`}>
-          See all {active.affected} <Icon name="arrow" size={15}/>
-        </a>
-      </div>
-
-      <ol className="nf-list" aria-label="Largest returned shortfalls">
-        {visibleEntities.map((entity, index) => <li key={`${entity.ulb}-${entity.district}`} className={entity.stalled ? 'is-stalled' : ''}>
-          <span className="nf-rank">{index + 1}</span>
-          <span className="nf-name"><b>{entity.ulb}</b><small>{entity.district}</small></span>
-          <span className="nf-bar" aria-hidden="true"><i style={{ width: `${Math.max((entity.value / peak) * 100, 4)}%` }}/></span>
-          <span className="nf-value">
-            <b>{entity.display}</b>
-            <small>{entity.detail}</small>
-          </span>
-          {entity.stalled
-            ? <span className="nf-flag" title="This ULB reports no progress at all, not merely less than target">Not started</span>
-            : entity.note
-              ? <span className="nf-flag is-progress">{entity.note}</span>
-              : <span className="nf-flag is-empty" aria-hidden="true"/>}
-          <DrillLink ulb={entity.ulb} district={entity.district} from="Where the shortfall sits"/>
-        </li>)}
-      </ol>
-    </div>
-
-    <footer className="nf-foot">
-      <span><Icon name="shield" size={15}/>
-        Ranked by {active.rankedBy === 'volume' ? 'the size of the shortfall' : "the share of each ULB's own target still outstanding"}.
-        Descriptive of what sources reported; not a score, and not a judgement of cause.
-      </span>
-      <b>ULBs that did not return a value are absent from this list, never ranked last</b>
-    </footer>
-  </section>;
-}
-
-/** Tab labels: what the count above each one is counting. Pluralised at render. */
-const shortfallLabels: Record<string, string> = {
-  'stalled-approvals': 'not started',
-  'undelivered-orders': 'received none',
-  'legacy-balance': 'cleared none',
-};
-
-/**
- * Presenter (Briefing) mode — an executive, chrome-free walk through the governed
- * evidence. Every chapter reuses production selectors and keeps coverage, period,
- * grain, exclusions, and decision limits in view. It is an evidence briefing, not a
- * dashboard screenshot and not a new scoring layer.
- */
 function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit: () => void }) {
   const findings = useMemo(() => getNamedFindings(), []);
   const disputed = useMemo(() => getDisputedValues(), []);
@@ -868,158 +754,14 @@ function PresenterConcentration({ findings }: { findings: ReturnType<typeof getN
 }
 
 function SampleOverview({ colorTheme }: { colorTheme: ColorTheme }) {
-  const collection = getCollectionProcurementSummary();
-  const ihhl = getIHHLFunnel();
-  const processing = getProcessingRegistry();
-  const legacyWaste = getLegacyWasteSummary();
-  const outcomes = getSwachhOutcomeSummary();
-  const analyticsHref = (tab: AnalyticsTab) => `${withMode('/operational-analytics', 'SAMPLE', colorTheme)}&tab=${tab}`;
-
-  /**
-   * The four domain cards, built from retained evidence rather than composites.
-   *
-   * DEMO shows four matching percentages because its fixtures are synthetic
-   * readiness indices. SAMPLE cannot show four percentages without inventing
-   * composites, which is precisely what the evidence gates exist to prevent, so
-   * these carry the measured quantity instead. The ratios those quantities
-   * produce stay on the gauges in the rail, which keeps the two complementary
-   * rather than duplicated.
-   */
-  const domainCards: MetricRow[] = [
-    {
-      label: 'Collection & Machinery',
-      value: `${collection.supplied.toLocaleString('en-IN')} supplied`,
-      detail: `of ${collection.target.toLocaleString('en-IN')} reported target · ${collection.workOrders.toLocaleString('en-IN')} work orders issued`,
-      tone: 'teal',
-      coverage: collection.coverage,
-    },
-    {
-      label: 'Processing & Facilities',
-      value: `${processing.configuredTpd.toLocaleString('en-IN')} TPD`,
-      detail: `configured across ${processing.facilityRecords} facility records · configured capacity, not treated volume`,
-      tone: 'blue',
-    },
-    {
-      label: 'Sanitation Delivery',
-      value: `${ihhl.completed.toLocaleString('en-IN')} completed`,
-      detail: `of ${ihhl.approved.toLocaleString('en-IN')} reported approvals · ${ihhl.underConstruction.toLocaleString('en-IN')} under construction`,
-      tone: 'violet',
-      coverage: ihhl.coverage,
-    },
-    {
-      label: 'Swachh Outcomes',
-      value: `${outcomes.rows.length} candidates`,
-      detail: `2024 outcome records · ODF ${outcomes.odfRecords} · GFC ${outcomes.gfcRecords} · rank ${outcomes.rankRecords}`,
-      tone: 'orange',
-      coverage: {
-        reported: outcomes.rows.length,
-        expected: 123,
-        unit: 'ULBs',
-        basis: `Source year ${outcomes.reportingYear}. Not comparable with 2026 operations.`,
-      },
-    },
-  ];
-
+  const { shapes, failed } = useDistrictShapes();
+  const href = (path: string) => withMode(path, 'SAMPLE', colorTheme);
   return <>
-    <PageIntro visual="overview" eyebrow="Operational intelligence · current governed evidence" title="Where reported delivery is falling short" description="Vehicle supply and IHHL completion are the clearest shortfalls in the retained 2026 sources; legacy-waste records show higher reported clearance, with 1.35M tonnes still remaining."/>
-    <section className="overview-quick-read" aria-label="Executive quick read">
-      <header><small>At a glance</small><b>Current decision read</b></header>
-      <span className="quick-read-signal tone-teal"><small>Review now</small><b>{formatPercent(collection.deliveryRatio)}</b><em>vehicle supply / target</em></span>
-      <span className="quick-read-signal tone-violet"><small>Review now</small><b>{formatPercent(ihhl.completionRatio)}</b><em>IHHL completed / approved</em></span>
-      <span className="quick-read-signal tone-blue"><small>Reported context</small><b>{formatPercent(legacyWaste.clearanceRatio)}</b><em>legacy waste cleared / target</em></span>
-      <span className="quick-read-signal is-held"><small>Decision boundary</small><b>UNSCORED</b><em>0 entities clear every gate</em></span>
-    </section>
-    <section className="metric-grid" aria-label="Core KPI categories">{domainCards.map((metric, index) => <MetricCard key={metric.label} metric={metric} icon={domainIcons[index]} />)}</section>
-    <NamedFindings colorTheme={colorTheme}/>
-    <OperationalDistrictSignalMap/>
-    <section className="overview-intelligence-layout" aria-label="Current operational review signals">
-      <article className="panel operational-signal-board">
-        <header className="signal-board-head"><div><span className="eyebrow">Operational signal board</span><h2>Three review signals from current SASA evidence</h2><p>Each lane is descriptive, deterministic, and linked to its retained source records.</p></div><span className="signal-count"><b>03</b> signals</span></header>
-        <div className="signal-lanes">
-      <SignalRow tone="teal"
-        gap={(collection.target - collection.supplied).toLocaleString('en-IN')}
-        gapLabel="vehicles short of target"
-        title="Reported vehicle delivery is substantially behind procurement target"
-        stages={`${collection.target.toLocaleString('en-IN')} target → ${collection.workOrders.toLocaleString('en-IN')} work orders → ${collection.supplied.toLocaleString('en-IN')} supplied`}
-        ratio={collection.deliveryRatio} ratioLabel="delivery ratio"
-        href={analyticsHref('collection')}/>
-
-      <SignalRow tone="violet"
-        gap={Math.max(ihhl.approved - ihhl.completed, 0).toLocaleString('en-IN')}
-        gapLabel="approvals not completed"
-        title="Reported IHHL completion is very low relative to approvals"
-        stages={`${ihhl.approved.toLocaleString('en-IN')} approved → ${ihhl.underConstruction.toLocaleString('en-IN')} under construction → ${ihhl.completed.toLocaleString('en-IN')} completed`}
-        ratio={ihhl.completionRatio} ratioLabel="completion ratio"
-        href={analyticsHref('sanitation')}/>
-
-      <SignalRow tone="blue"
-        gap={compactMetric(legacyWaste.balance)}
-        gapLabel="reported balance remaining"
-        title="Reported legacy-waste clearance is 91%; 1.35 million remains"
-        stages={`${compactMetric(legacyWaste.target)} target → ${compactMetric(legacyWaste.achievement)} reported cleared`}
-        ratio={legacyWaste.clearanceRatio} ratioLabel="clearance ratio"
-        href={analyticsHref('processing')}/>
-        </div>
-        <footer className="signal-board-foot"><span><Icon name="shield" size={16}/>Current evidence supports review signals—not a composite sanitation score.</span><b>{processing.configuredTpd.toLocaleString('en-IN')} TPD configured capacity is supporting context only</b></footer>
-      </article>
-      <aside className="overview-focus-rail">
-        <SignalRatios collection={collection} ihhl={ihhl} legacy={legacyWaste} href={withMode('/operational-analytics', 'SAMPLE', colorTheme)}/>
-        <article className="panel radar-activation-card radar-gate-spotlight"><span className="eyebrow">Next intelligence layer</span><b>Gap Radar: 0 eligible entities</b><p>Reviewed identity, aligned periods, current outcomes, and an approved scoring policy are still required.</p><GateDots/><a href={withMode('/gap-radar', 'SAMPLE', colorTheme)}>See evidence gates <Icon name="arrow" size={15}/></a></article>
-      </aside>
-    </section>
-    <EvidenceCompleteness colorTheme={colorTheme}/>
-    <ReportedOperationsMonitor series={getCommunityProgrammeHistory()}/>
-    <section className="overview-grid sample-overview-grid">
-      <article className="panel gap-summary">
-        <PanelTitle icon="target" title="Performance Gap Summary" subtitle="Why nothing is scoreable yet"/>
-        <UnscoredReasons radar={createProvider('SAMPLE').getGapAssessments()} href={withMode('/gap-radar', 'SAMPLE', colorTheme)}/>
-      </article>
-      <article className="panel why-panel">
-        <PanelTitle icon="shield" title="Why this matters" />
-        <WhyItem icon="target" title="Spot mismatches" text="Compare reported implementation with aligned outcomes." />
-        <WhyItem icon="search" title="Explain evidence" text="Trace every displayed value to its source context." />
-        <WhyItem icon="shield" title="Activate carefully" text="Score only when identity, periods, and values qualify." />
-      </article>
-    </section>
-    <section className="overview-context-row">
-      <article className="panel outcome-context-card"><span><Icon name="calendar" size={20}/></span><div><b>2024 Swachh outcomes are available as historical context.</b><p>{outcomes.odfRecords} ODF · {outcomes.rankRecords} rank · {outcomes.gfcRecords} GFC records. Not compared directly with 2026 operations.</p></div><a href={analyticsHref('outcomes')}>View 2024 outcomes <Icon name="arrow" size={15}/></a></article>
-      <article className="panel processing-context-card"><Image src="/assets/sasa/domain-iswm.png" alt="" width={70} height={64}/><div><span className="eyebrow">Processing context</span><b>Infrastructure is documented; operational utilization is not.</b><p>{processing.configuredTpd.toLocaleString('en-IN')} configured TPD is available as inventory evidence.</p></div><a href={analyticsHref('processing')}>Explore infrastructure <Icon name="arrow" size={15}/></a></article>
-    </section>
-    <EvidenceLabel/>
+    <OverviewReview shapes={shapes} failed={failed} href={href} integrity={<EvidenceIntegrity href={href}/>}>
+      <ReportedOperationsMonitor series={getCommunityProgrammeHistory()}/>
+    </OverviewReview>
   </>;
 }
-
-/**
- * How much of the possible evidence actually exists. This was buried in a Data Readiness
- * sub-tab, but it is the single most honest thing the product says, so it belongs where
- * everyone sees it.
- */
-function EvidenceCompleteness({ colorTheme }: { colorTheme: ColorTheme }) {
-  const decisions = useSyncExternalStore(subscribeDecisions, readDecisions, serverDecisions);
-  const aliases = useMemo(() => approvedAliases(decisions), [decisions]);
-  const grid = useMemo(() => getEvidenceCoverageGrid(aliases), [aliases]);
-  const have = grid.totals.returned + grid.totals.flagged + grid.totals.recovered;
-  const havePct = Math.round((have / grid.totals.cells) * 100);
-  return <a className="completeness-strip" href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>
-    <span className="comp-figure"><b>{havePct}%</b><small>of the evidence we could have</small></span>
-    <span className="comp-bar" role="img" aria-label={`${have} of ${grid.totals.cells} possible observations were returned`}>
-      <i className="comp-have" style={{ width: `${havePct}%` }}/>
-      <i className="comp-missing" style={{ width: `${100 - havePct}%` }}/>
-    </span>
-    <span className="comp-copy">
-      <b>{grid.totals.cells.toLocaleString('en-IN')}</b> possible observations across {grid.rows.length} ULBs and {grid.sources.length} sources.
-      <b> {grid.totals.absent.toLocaleString('en-IN')}</b> were never returned by any source.
-      <em>A blank is not a zero. See the full picture in Data Readiness.</em>
-    </span>
-    <span className="comp-go"><Icon name="arrow" size={16}/></span>
-  </a>;
-}
-
-/**
- * Copies a plain-text evidence summary for the entity on screen, with its provenance.
- * Nothing left the application before this, which quietly capped how useful it was:
- * an officer could read a finding but not take it into a meeting.
- */
 function EvidencePack({ diagnostic }: { diagnostic: ReturnType<ReturnType<typeof createProvider>['getDiagnostic']> }) {
   const [copied, setCopied] = useState(false);
   async function copy() {
@@ -1123,77 +865,6 @@ function ReportedOperationsMonitor({ series }: { series: ReturnType<typeof getCo
   </article>;
 }
 
-/**
- * One line per signal, led by the figure that matters: the shortfall, not the ratio.
- * `gap` is the headline, `stages` shows the progression it came from, and the track
- * encodes the ratio so the row reads at a glance without needing to parse numbers.
- */
-function SignalRow({ tone, gap, gapLabel, title, stages, ratio, ratioLabel, href }: {
-  tone: string;
-  gap: string;
-  gapLabel: string;
-  title: string;
-  stages: string;
-  ratio: number | null;
-  ratioLabel: string;
-  href: string;
-}) {
-  const fill = Math.max(0.6, Math.min(100, (ratio ?? 0) * 100));
-  return <a className={`signal-row tone-${tone}`} href={href}>
-    <span className="row-gap">
-      <b>{gap}</b>
-      <small>{gapLabel}</small>
-    </span>
-    <span className="row-main">
-      <span className="row-title">{title}</span>
-      <span className="row-stages">{stages}</span>
-      <span className="row-track"><i style={{ width: `${fill}%` }}/></span>
-    </span>
-    <span className="row-ratio">
-      <b>{formatPercent(ratio)}</b>
-      <small>{ratioLabel}</small>
-    </span>
-    <span className="row-go" aria-hidden="true"><Icon name="arrow" size={15}/></span>
-  </a>;
-}
-
-function SignalGauge({ value, label, denominator, tone, coverage }: { value: number | null; label: string; denominator: string; tone: string; coverage: Coverage }) {
-  const radius = 26;
-  const circumference = 2 * Math.PI * radius;
-  const fraction = Math.max(0, Math.min(1, value ?? 0));
-  // The gauge already names its quantity denominator. This adds the entity one:
-  // a ratio built from 34 of 123 ULBs is a different claim from one built on all
-  // of them, and the arc alone cannot tell them apart.
-  const shortfall = notReturned(coverage);
-  return <div className={`signal-gauge gauge-${tone}`}>
-    <svg viewBox="0 0 64 64" role="img" aria-label={`${label} ${formatPercent(value)}, ${denominator}, from ${coverageNote(coverage)}`}>
-      <circle className="gauge-track" cx="32" cy="32" r={radius}/>
-      <circle className="gauge-arc" cx="32" cy="32" r={radius} strokeDasharray={circumference} strokeDashoffset={circumference * (1 - fraction)} transform="rotate(-90 32 32)"/>
-      <text className="gauge-figure" x="32" y="36" textAnchor="middle">{formatPercent(value)}</text>
-    </svg>
-    <b>{label}</b>
-    <small>{denominator}</small>
-    <span className={`gauge-coverage tier-${coverageTier(coverage)}`} title={coverageNote(coverage)}>
-      {formatCoverage(coverage)} {coverage.unit}{shortfall > 0 && <i className="gauge-absence" aria-hidden="true"/>}
-    </span>
-  </div>;
-}
-
-/** The three ratios live here and nowhere else, so the cards below can carry evidence instead. */
-function SignalRatios({ collection, ihhl, legacy, href }: { collection: CollectionProcurementSummary; ihhl: IhhlFunnel; legacy: LegacyWasteSummary; href: string }) {
-  return <article className="panel signal-ratios-card">
-    <span className="eyebrow">Operational contrast</span>
-    <b className="ratios-title">Three source ratios, measured separately</b>
-    <div className="signal-gauges">
-      <SignalGauge value={collection.deliveryRatio} coverage={collection.coverage} label="Collection supply" denominator="supplied / target" tone="teal"/>
-      <SignalGauge value={ihhl.completionRatio} coverage={ihhl.coverage} label="IHHL completion" denominator="completed / approved" tone="blue"/>
-      <SignalGauge value={legacy.clearanceRatio} coverage={legacy.coverage} label="Legacy clearance" denominator="cleared / target" tone="violet"/>
-    </div>
-    <p>Each has its own denominator and its own source. Shown side by side for contrast, never combined. The count under each is how many ULBs returned a value, against the 123 in the source registry.</p>
-    <a href={href}>Open operational analytics <Icon name="arrow" size={15}/></a>
-  </article>;
-}
-
 function PanelTitle({ icon, title, subtitle }: { icon: IconName; title: string; subtitle?: string }) {
   return <div className="panel-title"><span className="panel-icon"><Icon name={icon}/></span><div><h2><GlossaryText text={title}/></h2>{subtitle && <p><GlossaryText text={subtitle}/></p>}</div></div>;
 }
@@ -1214,6 +885,8 @@ const analyticsTabs: Array<{ id: AnalyticsTab; label: string; description: strin
   { id: 'collection', label: 'Collection', description: 'Procurement & assets' },
   { id: 'sanitation', label: 'Sanitation Delivery', description: 'IHHL delivery' },
   { id: 'processing', label: 'Processing Infrastructure', description: 'Waste & facilities' },
+  { id: 'delivery', label: 'Delivery Against Plan', description: 'Works programmes 2026-27' },
+  { id: 'rural', label: 'Rural Sanitation', description: 'Gram panchayat grain' },
   { id: 'outcomes', label: 'Swachh Outcomes', description: '2024 context' },
 ];
 
@@ -1239,63 +912,10 @@ function compactMetric(value: number) {
   return value.toLocaleString('en-IN');
 }
 
-function downloadEvidenceBrief(mode: DataMode) {
-  const generated = new Date().toISOString().slice(0, 10);
-  const lines = mode === 'SAMPLE'
-    ? (() => {
-      const collection = getCollectionProcurementSummary();
-      const ihhl = getIHHLFunnel();
-      const legacy = getLegacyWasteSummary();
-      const outcomes = getSwachhOutcomeSummary();
-      return [
-        'SASA INTELLIGENCE LAB — GOVERNED EVIDENCE BRIEF',
-        `Prepared ${generated} · retained static snapshots · client-side export`,
-        '',
-        'DECISION STATE',
-        'UNSCORED — descriptive review is available; performance scoring is held by identity, period, quality and policy gates.',
-        '',
-        'CURRENT EVIDENCE FOOTPRINT',
-        `29 complete retained datasets · ${governedSnapshotStats.records.toLocaleString('en-IN')} retained rows · 123 observed ULB-name candidates (not an official statewide denominator).`,
-        '',
-        'OPERATIONAL SIGNALS (2026)',
-        `Collection: ${formatValue(collection.supplied)} supplied against ${formatValue(collection.target)} target; ${formatPercent(collection.deliveryRatio)} reported delivery ratio; ${formatCoverage(collection.coverage)} returned coverage.`,
-        `IHHL: ${formatValue(ihhl.completed)} completed against ${formatValue(ihhl.approved)} approved; ${formatPercent(ihhl.completionRatio)} completion ratio; ${formatCoverage(ihhl.coverage)} returned coverage.`,
-        `Legacy waste: ${compactNumber(legacy.achievement)} cleared against ${compactNumber(legacy.target)} target; ${compactNumber(legacy.balance)} reported balance; ${formatCoverage(legacy.coverage)} returned coverage.`,
-        '',
-        'OUTCOME CONTEXT (2024)',
-        `${outcomes.odfRecords.toLocaleString('en-IN')} ODF records · ${outcomes.gfcRecords.toLocaleString('en-IN')} GFC records · ${outcomes.rankRecords.toLocaleString('en-IN')} rank records. Kept separate from 2026 operations; not a combined performance score.`,
-        '',
-        'EVIDENCE RULES',
-        'Blank / not returned is not counted as zero. Ratios retain their stated denominator. Source grain is not silently merged. Disputed values are excluded rather than averaged. No score or causal claim is produced without all gates.',
-        '',
-        'NEXT UNLOCK',
-        'Approve an authoritative ULB registry and reviewed name-to-ID crosswalk, then obtain aligned repeated periods and a documented scoring policy.',
-      ];
-    })()
-    : [
-      'SASA INTELLIGENCE LAB — CAPABILITY BRIEF',
-      `Prepared ${generated} · ${mode === 'DEMO' ? 'Demo mode uses synthetic fixtures.' : 'Live mode is a roadmap marker; no runtime connector is present.'}`,
-      '',
-      'This export is a presentation aid, not an authenticated source record. Switch to Governed data for retained evidence and provenance.',
-    ];
-  const text = `${lines.join('\n')}\n`;
-  try {
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `sasa-${mode === 'SAMPLE' ? 'governed-evidence' : mode.toLowerCase()}-brief-${generated}.txt`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 0);
-  } catch {
-    // Download is a convenience; the visible evidence remains usable if a browser blocks it.
-  }
-}
 
 function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab: AnalyticsTab }) {
   const [tab, setTab] = useState<AnalyticsTab>(initialTab);
+  const [lens, setLens] = useState<AnalyticsLens>('snapshot');
   // Static hosting: resolve ?tab on mount so the named-findings "See all" deep
   // links land on the right tab without a server to read the query.
   useEffect(() => {
@@ -1304,7 +924,8 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
     /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const urlTab = new URLSearchParams(window.location.search).get('tab');
-      if (urlTab === 'sanitation' || urlTab === 'processing' || urlTab === 'outcomes' || urlTab === 'collection') setTab(urlTab);
+      if (urlTab === 'sanitation' || urlTab === 'processing' || urlTab === 'delivery' || urlTab === 'rural' || urlTab === 'outcomes' || urlTab === 'collection') setTab(urlTab);
+      if (new URLSearchParams(window.location.search).get('view') === 'movement') setLens('movement');
     } catch {
       // Fall back to the default tab.
     }
@@ -1313,19 +934,31 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   // `null` keeps the long-standing behaviour of using each dataset's own latest returned
   // period. Picking an explicit period pins every view to that month instead.
   const [period, setPeriod] = useState<string | null>(null);
+  // Delivery reads a twelve-month plan, so a two-period movement lens does not apply.
+  const effectiveLens: AnalyticsLens = tab === 'outcomes' || tab === 'delivery' || tab === 'rural' ? 'snapshot' : lens;
+  const selectLens = (nextLens: AnalyticsLens) => {
+    setLens(nextLens);
+    const url = new URL(window.location.href);
+    if (nextLens === 'movement') url.searchParams.set('view', 'movement');
+    else url.searchParams.delete('view');
+    window.history.replaceState({}, '', url);
+  };
   const tabArt = tab === 'sanitation' ? '/assets/sasa/hero-ihhl.png' : tab === 'processing' ? '/assets/sasa/hero-iswm.png' : tab === 'outcomes' ? '/assets/sasa/hero-swachh.png' : '/assets/sasa/hero-collection.png';
   return <>
     <PageIntro visual="operational-analytics" art={tabArt} eyebrow={tab === 'outcomes' && mode === 'SAMPLE' ? 'Source year 2024' : 'Available now'} title={tab === 'outcomes' && mode === 'SAMPLE' ? '2024 Swachh Outcomes' : 'Operational Analytics'} description={tab === 'outcomes' && mode === 'SAMPLE' ? 'Descriptive outcome evidence, intentionally separated from 2026 operational snapshots.' : 'Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible.'}><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'SAMPLE' ? 'Authenticated snapshot analytics · scoring remains gated' : mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>
     <section className="analytics-control-deck" aria-label="Analytics controls">
-      <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => { setTab(item.id); const url = new URL(window.location.href); url.searchParams.set('tab', item.id); window.history.replaceState({}, '', url); }}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
-      {mode === 'SAMPLE' && <PeriodScrubber period={period} onChange={setPeriod}/>}
+      <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => { setTab(item.id); if (item.id === 'outcomes') setLens('snapshot'); const url = new URL(window.location.href); url.searchParams.set('tab', item.id); if (item.id === 'outcomes') url.searchParams.delete('view'); window.history.replaceState({}, '', url); }}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
+      {mode === 'SAMPLE' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && <div className="analytics-lens-bar"><div><span>Evidence lens</span><div className="analytics-lens-switch" role="tablist" aria-label="Evidence lens"><button type="button" role="tab" aria-selected={effectiveLens === 'snapshot'} className={effectiveLens === 'snapshot' ? 'active' : ''} onClick={() => selectLens('snapshot')}><Icon name="database" size={14}/>Current snapshot</button><button type="button" role="tab" aria-selected={effectiveLens === 'movement'} className={effectiveLens === 'movement' ? 'active' : ''} onClick={() => selectLens('movement')}><Icon name="chart" size={14}/>Between periods</button></div></div><p>{effectiveLens === 'movement' ? 'Exact ULB matches across the latest two periods in one retained source.' : 'Inspect one reported period with its denominator and evidence boundary.'}</p></div>}
+      {mode === 'SAMPLE' && effectiveLens === 'snapshot' && <PeriodScrubber period={period} onChange={setPeriod}/>}
     </section>
-    {mode === 'SAMPLE' && <ReportedPeriods tab={tab}/>} 
-    {mode === 'SAMPLE' && <AnalyticsInsightBrief tab={tab} period={period}/>} 
-    {mode !== 'SAMPLE' ? <ModeAnalyticsPlaceholder mode={mode} tab={tab}/> : <>
+    {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && <ReportedPeriods tab={tab}/>}
+    {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && <AnalyticsInsightBrief tab={tab} period={period}/>}
+    {mode !== 'SAMPLE' ? <ModeAnalyticsPlaceholder mode={mode} tab={tab}/> : effectiveLens === 'movement' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' ? <ReportedMovementExplorer movement={getReportedMovement(tab)}/> : <>
       {tab === 'collection' && <CollectionAnalytics period={period}/>}
       {tab === 'sanitation' && <SanitationAnalytics period={period}/>}
       {tab === 'processing' && <ProcessingAnalytics period={period}/>}
+      {tab === 'delivery' && <DeliveryPlans/>}
+      {tab === 'rural' && <RuralSanitation/>}
       {tab === 'outcomes' && <OutcomeAnalytics/>}
     </>}
     <EvidenceLabel mode={mode}/>
@@ -1370,6 +1003,58 @@ function ReportedPeriods({ tab }: { tab: AnalyticsTab }) {
   return <div className="reported-periods"><Icon name="calendar" size={14}/><span>Reporting periods available</span><b>{compact.join(' · ')}</b><small>Reported period history—not a trend.</small></div>;
 }
 
+function ReportedMovementExplorer({ movement }: { movement: ReportedMovement }) {
+  const changed = movement.rows.filter((row) => row.delta !== 0);
+  const visible = changed.slice(0, 10);
+  const maxDelta = Math.max(...visible.map((row) => Math.abs(row.delta)), 1);
+  const omitted = Math.max(changed.length - visible.length, 0);
+  const value = (amount: number) => `${compactMetric(amount)} ${movement.unit}`;
+  const signed = (amount: number) => `${amount > 0 ? '+' : amount < 0 ? '−' : ''}${compactMetric(Math.abs(amount))}`;
+  const headline = movement.id === 'collection' ? 'Where reported vehicle supply changed'
+    : movement.id === 'sanitation' ? 'Where reported IHHL completions changed'
+      : 'Where reported legacy-waste balance changed';
+
+  return <article className={`panel movement-explorer movement-${movement.id}`}>
+    <header className="movement-head">
+      <div><span className="eyebrow">Exact-match period comparison</span><h2>{headline}</h2><p>{movement.metricLabel} · {movement.grain} grain · one retained source</p></div>
+      <div className="movement-period"><span>{movement.previousPeriod}</span><Icon name="arrow" size={17}/><b>{movement.currentPeriod}</b></div>
+    </header>
+    <section className="movement-kpis" aria-label="Movement classification">
+      <div className="is-matched"><small>Comparable</small><strong>{movement.matched}</strong><span>exact ULB pairs</span></div>
+      <div className="is-higher"><small>Higher current</small><strong>{movement.increased}</strong><span>reported values</span></div>
+      <div className="is-steady"><small>Unchanged</small><strong>{movement.unchanged}</strong><span>reported values</span></div>
+      <div className="is-lower"><small>Lower current</small><strong>{movement.decreased}</strong><span>reported values</span></div>
+    </section>
+    <div className="movement-layout">
+      <section className="movement-plot" aria-label={`Largest absolute changes in ${movement.metricLabel}`}>
+        <div className="movement-plot-head"><div><span>{changed.length > 0 ? 'Largest absolute reported changes' : 'No movement among comparable pairs'}</span><small>{changed.length > 0 ? `${visible.length} of ${changed.length} changed pairs shown` : `All ${movement.matched} exact matches repeated the same value`}</small></div>{changed.length > 0 && <div className="movement-axis"><span>Lower</span><i/><span>Higher</span></div>}</div>
+        {visible.length > 0 ? <ol>{visible.map((row) => {
+          const width = Math.max((Math.abs(row.delta) / maxDelta) * 48, row.delta === 0 ? 0 : 1.5);
+          return <li key={row.key} className={`direction-${row.direction}`} title={`${row.ulb}: ${value(row.previous)} to ${value(row.current)}`}>
+            <div className="movement-place"><b>{row.ulb}</b><span>{row.district}</span></div>
+            <div className="movement-values"><span>{compactMetric(row.previous)}</span><Icon name="arrow" size={12}/><b>{compactMetric(row.current)}</b></div>
+            <div className="movement-delta-track" aria-hidden="true"><i className="movement-zero"/><span style={row.delta >= 0 ? { left: '50%', width: `${width}%` } : { right: '50%', width: `${width}%` }}/></div>
+            <strong className="movement-delta">{signed(row.delta)}</strong>
+          </li>;
+        })}</ol> : <div className="movement-static-state"><div className="static-period-node"><small>{movement.previousPeriod}</small><strong>{movement.matched}</strong><span>exact ULB values</span></div><div className="static-connector"><i/><span><Icon name="check" size={18}/></span><i/></div><div className="static-period-node is-current"><small>{movement.currentPeriod}</small><strong>{movement.matched}</strong><span>same values returned</span></div><p><b>No reported movement.</b> This supports a repeated-value finding only; it does not establish that real-world activity stopped.</p></div>}
+        {omitted > 0 && <p className="movement-omitted">+ {omitted} additional changed pairs retained in the classification above.</p>}
+      </section>
+      <aside className="movement-ledger">
+        <div><span className="eyebrow">Comparison ledger</span><h3>What entered the view</h3></div>
+        <dl>
+          <div><dt>Matched in both periods</dt><dd>{movement.matched}</dd></div>
+          <div><dt>{movement.previousPeriod} only</dt><dd>{movement.previousOnly}</dd></div>
+          <div><dt>{movement.currentPeriod} only</dt><dd>{movement.currentOnly}</dd></div>
+          <div><dt>Blank, disputed, or quality-held</dt><dd>{movement.excluded}</dd></div>
+        </dl>
+        <div className="movement-basis"><Icon name="link" size={15}/><p><b>Join basis</b>{movement.basis}</p></div>
+        <div className="movement-boundary"><Icon name="shield" size={16}/><p><b>Decision boundary</b>{movement.boundary}</p></div>
+      </aside>
+    </div>
+    <footer className="movement-foot"><span><Icon name="database" size={14}/>{movement.tableKey}</span><b>Two returned periods describe movement—not persistence, trend, cause, or a performance score.</b></footer>
+  </article>;
+}
+
 function ModeAnalyticsPlaceholder({ mode, tab }: { mode: DataMode; tab: AnalyticsTab }) {
   const label = analyticsTabs.find((item) => item.id === tab)?.label;
   if (mode === 'LIVE') return <article className="panel analytics-placeholder"><Icon name="link" size={34}/><h2>Live connector — on the roadmap</h2><p>The planned on-demand authenticated pull is not yet enabled. Switch to Governed data to work with the same sources today, retained as snapshots.</p></article>;
@@ -1386,6 +1071,8 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
   const legacy = getLegacyWasteSummary(period);
   const processing = getProcessingRegistry(period);
   const outcomes = getSwachhOutcomeSummary();
+  const primaryCount = tab === 'collection' ? collection.rows.length : tab === 'sanitation' ? sanitation.rows.length : tab === 'processing' ? legacy.rows.length : outcomes.rows.length;
+  if (primaryCount === 0) return <article className="screen-feature sf-analytics" aria-label="Operational evidence briefing"><div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">Selected snapshot / evidence unavailable</span><h2>No retained {tab === 'processing' ? 'legacy-waste' : tab === 'sanitation' ? 'IHHL' : tab === 'collection' ? 'ULB procurement' : 'outcome'} rows for this selection.</h2><div className="sf-chain"><p>Choose another reported period. Other source panels retain their own availability and boundaries.</p></div></div><div className="sf-big-metric" data-unavailable="true"><strong>Not returned</strong><small>Missing evidence is not zero activity.</small></div></div></article>;
   const content = tab === 'collection' ? {
     metric: formatPercent(collection.deliveryRatio), metricLabel: 'supplied / target', coverage: `${formatCoverage(collection.coverage)} ULBs returned`,
     headline: 'Reported delivery is far behind procurement intent',
@@ -1415,9 +1102,9 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
     review: `Only ${outcomes.gfcRecords} GFC records returned; obtain aligned operational and outcome periods.`,
     limit: 'These outcomes cannot be attributed to, or compared directly with, 2026 operations.',
   };
-  return <article className={`panel insight-brief insight-${tab}`}>
-    <div className="insight-brief-head"><div className="insight-metric"><span>At a glance</span><strong>{content.metric}</strong><small>{content.metricLabel}</small><em>{content.coverage}</em></div><div className="insight-lead"><span className="eyebrow">Current evidence read</span><h2>{content.headline}</h2></div><div className="insight-evidence"><span><Icon name="database" size={14}/>Evidence chain</span><strong>{content.evidence}</strong></div></div>
-    <div className="insight-grid"><InsightCell icon="search" label="Why it matters" text={content.meaning}/><InsightCell icon="target" label="Where to review" text={content.review}/><InsightCell icon="shield" label="Boundary" text={content.limit}/></div>
+  return <article className="screen-feature sf-analytics" aria-label="Operational evidence briefing">
+    <div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">{tab === 'outcomes' ? 'Historical evidence / 2024' : 'Operational evidence / selected snapshot'}</span><h2>{content.headline}</h2><div className="sf-chain"><span>Reported evidence</span><p>{content.evidence}</p></div></div><div className="sf-big-metric" data-unavailable={content.metric === 'Not computable'}><strong>{content.metric}</strong><span>{content.metricLabel}</span><small>{content.coverage}</small><i aria-hidden="true"/></div></div>
+    <div className="sf-notes"><InsightCell icon="search" label="Why it matters" text={content.meaning}/><InsightCell icon="target" label="Where to review" text={content.review}/><InsightCell icon="shield" label="Boundary" text={content.limit}/></div>
   </article>;
 }
 
@@ -1489,7 +1176,7 @@ function OperationalEntityComparison({ domain, period }: { domain: OperationalCo
 
   return <article className="panel operational-compare" aria-label="Same-source ULB comparison">
     <header className="operational-compare-head">
-      <div><span className="eyebrow">Source-locked comparison</span><h2>Compare returned ULBs without mixing the evidence.</h2><p>{model.source} · {periodLabel} · ULB grain. Default cards show the largest source-reported gaps; they are not a score.</p></div>
+      <div><span className="eyebrow">Same source · same period · same measure</span><h2>Compare ULBs on the same evidence.</h2><p>{model.source} · {periodLabel} · ULB grain. Default cards show the largest source-reported gaps; they are not a score.</p></div>
       <div className="operational-compare-picker">
         <label htmlFor={`compare-${domain}`}>Browse another ULB</label>
         <select id={`compare-${domain}`} value="" disabled={selected.length >= 3 || available.length === 0} onChange={(event) => { if (event.target.value) setSelectedKeys((current) => [...current, event.target.value].slice(0, 3)); }}>
@@ -1511,15 +1198,16 @@ function OperationalEntityComparison({ domain, period }: { domain: OperationalCo
 }
 
 function StageCohortAnalytics({ group }: { group: OperationalStageCohorts }) {
-  const peak = Math.max(...group.cohorts.map((cohort) => cohort.count), 1);
+  const largest = [...group.cohorts].sort((left, right) => right.count - left.count)[0];
   return <article className="panel stage-cohort-panel">
     <header className="stage-cohort-head"><PanelTitle icon="target" title={group.title} subtitle="Mutually exclusive returned-record stages · descriptive, not scored"/><div className="stage-classified"><b>{group.classified}</b><span>classified ULB records</span></div></header>
-    <div className="stage-cohort-grid">{group.cohorts.map((cohort) => <section key={cohort.id} className={`stage-cohort tone-${cohort.tone}`}>
-      <div className="stage-cohort-number"><strong>{cohort.count}</strong><span>{cohort.label}</span></div>
-      <i className="stage-cohort-bar"><em style={{ width: `${Math.max(cohort.count > 0 ? 4 : 0, (cohort.count / peak) * 100)}%` }}/></i>
-      <p>{cohort.detail}</p>
-      <small>{cohort.examples.length ? `Examples: ${cohort.examples.map((item) => item.ulb).join(' · ')}` : 'No returned records in this stage.'}</small>
-    </section>)}</div>
+    {largest && group.classified > 0 && <div className="cohort-quick-read"><strong>{largest.count}<small> / {group.classified}</small></strong><div><span>Largest reported group · {group.period}</span><b>{largest.detail}</b><p>Of classified ULB records in this source—not all Andhra Pradesh ULBs.</p></div></div>}
+    <div className="cohort-composition" role="img" aria-label={group.cohorts.map((item) => `${item.label}: ${item.count} of ${group.classified} classified records`).join('; ')}>{group.cohorts.filter((item) => item.count > 0).map((item) => <span key={item.id} className={`cohort-tone-${item.tone}`} style={{ flexGrow: item.count }} title={`${item.label}: ${item.count}`}/>)}</div>
+    <p className="cohort-scale-note">One shared denominator: {group.classified} classified returned ULB records. Counts are not performance ratings.</p>
+    <div className="cohort-ledger">{group.cohorts.map((cohort) => <details key={cohort.id} className={`cohort-tone-${cohort.tone}`}>
+      <summary><span className="cohort-label"><i/><b>{cohort.label}</b></span><span className="cohort-track"><i style={{ width: `${group.classified > 0 ? cohort.count / group.classified * 100 : 0}%` }}/></span><strong>{cohort.count}</strong><Icon name="arrow" size={16}/></summary>
+      <div className="cohort-detail"><p>{cohort.detail}</p>{cohort.examples.length > 0 ? <div><span>Reported examples</span>{cohort.examples.map((item) => <span key={`${item.district}-${item.ulb}`}><b>{item.ulb}</b><small>{item.district}</small><DrillLink ulb={item.ulb} district={item.district} from="Stage review"/></span>)}</div> : <p>No returned records in this stage.</p>}</div>
+    </details>)}</div>
     <footer className="stage-cohort-foot"><span><Icon name="database" size={15}/><b>{formatCoverage(group.coverage)} {group.coverage.unit}</b> returned · {notReturned(group.coverage)} not returned · {group.period}</span><span>{group.excluded > 0 ? <><b>{group.excluded} excluded:</b> {group.excludedDetail}</> : 'No returned records excluded from classification.'}</span><small>{group.rule}</small></footer>
   </article>;
 }
@@ -1531,10 +1219,11 @@ function CollectionAnalytics({ period }: { period: string | null }) {
   const deliveryPeers = useMemo(() => distributionOf(data.rows.map((row) => row.deliveryRatio)), [data]);
   const districtAssets = getDistrictCollectionAssetSummary();
   const topRows = [...data.rows].sort((a, b) => (b.deliveryGap ?? -1) - (a.deliveryGap ?? -1)).slice(0, 5);
+  if (view === 'procurement' && data.rows.length === 0) return <section className="analytics-view"><InternalViewSwitch label="Collection evidence view" value={view} onChange={setView} items={[["procurement", "ULB procurement"], ["district-assets", "District collection assets"]]}/><EmptySourcePeriod/></section>;
   return <section className="analytics-view collection-view">
     <InternalViewSwitch label="Collection evidence view" value={view} onChange={setView} items={[['procurement', 'ULB procurement'], ['district-assets', 'District collection assets']]}/>
     {view === 'procurement' ? <>
-      <article className="panel analytical-hero funnel-panel primary-visual conversion-hero"><PanelTitle icon="chart" title="Collection procurement funnel" subtitle="E-Auto Service Model · ULB grain · latest period July 2026 from 166-row full export"/><ConversionJourney stages={[["Target", data.target, "teal"], ["Work orders issued", data.workOrders, "blue"], ["Vehicles supplied", data.supplied, "violet"]]}/><div className="funnel-foot"><span>Across returned ULB records</span><b>Reported gap: {data.deliveryGap.toLocaleString('en-IN')} vehicles</b></div></article>
+      <article className="panel analytical-hero funnel-panel primary-visual conversion-hero"><PanelTitle icon="chart" title="Vehicles: planned, ordered and supplied" subtitle={`E-Auto Service Model · urban local body (ULB) records · ${data.rows[0]?.period ?? 'No returned period'}`}/><ConversionJourney stages={[["Target", data.target, "teal"], ["Work orders issued", data.workOrders, "blue"], ["Vehicles supplied", data.supplied, "violet"]]}/><div className="funnel-foot"><span>Across returned ULB records</span><b>Reported gap: {data.deliveryGap.toLocaleString('en-IN')} vehicles</b></div></article>
       <div className="analytics-kpis"><MiniKpi icon="chart" label="Delivery ratio" value={formatPercent(data.deliveryRatio)} detail="supplied / target" tone="teal" coverage={data.coverage}/><MiniKpi icon="database" label="Work-order ratio" value={formatPercent(data.workOrderRatio)} detail="work orders / target" tone="blue" coverage={data.coverage}/><MiniKpi icon="alert" label="Reported shortfall" value={data.deliveryGap.toLocaleString('en-IN')} detail="target minus supplied" tone="violet"/></div>
       <StageCohortAnalytics group={getCollectionStageCohorts(period)}/>
       <CollectionSourceContrast procurement={data} districts={districtAssets}/>
@@ -1578,8 +1267,9 @@ function SanitationAnalytics({ period }: { period: string | null }) {
   const data = getIHHLFunnel(period);
   const completionPeers = useMemo(() => distributionOf(data.rows.map((row) => row.completionRatio)), [data]);
   const topRows = [...data.rows].sort((a, b) => (b.openApprovals ?? -1) - (a.openApprovals ?? -1)).slice(0, 5);
+  if (data.rows.length === 0) return <EmptySourcePeriod/>;
   return <section className="analytics-view sanitation-view">
-    <article className="panel analytical-hero funnel-panel primary-visual conversion-hero sanitation-conversion"><PanelTitle icon="chart" title="IHHL delivery funnel" subtitle="Four-stage sanitation pipeline · exact duplicates excluded and retained as quality evidence"/><ConversionJourney stages={[["Identified", data.identified, "teal"], ["Approved", data.approved, "blue"], ["Under construction", data.underConstruction, "violet"], ["Completed", data.completed, "teal"]]}/></article>
+    <article className="panel analytical-hero funnel-panel primary-visual conversion-hero sanitation-conversion"><PanelTitle icon="chart" title="Household toilets: approval to completion" subtitle={`Individual household latrines (IHHL) · ${data.rows[0]?.period ?? 'No returned period'} · exact duplicate rows excluded`}/><ConversionJourney stages={[["Identified", data.identified, "teal"], ["Approved", data.approved, "blue"], ["Under construction", data.underConstruction, "violet"], ["Completed", data.completed, "teal"]]}/></article>
     <div className="analytics-kpis"><MiniKpi icon="check" label="Completion ratio" value={formatPercent(data.completionRatio)} detail="completed / approved" tone="teal" coverage={data.coverage}/><MiniKpi icon="target" label="Identified coverage" value={formatPercent(data.identifiedCoverage)} detail="completed / identified" tone="blue" coverage={data.coverage}/><MiniKpi icon="clock" label="Open approvals" value={data.openApprovals.toLocaleString('en-IN')} detail="approved minus completed" tone="violet"/></div>
     <StageCohortAnalytics group={getIHHLStageCohorts(period)}/>
     <OperationalEntityComparison key={`sanitation-${period ?? 'latest'}`} domain="sanitation" period={period}/>
@@ -1612,6 +1302,7 @@ function ProcessingAnalytics({ period }: { period: string | null }) {
 
 function LegacyWasteAnalytics({ data, period }: { data: ReturnType<typeof getLegacyWasteSummary>; period: string | null }) {
   const clearancePeers = useMemo(() => distributionOf(data.rows.map((row) => row.clearanceRatio)), [data]);
+  if (data.rows.length === 0) return <EmptySourcePeriod/>;
   const reviewRows = [...data.rows].filter((row) => (row.balance ?? 0) > 0).sort((left, right) => (right.balance ?? 0) - (left.balance ?? 0)).slice(0, 8);
   return <>
     <div className="legacy-visual-grid"><article className="panel legacy-hero primary-visual">
@@ -1688,17 +1379,19 @@ function OutcomeEvidenceLandscape({ data }: { data: ReturnType<typeof getSwachhO
 }
 
 function ConversionJourney({ stages }: { stages: Array<[string, number, string]> }) {
-  const base = Math.max(stages[0]?.[1] ?? 0, 1);
-  return <div className={`conversion-journey stages-${stages.length}`}>
+  const base = stages[0]?.[1] ?? 0;
+  const max = Math.max(1, ...stages.map(([, value]) => value));
+  const basis = stages[0]?.[0].toLowerCase() ?? 'first stage';
+  return <div className="evidence-stage-chart" aria-label="Reported stage quantities">
+    <div className="stage-chart-key"><span>Reported stage</span><span>Quantity · shared linear scale</span><span>Share of {basis}</span></div>
     {stages.map(([label, value, tone], index) => {
-      const previous = stages[index - 1]?.[1];
-      const reduction = previous === undefined ? null : Math.max(previous - value, 0);
-      const share = Math.max(1.2, Math.min(100, value / base * 100));
-      return <div className="journey-segment" key={label}>
-        {reduction !== null && <div className="journey-loss"><span>{reduction.toLocaleString('en-IN')}</span><small>not represented in next reported stage</small><Icon name="arrow" size={20}/></div>}
-        <article className={`journey-stage stage-${tone}`}><span className="journey-order">{String(index + 1).padStart(2, '0')}</span><small>{label}</small><b className="journey-value">{value.toLocaleString('en-IN')}</b><i><b style={{ width: `${share}%` }}/></i><em>{Math.round(value / base * 1000) / 10}% of target</em></article>
+      return <div className={`evidence-stage stage-${tone}`} key={label}>
+        <span className="stage-chart-label"><small>{String(index + 1).padStart(2, '0')}</small><b>{label}</b></span>
+        <div className="stage-chart-quantity"><b>{value.toLocaleString('en-IN')}</b><i aria-hidden="true"><em style={{width: `${Math.max(0, value) / max * 100}%`}}/></i></div>
+        <strong>{base > 0 ? `${Math.round(value / base * 1000) / 10}%` : 'Not computable'}</strong>
       </div>;
     })}
+    <p>Bar lengths show reported quantities, without minimum-width inflation. Shares use {base.toLocaleString('en-IN')} {basis} as their denominator; stages are not added together.</p>
   </div>;
 }
 
@@ -1709,6 +1402,10 @@ function PipelineDropoff({ values }: { values: Array<[string, number]> }) {
 
 function MeaningFooter({ children }: { children: React.ReactNode }) {
   return <p className="meaning-footer"><Icon name="shield" size={16}/><b>What this does not mean</b><span>{children}</span></p>;
+}
+
+function EmptySourcePeriod() {
+  return <div className="empty-source-period"><Icon name="database" size={24}/><div><b>No retained source rows for this period</b><p>Charts and comparisons are withheld. Select a returned period to inspect the source; absence is not zero activity.</p></div></div>;
 }
 
 function MiniKpi({ icon, label, value, detail, tone, coverage }: { icon?: IconName; label: string; value: string; detail: string; tone: string; coverage?: Coverage }) {
@@ -1843,52 +1540,6 @@ function useDistrictShapes() {
   return { shapes, failed };
 }
 
-function OperationalDistrictSignalMap() {
-  const maps = useMemo(() => getDistrictSignalMaps(), []);
-  const { shapes, failed } = useDistrictShapes();
-  const [activeId, setActiveId] = useState<DistrictSignalMap['id']>(maps[0]?.id ?? 'collection');
-  const [hover, setHover] = useState<string | null>(null);
-  const [pinned, setPinned] = useState<string | null>(null);
-  const active = maps.find((map) => map.id === activeId) ?? maps[0];
-  if (!active) return null;
-  const expand = (name: string) => name.toUpperCase().replace(/[^A-Z]/g, '') === 'SPSRNELLORE' ? 'SRI POTTI SRIRAMULU NELLORE' : name;
-  const match = (name: string) => active.districts.find((district) => sameDistrict(expand(district.district), expand(name))) ?? null;
-  const peak = Math.max(...active.districts.map((district) => district.value), 1);
-  const focusName = hover ?? pinned;
-  const focused = (focusName ? match(focusName) : null) ?? active.districts[0] ?? null;
-  const total = active.districts.reduce((sum, district) => sum + district.value, 0);
-  return <article className="panel district-signal-panel">
-    <header className="district-signal-head"><PanelTitle icon="building" title="District operational signal map" subtitle="Switchable, single-source geography · absolute signal volume, never a combined score"/><div className="presenter-map-tabs" role="tablist" aria-label="District operational measure">{maps.map((map) => <button key={map.id} role="tab" aria-selected={map.id === active.id} className={map.id === active.id ? 'active' : ''} onClick={() => { setActiveId(map.id); setHover(null); setPinned(null); }}><span>{map.label}</span><b>{compactMetric(map.districts.reduce((sum, district) => sum + district.value, 0))}</b><small>{map.unit}</small></button>)}</div></header>
-    <div className="district-signal-layout">
-      <section className="presenter-map-canvas">
-        {failed && <p className="map-fallback">District boundaries could not be loaded.</p>}
-        {!failed && !shapes && <p className="map-fallback">Loading district boundaries…</p>}
-        {shapes && <svg viewBox="0 0 560 470" role="img" aria-label={`Andhra Pradesh district map of ${active.title}`}><defs><pattern id="overview-map-absent" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--absence-ink)" strokeWidth="2.2"/></pattern></defs>{shapes.map((shape) => { const district = match(shape.d); const intensity = district ? Math.sqrt(district.value / peak) : null; const isActive = Boolean(focusName && sameDistrict(expand(focusName), expand(shape.d))); return <path key={shape.d} d={shape.path} tabIndex={0} role="button" aria-pressed={Boolean(pinned && sameDistrict(expand(pinned), expand(shape.d)))} aria-label={district ? `${district.district}: ${district.value.toLocaleString('en-IN')} ${active.unit}. Activate to pin.` : `${shape.d}: not returned in this source. Activate to pin.`} className={`presenter-map-district${isActive ? ' is-active' : ''}${district ? '' : ' is-absent'}`} fill={district ? `color-mix(in oklab, var(--teal) ${Math.round(16 + (intensity ?? 0) * 84)}%, var(--surface))` : 'url(#overview-map-absent)'} onClick={() => setPinned((current) => current === shape.d ? null : shape.d)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPinned((current) => current === shape.d ? null : shape.d); } }} onMouseEnter={() => setHover(shape.d)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(shape.d)} onBlur={() => setHover(null)}/>; })}</svg>}
-        <div className="presenter-map-legend"><span>District signal volume</span><i/><div><b>0</b><b>{compactMetric(peak)}</b></div><small>Square-root colour scale · tap a district to pin · absence hatched</small></div>
-        {focused && <div className="presenter-map-focus"><small>{focused.district}</small><b>{focused.value.toLocaleString('en-IN')} {active.unit}</b><span>{focused.expected > 0 && focused.returned <= focused.expected ? `${focused.returned} / ${focused.expected} registry ULBs returned` : `${focused.returned} returned candidates · registry anchor ${focused.expected || 'unmapped'} · label review`}</span>{focused.topEntity && <em>Largest: {focused.topEntity.ulb} · {focused.topEntity.value.toLocaleString('en-IN')}</em>}</div>}
-      </section>
-      <aside className="presenter-map-ranking"><header><span><small>{active.period} · one retained source</small><h2>{active.title}</h2></span><strong>{total.toLocaleString('en-IN')}<small>{active.unit}</small></strong></header><ol>{active.districts.slice(0,6).map((district,index) => <li key={district.district} onMouseEnter={() => setHover(district.district)} onMouseLeave={() => setHover(null)}><span>{String(index+1).padStart(2,'0')}</span><div><b>{district.district}</b><i><em style={{width:`${Math.max(3,district.value/peak*100)}%`}}/></i><small>{district.affected} affected · {district.expected > 0 && district.returned <= district.expected ? `${district.returned}/${district.expected} registry ULBs returned` : `${district.returned} returned · registry ${district.expected || 'unmapped'} · label review`}</small></div><strong>{compactMetric(district.value)}</strong></li>)}</ol><footer><Icon name="shield" size={15}/><span><b>{formatCoverage(active.coverage)} {active.coverage.unit} returned.</b> {active.rule} District labels are candidate matches to the 2022 boundary file.</span></footer></aside>
-    </div>
-  </article>;
-}
-
-/**
- * Evidence density across Andhra Pradesh.
- *
- * Colour is how many independent retained sources carry a row for each district,
- * not a performance measure. That choice is deliberate: ULB reporting coverage is
- * 123 of 123, so a coverage map would be a single flat colour, while source
- * density ranges from 3 to 28 and shows where the evidence is genuinely thin.
- *
- * A district with no retained row is filled with the house absence hatch rather
- * than the palest step of the ramp, so "nothing came back" can never be misread
- * as "a low value".
- *
- * The bundled boundaries are the 2022 reorganisation, 26 districts. Markapuram
- * and Polavaram were created on 31 December 2025 and have no boundary in any
- * public source yet; they appear in the data, so they are listed beside the map
- * rather than silently dropped.
- */
 function DistrictEvidenceMap() {
   const { shapes, failed } = useDistrictShapes();
   const [hover, setHover] = useState<string | null>(null);
@@ -2016,8 +1667,8 @@ function ClearanceRankContrast() {
       <span className="contrast-gap">{data.clearancePeriod} vs {data.rankYear} rank · {monthsApart(data.clearancePeriod, data.rankYear)}</span>
     </div>
     <p className="contrast-lede">
-      The only pairing the retained evidence can populate. Every other axis is empty:
-      IHHL completion is zero for 58 of 59 ULBs and collection delivery for 80 of 83.
+      A varied historical-outcome comparison. Other operational measures can be paired,
+      but most reported IHHL completions and vehicle-supply counts are zero—not missing.
       <b> The two axes here are two years apart, so position shows contrast, never cause.</b>
     </p>
     <div className="contrast-body">
@@ -2054,7 +1705,7 @@ function ClearanceRankContrast() {
       </aside>
     </div>
     <footer className="contrast-foot">
-      <span><b>{data.atCeiling}</b> sit at exactly 100% cleared, which is worth questioning before it is read as success.</span>
+      <span><b>{data.atCeiling}</b> report at least 100% cleared; positions above 100% are capped at the chart edge.</span>
       <span><b>{data.excludedNoRank}</b> excluded: a clearance figure but no rank record at all.</span>
       <span><b>{data.excludedNoClearance}</b> excluded: a rank record but no usable exact-signature clearance pair.</span>
       <span><b>{data.excludedZeroRank}</b> parsed rank records returned zero; missing ranks remain “not returned.”</span>
@@ -2073,6 +1724,14 @@ function monthsApart(period: string, rankYear: number): string {
 function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
   const stats = useMemo(() => crosswalkStats(), []);
   const queue = useMemo(() => crosswalkQueue(), []);
+  const identityReach = useMemo(() => getIdentityReach(), []);
+  const crosswalk = useMemo(() => getLgdCrosswalk(), []);
+  // Read the outcome year from the retained evidence rather than restating "2024".
+  const outcomeYearLabel = useMemo(() => {
+    const years = [...new Set((governedSnapshotByKey.get('swacch_survekshan_info_new1_api')?.records ?? [])
+      .map((record) => String(record.year ?? '').trim()).filter(Boolean))].sort();
+    return years.length ? years.join(', ') : '2024';
+  }, []);
   const decisions = useSyncExternalStore(subscribeDecisions, readDecisions, serverDecisions);
 
   function decide(item: QueueItem, state: DecisionState, ulbId: string | null) {
@@ -2105,20 +1764,26 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
   const localIdentityReviewComplete = reviewed >= stats.residualNames;
   const blockers: Array<[IconName, string, string, boolean]> = [
     ['link', localIdentityReviewComplete ? 'Working crosswalk reviewed locally' : 'ULB identity not reviewed', localIdentityReviewComplete ? `${reviewed} of ${stats.residualNames} residual names carry a local decision; formal sign-off is still required.` : `${stats.residualNames - reviewed} of ${stats.residualNames} observed names still need a review decision.`, localIdentityReviewComplete],
-    ['calendar', 'Periods not aligned', 'Operations and outcomes are from different months, so they cannot be compared.', false],
-    ['clock', 'Outcome data is older', 'The only outcome data we have is from 2024. Operations are from 2026.', false],
+    // The platform supplied its own identity mapping in September. It does not clear
+    // this gate, and the reason it does not is evidence, so it is stated as a gate.
+    ['alert', 'Supplied LGD mapping is not usable as identity', `${identityReach.enrichedDatasets} of ${identityReach.totalDatasets} retained datasets carry LGD codes, reaching ${Math.round(identityReach.coverageRatio * 100)}% of observed entities. ${crosswalk.selfContradictions.length} district labels map to two different LGD districts inside one source.`, false],
+    ['calendar', 'Periods not aligned', 'Operational and outcome periods have not been aligned for comparison.', false],
+    ['clock', 'Outcome data is older', `The retained outcome evidence reports ${outcomeYearLabel}. Operations are from 2026.`, false],
     ['shield', 'Scoring policy not approved', 'Nobody has agreed the thresholds yet, so there is nothing to score against.', false],
   ];
 
   return <>
-    <PageIntro visual="gap-radar" eyebrow="What the evidence supports today" title="Scoring starts once the operational and outcome data line up." description="The layout below shows what this becomes. Real entities are not scored yet because the evidence is not there."/>
-    <ModeKey mode="SAMPLE"/>
-    <section className="panel sample-radar-state">
-      <div className="radar-zero"><span><Icon name="target" size={30}/></span><small>Current state</small><strong>0</strong><b>entities eligible for scoring</b><p>Real entities stay unscored until there is enough evidence to score them.</p></div>
-      <div className="radar-blockers"><h2>What is blocking activation?</h2>{blockers.map(([icon, title, detail, done]) => <div key={title} className={done ? 'blocker-cleared' : undefined}><span><Icon name={done ? 'check' : icon} size={18}/></span><p><b>{title}</b><small>{detail}</small></p></div>)}</div>
-      <div className="radar-next"><span className="eyebrow">Next</span><b>Formal crosswalk sign-off + aligned current outcomes</b><p>The working review is complete locally. Formal approval and current outcome evidence still require owner action.</p><a href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>Inspect readiness evidence <Icon name="arrow" size={15}/></a></div>
+    <PageIntro visual="gap-radar" eyebrow="Evidence-gated assessment" title="Gap Radar" description="Review identity, periods and policy before assigning a performance label."/>
+    <section className="screen-feature sf-radar" aria-label="Scoring activation briefing">
+      <div className="sf-dark sf-radar-grid">
+        <div className="sf-radar-lead"><span className="sf-eyebrow">Gap Radar / evidence boundary</span><h2>Review is possible.<br/><em>Scoring must wait.</em></h2><div className="radar-zero"><strong>0</strong><div><b>entities eligible <br/>for scoring</b><span>UNSCORED</span></div></div><p>No performance label is assigned before every required evidence gate passes.</p></div>
+        <div className="sf-gate-sequence"><span className="sf-eyebrow">What is blocking activation?</span>{blockers.map(([icon, title, detail, done], index) => <div key={title} className={done ? 'is-local' : ''}><span className="sf-gate-number">{String(index + 1).padStart(2, '0')}</span><div><b>{title}</b><p>{detail}</p><small>{done ? 'Local review only · formal approval pending' : 'Required before scoring'}</small></div><Icon name={done ? 'check' : icon} size={18}/></div>)}</div>
+      </div>
+      <div className="sf-next-action"><Icon name="arrow" size={24}/><div><span>Next owner action</span><b>{localIdentityReviewComplete ? 'Formal crosswalk sign-off + aligned current outcomes' : 'Complete identity review + obtain aligned current outcomes'}</b><p>{localIdentityReviewComplete ? 'Local decisions support review; they do not replace formal approval.' : 'Unreviewed names remain outside approved cross-source identity.'} Period, quality and policy conditions still apply.</p></div><a href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>Inspect readiness evidence <Icon name="arrow" size={15}/></a></div>
     </section>
+    <LgdCrosswalkPanel/>
     <CrosswalkWorkbench stats={stats} queue={queue} decisions={decisions} approved={approved} reviewed={reviewed} remaining={remaining} onDecide={decide} onClear={clearDecision} onApproveBulk={approveBulk}/>
+    <VehiclePairing/>
     <ClearanceRankContrast/>
     <EvidenceLabel/>
   </>;
@@ -2152,7 +1817,7 @@ function CrosswalkPayoff({ decisions }: { decisions: Record<string, Decision> })
   return <div className="crosswalk-payoff" aria-label="Crosswalk effect and remaining scoring gates">
     <div className="payoff-result">
       <span className="payoff-icon"><Icon name="link" size={20}/></span>
-      <div><small>Evidence links recovered</small><b>{grid.totals.recovered.toLocaleString('en-IN')} <em>observations</em></b><p>Approved aliases make previously disconnected retained rows reachable. <a href={withMode('/data-readiness', 'SAMPLE', 'light')}>Inspect recovered cells</a>.</p></div>
+      <div><small>Evidence links recovered</small><b>{grid.totals.recovered.toLocaleString('en-IN')} <em>observations</em></b><p>Locally approved aliases make previously disconnected retained rows reachable. <a href={`${withMode('/data-readiness', 'SAMPLE', 'light')}&view=coverage`}>Inspect recovered cells</a>.</p></div>
       <div className="payoff-remaining"><strong>{absentPercent}%</strong><span>still not returned</span><small>kept distinct from zero</small></div>
     </div>
     <div className="payoff-next">
@@ -2253,7 +1918,7 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
 
   return <section className={`panel crosswalk-workbench${complete ? ' is-complete' : ''}`} aria-label="Candidate ULB crosswalk workbench">
     <div className="catalogue-heading">
-      <PanelTitle icon="link" title="Crosswalk workbench" subtitle="Propose, review and record candidate ULB matches against the source-provided anchor registry"/>
+      <PanelTitle icon="link" title="Connecting ULB names across sources" subtitle="Crosswalk workbench · review whether different source names refer to the same urban local body"/>
       <span className="catalogue-count">{stats.anchorSize} anchor IDs · {stats.anchorConflicts} conflicts</span>
     </div>
 
@@ -2447,7 +2112,13 @@ function Diagnostics({ mode, colorTheme, cameFrom, diagnostic, allKeys }: { mode
   const evidence = diagnostic.evidence[evidenceIndex] ?? diagnostic.evidence[0];
   const sourceFamilies = new Set(diagnostic.evidence.map((item) => item.tableKey)).size;
   const returnedPeriods = new Set(diagnostic.evidence.map((item) => item.period)).size;
-  const additionalSources = diagnostic.evidence.filter((item) => !/identification_of_new_ihhls|machinery_e_autos_service_model|iswm_facilities|odf_status|gfc_status|national_rank/.test(item.tableKey));
+  const inspectRecord = (index: number) => {
+    setEvidenceIndex(index);
+    if (window.matchMedia?.('(max-width: 1150px)').matches) {
+      document.querySelector<HTMLElement>('.evidence-panel')?.scrollIntoView({ block: 'start' });
+      document.querySelector<HTMLElement>('.evidence-panel')?.focus({ preventScroll: true });
+    }
+  };
   const backTab = cameFrom === 'Sanitation delivery' ? 'sanitation' : cameFrom === 'Legacy waste' ? 'processing' : 'collection';
   return <>
     {cameFrom && <nav className="drill-crumb" aria-label="Where you came from">
@@ -2455,18 +2126,19 @@ function Diagnostics({ mode, colorTheme, cameFrom, diagnostic, allKeys }: { mode
       <span>You opened this from the {cameFrom.toLowerCase()} review table.</span>
     </nav>}
     <PageIntro visual="diagnostics" eyebrow="Source-by-source review" title="ULB Evidence Inspector" description="See what this ULB returned, what is absent, and why each conclusion is—or is not—supported."><EntityPicker diagnostic={diagnostic} allKeys={allKeys} mode={mode} colorTheme={colorTheme}/>{mode === 'SAMPLE' && <EvidencePack diagnostic={diagnostic}/>}</PageIntro>
+    {mode === 'SAMPLE' && <section className="screen-feature sf-diagnostic" aria-label="ULB evidence file summary"><div className="sf-dark sf-diagnostic-grid"><div><span className="sf-eyebrow">Selected ULB / source-by-source evidence</span><h2>{diagnostic.name}</h2><p className="sf-location"><Icon name="building" size={17}/>{diagnostic.district}</p><p className="sf-reporting">{diagnostic.reportingContext}</p><span className="sf-identity"><Icon name="link" size={15}/>Candidate cross-source identity — not yet reviewed</span></div><div className="sf-footprint"><span className="sf-eyebrow">Returned evidence footprint</span><div className="sf-footprint-value"><strong>{sourceFamilies}</strong><span>source families<br/>returned</span></div><div className="sf-family-nodes" aria-label={`${sourceFamilies} returned source families`}>{[...new Map(diagnostic.evidence.map((item) => [item.tableKey, item.dataset])).entries()].map(([key, name]) => <i key={key} title={name}/>)}</div><small>One block per returned family. Breadth is not completeness or performance.</small></div></div><div className="sf-file-facts"><div><b>{diagnostic.evidence.length}</b><span>retained matching rows</span></div><div><b>{returnedPeriods}</b><span>reported period labels</span></div><div><b>UNSCORED</b><span>identity & period gates apply</span></div><p>Choose a record below.<br/>Every reading keeps its source context.</p></div></section>}
     <section className="diagnostics-layout">
       <article className="panel diagnostic-main">
-        <div className="diagnostic-heading"><span className="municipal-icon"><Icon name="building" size={28}/></span><div><small className="diagnostic-kicker">Selected ULB evidence file</small><h2>{diagnostic.name}</h2><p>{diagnostic.district} · {diagnostic.reportingContext}</p>{mode === 'SAMPLE' && <span className="candidate-identity-label">Candidate cross-source identity — not yet reviewed</span>}</div><StatusPill state={diagnostic.state}/></div>
-        {mode === 'SAMPLE' && <div className="evidence-breadth-strip"><span><Icon name="database" size={18}/><b>{sourceFamilies}</b><small>source families returned</small></span><span><Icon name="calendar" size={18}/><b>{returnedPeriods}</b><small>reported period labels</small></span><span><Icon name="link" size={18}/><b>{diagnostic.evidence.length}</b><small>retained matching rows</small></span><span><Icon name="shield" size={18}/><b>UNSCORED</b><small>candidate identity only</small></span></div>}
-        <section className="case-section"><header className="case-section-head"><div><span className="eyebrow">What is reported</span><h3>Current matched records</h3></div><small>Select a tile to inspect its retained source</small></header><div className="diagnostic-metrics">{diagnostic.metrics.slice(0, 4).map((metric) => <MetricRowView key={metric.label} metric={metric} selected={evidence?.id === metric.evidenceId} onEvidence={() => { const index = diagnostic.evidence.findIndex((item) => item.id === metric.evidenceId); if (index >= 0) setEvidenceIndex(index); }}/>)}</div>{mode === 'SAMPLE' && additionalSources.length > 0 && <details className="additional-evidence"><summary>Show {additionalSources.length} additional exact-name source records</summary><div>{[...new Map(additionalSources.map((item) => [item.tableKey, { item, index: diagnostic.evidence.indexOf(item) }])).values()].map(({ item, index }) => <button type="button" key={item.tableKey} onClick={() => setEvidenceIndex(index)}><Icon name="database" size={15}/><span><b>{item.dataset}</b><small>{item.period} · {item.grain} grain</small></span><Icon name="arrow" size={14}/></button>)}</div></details>}</section>
+        {mode !== 'SAMPLE' && <div className="diagnostic-heading"><span className="municipal-icon"><Icon name="building" size={28}/></span><div><small className="diagnostic-kicker">Selected ULB evidence file</small><h2>{diagnostic.name}</h2><p>{diagnostic.district} · {diagnostic.reportingContext}</p>{mode === 'SAMPLE' && <span className="candidate-identity-label">Candidate cross-source identity — not yet reviewed</span>}</div><StatusPill state={diagnostic.state}/></div>}
+        {mode === 'SAMPLE' ? <DiagnosticReadings records={diagnostic.evidence} selectedId={evidence?.id} onInspect={id => {const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/> : <section className="case-section"><header className="case-section-head"><div><span className="eyebrow">What is reported</span><h3>Current matched records</h3></div><small>Select a reading to inspect its retained source</small></header><div className="diagnostic-metrics">{diagnostic.metrics.slice(0, 4).map((metric) => <MetricRowView key={metric.label} metric={metric} selected={evidence?.id === metric.evidenceId} onEvidence={() => { const index = diagnostic.evidence.findIndex((item) => item.id === metric.evidenceId); if (index >= 0) inspectRecord(index); }}/>)}</div></section>}
         <section className="case-analysis-grid">
           <article className={`case-signal callout-${diagnostic.state.toLowerCase()}`}><span><Icon name={diagnostic.state === 'UNSCORED' ? 'alert' : 'target'} size={22}/></span><div><small>What stands out</small><h3>{diagnostic.title}</h3><b>Why</b><p>{diagnostic.summary}</p></div></article>
           <article className="case-limit"><span><Icon name="shield" size={20}/></span><div><small>What cannot be concluded</small><p>{mode === 'SAMPLE' ? 'These records do not establish utilization, an underlying cause, or current outcome impact. Identity and period review are still required.' : 'Illustrative demo values are not government findings.'}</p></div></article>
         </section>
+        {mode === 'SAMPLE' && <EvidenceRecordBrowser records={diagnostic.evidence} selectedId={evidence?.id} onSelect={inspectRecord}/>}
       </article>
       <aside className="diagnostic-side">
-        <article className="panel evidence-panel"><PanelTitle icon="search" title="Evidence Inspector" subtitle={mode === 'SAMPLE' ? `${diagnostic.evidence.length} matching source record${diagnostic.evidence.length === 1 ? '' : 's'} retained` : 'Select a metric row to inspect its source'}/>{diagnostic.evidence.length > 1 && <label className="evidence-select"><span>Source record</span><select aria-label="Evidence record" value={evidenceIndex} onChange={(event) => setEvidenceIndex(Number(event.target.value))}>{diagnostic.evidence.map((item, index) => <option value={index} key={item.id}>{item.dataset} · {item.period}</option>)}</select></label>}{evidence ? <EvidenceView evidence={evidence} scored={diagnostic.state !== 'UNSCORED'}/> : <div className="empty-evidence"><Icon name="database" size={30}/><b>No source record available</b><p>Evidence appears only after a qualified fixture or source record is selected.</p></div>}</article>
+        <article className="panel evidence-panel" tabIndex={-1}><PanelTitle icon="search" title="Evidence Inspector" subtitle={mode === 'SAMPLE' ? `${diagnostic.evidence.length} matching source record${diagnostic.evidence.length === 1 ? '' : 's'} retained` : 'Select a metric row to inspect its source'}/>{diagnostic.evidence.length > 1 && <label className="evidence-select"><span>Source record</span><select aria-label="Evidence record" value={evidenceIndex} onChange={(event) => setEvidenceIndex(Number(event.target.value))}>{diagnostic.evidence.map((item, index) => <option value={index} key={item.id}>{item.dataset} · {item.period}</option>)}</select></label>}{evidence ? <EvidenceView evidence={evidence} scored={diagnostic.state !== 'UNSCORED'}/> : <div className="empty-evidence"><Icon name="database" size={30}/><b>No source record available</b><p>Evidence appears only after a qualified fixture or source record is selected.</p></div>}</article>
         <article className="panel quality-panel"><PanelTitle icon="shield" title={diagnostic.state === 'UNSCORED' ? 'Why this is unscored' : 'Evidence quality'} />
           <ul>{diagnostic.qualityFlags.map((flag) => { const passed = /complete authenticated snapshots retained/i.test(flag); return <li key={flag} className={passed ? 'is-passed' : ''}><Icon name={passed || diagnostic.state !== 'UNSCORED' ? 'check' : 'alert'} size={16}/>{flag}</li>; })}</ul>
         </article>
@@ -2507,8 +2179,8 @@ function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnT
   });
   return <>
     <PageIntro visual="data-readiness" art={view === 'coverage' ? '/assets/sasa/hero-swachh.png' : undefined} eyebrow="Activation evidence" title={view === 'coverage' ? 'ULB Evidence Coverage Explorer' : 'Data Readiness'} description={view === 'coverage' ? 'See where governed dataset coverage overlaps and where evidence blind spots remain.' : 'Inspect catalogue coverage, returned periods, quality conditions, and the gates for higher-order intelligence.'}><FilterBar mode={mode}/></PageIntro>
-    <ReadinessCommandCenter readiness={readiness}/>
     <div className="analytics-tabs readiness-tabs" role="tablist" aria-label="Data readiness views">{(['catalogue', 'coverage', 'periods', 'quality'] as const).map((item) => <button key={item} role="tab" aria-selected={view === item} className={view === item ? 'active' : ''} onClick={() => setView(item)}>{sentenceCase(item)}</button>)}</div>
+    {mode === 'SAMPLE' && (view === 'catalogue' ? <ReadinessCommandCenter readiness={readiness}/> : <div className="sf-readiness-context"><span><b>{governedSnapshotStats.completeDatasets}</b> complete datasets / {readinessCatalogueStats.platformAvailable} granted</span><span>Scoring remains <b>UNSCORED</b></span><button onClick={() => setView('catalogue')}>View activation pipeline <Icon name="arrow" size={15}/></button></div>)}
     {view === 'catalogue' && <><section className="readiness-layout">
       <article className="panel readiness-table-panel">
         <div className="catalogue-heading"><PanelTitle icon="database" title={mode === 'SAMPLE' ? 'Governed and documented catalogue' : 'Dataset readiness'} subtitle={mode === 'SAMPLE' ? `${readinessCatalogueStats.platformAvailable} datasets granted on the platform (per API docs) · ${readinessCatalogueStats.notProvisioned} further documented keys not yet provisioned` : 'Mode-isolated readiness evidence'}/><span className="catalogue-count">{filteredRows.length} / {readiness.rows.length}</span></div>
@@ -2576,18 +2248,13 @@ function ReadinessCommandCenter({ readiness }: { readiness: ReturnType<ReturnTyp
     { label: 'Complete retained', value: governedSnapshotStats.completeDatasets, detail: 'pagination reconciled', state: 'retained' },
     { label: 'Scoring eligible', value: scoringEligible, detail: 'evidence gates unmet', state: 'held' },
   ];
-  return <section className="readiness-command" aria-label="Evidence activation pipeline">
-    <header><div><span className="eyebrow">Evidence activation</span><h2>Descriptive review is ready. Scoring remains held.</h2><p>Each stage narrows only when a documented evidence condition is met.</p></div><span className="command-state"><Icon name="shield" size={16}/>UNSCORED</span></header>
-    <div className="activation-layout">
-      <ol className="activation-pipeline">{stages.map((stage, index) => <Fragment key={stage.label}><li className={`stage-${stage.state}`}><small>{stage.label}</small><b>{stage.value.toLocaleString('en-IN')}</b><span>{stage.detail}</span></li>{index < stages.length - 1 && <Icon name="arrow" size={18}/>}</Fragment>)}</ol>
-      <aside className="activation-exceptions" aria-label="Why catalogue entries do not reach retained evidence">
-        <div><span className="exception-violet"><Icon name="database" size={15}/></span><b>{audit.pending}</b><small>documented, not provisioned</small></div>
-        <div><span className="exception-blue"><Icon name="clock" size={15}/></span><b>{audit.awaitingPull}</b><small>accessible, awaiting complete pull</small></div>
-        <div><span className="exception-orange"><Icon name="alert" size={15}/></span><b>{audit.unavailable}</b><small>granted, response unavailable</small></div>
-      </aside>
+  return <section className="screen-feature sf-readiness" aria-label="Evidence activation pipeline">
+    <div className="sf-dark sf-readiness-grid">
+      <div className="sf-readiness-lead"><span className="sf-eyebrow">Evidence activation / retained snapshots</span><h2>Descriptive review <br/>is ready. <br/><em>Scoring remains held.</em></h2><p>Access is the beginning. Usable, aligned evidence is what enables a decision.</p><span className="sf-held"><Icon name="shield" size={16}/>UNSCORED</span></div>
+      <div className="sf-activation-flow"><span className="sf-eyebrow">From catalogue to eligibility</span><ol>{stages.map((stage, index) => <li key={stage.label} className={`sf-stage-${stage.state}`}><span>{String(index + 1).padStart(2, '0')}</span><div><b>{stage.label}</b><small>{stage.detail}</small><i aria-hidden="true"><em style={{width: `${audit.total > 0 ? stage.value / audit.total * 100 : 0}%`}}/></i></div><strong>{stage.value.toLocaleString('en-IN')}</strong></li>)}</ol><p>Dataset counts · bar lengths use the {audit.total}-entry catalogue as reference.<br/>Retention is not scoring eligibility.</p></div>
     </div>
-    <div className="activation-next"><span><Icon name="target" size={17}/></span><div><small>First required data action</small><b>Approve an authoritative ULB registry and name-to-ID crosswalk</b><p>This unlocks trusted joins across the observed name candidates. Period alignment and quality gates still remain, so scoring stays held.</p></div><em>{readiness.gates.filter((gate) => gate.state === 'blocked').length} blocked gates remain</em></div>
-    <footer><span><Icon name="check" size={14}/>Available now: source-backed operational review</span><span><Icon name="alert" size={14}/>Held: cross-source scoring and forward-looking claims</span></footer>
+    <div className="sf-readiness-exceptions" aria-label="Why catalogue entries do not reach retained evidence"><div><b>{audit.pending}</b><span>documented<br/>not provisioned</span></div><div><b>{audit.awaitingPull}</b><span>accessible<br/>complete pull pending</span></div><div><b>{audit.unavailable}</b><span>granted<br/>response unavailable</span></div><p>These are different access states.<br/>None is treated as zero operational activity.</p></div>
+    <div className="sf-next-action"><Icon name="target" size={24}/><div><span>First required data action</span><b>Approve an authoritative ULB registry and name-to-ID crosswalk</b><p>Trusted joins still need period alignment and quality review. {readiness.gates.filter((gate) => gate.state === 'blocked').length} blocked gates remain.</p></div></div>
   </section>;
 }
 
@@ -2801,19 +2468,20 @@ function EvidenceCoverageGrid() {
     <div className="grid-totals">
       <div><b>{grid.totals.returned.toLocaleString('en-IN')}</b><small>returned</small></div>
       <div><b>{grid.totals.flagged.toLocaleString('en-IN')}</b><small>returned with a quality condition</small></div>
-      <div className="total-absent"><b>{grid.totals.absent.toLocaleString('en-IN')}</b><small>never returned — {absentPercent}% of the grid</small></div>
-      <div className="total-recovered"><b>{grid.totals.recovered.toLocaleString('en-IN')}</b><small>{grid.totals.recovered === 0 ? 'recoverable by approving name matches' : 'recovered by your approved crosswalk'}</small></div>
+      <div className="total-absent"><b>{grid.totals.absent.toLocaleString('en-IN')}</b><small>not returned — {absentPercent}% of the retained grid</small></div>
+      <div className="total-recovered"><b>{grid.totals.recovered.toLocaleString('en-IN')}</b><small>recovered by locally approved aliases</small></div>
     </div>
-    <div className="anchor-source-profile" aria-label="Anchored coverage by source">
+    <AnchoredSourceBrowser grid={grid}/>
+    <details className="anchor-profile-disclosure"><summary>Compare all {grid.sources.length} source coverage profiles <Icon name="arrow" size={16}/></summary><div className="anchor-source-profile" aria-label="Anchored coverage by source">
       <header><div><span className="eyebrow">Fast read</span><h3>Which sources limit anchored evidence?</h3></div><small>Each row uses {grid.rows.length} registry entities</small></header>
       <div>{sourceProfiles.map(({ source, returned, flagged, recovered, absent }) => <div className="anchor-source-row" key={source.tableKey}>
         <b>{source.label}</b>
         <span className="anchor-source-track" aria-label={`${source.label}: ${returned} returned, ${flagged} quality-flagged, ${recovered} recovered, ${absent} not returned`}><i className="cell-returned" style={{ width: `${returned / grid.rows.length * 100}%` }}/><i className="cell-quality-issue" style={{ width: `${flagged / grid.rows.length * 100}%` }}/><i className="cell-recovered" style={{ width: `${recovered / grid.rows.length * 100}%` }}/><i className="cell-not-returned" style={{ width: `${absent / grid.rows.length * 100}%` }}/></span>
         <span><strong>{returned + flagged + recovered}</strong><small> returned</small><em>{absent} not returned</em></span>
       </div>)}</div>
-    </div>
+    </div></details>
     {grid.totals.recovered === 0
-      ? <p className="grid-prompt"><Icon name="link" size={16}/><span>These cells are blank because the source spells the entity differently, not because the evidence is missing. Approve name matches in the <a href={withMode('/gap-radar', 'SAMPLE', 'light')}>crosswalk workbench</a> and they fill in here.</span></p>
+      ? <p className="grid-prompt"><Icon name="link" size={16}/><span>Some retained rows may become reachable after name review in the <a href={withMode('/gap-radar', 'SAMPLE', 'light')}>crosswalk workbench</a>. An absent cell alone does not establish whether the cause is naming or missing evidence.</span></p>
       : <p className="grid-prompt is-recovered"><Icon name="check" size={16}/><span><b>{grid.totals.recovered} observations recovered.</b> These were unreachable until you approved the name matches that connect them. They are marked below.</span></p>}
     <details className="anchor-grid-audit"><summary><span><Icon name="database" size={16}/><span><b>Inspect every anchored evidence cell</b><small>{grid.rows.length} entities × {grid.sources.length} sources · retained row-level audit view</small></span></span><span>Open grid <Icon name="arrow" size={14}/></span></summary><div className="grid-scroll">
         <div className="coverage-grid" style={{ gridTemplateColumns: `132px repeat(${grid.sources.length}, minmax(9px, 1fr))` }}>
@@ -2834,7 +2502,7 @@ function EvidenceCoverageGrid() {
         <span><i className="cell-quality-issue"/>Returned, quality condition</span>
         <span><i className="cell-recovered"/>Recovered by an approved match</span>
         <span><i className="cell-not-returned"/>Not returned — never zero</span>
-        <b className="grid-readout">{hovered || '\u00a0'}</b>
+        <b className="grid-readout">{hovered || 'Use the source browser above for touch and keyboard inspection.'}</b>
       </div></details>
     <p className="table-note"><Icon name="info" size={15}/>An empty cell means the source returned no row for that registry entity. It is not a reported zero, and it is not evidence of absence in the world.</p>
   </article>;
@@ -2993,7 +2661,8 @@ function ReviewInbox() {
   const open = items.filter((item) => state(item) === 'open');
   const visible = showDone ? items : open;
   const flagged = open.reduce((total, item) => total + item.count, 0);
-  const blocked = open.filter((item) => item.severity === 'blocked').length;
+  // Local review marks change the queue, not the underlying activation blockers.
+  const blocked = items.filter((item) => item.severity === 'blocked').length;
   const lanes: Array<{ severity: InboxItem['severity']; title: string; detail: string }> = [
     { severity: 'blocked', title: 'Activation blockers', detail: 'These conditions keep higher-order intelligence gated.' },
     { severity: 'review', title: 'Human review needed', detail: 'The retained record is preserved, but a source or definition decision is needed.' },
@@ -3007,12 +2676,12 @@ function ReviewInbox() {
     </div>
     <div className="inbox-summary">
       <div><b>{open.length}</b><small>conditions awaiting review</small></div>
-      <div><b>{flagged.toLocaleString('en-IN')}</b><small>records flagged across them</small></div>
+      <div><b>{flagged.toLocaleString('en-IN')}</b><small>summed open condition counts · may overlap</small></div>
       <div className={blocked > 0 ? 'inbox-blocked' : ''}><b>{blocked}</b><small>block activation until source action</small></div>
     </div>
     <label className="inbox-toggle"><input type="checkbox" checked={showDone} onChange={(event) => setShowDone(event.target.checked)}/> Show locally marked items</label>
     {visible.length === 0
-      ? <p className="inbox-empty">Every condition has been triaged. Nothing is outstanding.</p>
+      ? <p className="inbox-empty">Every condition has a local review mark. Source conditions and scoring gates remain unchanged.</p>
       : <div className="inbox-lanes">{lanes.map((lane) => {
         const laneItems = visible.filter((item) => item.severity === lane.severity);
         if (!laneItems.length) return null;
@@ -3020,12 +2689,11 @@ function ReviewInbox() {
           const current = state(item);
           const localLabel = current === 'acknowledged' ? 'reviewed locally' : current === 'resolved' ? 'marked addressed locally' : '';
           return <li key={item.id} className={`inbox-item sev-${item.severity} triage-${current}`}>
-            <span className="inbox-count"><b>{item.count.toLocaleString('en-IN')}</b><small>{item.count === 1 ? 'record' : 'records'}</small></span>
+            <span className="inbox-count"><b>{item.count.toLocaleString('en-IN')}</b><small>condition count</small></span>
             <div className="inbox-body">
               <div className="inbox-head"><b>{item.title}</b><span className={`sev-chip sev-${item.severity}`}>{item.severity}</span></div>
               <p>{item.detail}</p>
-              <p className="inbox-rule"><Icon name="shield" size={13}/><span><b>What triggered this:</b> {item.rule}</span></p>
-              <span className="inbox-where">Inspect in {item.screen}</span>
+              <details className="inbox-rule-details"><summary>Check rule and evidence location</summary><p className="inbox-rule"><Icon name="shield" size={13}/><span><b>What triggered this:</b> {item.rule}</span></p><span className="inbox-where">Inspect in {item.screen}</span></details>
             </div>
             <div className="inbox-actions">
               {current !== 'open' && <span className={`triage-state triage-${current}`}>{localLabel}</span>}

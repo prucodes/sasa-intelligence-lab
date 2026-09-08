@@ -80,8 +80,16 @@ const outcomeExcerptKeys = new Set([
   'sasa_sac_swacch_survekshan_information_national_rank_api',
 ]);
 
+/**
+ * Authorized SASA keys whose complete response is now retained. Gobardhan returned 502
+ * for weeks and was the single unavailable authorized endpoint; it began serving again
+ * before the 2026-09-08 pull, so it is no longer an exception anywhere in the product.
+ */
+const retainedFullExportKeys = new Set(['sasa_establishment_of_gobardhan_units_api']);
+
 export const sasaCatalogue: CatalogueDataset[] = catalogueTuples.map(([catalogueName, tableKey, theme, columns]) => {
   const retainedExcerpt = retainedExcerptKeys.has(tableKey);
+  const retainedFull = retainedFullExportKeys.has(tableKey);
   return {
     catalogueName,
     tableKey,
@@ -91,15 +99,19 @@ export const sasaCatalogue: CatalogueDataset[] = catalogueTuples.map(([catalogue
     fieldCount: columns.length,
     columns,
     dataLakeLink: `https://datalakes.ailivinglabs.ap.gov.in/datasets/${tableKey}`,
-    schemaVerification: 'PUBLIC SCHEMA VERIFIED',
-    retainedExcerpt,
-    completePayload: false,
-    payloadEvidence: retainedExcerpt ? 'EXCERPT VERIFIED' : 'AUTHENTICATION REQUIRED',
-    joinEligibility: outcomeExcerptKeys.has(tableKey)
-      ? 'PERIOD ALIGNMENT REQUIRED'
-      : retainedExcerpt
-        ? 'CROSSWALK REQUIRED'
-        : 'NOT EVALUATED',
+    schemaVerification: retainedFull ? 'AUTHENTICATED SCHEMA VERIFIED' : 'PUBLIC SCHEMA VERIFIED',
+    retainedExcerpt: retainedExcerpt || retainedFull,
+    completePayload: retainedFull,
+    payloadEvidence: retainedFull
+      ? 'AUTHENTICATED · 28/28 ROWS RETAINED 2026-09-08 · ENDPOINT RECOVERED FROM PROLONGED 502'
+      : retainedExcerpt ? 'EXCERPT VERIFIED' : 'AUTHENTICATION REQUIRED',
+    joinEligibility: retainedFull
+      ? 'DISTRICT GRAIN · LGD DISTRICT CODE ON EVERY ROW'
+      : outcomeExcerptKeys.has(tableKey)
+        ? 'PERIOD ALIGNMENT REQUIRED'
+        : retainedExcerpt
+          ? 'CROSSWALK REQUIRED'
+          : 'NOT EVALUATED',
     scoringEligibility: 'UNSCORED',
     sourceState: 'AUTHORIZED',
   };
@@ -131,6 +143,93 @@ export const serpCatalogue: CatalogueDataset[] = serpCatalogueTuples.map(([catal
 
 export const authorizedCatalogue = [...serpCatalogue, ...sasaCatalogue];
 
+/**
+ * The September 2026 LGD standardisation pass.
+ *
+ * The platform re-issued several SASA sources as `*_new1_api` versions carrying LGD
+ * district and mandal codes alongside the original source labels, and marked them
+ * `versionStatus: "current"`. The originals still serve and are still retained, so both
+ * vintages sit in the catalogue: these are not replacements in the product until a
+ * reviewer accepts them as such, and for four datasets the revision actually dropped
+ * reported months our earlier vintage still holds.
+ */
+export const lgdRevisionCatalogue: CatalogueDataset[] = [
+  {
+    catalogueName: 'Swachh Survekshan Information — Combined (LGD)',
+    tableKey: 'swacch_survekshan_info_new1_api',
+    programme: 'SASA CDMA',
+    theme: 'Sanitation outcomes',
+    frequency: 'Not established',
+    fieldCount: 10,
+    columns: ['dstrt_nm', 'ulb_nm', 'gfc_status', 'odf_status', 'national_rank', 'year', 'lgd_dist_code', 'district_name', 'lgd_mandal_code', 'mandal_name'],
+    dataLakeLink: 'https://datalakes.ailivinglabs.ap.gov.in/datasets/swacch_survekshan_info_new1_api',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 206/206 ROWS RETAINED 2026-09-08 · REPLACES THREE SEPARATE 2024 OUTCOME KEYS',
+    joinEligibility: 'ULB GRAIN · LGD CODES PRESENT · 2024 OUTCOME YEAR, NOT OPERATIONAL',
+    scoringEligibility: 'UNSCORED',
+    sourceState: 'AUTHORIZED',
+    sourceGrain: 'District',
+  },
+  {
+    catalogueName: 'FSTP/STP Co-Treatment (LGD)',
+    tableKey: 'fstps_stps_cotreatment_new1_api',
+    programme: 'SASA CDMA',
+    theme: 'Waste management',
+    frequency: 'Monthly',
+    fieldCount: 12,
+    columns: ['dstrt_nm', 'ulb_nm', 'capacity_in_kld', 'overall_progress', 'mnth_no', 'mnth_nm', 'year', 'fin_year', 'lgd_dist_code', 'district_name', 'lgd_mandal_code', 'mandal_name'],
+    dataLakeLink: 'https://datalakes.ailivinglabs.ap.gov.in/datasets/fstps_stps_cotreatment_new1_api',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 70/70 ROWS RETAINED 2026-09-08 · CONFIGURED CAPACITY, NOT THROUGHPUT',
+    joinEligibility: 'ULB GRAIN · LGD CODES ON 62 OF 70 ROWS',
+    scoringEligibility: 'UNSCORED',
+    sourceState: 'AUTHORIZED',
+    sourceGrain: 'District',
+  },
+  {
+    catalogueName: 'C&D Waste Processing Plants Revival (LGD)',
+    tableKey: 'cd_waste_process_plants_revival_new1_api',
+    programme: 'SASA CDMA',
+    theme: 'Waste management',
+    frequency: 'Monthly',
+    fieldCount: 11,
+    columns: ['dstrt_nm', 'ulb_nm', 'plnt_cpcty_in_tpd', 'mnth_no', 'mnth_nm', 'year', 'fin_year', 'lgd_dist_code', 'district_name', 'lgd_mandal_code', 'mandal_name'],
+    dataLakeLink: 'https://datalakes.ailivinglabs.ap.gov.in/datasets/cd_waste_process_plants_revival_new1_api',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 6/6 ROWS RETAINED 2026-09-08 · LGD CODES ON ONLY 2 OF 6 ROWS',
+    joinEligibility: 'ULB GRAIN · LGD COVERAGE INCOMPLETE',
+    scoringEligibility: 'UNSCORED',
+    sourceState: 'AUTHORIZED',
+    sourceGrain: 'District',
+  },
+  {
+    catalogueName: 'Sewage Treatment Plant Capacity (LGD)',
+    tableKey: 'sewage_treated_qty_new1_api',
+    programme: 'SASA CDMA',
+    theme: 'Waste management',
+    frequency: 'Monthly',
+    fieldCount: 19,
+    columns: ['rec_id', 'pckg_nm', 'dstrt_nm', 'ulb_s_no', 'plant_s_no', 'ulb_nm', 'capacity_mld', 'crnt_prgrs_tx', 'mnth_no', 'mnth_nm', 'year', 'fin_year', 'a_in', 'i_ts', 'u_ts', 'lgd_dist_code', 'district_name', 'lgd_mandal_code', 'mandal_name'],
+    dataLakeLink: 'https://datalakes.ailivinglabs.ap.gov.in/datasets/sewage_treated_qty_new1_api',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    // Named "sewage treated quantity" but the columns carry plant capacity and a
+    // progress label. No treated volume is returned; the name must not be trusted.
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 242/242 ROWS RETAINED 2026-09-08 · CAPACITY AND PROGRESS ONLY, NO TREATED VOLUME',
+    joinEligibility: 'PLANT GRAIN · LGD CODES ON EVERY ROW · NOT A ULB-GRAIN SOURCE',
+    scoringEligibility: 'UNSCORED',
+    sourceState: 'AUTHORIZED',
+    sourceGrain: 'District',
+  },
+];
+
 export const documentedIntegrationCatalogue: CatalogueDataset[] = [
   {
     catalogueName: 'PR Gram Panchayat SWPC Availability and Working Condition',
@@ -157,13 +256,13 @@ export const documentedIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Not established',
     fieldCount: 4,
     columns: ['DISTRICT_ID', 'DISTRICT_NAME', 'SWACHCH_RATHAM_MANDAL_OPERATORS', 'SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · INGESTION PENDING',
-    joinEligibility: 'DISTRICT GRAIN · SEMANTIC REVIEW REQUIRED',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 56/56 ROWS RETAINED 2026-09-08 · FIRST RETAINED RURAL SOURCE',
+    joinEligibility: 'DISTRICT GRAIN · RURAL POPULATION · NOT COMPARABLE TO ULB COUNTS',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -293,13 +392,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Monthly',
     fieldCount: 15,
     columns: ['s_no', 'district_name', 'district_id', 'csc_target_units', 'csc_achievement', 'csc_achievement_percentage', 'month_no', 'month_name', 'year', 'fin_year', 'a_in', 'i_ts', 'u_ts', 'api_lgd_dist_code', 'api_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
-    joinEligibility: 'DISTRICT GRAIN · TWO PARALLEL DISTRICT ID SYSTEMS',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 84/84 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'DISTRICT GRAIN · LGD DISTRICT CODE ON EVERY ROW',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -310,13 +409,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Not established',
     fieldCount: 9,
     columns: ['district_id', 'district_name', 'work_name', 'units', 'fin_year', 'month', 'target', 'achivement', 'lgd_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
-    joinEligibility: 'DISTRICT GRAIN · PERIOD ENCODING UNCONFIRMED',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 336/336 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'DISTRICT GRAIN · TWELVE REPORTED MONTHS 202604-202703',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -327,13 +426,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Not established',
     fieldCount: 9,
     columns: ['district_id', 'district_name', 'work_name', 'units', 'fin_year', 'month', 'target', 'achivement', 'lgd_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
-    joinEligibility: 'DISTRICT GRAIN · PERIOD ENCODING UNCONFIRMED',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 336/336 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'DISTRICT GRAIN · TWELVE REPORTED MONTHS 202604-202703',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -344,13 +443,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Not established',
     fieldCount: 9,
     columns: ['district_id', 'district_name', 'work_name', 'units', 'fin_year', 'month', 'target', 'achivement', 'lgd_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · SAMPLE DUPLICATES COMPOST PITS',
-    joinEligibility: 'DISTRICT GRAIN · SOURCE SAMPLE NOT SPECIFIC TO THIS DATASET',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 336/336 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'DISTRICT GRAIN · TWELVE REPORTED MONTHS 202604-202703',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -361,13 +460,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Monthly',
     fieldCount: 13,
     columns: ['s_no', 'district_name', 'construction_of_ihhls_target_units', 'construction_of_ihhls_achievement', 'construction_of_ihhls_achievement_percentage', 'month_no', 'month_name', 'year', 'fin_year', 'a_in', 'i_ts', 'u_ts', 'lgd_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
-    joinEligibility: 'DISTRICT GRAIN',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 84/84 ROWS RETAINED 2026-09-08 · GRANTED IN THE SEPTEMBER LGD PASS',
+    joinEligibility: 'DISTRICT GRAIN · LGD DISTRICT NAME PRESENT ON EVERY ROW',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -378,13 +477,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Monthly',
     fieldCount: 14,
     columns: ['s_no', 'district_id', 'district_name', 'ihhls_target_units', 'ihhls_achievement', 'ihhls_achievement_percentage', 'month_no', 'month_name', 'year', 'fin_year', 'a_in', 'i_ts', 'u_ts', 'lgd_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · ACCESS NOT GRANTED',
-    joinEligibility: 'DISTRICT GRAIN · TWO PARALLEL DISTRICT ID SYSTEMS',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 84/84 ROWS RETAINED 2026-09-08 · GRANTED IN THE SEPTEMBER LGD PASS',
+    joinEligibility: 'DISTRICT GRAIN · TWO PARALLEL DISTRICT ID SYSTEMS · LGD DISTRICT NAME PRESENT',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
   {
@@ -395,13 +494,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Monthly',
     fieldCount: 12,
     columns: ['dstrt_nm', 'ulb_nm', 'total_tpd', 'status_tx', 'mnth_no', 'mnth_nm', 'year', 'fin_year', 'lgd_dist_code', 'district_name', 'lgd_mandal_code', 'mandal_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · DUPLICATES LIVE sasa_sac_msw_processing_facilities_cbg_units_api',
-    joinEligibility: 'ULB GRAIN · ULB CODE IS A MANDAL CODE',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 12/12 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'ULB GRAIN · LGD DISTRICT AND MANDAL CODES',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'Secretariat · Day',
   },
   {
@@ -412,13 +511,13 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Monthly',
     fieldCount: 15,
     columns: ['dstrt_nm', 'ulb_nm', 'ihhls_approved_by_mohua', 'no_of_benf_identified', 'percentage_of_achievement', 'under_construction', 'completed', 'mnth_no', 'mnth_nm', 'year', 'fin_year', 'lgd_dist_code', 'district_name', 'lgd_mandal_code', 'mandal_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · SAME MEASURES AS LIVE sasa_sac_identification_of_new_ihhls_api (DUPLICATE)',
-    joinEligibility: 'ULB GRAIN · ULB CODE IS A MANDAL CODE',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 246/246 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'ULB GRAIN · LGD MANDAL CODE ON 202 OF 246 ROWS · SOURCE-SUPPLIED CROSSWALK',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'Secretariat · Day',
   },
   {
@@ -429,18 +528,18 @@ export const cdmaIntegrationCatalogue: CatalogueDataset[] = [
     frequency: 'Monthly',
     fieldCount: 7,
     columns: ['dstrt_id', 'dstrt_nm', 'trgt_units', 'achvmnt', 'prcnt_achvd', 'lgd_district_code', 'lgd_district_name'],
-    schemaVerification: 'DOCUMENTED RESPONSE EXAMPLE',
-    retainedExcerpt: false,
-    completePayload: false,
-    payloadEvidence: 'DOCUMENTED · HTTP 403 ON LIVE 2026-09-06 · OVERLAPS LIVE sasa_itc_wow_program_in_schools_api',
-    joinEligibility: 'DISTRICT GRAIN',
+    schemaVerification: 'AUTHENTICATED SCHEMA VERIFIED',
+    retainedExcerpt: true,
+    completePayload: true,
+    payloadEvidence: 'AUTHENTICATED · 24/24 ROWS RETAINED 2026-09-08',
+    joinEligibility: 'DISTRICT GRAIN · LGD DISTRICT CODE ON EVERY ROW',
     scoringEligibility: 'UNSCORED',
-    sourceState: 'DOCUMENTED — INGESTION PENDING',
+    sourceState: 'AUTHORIZED',
     sourceGrain: 'District',
   },
 ];
 
-export const readinessCatalogue = [...authorizedCatalogue, ...documentedIntegrationCatalogue, ...cdmaIntegrationCatalogue];
+export const readinessCatalogue = [...authorizedCatalogue, ...lgdRevisionCatalogue, ...documentedIntegrationCatalogue, ...cdmaIntegrationCatalogue];
 
 export const sasaCatalogueStats = {
   publishedDatasets: sasaCatalogue.length,

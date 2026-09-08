@@ -1,0 +1,38 @@
+/* Evidence integrity: conditions the product found in the sources themselves. */
+.evidence-integrity { --ei-accent: #087f83; --ei-warn: #b8791f; margin-top: 30px; color: var(--ink); }
+.evidence-integrity :is(h2,p) { margin: 0; }
+.evidence-integrity a:focus-visible { outline: 3px solid var(--ei-accent); outline-offset: 4px; }
+.ei-kicker { display: block; font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; color: var(--ei-warn); margin-bottom: 8px; }
+.evidence-integrity > header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px; margin-bottom: 16px; }
+.evidence-integrity h2 { font-size: clamp(19px,2vw,26px); letter-spacing: -.035em; font-weight: 600; }
+.ei-scope { font-size: 11px; line-height: 1.7; color: var(--muted); max-width: 46ch; text-align: right; }
+
+.ei-findings { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.ei-finding { display: flex; gap: 18px; align-items: flex-start; padding: 20px 22px; border: 1px solid #d8b483; border-left: 4px solid var(--ei-warn); border-radius: 14px; background: color-mix(in srgb, #e8a33d 6%, var(--surface)); color: inherit; text-decoration: none; transition: box-shadow .18s, transform .18s; }
+.ei-finding:hover { box-shadow: 0 8px 24px #1535370f; }
+.ei-finding[data-empty=true] { border-color: var(--line); border-left-color: var(--ei-accent); background: var(--surface); }
+.ei-value { display: flex; flex-direction: column; align-items: center; min-width: 62px; }
+.ei-value strong { font-size: clamp(30px,3.4vw,44px); line-height: 1; font-weight: 600; letter-spacing: -.05em; font-variant-numeric: tabular-nums; color: var(--ei-warn); }
+.ei-finding[data-empty=true] .ei-value strong { color: var(--ei-accent); }
+.ei-value span { font-size: 10px; color: var(--muted); text-align: center; margin-top: 6px; line-height: 1.4; }
+.ei-copy { min-width: 0; }
+.ei-copy b { display: block; font-size: 14px; font-weight: 650; letter-spacing: -.01em; margin-bottom: 6px; }
+.ei-copy p { font-size: 12px; line-height: 1.7; color: var(--muted); }
+.ei-copy small { display: block; margin-top: 10px; font-size: 11px; font-weight: 650; color: var(--ei-accent); }
+
+.theme-dark .evidence-integrity { --ei-accent: #8bcec0; --ei-warn: #efc58b; }
+.theme-dark .ei-finding { border-color: #7d5a24; border-left-color: #e8a33d; background: color-mix(in srgb, #e8a33d 10%, var(--surface)); }
+.theme-dark .ei-finding[data-empty=true] { border-color: var(--line); border-left-color: #8bcec0; }
+
+@media (max-width: 900px) {
+  .ei-findings { grid-template-columns: 1fr; }
+  .evidence-integrity > header { align-items: flex-start; }
+  .ei-scope { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .ei-finding { transition: none; } }
+
+/* A corroboration is still evidence-about-evidence, but it is not a warning. */
+.ei-finding[data-good=true] { border-color: var(--line); border-left-color: var(--ei-accent); background: color-mix(in srgb, #087f83 5%, var(--surface)); }
+.ei-finding[data-good=true] .ei-value strong { color: var(--ei-accent); }
+.theme-dark .ei-finding[data-good=true] { border-color: var(--line); border-left-color: #8bcec0; background: color-mix(in srgb, #8bcec0 8%, var(--surface)); }
+@media (min-width: 901px) { .ei-findings { grid-template-columns: repeat(3,minmax(0,1fr)); } }

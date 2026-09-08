@@ -15,7 +15,7 @@ await page.getByRole('link', { name: 'Operational Analytics', exact: true }).cli
 await page.waitForURL(/\/operational-analytics\/?\?mode=governed/);
 await page.waitForTimeout(500);
 await page.getByRole('tab', { name: 'Sanitation Delivery', exact: true }).click();
-await page.getByRole('heading', { name: 'IHHL delivery funnel', exact: true }).waitFor();
+await page.getByRole('heading', { name: 'Household toilets: approval to completion', exact: true }).waitFor();
 await page.getByRole('link', { name: 'Gap Radar', exact: true }).click();
 await page.waitForURL(/\/gap-radar\/?\?mode=governed/);
 await page.getByRole('link', { name: 'ULB Diagnostics', exact: true }).click();
@@ -40,7 +40,9 @@ const districtPicker = page.getByRole('combobox', { name: /browse a district to 
 const firstDistrict = await districtPicker.locator('option').nth(1).getAttribute('value');
 if (firstDistrict) await districtPicker.selectOption(firstDistrict);
 await page.getByRole('button', { name: /close comparison tray/i }).click();
-await page.getByRole('button', { name: /download evidence brief/i }).click();
+await page.getByRole('button', { name: /open executive evidence brief/i }).click();
+await page.getByRole('dialog', {name:'Executive evidence brief'}).waitFor();
+await page.getByRole('button', {name:'Close executive brief'}).click();
 
 const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
 await mobile.goto(`${baseUrl}/data-readiness?mode=governed`, { waitUntil: 'domcontentloaded' });

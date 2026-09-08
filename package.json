@@ -18,6 +18,10 @@
     "verify": "npm run validate:data && npm run lint && npm run test && npm run build",
     "screenshots": "node scripts/capture-screenshots.mjs",
     "test:browser": "node scripts/browser-smoke.mjs",
+    "test:overview": "node scripts/overview-smoke.mjs",
+    "test:screens": "node scripts/screen-features-smoke.mjs",
+    "test:content": "node scripts/content-captures.mjs",
+    "test:review": "node scripts/review-enhancements-smoke.mjs",
     "build:static": "node scripts/build-static.mjs",
     "check:live": "node scripts/check-live.mjs",
     "audit:live-snapshots": "node scripts/audit-live-snapshots.mjs"

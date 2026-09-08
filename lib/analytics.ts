@@ -178,6 +178,44 @@ export interface IhhlFunnel {
   rows: IhhlRow[];
 }
 
+export type ReportedMovementDirection = 'increased' | 'unchanged' | 'decreased';
+
+export interface ReportedMovementRow {
+  key: string;
+  district: string;
+  ulb: string;
+  previous: number;
+  current: number;
+  delta: number;
+  direction: ReportedMovementDirection;
+}
+
+/**
+ * A deliberately narrow period comparison. Every row is the same source,
+ * measure, grain and exact source-provided ULB identity in both periods.
+ * Unmatched, blank and disputed rows stay outside the comparison denominator.
+ */
+export interface ReportedMovement {
+  id: 'collection' | 'sanitation' | 'processing';
+  label: string;
+  metricLabel: string;
+  unit: string;
+  tableKey: string;
+  grain: 'ULB';
+  previousPeriod: string;
+  currentPeriod: string;
+  matched: number;
+  previousOnly: number;
+  currentOnly: number;
+  excluded: number;
+  increased: number;
+  unchanged: number;
+  decreased: number;
+  rows: ReportedMovementRow[];
+  basis: string;
+  boundary: string;
+}
+
 export type StageCohortTone = 'blocked' | 'review' | 'progress' | 'met';
 
 export interface StageCohort {
@@ -496,6 +534,138 @@ function uniqueRecords(records: SnapshotRecord[]): { records: SnapshotRecord[]; 
   const retained = new Map<string, SnapshotRecord>();
   records.forEach((record) => retained.set(exactSignature(record), record));
   return { records: [...retained.values()], duplicates: records.length - retained.size };
+}
+
+type MovementConfig = {
+  id: ReportedMovement['id'];
+  label: string;
+  metricLabel: string;
+  unit: string;
+  tableKey: string;
+  field: string;
+  boundary: string;
+  valid?: (record: SnapshotRecord) => boolean;
+};
+
+function buildReportedMovement(config: MovementConfig): ReportedMovement {
+  const source = snapshot(config.tableKey);
+  const orders = [...new Set(source.records.map(periodOrder))].filter((order) => order > 0).sort((left, right) => right - left);
+  const currentOrder = orders[0];
+  const previousOrder = orders[1];
+  const currentRecords = source.records.filter((record) => periodOrder(record) === currentOrder);
+  const previousRecords = source.records.filter((record) => periodOrder(record) === previousOrder);
+
+  const prepare = (records: SnapshotRecord[]) => {
+    const grouped = new Map<string, SnapshotRecord[]>();
+    let missingIdentity = 0;
+    records.forEach((record) => {
+      const key = sourceCandidateKey(record);
+      if (!key) {
+        missingIdentity += 1;
+        return;
+      }
+      grouped.set(key, [...(grouped.get(key) ?? []), record]);
+    });
+    const valid = new Map<string, { value: number; record: SnapshotRecord }>();
+    const excluded = new Set<string>();
+    grouped.forEach((candidateRecords, key) => {
+      const values = [...new Set(candidateRecords.map((record) => numberValue(record[config.field])).filter((value): value is number => value !== null))];
+      const qualityPasses = config.valid ? candidateRecords.every(config.valid) : true;
+      // More than one number for the same entity + period is a dispute. No number
+      // is absence. Neither may be coerced to zero or averaged into the movement.
+      if (values.length !== 1 || !qualityPasses) {
+        excluded.add(key);
+        return;
+      }
+      valid.set(key, { value: values[0], record: candidateRecords[0] });
+    });
+    return { valid, excluded, missingIdentity };
+  };
+
+  const previous = prepare(previousRecords);
+  const current = prepare(currentRecords);
+  const excludedKeys = new Set([...previous.excluded, ...current.excluded]);
+  const rows: ReportedMovementRow[] = [];
+  previous.valid.forEach((before, key) => {
+    const after = current.valid.get(key);
+    if (!after || excludedKeys.has(key)) return;
+    const display = candidateDisplay(after.record);
+    const delta = after.value - before.value;
+    rows.push({
+      key,
+      ...display,
+      previous: before.value,
+      current: after.value,
+      delta,
+      direction: delta > 0 ? 'increased' : delta < 0 ? 'decreased' : 'unchanged',
+    });
+  });
+  rows.sort((left, right) => Math.abs(right.delta) - Math.abs(left.delta) || left.ulb.localeCompare(right.ulb));
+
+  return {
+    id: config.id,
+    label: config.label,
+    metricLabel: config.metricLabel,
+    unit: config.unit,
+    tableKey: config.tableKey,
+    grain: 'ULB',
+    previousPeriod: recordPeriodLabel(previousRecords[0] ?? {}),
+    currentPeriod: recordPeriodLabel(currentRecords[0] ?? {}),
+    matched: rows.length,
+    previousOnly: [...previous.valid.keys()].filter((key) => !current.valid.has(key) && !excludedKeys.has(key)).length,
+    currentOnly: [...current.valid.keys()].filter((key) => !previous.valid.has(key) && !excludedKeys.has(key)).length,
+    excluded: excludedKeys.size + previous.missingIdentity + current.missingIdentity,
+    increased: rows.filter((row) => row.direction === 'increased').length,
+    unchanged: rows.filter((row) => row.direction === 'unchanged').length,
+    decreased: rows.filter((row) => row.direction === 'decreased').length,
+    rows,
+    basis: `Exact source identity · ${config.metricLabel} · ULB grain · same retained source`,
+    boundary: config.boundary,
+  };
+}
+
+/** Latest two returned periods for three high-value, same-grain operational measures. */
+export function getReportedMovements(): ReportedMovement[] {
+  const legacyBalancePasses = (record: SnapshotRecord) => {
+    const target = numberValue(record.target);
+    const achievement = numberValue(record.achievement);
+    const balance = numberValue(record.balance);
+    return target !== null && achievement !== null && balance !== null && Math.abs(target - achievement - balance) <= 1;
+  };
+  return [
+    buildReportedMovement({
+      id: 'collection',
+      label: 'E-Auto delivery movement',
+      metricLabel: 'Vehicles supplied',
+      unit: 'vehicles',
+      tableKey: keys.collection,
+      field: 'achievement',
+      boundary: 'A higher value means more vehicles were reported supplied. It does not establish deployment, utilization, or service quality.',
+    }),
+    buildReportedMovement({
+      id: 'sanitation',
+      label: 'IHHL completion movement',
+      metricLabel: 'IHHLs completed',
+      unit: 'IHHLs',
+      tableKey: keys.ihhl,
+      field: 'completed',
+      boundary: 'A higher value means more completions were reported. It does not explain conversion barriers or independently verify construction.',
+    }),
+    buildReportedMovement({
+      id: 'processing',
+      label: 'Legacy-waste balance movement',
+      metricLabel: 'Legacy waste balance',
+      unit: 'tonnes',
+      tableKey: keys.legacyWaste,
+      field: 'balance',
+      valid: legacyBalancePasses,
+      boundary: 'A lower reported balance indicates less remaining waste. Rows that fail target minus cleared equals balance are held out.',
+    }),
+  ];
+}
+
+export function getReportedMovement(id: ReportedMovement['id']): ReportedMovement {
+  return getReportedMovements().find((movement) => movement.id === id)!;
 }
 
 export function getCollectionProcurementSummary(periodId?: string | null): CollectionProcurementSummary {
@@ -842,7 +1012,7 @@ function districtSignals(
       district,
       value: districtRows.reduce((total, row) => total + (row.value ?? 0), 0),
       returned,
-      expected: new Set(anchors.map((anchor) => anchor.id)).size,
+      expected: new Set(anchors.map((anchor) => anchor.ulbId)).size,
       affected: districtRows.filter((row) => (row.value ?? 0) > 0).length,
       topEntity: ranked[0]?.ulb ? { ulb: ranked[0].ulb as string, value: ranked[0].value ?? 0 } : null,
     };
@@ -971,10 +1141,20 @@ export function getSupportingProgrammePortfolio(): SupportingProgrammeItem[] {
     grain: SourceGrain;
     targetFields: string[];
     achievementFields: string[];
+    percentageFields?: string[];
   }> = [
-    { tableKey: 'sasa_50_percent_green_spaces_api', label: 'Green spaces', theme: 'Green & water', grain: 'ULB', targetFields: ['target'], achievementFields: ['achievement'] },
-    { tableKey: 'sasa_50_percent_greencover_api', label: 'Green cover', theme: 'Green & water', grain: 'ULB', targetFields: ['target'], achievementFields: ['achievement'] },
-    { tableKey: 'sasa_50_percent_rejuvenation_api', label: 'Water-body rejuvenation', theme: 'Green & water', grain: 'ULB', targetFields: ['target'], achievementFields: ['achievement'] },
+    // The three "50 percent" programmes are listed with BOTH column vocabularies.
+    //
+    // The retained August vintage returns them as three separate datasets with generic
+    // `target`/`achievement` columns. The September platform revision merged them into one
+    // table — served under all three keys — where each programme has its own named
+    // columns. Listing the specific name first and the generic one as fallback means the
+    // same config reads the right measure from either vintage, and that adopting the
+    // merged table is a data swap rather than a rewrite. Because each entry reads a
+    // DIFFERENT column, three keys pointing at one merged table cannot triple-count.
+    { tableKey: 'sasa_50_percent_green_spaces_api', label: 'Green spaces', theme: 'Green & water', grain: 'ULB', targetFields: ['green_spaces_target_in_nos', 'target'], achievementFields: ['green_spaces_achieved', 'achievement'], percentageFields: ['green_spaces_achieved_percent', 'achievement_percentage', 'percentage'] },
+    { tableKey: 'sasa_50_percent_greencover_api', label: 'Green cover', theme: 'Green & water', grain: 'ULB', targetFields: ['green_cover_trgts_in_kms', 'target'], achievementFields: ['green_cover_achvd_in_kms', 'achievement'], percentageFields: ['achvd_percent_in_kms', 'achievement_percentage', 'percentage'] },
+    { tableKey: 'sasa_50_percent_rejuvenation_api', label: 'Water-body rejuvenation', theme: 'Green & water', grain: 'ULB', targetFields: ['rejuvenation_of_water_bodies_in_nos_targets', 'target'], achievementFields: ['rejuvenation_of_water_bodies_achived', 'achievement'], percentageFields: ['rejuvenation_of_water_bodies_achived_percent', 'achievement_percentage', 'percentage'] },
     { tableKey: 'sasa_cdma_ulbs_ewaste_collection_mechanism_api', label: 'E-waste collection mechanism', theme: 'Waste management', grain: 'District', targetFields: ['target'], achievementFields: ['achievement'] },
     { tableKey: 'sasa_cdma_ulbs_single_use_plastic_ban_api', label: 'Single-use plastic ban', theme: 'Waste management', grain: 'District', targetFields: ['target'], achievementFields: ['achievement'] },
     { tableKey: 'sasa_declaration_of_odf_plus_model_villages_api', label: 'ODF+ model villages', theme: 'Sanitation outcomes', grain: 'District', targetFields: ['target'], achievementFields: ['achievement'] },
@@ -989,9 +1169,14 @@ export function getSupportingProgrammePortfolio(): SupportingProgrammeItem[] {
   return configs.map((config) => {
     const source = snapshot(config.tableKey);
     const deduplicated = uniqueRecords(currentSnapshotRecords(source)).records;
+    // Resolve the achievement column the retained vintage actually carries. Passing a
+    // candidate that is absent would make every row's value `undefined`, which reads as
+    // unanimous agreement and silently switches dispute exclusion off.
+    const achievementField = config.achievementFields.find((field) => deduplicated.some((record) => record[field] !== undefined))
+      ?? config.achievementFields[0];
     // Places whose rows disagree on the achievement have no usable figure, so
     // they leave the aggregate entirely rather than contributing both values.
-    const disputed = excludeDisputed(deduplicated, config.achievementFields[0]);
+    const disputed = excludeDisputed(deduplicated, achievementField);
     const records = disputed.records;
     const targetFor = (record: SnapshotRecord) => numberValue(firstValue(record, ...config.targetFields));
     const achievementFor = (record: SnapshotRecord) => numberValue(firstValue(record, ...config.achievementFields));
@@ -1000,7 +1185,7 @@ export function getSupportingProgrammePortfolio(): SupportingProgrammeItem[] {
     const percentageConflicts = records.filter((record) => {
       const rowTarget = targetFor(record);
       const rowAchievement = achievementFor(record);
-      const reported = numberValue(firstValue(record, 'achievement_percentage', 'percentage'));
+      const reported = numberValue(firstValue(record, ...(config.percentageFields ?? ['achievement_percentage', 'percentage'])));
       return rowTarget !== null && rowTarget !== 0 && rowAchievement !== null && reported !== null
         && Math.abs(rowAchievement / rowTarget * 100 - reported) > 1;
     }).length;
@@ -1390,6 +1575,21 @@ const primaryDatasetUse = new Map<string, string>([
   [keys.gfc, 'Limited 2024 historical outcome evidence'],
   [keys.rank, '2024 national-rank distribution'],
   [keys.odf, '2024 ODF distribution'],
+  ['housing_construction_of_ihhls_new1_api', 'Cross-source reconciliation: Housing IHHL construction'],
+  ['sbm_construction_of_ihhls_new1_api', 'Cross-source reconciliation: SBM IHHL construction'],
+  // The September 2026 LGD vintage. These six supply the entity mapping the identity
+  // gate is assessed against, so each one is read for its crosswalk as well as its
+  // measures — including where its mapping contradicts itself.
+  ['ihhl_new_identification_new1_api', 'Supplied LGD crosswalk and identity-reach evidence'],
+  ['swacch_survekshan_info_new1_api', 'Supplied LGD crosswalk; retained 2024 outcome year'],
+  ['fstps_stps_cotreatment_new1_api', 'Supplied LGD crosswalk; configured KLD registry'],
+  ['msw_cbg_units_new1_api', 'Supplied LGD crosswalk; configured TPD registry'],
+  ['cd_waste_process_plants_revival_new1_api', 'Supplied LGD crosswalk; configured plant capacity'],
+  ['sewage_treated_qty_new1_api', 'Supplied LGD crosswalk; plant capacity and progress label'],
+  ['compost_pits_api', 'Twelve-month delivery plan and elapsed-window pace'],
+  ['magic_drains_api', 'Twelve-month delivery plan, measured in kilometres'],
+  ['soak_pits_api', 'Duplicate detection: returns Compost Pits rows, excluded from totals'],
+  ['sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026', 'Rural sanitation: mandal operators reported vs counted'],
 ]);
 
 const supportingDatasetUse = new Map<string, string>([
@@ -1406,6 +1606,11 @@ const supportingDatasetUse = new Map<string, string>([
   ['serp_kitchen_garden_api', 'SERP district programme portfolio'],
   ['serp_swachhata_awareness_api', 'SERP district programme portfolio'],
   ['serp_circular_economy_api', 'SERP district programme portfolio with above-target review'],
+  // Retained and complete, but not yet driving a view of their own. Listed as
+  // supporting rather than primary so the audit does not overstate what is in use.
+  ['construction_of_csc_api', 'District programme portfolio · community sanitary complexes'],
+  ['itc_wow_schools_api', 'District programme portfolio · LGD-coded schools programme'],
+  ['sasa_establishment_of_gobardhan_units_api', 'District programme portfolio · endpoint recovered 2026-09-08'],
 ]);
 
 export function getDatasetUsageAudit(): DatasetUsageAudit {
@@ -1702,22 +1907,21 @@ export interface ClearanceRankContrast {
   excludedNoClearance: number;
   /** ULBs whose rank came back as 0, which means unranked rather than first. */
   excludedZeroRank: number;
-  /** Points sitting exactly at 100% clearance, which is worth a second look. */
+  /** Points reporting at least 100% clearance; the chart caps positions at 100%. */
   atCeiling: number;
 }
 
 /**
- * The one contrast the retained evidence can actually populate today.
+ * A descriptive contrast between operational clearance and a historical rank.
  *
  * This is deliberately NOT the Gap Radar. That plots reported implementation
  * against a same-period outcome and classifies the result; nothing here supports
  * a classification. The two axes are two years apart, so no causal reading is
  * available and none is offered — the panel states the gap rather than hiding it.
  *
- * Every other candidate axis is degenerate: IHHL completion is zero for 58 of 59
- * ULBs, collection delivery for 80 of 83, and GFC ratings exist for 5 of 102.
- * Legacy clearance and national rank are the only two measures in the retained
- * snapshots with enough spread to place a point meaningfully.
+ * This historical-outcome pairing has more spread than zero-heavy completion
+ * and supply rates. Same-source operational counts can also be compared, but
+ * this panel deliberately preserves the operational/outcome period gap.
  *
  * A rank of 0 is treated as unranked, never as first place. That is finding A4
  * applied to the only outcome axis that works.

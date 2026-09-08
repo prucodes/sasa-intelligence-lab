@@ -27,6 +27,25 @@ import sweepingMachines from '@/data/full-snapshots/sasa_sac_sweeping_machines_i
 import cdWaste from '@/data/full-snapshots/sasa_sac_c_d_waste_processing_api.json';
 import singleUsePlastic from '@/data/full-snapshots/sasa_cdma_ulbs_single_use_plastic_ban_api.json';
 import eWaste from '@/data/full-snapshots/sasa_cdma_ulbs_ewaste_collection_mechanism_api.json';
+// Retained 2026-09-08, after the platform's LGD standardisation pass. District-grain,
+// three reported months, and the first two sources able to share an identity frame.
+import housingIhhls from '@/data/full-snapshots/housing_construction_of_ihhls_new1_api.json';
+import sbmIhhls from '@/data/full-snapshots/sbm_construction_of_ihhls_new1_api.json';
+import ihhlLgd from '@/data/full-snapshots/ihhl_new_identification_new1_api.json';
+import survekshanLgd from '@/data/full-snapshots/swacch_survekshan_info_new1_api.json';
+import fstpLgd from '@/data/full-snapshots/fstps_stps_cotreatment_new1_api.json';
+import cbgLgd from '@/data/full-snapshots/msw_cbg_units_new1_api.json';
+import cdWasteLgd from '@/data/full-snapshots/cd_waste_process_plants_revival_new1_api.json';
+import itcWowLgd from '@/data/full-snapshots/itc_wow_schools_api.json';
+import compostPits from '@/data/full-snapshots/compost_pits_api.json';
+import magicDrains from '@/data/full-snapshots/magic_drains_api.json';
+import soakPits from '@/data/full-snapshots/soak_pits_api.json';
+import communitySanitaryComplexes from '@/data/full-snapshots/construction_of_csc_api.json';
+import sewagePlants from '@/data/full-snapshots/sewage_treated_qty_new1_api.json';
+import gobardhan from '@/data/full-snapshots/sasa_establishment_of_gobardhan_units_api.json';
+// Rural: district-grain mandal operator counts. Its gram-panchayat companion (26,702
+// rows) is retained in data/large-snapshots and reaches the app as a district rollup.
+import prSwpcOperators from '@/data/full-snapshots/sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026.json';
 
 export type SnapshotRecord = Record<string, string>;
 
@@ -83,13 +102,32 @@ export const governedSnapshots: SnapshotEnvelope[] = [
   cdWaste,
   singleUsePlastic,
   eWaste,
+  housingIhhls,
+  sbmIhhls,
+  ihhlLgd,
+  survekshanLgd,
+  fstpLgd,
+  cbgLgd,
+  cdWasteLgd,
+  itcWowLgd,
+  compostPits,
+  magicDrains,
+  soakPits,
+  communitySanitaryComplexes,
+  sewagePlants,
+  gobardhan,
+  prSwpcOperators,
 ].map(asSnapshot);
 
 export const governedSnapshotByKey = new Map(
   governedSnapshots.map((snapshot) => [snapshot.responseMetadata.tableKey, snapshot]),
 );
 
-export const missingAuthorizedSnapshotKeys = ['sasa_establishment_of_gobardhan_units_api'] as const;
+/**
+ * Authorized endpoints with no retained response. Empty since 2026-09-08: Gobardhan,
+ * the sole long-standing entry, began serving again and its 28 rows are now retained.
+ */
+export const missingAuthorizedSnapshotKeys = [] as const;
 
 export function isCompleteSnapshot(snapshot: SnapshotEnvelope): boolean {
   return snapshot.responseMetadata.hasNextPage === false
@@ -121,11 +159,48 @@ export function normalizeSourceName(value: string | undefined): string {
     .replace(/\s+/g, ' ');
 }
 
+/**
+ * The identity a source gives itself, in the source's own words.
+ *
+ * The LGD-enriched exports retained on 2026-09-08 carry BOTH spellings: `dstrt_nm` /
+ * `ulb_nm` hold the original departmental label, while `district_name` / `mandal_name`
+ * hold the LGD master label the platform mapped it to. Every earlier export carries only
+ * one spelling. So `dstrt_nm` is preferred wherever present — otherwise this key would
+ * silently mean "source label" for old datasets and "LGD label" for new ones, and the
+ * same ULB would not match itself across the two vintages.
+ *
+ * Use `lgdIdentity` for the canonical side of that pair.
+ */
 export function sourceCandidateKey(record: SnapshotRecord): string | null {
-  const district = record.district_name ?? record.dstrt_nm;
-  const ulb = record.ulb_name ?? record.ulb_nm;
+  const district = record.dstrt_nm ?? record.district_name;
+  const ulb = record.ulb_nm ?? record.ulb_name;
   if (!district || !ulb) return null;
   return `${normalizeSourceName(district)}|${normalizeSourceName(ulb)}`;
+}
+
+export interface LgdIdentity {
+  districtCode: string | null;
+  districtName: string | null;
+  ulbCode: string | null;
+  ulbName: string | null;
+}
+
+/**
+ * The LGD master identity a row carries, when it carries one. Returns nulls rather than
+ * guessing: a blank LGD code means the platform did not map that row, which is a
+ * reviewable fact, not a value to infer from the name.
+ */
+export function lgdIdentity(record: SnapshotRecord): LgdIdentity {
+  const value = (raw: string | undefined) => {
+    const trimmed = raw?.trim();
+    return trimmed && trimmed.toLowerCase() !== 'null' ? trimmed : null;
+  };
+  return {
+    districtCode: value(record.lgd_dist_code ?? record.lgd_district_code),
+    districtName: value(record.dstrt_nm ? record.district_name : undefined) ?? value(record.lgd_district_name),
+    ulbCode: value(record.lgd_mandal_code),
+    ulbName: value(record.mandal_name),
+  };
 }
 
 export function recordsBySourceCandidate(tableKey: string): Map<string, SnapshotRecord> {

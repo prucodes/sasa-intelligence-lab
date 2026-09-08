@@ -43,6 +43,18 @@ Operational analytics are computed by reusable selectors in `lib/analytics.ts`. 
 
 The current dataset-use reconciliation covers all 33 documented entries: 16 retained datasets power primary analytics, 13 retained datasets power supporting programme/history/evidence-breadth views, Gobardhan remains unavailable, and three SASA PR integrations remain ingestion-pending. No complete retained dataset is left without a visible role. The exact register is documented in `DATASET_USAGE_REGISTER_2026-08-31.md` and is rendered in **Data Readiness → Catalogue**.
 
+The governed Overview is a connected review workspace: choose vehicle delivery, household toilets, or legacy waste, then select a district to narrow the named ULB list. `lib/overview.ts` supplies the same eligible cohort to the headline, map, ranking and top-five concentration. Missing, negative, non-finite and disputed required measurements are held out; identical measurements are counted once. Legacy-waste records must also pass balance reconciliation. Quantities are never combined across sources. Map matching does not approve an identity, and unmapped district labels remain available in the picker. Period movement is explicitly source-wide and restricted to matched same-source ULBs; 2024 outcomes remain separate.
+
+Run `PREVIEW_URL=http://127.0.0.1:4192 npm run test:overview` against a fresh local static build to check linked interactions, unchanged hover-text colours and horizontal overflow at 320, 390, 768, 1024 and 1440 pixels. It saves light/dark screenshots under `artifacts/screenshots/overview-review/`; this is responsive smoke coverage, not a pixel-diff baseline suite.
+
+The other governed screens share the Overview's teal-and-pale-green focal treatment in `app/screen-features.css`: Operational Analytics highlights one source-backed finding and denominator; Gap Radar separates local review from scoring gates; Diagnostics shows the selected ULB's retained evidence footprint; and Catalogue visualizes evidence activation. Coverage, Periods and Quality keep a compact readiness context so their own evidence leads. These summaries do not alter source data or scoring rules. An absent operational source-period displays “Not returned,” never a zero-performance headline.
+
+Run `PREVIEW_URL=http://127.0.0.1:4192 npm run test:screens` for 50 responsive states across the four operational tabs, Radar, Diagnostics and four readiness tabs at the same five widths. It checks document overflow, clipped readiness tabs, diagnostic selection and hover-text stability, and saves light/dark captures under `artifacts/screenshots/screen-features/`. Screenshots disable transitions for settled-state inspection; this is not a pixel-diff regression suite.
+
+Below the summaries, `app/evidence-content.css` styles the analytical work surfaces. Shared-scale stage charts preserve exact bar proportions and name the starting-stage denominator. Cohort ledgers expand into named source examples. The anchored coverage browser filters one source by district and return state, with 12-entity pagination; local alias matches are not formal identity approval. The diagnostic source library exposes every retained record under its source and period, with mobile selection moving to the evidence inspector. Quality totals are explicitly overlapping condition counts; local review marks never reduce the underlying activation-blocker count. No new source data is introduced by this content pass.
+
+`npm run test:content` checks 39 lower-section states at 320, 390 and 1440 pixels, including expanded cohorts, ULB comparison replacement, grouped-record selection and source-state filtering. It captures the analytical bodies and audit tools under `artifacts/screenshots/content-pass/`, not only the screen headers. The executive reading layer uses plain-language vehicle/toilet headings and a computed largest-group statement with its returned-record denominator; it never extrapolates to the whole state.
+
 The header includes an accessible light/dark theme toggle. Dark mode uses the prototype’s deep-navy analytical-panel language with restrained teal and violet accents; it changes presentation only and never changes the selected data mode, calculations, evidence state, or scoring eligibility.
 
 The header About panel includes a maintained plain-language glossary. Common abbreviations and evidence terms are also underlined in context and expose the same definition on hover or keyboard focus. `lib/glossary.ts` is the single source of truth; see `GLOSSARY.md` for the required update workflow whenever a dataset or API is activated. Retrieval provenance and the limits of the completeness claim are documented in `DATA_PROVENANCE.md`.
@@ -140,6 +152,13 @@ The internal enum stays `SAMPLE` and legacy `?mode=sample` links still resolve.
   by the platform/identity owner of the AI Living Labs Data Lake.
 
 ## Evidence and limitations
+
+### Review surfaces and executive export
+
+- Gap Radar includes a same-source, latest-period work-orders/supply chart. Exact coordinate overlaps are grouped without jitter; the district-grouped ULB selector exposes individual readings. Missing, invalid and disputed pairs are held out. This is procurement evidence, not a delay or performance score.
+- ULB Diagnostics separates delivery quantities, configured capacity and each historical outcome source. The latest source period is explicit; a zero denominator suppresses the rate and an absent reading remains **Not returned**. Each available card opens its own evidence record.
+- **Brief** opens an executive preview with named quantities, eligible-cohort denominators and a provenance appendix. **Print / Save PDF** uses the browser print dialog; **Download text** exports the same evidence. Its scope is the whole retained snapshot at each source's latest period: screen filters, ULB selections and local crosswalk decisions are not applied. Demo and Live exports contain no governed findings.
+- `PREVIEW_URL=http://127.0.0.1:4192 npm run test:review` checks these surfaces at 320, 390, 768, 1024 and 1440px, source selection, focus, hover readability, text export and print isolation. Screenshots go to `artifacts/screenshots/review-enhancements`; a temporary print-verification PDF goes to `tmp/pdfs`.
 
 The authoritative assessments remain:
 

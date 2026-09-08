@@ -18,6 +18,7 @@ import {
   getLegacyWasteSummary,
   getLegacyWasteStageCohorts,
   getProcessingRegistry,
+  getReportedMovements,
   getSourceReconciliationIssues,
   getSupportingProgrammePortfolio,
   getSwachhOutcomeSummary,
@@ -108,6 +109,22 @@ describe('operational analytics selectors', () => {
     expect(maps.every((map) => map.rule.length > 20 && map.coverage.expected === 123)).toBe(true);
   });
 
+  it('compares only exact, same-source ULB matches between retained periods', () => {
+    const movements = getReportedMovements();
+    expect(movements.map((movement) => movement.id)).toEqual(['collection', 'sanitation', 'processing']);
+    movements.forEach((movement) => {
+      expect(movement.previousPeriod).toBe('June 2026');
+      expect(movement.currentPeriod).toBe('July 2026');
+      expect(movement.grain).toBe('ULB');
+      expect(movement.matched).toBe(movement.rows.length);
+      expect(movement.increased + movement.unchanged + movement.decreased).toBe(movement.matched);
+      expect(movement.rows.every((row) => Number.isFinite(row.previous) && Number.isFinite(row.current))).toBe(true);
+    });
+    const legacy = movements.find((movement) => movement.id === 'processing')!;
+    expect(legacy.excluded).toBeGreaterThanOrEqual(1);
+    expect(legacy.boundary).toContain('held out');
+  });
+
   it('uses the latest governed period for complete MEPMA programme exports', () => {
     const summary = getCommunityProgrammeSummary();
     expect(summary.period).toBe('July 2026');
@@ -179,17 +196,17 @@ describe('operational analytics selectors', () => {
 
   it('measures operational evidence breadth without calling it official completeness', () => {
     const breadth = getEntityEvidenceBreadth();
-    expect(breadth.sourceCount).toBe(15);
-    expect(breadth.candidateCount).toBe(250);
-    expect(breadth.topCandidates[0].sourceCount).toBe(12);
-    expect(breadth.distribution.reduce((total, item) => total + item.candidates, 0)).toBe(250);
+    expect(breadth.sourceCount).toBe(21);
+    expect(breadth.candidateCount).toBe(265);
+    expect(breadth.topCandidates[0].sourceCount).toBe(15);
+    expect(breadth.distribution.reduce((total, item) => total + item.candidates, 0)).toBe(265);
   });
 
   it('builds deterministic source-reconciliation queues', () => {
     const issues = getSourceReconciliationIssues();
     const count = (id: string) => issues.find((issue) => issue.id === id)?.count;
-    expect(count('recon-duplicates')).toBe(6);
-    expect(count('recon-ambiguous')).toBe(12);
+    expect(count('recon-duplicates')).toBe(46);
+    expect(count('recon-ambiguous')).toBe(243);
     expect(count('recon-percentage')).toBe(296);
     expect(count('recon-zero-target')).toBe(104);
     expect(count('recon-above-target')).toBe(22);
@@ -214,21 +231,22 @@ describe('operational analytics selectors', () => {
 
   it('accounts for all 46 catalogue entries and distinguishes used from unavailable data', () => {
     const audit = getDatasetUsageAudit();
-    expect(audit.total).toBe(46);
-    expect(audit.used).toBe(29);
-    expect(audit.primary).toBe(16);
-    expect(audit.supporting).toBe(13);
+    expect(audit.total).toBe(50);
+    // +2 on 2026-09-08: the IHHL construction pair moved from documented to retained.
+    expect(audit.used).toBe(44);
+    expect(audit.primary).toBe(28);
+    expect(audit.supporting).toBe(16);
     // Gobardhan alone: authorized, and every route to it still fails.
-    expect(audit.unavailable).toBe(1);
+    expect(audit.unavailable).toBe(0);
     // Documented on paper only, endpoint not live (3 PR + 10 CDMA that 404).
-    expect(audit.pending).toBe(13);
+    expect(audit.pending).toBe(3);
     // Live and readable on 2 September, no retained snapshot yet. This is the
     // only bucket that can be acted on without waiting for anyone else.
     expect(audit.awaitingPull).toBe(3);
     expect(audit.awaitingPullRows).toBe(193424);
     // Every entry lands in exactly one bucket.
     expect(audit.primary + audit.supporting + audit.pending + audit.unavailable + audit.awaitingPull).toBe(audit.total);
-    expect(audit.rows.filter((row) => row.records > 0)).toHaveLength(29);
+    expect(audit.rows.filter((row) => row.records > 0)).toHaveLength(44);
     // Reachable is not retained: an awaiting-pull row carries no records.
     expect(audit.rows.filter((row) => row.state === 'awaiting-pull').every((row) => row.records === 0)).toBe(true);
   });
@@ -243,17 +261,29 @@ describe('operational analytics selectors', () => {
     expect(fstp.months).toEqual([6, 7]);
     expect(fstp.conflict).toBe(true);
     expect(outcomes.every((row) => row.years.join() === '2024' && row.months.length === 0)).toBe(true);
-    expect(gobardhan.retrieved).toBe(false);
+    // Retained 2026-09-08 after recovering from a prolonged 502. It carries no month
+    // or year column, so it is retrieved but still not placed in an operational period.
+    expect(gobardhan.retrieved).toBe(true);
+    expect(gobardhan.years).toEqual([]);
+    expect(gobardhan.period).toBe('Period not supplied');
     expect(documentedPr).toHaveLength(3);
-    expect(documentedPr.every((row) => !row.retrieved && row.years.length === 0 && row.months.length === 0)).toBe(true);
-    expect(documentedPr.every((row) => row.period.includes('documentation example only'))).toBe(true);
+    // The 56-row SWPC operator source was retained 2026-09-08. The other two are
+    // gram-panchayat grain at 26,702 and 3,965,247 rows and stay documented-only.
+    const retainedPr = documentedPr.filter((row) => row.retrieved);
+    expect(retainedPr.map((row) => row.tableKey)).toEqual(['sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026']);
+    expect(retainedPr[0].period).toBe('Period not supplied');
+    const pendingPr = documentedPr.filter((row) => !row.retrieved);
+    expect(pendingPr).toHaveLength(2);
+    expect(pendingPr.every((row) => row.years.length === 0 && row.months.length === 0)).toBe(true);
+    expect(pendingPr.every((row) => row.period.includes('documentation example only'))).toBe(true);
   });
 
   it('surfaces evidence issues as operational quality states', () => {
     const issues = getDataQualityIssues();
-    expect(issues.find((item) => item.id === 'duplicates')?.count).toBe(6);
+    expect(issues.find((item) => item.id === 'duplicates')?.count).toBe(46);
     expect(issues.find((item) => item.id === 'period-conflicts')?.count).toBe(35);
-    expect(issues.find((item) => item.id === 'unavailable')?.count).toBe(1);
+    // Gobardhan recovered on 2026-09-08; no authorized endpoint is unavailable now.
+    expect(issues.find((item) => item.id === 'unavailable')?.count).toBe(0);
     expect(issues.find((item) => item.id === 'pagination')?.count).toBe(0);
     expect(issues.find((item) => item.id === 'documented-pr')?.count).toBe(3);
     expect(issues.find((item) => item.id === 'pr-pagination')?.count).toBe(1);

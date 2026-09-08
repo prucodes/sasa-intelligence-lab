@@ -18,6 +18,7 @@
  */
 
 import type { Coverage } from '@/lib/coverage';
+import { eligibleReviewRows } from '@/lib/overview';
 import {
   getCollectionProcurementSummary,
   getIHHLFunnel,
@@ -101,7 +102,7 @@ function concentrationOf(entities: FindingEntity[], total: number, count: number
  */
 function undeliveredOrders(): Finding | null {
   const summary = getCollectionProcurementSummary();
-  const rows = summary.rows.filter((row) => row.ulb && (row.workOrders ?? 0) > 0);
+  const rows = eligibleReviewRows(summary.rows, (row) => [row.workOrders, row.supplied]).rows.filter((row) => row.workOrders! > 0);
   if (!rows.length) return null;
 
   const entities: FindingEntity[] = rows
@@ -129,7 +130,7 @@ function undeliveredOrders(): Finding | null {
     unit: 'vehicles',
     total,
     headline: `${total.toLocaleString('en-IN')} vehicles ordered and not delivered`,
-    statement: `${stalled} of ${rows.length} ULBs with work orders have received nothing at all.`,
+    statement: `${stalled} of ${rows.length} ULBs with work orders report zero vehicles supplied.`,
     affected: entities.length,
     reporting: rows.length,
     stalled,
@@ -152,7 +153,7 @@ function undeliveredOrders(): Finding | null {
  */
 function stalledApprovals(): Finding | null {
   const funnel = getIHHLFunnel();
-  const rows = funnel.rows.filter((row) => (row.approved ?? 0) > 0);
+  const rows = eligibleReviewRows(funnel.rows, (row) => [row.approved, row.completed, row.underConstruction]).rows.filter((row) => row.approved! > 0);
   if (!rows.length) return null;
 
   const entities: FindingEntity[] = rows
@@ -212,9 +213,8 @@ function stalledApprovals(): Finding | null {
  */
 function remainingLegacyWaste(): Finding | null {
   const summary = getLegacyWasteSummary();
-  const rows = summary.rows.filter(
-    (row) => row.balanceCheck !== 'conflict' && (row.balance ?? 0) > 0 && (row.target ?? 0) > 0,
-  );
+  const eligible = eligibleReviewRows(summary.rows, (row) => [row.target, row.achievement, row.balance], (row) => row.balanceCheck === 'pass').rows;
+  const rows = eligible.filter((row) => row.balance! > 0 && row.target! > 0);
   if (!rows.length) return null;
 
   const entities: FindingEntity[] = rows
@@ -241,9 +241,9 @@ function remainingLegacyWaste(): Finding | null {
     unit: 'tonnes',
     total,
     headline: `${Math.round(total).toLocaleString('en-IN')} tonnes of legacy waste remain`,
-    statement: `${entities.length} of ${summary.rows.length} ULBs report a balance still on the ground.`,
+    statement: `${entities.length} of ${eligible.length} usable ULB records report a remaining balance.`,
     affected: entities.length,
-    reporting: summary.rows.length,
+    reporting: eligible.length,
     stalled: entities.filter((entity) => entity.stalled).length,
     entities: entities.slice(0, TOP_N),
     rankedBy: 'share',

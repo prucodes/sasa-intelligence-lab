@@ -119,9 +119,11 @@ async function completedOffsets(dir) {
 }
 
 async function main() {
-  const [tableKey, ...rest] = process.argv.slice(2);
-  if (!tableKey) {
-    console.error('Usage: node scripts/ingest.mjs <tableKey> [--month <YYYYMM>] [--year <YYYY>] [--fresh]');
+  const argv = process.argv.slice(2);
+  const rest = argv.filter((arg) => arg.startsWith('--') || argv[argv.indexOf(arg) - 1]?.startsWith('--'));
+  const tableKeys = argv.filter((arg) => !rest.includes(arg));
+  if (!tableKeys.length) {
+    console.error('Usage: node scripts/ingest.mjs <tableKey> [<tableKey> ...] [--month <YYYYMM>] [--year <YYYY>] [--fresh]');
     console.error(`Known keys: ${Object.keys(datasets).join(', ')}`);
     process.exit(1);
   }
@@ -142,12 +144,23 @@ async function main() {
     process.exit(1);
   }
 
+  // One Session for every dataset in the run. Refresh tokens ROTATE on use and the new
+  // one is held in memory, so a second process started with the original token can find
+  // it already spent. Passing several keys to one invocation is therefore not a
+  // convenience — it is the only reliable way to pull more than one dataset per token.
+  const session = new Session(refreshToken);
+  for (const tableKey of tableKeys) {
+    console.log(`\n=== ${tableKey} ===`);
+    await ingestOne(session, tableKey, filters, fresh);
+  }
+}
+
+async function ingestOne(session, tableKey, filters, fresh) {
   const dir = rawDir(tableKey);
   await mkdir(dir, { recursive: true });
   const done = fresh ? new Set() : await completedOffsets(dir);
   if (done.size) console.log(`Resuming: ${done.size} page(s) already retrieved.`);
 
-  const session = new Session(refreshToken);
   let pageToken = done.size ? tokenForOffset(Math.max(...done) + PAGE_SIZE) : null;
   let retained = done.size * PAGE_SIZE;
   let total = null;

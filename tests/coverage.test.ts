@@ -127,10 +127,12 @@ describe('analytics summaries carry entity coverage', () => {
  * source ever stated, which is how Nellore's sweeping machines became 23.
  */
 describe('disputed values leave the aggregate', () => {
-  it('finds the twelve disagreements across the retained snapshots', () => {
+  it('finds every disagreement across the retained snapshots', () => {
     const disputed = getDisputedValues();
-    expect(disputed.total).toBe(12);
-    expect(disputed.datasets).toBe(2);
+    // Rose from 12 across 2 datasets when the September 2026 vintage was retained:
+    // the LGD-enriched exports disagree with themselves as well as with each other.
+    expect(disputed.total).toBe(76);
+    expect(disputed.datasets).toBe(3);
   });
 
   it('drops both rows of a disputed place rather than summing them', () => {

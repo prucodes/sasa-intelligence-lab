@@ -44,36 +44,49 @@ describe('evidence-safe calculations', () => {
     expect(sasaCatalogue).toHaveLength(27);
     expect(sasaCatalogueStats.documentedFields).toBe(242);
     expect(sasaCatalogueStats.themes).toBe(6);
-    expect(sasaCatalogueStats.retainedExcerpts).toBe(6);
-    expect(sasaCatalogueStats.completePayloads).toBe(0);
+    expect(sasaCatalogueStats.retainedExcerpts).toBe(7);
+    // Gobardhan: the one SASA key whose complete response is now retained.
+    expect(sasaCatalogueStats.completePayloads).toBe(1);
     expect(sasaCatalogue.every((dataset) => dataset.scoringEligibility === 'UNSCORED')).toBe(true);
     expect(authorizedCatalogueStats.authorizedDatasets).toBe(30);
     expect(authorizedCatalogueStats.serpDatasets).toBe(3);
-    expect(datasets.SAMPLE.readiness.rows).toHaveLength(46);
+    expect(datasets.SAMPLE.readiness.rows).toHaveLength(50);
   });
 
   it('adds documented PR and CDMA integrations without promoting them to authenticated snapshots', () => {
     expect(documentedIntegrationCatalogue).toHaveLength(3);
     expect(cdmaIntegrationCatalogue).toHaveLength(13);
-    expect(readinessCatalogueStats.documentedDatasets).toBe(46);
-    expect(readinessCatalogueStats.documentedPending).toBe(16);
-    // Three CDMA keys are live (re-verified 3 September 2026); the other ten
-    // still return dataset_not_found (404).
-    const cdmaLive = cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED');
+    expect(readinessCatalogueStats.documentedDatasets).toBe(50);
+    expect(readinessCatalogueStats.documentedPending).toBe(6);
+    // The CDMA thirteen now sit in three distinct states, and the distinction between
+    // them is the point: retained is not the same as reachable, and reachable is not
+    // the same as documented.
+    const cdmaAuthorized = cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED');
+    expect(cdmaAuthorized).toHaveLength(12);
+
+    // Two were granted in the September LGD pass and are fully retained (2026-09-08).
+    const cdmaRetained = cdmaAuthorized.filter((dataset) => dataset.completePayload);
+    expect(cdmaRetained).toHaveLength(9);
+    expect(cdmaRetained.map((dataset) => dataset.tableKey)).toContain('housing_construction_of_ihhls_new1_api');
+    expect(cdmaRetained.map((dataset) => dataset.tableKey)).toContain('compost_pits_api');
+
+    // Three are readable but far too large to retain in one page, so they stay unpulled.
+    const cdmaLive = cdmaAuthorized.filter((dataset) => !dataset.completePayload);
     expect(cdmaLive).toHaveLength(3);
     expect(cdmaLive.every((dataset) => (dataset.liveRowCount ?? 0) > 0)).toBe(true);
     expect(cdmaLive.every((dataset) => dataset.liveCheckedOn === '2026-09-06')).toBe(true);
-    expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(10);
-    // The invariant that matters: reachable is not the same as retained, and
-    // neither makes a source scoreable. This must hold for all thirteen.
-    expect(cdmaIntegrationCatalogue.every((dataset) => dataset.completePayload === false)).toBe(true);
-    expect(cdmaIntegrationCatalogue.every((dataset) => dataset.retainedExcerpt === false)).toBe(true);
+    expect(cdmaLive.every((dataset) => dataset.retainedExcerpt === false)).toBe(true);
+
+    expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(1);
+    // The invariant that survives all three states: nothing here is scoreable.
     expect(cdmaIntegrationCatalogue.every((dataset) => dataset.scoringEligibility === 'UNSCORED')).toBe(true);
     // 193,424 rows are readable today and none of them are in the product yet.
     expect(readinessCatalogueStats.liveNotIngestedDatasets).toBe(3);
     expect(readinessCatalogueStats.liveNotIngestedRows).toBe(193424);
     expect(readinessCatalogueStats.documentedPendingFields).toBe(24);
-    expect(documentedIntegrationCatalogue.every((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toBe(true);
+    // The SWPC operator source was retained 2026-09-08; the two gram-panchayat-grain
+    // keys behind it are 26,702 and 3,965,247 rows and stay documented-only for now.
+    expect(documentedIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(2);
     expect(documentedIntegrationCatalogue.every((dataset) => dataset.scoringEligibility === 'UNSCORED')).toBe(true);
     expect(documentedIntegrationCatalogue.map((dataset) => dataset.sourceGrain)).toEqual([
       'Gram Panchayat',
@@ -83,8 +96,10 @@ describe('evidence-safe calculations', () => {
   });
 
   it('reconciles every authenticated snapshot while retaining unscored ULB candidates', () => {
-    expect(governedSnapshotStats.completeDatasets).toBe(29);
-    expect(governedSnapshotStats.records).toBe(4359);
+    // 29 retained 2026-08-28, plus 14 retained 2026-09-08 from the September grant
+    // and the platform's LGD standardisation pass.
+    expect(governedSnapshotStats.completeDatasets).toBe(44);
+    expect(governedSnapshotStats.records).toBe(6509);
     expect(governedSnapshotStats.baselineUlbRows).toBe(119);
     expect(governedSnapshotStats.baselineUlbCandidates).toBe(123);
     expect(governedSnapshots.every(isCompleteSnapshot)).toBe(true);

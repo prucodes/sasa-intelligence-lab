@@ -65,6 +65,7 @@ async function main() {
   if (base) {
     console.log(`[4/5] rewriting absolute paths for subpath ${base}`);
     await rewriteBase(OUT, base);
+    await assertNoBareRouteLinks(OUT, base, await appRouteTokens());
   }
 
   console.log(`[${base ? 5 : 4}/${base ? 5 : 4}] .nojekyll`);
@@ -85,11 +86,13 @@ async function main() {
  * the RSC payloads used for client navigation.
  */
 async function rewriteBase(dir, base) {
-  // Order matters only in that longer, unambiguous tokens are safe to replace globally.
-  // '/_next/' is intentionally NOT here: assetPrefix already prefixes those and the
+  // Route tokens are read from app/ rather than listed here. A hardcoded list silently
+  // stopped prefixing /reconciliation when that route was added, which 404s the nav link
+  // on Pages while every local check passes — so the list is derived and then verified.
+  // '/_next/' is intentionally NOT included: assetPrefix already prefixes those and the
   // webpack runtime publicPath, which a text rewrite cannot reach for lazy chunks.
-  const tokens = ['/assets/', '/icon.svg', '/ap-districts.geojson',
-    '/data-readiness', '/gap-radar', '/operational-analytics', '/diagnostics'];
+  const routeTokens = await appRouteTokens();
+  const tokens = ['/assets/', '/icon.svg', '/ap-districts.geojson', ...routeTokens];
   const files = (await readdir(dir, { recursive: true }))
     .filter((f) => /\.(html|js|rsc|json|txt|css)$/.test(f));
   let changed = 0;
@@ -121,6 +124,50 @@ async function rewriteBase(dir, base) {
     if (text !== before) { await writeFile(path, text); changed += 1; }
   }
   console.log(`   rewrote ${changed} files`);
+}
+
+/**
+ * Every top-level route the app defines, as a leading-slash token.
+ *
+ * Derived from app/<segment>/page.tsx so adding a route cannot silently skip the subpath
+ * rewrite. Dynamic segments ([ulbKey]) are covered by their parent token: '/diagnostics'
+ * prefixes '/diagnostics/demo-delta' too.
+ */
+async function appRouteTokens() {
+  const appDir = resolve(process.cwd(), 'app');
+  const entries = await readdir(appDir, { withFileTypes: true });
+  const tokens = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory() || entry.name.startsWith('[') || entry.name.startsWith('_')) continue;
+    // A page may sit directly in the folder (app/gap-radar/page.tsx) or under a dynamic
+    // segment (app/diagnostics/[ulbKey]/page.tsx). Both make '/<segment>' a real route
+    // prefix, and missing the second kind is exactly how /diagnostics went unprefixed.
+    const nested = (await readdir(resolve(appDir, entry.name), { recursive: true }))
+      .some((file) => file.endsWith('page.tsx'));
+    if (nested) tokens.push(`/${entry.name}`);
+  }
+  // Longest first, so '/diagnostics' is not partially matched by a shorter sibling.
+  return tokens.sort((a, b) => b.length - a.length);
+}
+
+/**
+ * Fail the build if any route link survived without the base path. Catching this here is
+ * the difference between a broken nav item and a green deploy that 404s on click.
+ */
+async function assertNoBareRouteLinks(dir, base, routeTokens) {
+  const offenders = [];
+  const files = (await readdir(dir, { recursive: true })).filter((f) => f.endsWith('.html'));
+  for (const rel of files) {
+    const text = await readFile(resolve(dir, rel), 'utf8');
+    for (const token of routeTokens) {
+      // A bare href is one whose token is not preceded by the base path.
+      const bare = new RegExp(`(src|href)="${token}(?![\\w-])`, 'g');
+      if (bare.test(text)) offenders.push(`${rel}: ${token}`);
+    }
+  }
+  if (offenders.length) {
+    throw new Error(`Base path ${base} was not applied to ${offenders.length} link(s):\n  ${offenders.slice(0, 12).join('\n  ')}`);
+  }
 }
 
 async function directoryStyle(dir, isLeaf = false) {

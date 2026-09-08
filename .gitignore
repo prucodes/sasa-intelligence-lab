@@ -16,3 +16,6 @@ data/aggregates/*.detail.json
 dist-static/
 tsconfig.tsbuildinfo
 artifacts/
+
+# Resumable page cache for scripts/retain-snapshot.mjs. Regenerable, never shipped.
+data/.retain-cache/

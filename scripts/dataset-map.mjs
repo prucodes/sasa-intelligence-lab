@@ -66,13 +66,15 @@ export const datasets = {
     ratios: {},
   },
 
-  waste_segregation_api: {
+  waste_egregation_api: {
     label: 'Waste segregation',
     grain: 'secretariat-day',
-    // The section index spells this `waste_egregation_api`; the heading, request body,
-    // echo and tableName all say `waste_segregation_api`. Confirm before the first pull.
-    tableKey: 'waste_segregation_api',
-    alternateTableKeys: ['waste_egregation_api'],
+    // Confirmed live 2026-09-08: the platform serves this under the section index's
+    // spelling, `waste_egregation_api` (64,368 rows). The documented heading, request
+    // body and tableName spelling `waste_segregation_api` returns 404. The typo is the
+    // real key, so it is the primary one here and the tidy spelling is the alternate.
+    tableKey: 'waste_egregation_api',
+    alternateTableKeys: ['waste_segregation_api'],
     district: ['api_lgd_dist_code', 'lgd_district_code', 'district_code'],
     districtName: ['api_district_name', 'district_name'],
     ulb: ['api_lgd_mandal_code', 'lgd_mandal_code', 'ulb_code'],
