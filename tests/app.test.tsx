@@ -103,9 +103,10 @@ describe('application shell and screens', () => {
     expect(screen.getAllByText(/complete governed snapshot/i)).toHaveLength(44);
     
     // Thirteen are documented on paper only (3 PR + 10 CDMA whose keys 404 on live).
-    expect(screen.getAllByText(/documented · ingestion pending/i, { selector: '.dataset-name span' })).toHaveLength(3);
+    expect(screen.getAllByText(/documented · ingestion pending/i, { selector: '.dataset-name span' })).toHaveLength(2);
     // Three are live and readable but not pulled, which reads differently and must.
-    expect(screen.getAllByText(/live · [\d,]+ rows · complete pull pending/i, { selector: '.dataset-name span' })).toHaveLength(3);
+    // Nothing is live-but-unpulled any more; all four were retained on 2026-09-08.
+    expect(screen.queryAllByText(/live · [\d,]+ rows · complete pull pending/i, { selector: '.dataset-name span' })).toHaveLength(0);
     expect(screen.getByText(/pagination reconciled to the source total/i)).toBeInTheDocument();
     fireEvent.change(screen.getByRole('textbox', { name: /search catalogue/i }), { target: { value: 'ITC WOW' } });
     // 'ITC WOW' matches two catalogue rows: the SAC programme and the LGD-coded

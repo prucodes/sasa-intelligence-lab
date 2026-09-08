@@ -1590,6 +1590,12 @@ const primaryDatasetUse = new Map<string, string>([
   ['magic_drains_api', 'Twelve-month delivery plan, measured in kilometres'],
   ['soak_pits_api', 'Duplicate detection: returns Compost Pits rows, excluded from totals'],
   ['sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026', 'Rural sanitation: mandal operators reported vs counted'],
+  // Retained in full but far too large to bundle; each reaches the app only as a
+  // reporting-continuity summary, which is the only honest reading they support.
+  ['msw_door_to_door_collection_api', 'Reporting continuity: 94.6% of collection on one day'],
+  ['identification_of_bulk_waste_generators_api', 'Reporting continuity: steady, from a minority of secretariats'],
+  ['onsite_processing_of_wet_waste_bwg_api', 'Reporting continuity: 3,722 of 4,033 secretariats never report'],
+  ['waste_egregation_api', 'Reporting continuity: 93.2% of segregation on one day'],
 ]);
 
 const supportingDatasetUse = new Map<string, string>([

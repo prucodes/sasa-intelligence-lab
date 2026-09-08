@@ -12,6 +12,7 @@ import { LgdCrosswalkPanel } from './lgd-crosswalk-panel';
 import { EvidenceIntegrity } from './evidence-integrity';
 import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
+import { ReportingContinuity } from './reporting-continuity';
 import './screen-features.css';
 import './evidence-content.css';
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
@@ -83,7 +84,7 @@ import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
 
 type Page = 'overview' | 'operational-analytics' | 'gap-radar' | 'reconciliation' | 'diagnostics' | 'data-readiness';
 type ColorTheme = 'light' | 'dark';
-type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'delivery' | 'rural' | 'outcomes';
+type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'delivery' | 'rural' | 'continuity' | 'outcomes';
 type AnalyticsLens = 'snapshot' | 'movement';
 
 const navItems: { page: Page; label: string; href: string; icon: IconName }[] = [
@@ -887,6 +888,7 @@ const analyticsTabs: Array<{ id: AnalyticsTab; label: string; description: strin
   { id: 'processing', label: 'Processing Infrastructure', description: 'Waste & facilities' },
   { id: 'delivery', label: 'Delivery Against Plan', description: 'Works programmes 2026-27' },
   { id: 'rural', label: 'Rural Sanitation', description: 'Gram panchayat grain' },
+  { id: 'continuity', label: 'Reporting Continuity', description: 'Filled is not reported' },
   { id: 'outcomes', label: 'Swachh Outcomes', description: '2024 context' },
 ];
 
@@ -924,7 +926,7 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
     /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const urlTab = new URLSearchParams(window.location.search).get('tab');
-      if (urlTab === 'sanitation' || urlTab === 'processing' || urlTab === 'delivery' || urlTab === 'rural' || urlTab === 'outcomes' || urlTab === 'collection') setTab(urlTab);
+      if (urlTab === 'sanitation' || urlTab === 'processing' || urlTab === 'delivery' || urlTab === 'rural' || urlTab === 'continuity' || urlTab === 'outcomes' || urlTab === 'collection') setTab(urlTab);
       if (new URLSearchParams(window.location.search).get('view') === 'movement') setLens('movement');
     } catch {
       // Fall back to the default tab.
@@ -935,7 +937,7 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   // period. Picking an explicit period pins every view to that month instead.
   const [period, setPeriod] = useState<string | null>(null);
   // Delivery reads a twelve-month plan, so a two-period movement lens does not apply.
-  const effectiveLens: AnalyticsLens = tab === 'outcomes' || tab === 'delivery' || tab === 'rural' ? 'snapshot' : lens;
+  const effectiveLens: AnalyticsLens = tab === 'outcomes' || tab === 'delivery' || tab === 'rural' || tab === 'continuity' ? 'snapshot' : lens;
   const selectLens = (nextLens: AnalyticsLens) => {
     setLens(nextLens);
     const url = new URL(window.location.href);
@@ -948,17 +950,18 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
     <PageIntro visual="operational-analytics" art={tabArt} eyebrow={tab === 'outcomes' && mode === 'SAMPLE' ? 'Source year 2024' : 'Available now'} title={tab === 'outcomes' && mode === 'SAMPLE' ? '2024 Swachh Outcomes' : 'Operational Analytics'} description={tab === 'outcomes' && mode === 'SAMPLE' ? 'Descriptive outcome evidence, intentionally separated from 2026 operational snapshots.' : 'Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible.'}><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'SAMPLE' ? 'Authenticated snapshot analytics · scoring remains gated' : mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>
     <section className="analytics-control-deck" aria-label="Analytics controls">
       <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => { setTab(item.id); if (item.id === 'outcomes') setLens('snapshot'); const url = new URL(window.location.href); url.searchParams.set('tab', item.id); if (item.id === 'outcomes') url.searchParams.delete('view'); window.history.replaceState({}, '', url); }}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
-      {mode === 'SAMPLE' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && <div className="analytics-lens-bar"><div><span>Evidence lens</span><div className="analytics-lens-switch" role="tablist" aria-label="Evidence lens"><button type="button" role="tab" aria-selected={effectiveLens === 'snapshot'} className={effectiveLens === 'snapshot' ? 'active' : ''} onClick={() => selectLens('snapshot')}><Icon name="database" size={14}/>Current snapshot</button><button type="button" role="tab" aria-selected={effectiveLens === 'movement'} className={effectiveLens === 'movement' ? 'active' : ''} onClick={() => selectLens('movement')}><Icon name="chart" size={14}/>Between periods</button></div></div><p>{effectiveLens === 'movement' ? 'Exact ULB matches across the latest two periods in one retained source.' : 'Inspect one reported period with its denominator and evidence boundary.'}</p></div>}
+      {mode === 'SAMPLE' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <div className="analytics-lens-bar"><div><span>Evidence lens</span><div className="analytics-lens-switch" role="tablist" aria-label="Evidence lens"><button type="button" role="tab" aria-selected={effectiveLens === 'snapshot'} className={effectiveLens === 'snapshot' ? 'active' : ''} onClick={() => selectLens('snapshot')}><Icon name="database" size={14}/>Current snapshot</button><button type="button" role="tab" aria-selected={effectiveLens === 'movement'} className={effectiveLens === 'movement' ? 'active' : ''} onClick={() => selectLens('movement')}><Icon name="chart" size={14}/>Between periods</button></div></div><p>{effectiveLens === 'movement' ? 'Exact ULB matches across the latest two periods in one retained source.' : 'Inspect one reported period with its denominator and evidence boundary.'}</p></div>}
       {mode === 'SAMPLE' && effectiveLens === 'snapshot' && <PeriodScrubber period={period} onChange={setPeriod}/>}
     </section>
-    {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && <ReportedPeriods tab={tab}/>}
-    {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && <AnalyticsInsightBrief tab={tab} period={period}/>}
-    {mode !== 'SAMPLE' ? <ModeAnalyticsPlaceholder mode={mode} tab={tab}/> : effectiveLens === 'movement' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' ? <ReportedMovementExplorer movement={getReportedMovement(tab)}/> : <>
+    {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <ReportedPeriods tab={tab}/>}
+    {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <AnalyticsInsightBrief tab={tab} period={period}/>}
+    {mode !== 'SAMPLE' ? <ModeAnalyticsPlaceholder mode={mode} tab={tab}/> : effectiveLens === 'movement' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' ? <ReportedMovementExplorer movement={getReportedMovement(tab)}/> : <>
       {tab === 'collection' && <CollectionAnalytics period={period}/>}
       {tab === 'sanitation' && <SanitationAnalytics period={period}/>}
       {tab === 'processing' && <ProcessingAnalytics period={period}/>}
       {tab === 'delivery' && <DeliveryPlans/>}
       {tab === 'rural' && <RuralSanitation/>}
+      {tab === 'continuity' && <ReportingContinuity/>}
       {tab === 'outcomes' && <OutcomeAnalytics/>}
     </>}
     <EvidenceLabel mode={mode}/>

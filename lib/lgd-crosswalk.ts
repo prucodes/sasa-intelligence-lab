@@ -324,13 +324,19 @@ export interface VintageCorroboration {
 export function getIhhlVintageCorroboration(): VintageCorroboration {
   const measures = ['ihhls_approved_by_mohua', 'no_of_benf_identified', 'under_construction', 'completed'];
   const sources: [string, string] = ['sasa_sac_identification_of_new_ihhls_api', 'ihhl_new_identification_new1_api'];
-  const latest = (tableKey: string) => {
+  const latest = (tableKey: string): Map<string, SnapshotRecord> => {
     const snapshot = governedSnapshotByKey.get(tableKey);
-    if (!snapshot) return new Map<string, SnapshotRecord>();
+    const result = new Map<string, SnapshotRecord>();
+    if (!snapshot) return result;
     const month = (record: SnapshotRecord) => Number(record.month_number ?? record.mnth_no ?? 0);
     const newest = Math.max(...snapshot.records.map(month));
-    const rows = snapshot.records.filter((record) => month(record) === newest);
-    return new Map(rows.map((record) => [sourceCandidateKey(record) ?? '', record]).filter(([key]) => key));
+    for (const record of snapshot.records) {
+      if (month(record) !== newest) continue;
+      const key = sourceCandidateKey(record);
+      // A row without an identity cannot be matched against the other vintage.
+      if (key) result.set(key, record);
+    }
+    return result;
   };
 
   const left = latest(sources[0]);

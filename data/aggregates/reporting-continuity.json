@@ -1,0 +1,584 @@
+{
+  "version": 1,
+  "grain": "Dataset · reported day",
+  "sourceGrain": "Secretariat · day",
+  "generatedFrom": {
+    "identification_of_bulk_waste_generators_api": {
+      "generatedAt": "2026-09-08T21:13:37.157Z",
+      "rows": 64528,
+      "pages": 646,
+      "reportedTotalRecordCount": 64528
+    },
+    "msw_door_to_door_collection_api": {
+      "generatedAt": "2026-09-08T20:46:27.112Z",
+      "rows": 64368,
+      "pages": 644,
+      "reportedTotalRecordCount": 64368
+    },
+    "onsite_processing_of_wet_waste_bwg_api": {
+      "generatedAt": "2026-09-08T21:40:02.698Z",
+      "rows": 64528,
+      "pages": 646,
+      "reportedTotalRecordCount": 64528
+    },
+    "waste_egregation_api": {
+      "generatedAt": "2026-09-08T22:07:28.667Z",
+      "rows": 64368,
+      "pages": 644,
+      "reportedTotalRecordCount": 64368
+    }
+  },
+  "datasets": [
+    {
+      "tableKey": "identification_of_bulk_waste_generators_api",
+      "label": "Bulk waste generator identification",
+      "unit": "generators",
+      "measureLabel": "bulk waste generators",
+      "rows": 64528,
+      "measure": "no_of_bwgs",
+      "entityGrain": "Secretariat",
+      "entities": 4033,
+      "entitiesNeverReporting": 3095,
+      "entitiesReportingEveryDay": 925,
+      "days": [
+        {
+          "date": "2026-08-12",
+          "rows": 4917,
+          "reporting": 1198,
+          "reportingRatio": 0.24364449867805574,
+          "value": 2240
+        },
+        {
+          "date": "2026-08-13",
+          "rows": 4692,
+          "reporting": 1082,
+          "reportingRatio": 0.23060528559249788,
+          "value": 2110
+        },
+        {
+          "date": "2026-08-14",
+          "rows": 4214,
+          "reporting": 927,
+          "reportingRatio": 0.21998101566207878,
+          "value": 1793
+        },
+        {
+          "date": "2026-08-15",
+          "rows": 3757,
+          "reporting": 810,
+          "reportingRatio": 0.21559755123768964,
+          "value": 1484
+        },
+        {
+          "date": "2026-08-16",
+          "rows": 4448,
+          "reporting": 991,
+          "reportingRatio": 0.22279676258992806,
+          "value": 1880
+        },
+        {
+          "date": "2026-08-17",
+          "rows": 3415,
+          "reporting": 795,
+          "reportingRatio": 0.232796486090776,
+          "value": 1425
+        },
+        {
+          "date": "2026-08-18",
+          "rows": 4933,
+          "reporting": 1144,
+          "reportingRatio": 0.23190756132171092,
+          "value": 2378
+        },
+        {
+          "date": "2026-08-19",
+          "rows": 4700,
+          "reporting": 999,
+          "reportingRatio": 0.2125531914893617,
+          "value": 1798
+        },
+        {
+          "date": "2026-08-20",
+          "rows": 5731,
+          "reporting": 1220,
+          "reportingRatio": 0.212877333798639,
+          "value": 2056
+        },
+        {
+          "date": "2026-08-21",
+          "rows": 4670,
+          "reporting": 1023,
+          "reportingRatio": 0.2190578158458244,
+          "value": 1994
+        },
+        {
+          "date": "2026-08-22",
+          "rows": 3804,
+          "reporting": 926,
+          "reportingRatio": 0.2434279705573081,
+          "value": 1622
+        },
+        {
+          "date": "2026-08-23",
+          "rows": 4720,
+          "reporting": 1048,
+          "reportingRatio": 0.22203389830508474,
+          "value": 1954
+        },
+        {
+          "date": "2026-08-24",
+          "rows": 3149,
+          "reporting": 814,
+          "reportingRatio": 0.25849476024134643,
+          "value": 1382
+        },
+        {
+          "date": "2026-08-25",
+          "rows": 4349,
+          "reporting": 1285,
+          "reportingRatio": 0.29547022303977927,
+          "value": 3098
+        },
+        {
+          "date": "2026-08-26",
+          "rows": 2250,
+          "reporting": 545,
+          "reportingRatio": 0.24222222222222223,
+          "value": 1069
+        },
+        {
+          "date": "2026-08-27",
+          "rows": 779,
+          "reporting": 196,
+          "reportingRatio": 0.251604621309371,
+          "value": 295
+        }
+      ],
+      "busiestDate": "2026-08-25",
+      "busiestDateShare": 0.10840506683462804,
+      "evenShare": 0.0625,
+      "verdict": "partial-but-steady",
+      "naiveRatio": null,
+      "busiestDayRatio": null,
+      "totalValue": 28578,
+      "totalDenominator": 0,
+      "retrievedAt": "2026-09-08T21:13:37.157Z",
+      "pages": 646,
+      "reportedTotalRecordCount": 64528
+    },
+    {
+      "tableKey": "msw_door_to_door_collection_api",
+      "label": "MSW door-to-door collection",
+      "unit": "households",
+      "measureLabel": "collected households",
+      "rows": 64368,
+      "measure": "collected_households",
+      "denominator": "total_households",
+      "entityGrain": "Secretariat",
+      "entities": 4023,
+      "entitiesNeverReporting": 2239,
+      "entitiesReportingEveryDay": 0,
+      "days": [
+        {
+          "date": "2026-08-12",
+          "rows": 4849,
+          "reporting": 2812,
+          "reportingRatio": 0.5799133842029285,
+          "value": 3169240
+        },
+        {
+          "date": "2026-08-13",
+          "rows": 4595,
+          "reporting": 17,
+          "reportingRatio": 0.0036996735582154514,
+          "value": 17218
+        },
+        {
+          "date": "2026-08-14",
+          "rows": 4256,
+          "reporting": 14,
+          "reportingRatio": 0.003289473684210526,
+          "value": 18479
+        },
+        {
+          "date": "2026-08-15",
+          "rows": 3774,
+          "reporting": 11,
+          "reportingRatio": 0.0029146793852676206,
+          "value": 10715
+        },
+        {
+          "date": "2026-08-16",
+          "rows": 4673,
+          "reporting": 8,
+          "reportingRatio": 0.0017119623368285898,
+          "value": 7930
+        },
+        {
+          "date": "2026-08-17",
+          "rows": 3461,
+          "reporting": 14,
+          "reportingRatio": 0.004045073678127709,
+          "value": 14783
+        },
+        {
+          "date": "2026-08-18",
+          "rows": 4824,
+          "reporting": 13,
+          "reportingRatio": 0.00269485903814262,
+          "value": 14521
+        },
+        {
+          "date": "2026-08-19",
+          "rows": 4317,
+          "reporting": 5,
+          "reportingRatio": 0.0011582117211026176,
+          "value": 4836
+        },
+        {
+          "date": "2026-08-20",
+          "rows": 5890,
+          "reporting": 13,
+          "reportingRatio": 0.0022071307300509336,
+          "value": 16569
+        },
+        {
+          "date": "2026-08-21",
+          "rows": 4664,
+          "reporting": 10,
+          "reportingRatio": 0.002144082332761578,
+          "value": 11600
+        },
+        {
+          "date": "2026-08-22",
+          "rows": 3913,
+          "reporting": 6,
+          "reportingRatio": 0.001533350370559673,
+          "value": 6488
+        },
+        {
+          "date": "2026-08-23",
+          "rows": 4699,
+          "reporting": 6,
+          "reportingRatio": 0.001276867418599702,
+          "value": 4120
+        },
+        {
+          "date": "2026-08-24",
+          "rows": 3083,
+          "reporting": 6,
+          "reportingRatio": 0.0019461563412260785,
+          "value": 7267
+        },
+        {
+          "date": "2026-08-25",
+          "rows": 4557,
+          "reporting": 18,
+          "reportingRatio": 0.003949967083607637,
+          "value": 20556
+        },
+        {
+          "date": "2026-08-26",
+          "rows": 2079,
+          "reporting": 17,
+          "reportingRatio": 0.008177008177008177,
+          "value": 22769
+        },
+        {
+          "date": "2026-08-27",
+          "rows": 734,
+          "reporting": 3,
+          "reportingRatio": 0.004087193460490463,
+          "value": 3217
+        }
+      ],
+      "busiestDate": "2026-08-12",
+      "busiestDateShare": 0.9459548196762805,
+      "evenShare": 0.0625,
+      "verdict": "single-day-concentration",
+      "naiveRatio": 0.04448444164916044,
+      "busiestDayRatio": 0.5610108405497455,
+      "totalValue": 3350308,
+      "totalDenominator": 75314152,
+      "retrievedAt": "2026-09-08T20:46:27.112Z",
+      "pages": 644,
+      "reportedTotalRecordCount": 64368
+    },
+    {
+      "tableKey": "onsite_processing_of_wet_waste_bwg_api",
+      "label": "On-site wet waste processing",
+      "unit": "generators",
+      "measureLabel": "generators processing wet waste on site",
+      "rows": 64528,
+      "measure": "wet_waste_processing_bwgs",
+      "entityGrain": "Secretariat",
+      "entities": 4033,
+      "entitiesNeverReporting": 3722,
+      "entitiesReportingEveryDay": 302,
+      "days": [
+        {
+          "date": "2026-08-12",
+          "rows": 4917,
+          "reporting": 364,
+          "reportingRatio": 0.07402887939800691,
+          "value": 508
+        },
+        {
+          "date": "2026-08-13",
+          "rows": 4692,
+          "reporting": 282,
+          "reportingRatio": 0.06010230179028133,
+          "value": 357
+        },
+        {
+          "date": "2026-08-14",
+          "rows": 4214,
+          "reporting": 292,
+          "reportingRatio": 0.06929283341243474,
+          "value": 383
+        },
+        {
+          "date": "2026-08-15",
+          "rows": 3757,
+          "reporting": 268,
+          "reportingRatio": 0.07133351077987757,
+          "value": 348
+        },
+        {
+          "date": "2026-08-16",
+          "rows": 4448,
+          "reporting": 297,
+          "reportingRatio": 0.06677158273381295,
+          "value": 400
+        },
+        {
+          "date": "2026-08-17",
+          "rows": 3415,
+          "reporting": 262,
+          "reportingRatio": 0.0767203513909224,
+          "value": 350
+        },
+        {
+          "date": "2026-08-18",
+          "rows": 4933,
+          "reporting": 385,
+          "reportingRatio": 0.07804581390634502,
+          "value": 499
+        },
+        {
+          "date": "2026-08-19",
+          "rows": 4700,
+          "reporting": 323,
+          "reportingRatio": 0.06872340425531914,
+          "value": 436
+        },
+        {
+          "date": "2026-08-20",
+          "rows": 5731,
+          "reporting": 608,
+          "reportingRatio": 0.10608968766358402,
+          "value": 869
+        },
+        {
+          "date": "2026-08-21",
+          "rows": 4670,
+          "reporting": 314,
+          "reportingRatio": 0.06723768736616702,
+          "value": 380
+        },
+        {
+          "date": "2026-08-22",
+          "rows": 3804,
+          "reporting": 390,
+          "reportingRatio": 0.10252365930599369,
+          "value": 531
+        },
+        {
+          "date": "2026-08-23",
+          "rows": 4720,
+          "reporting": 340,
+          "reportingRatio": 0.07203389830508475,
+          "value": 445
+        },
+        {
+          "date": "2026-08-24",
+          "rows": 3149,
+          "reporting": 334,
+          "reportingRatio": 0.10606541759288662,
+          "value": 446
+        },
+        {
+          "date": "2026-08-25",
+          "rows": 4349,
+          "reporting": 408,
+          "reportingRatio": 0.09381467003908944,
+          "value": 562
+        },
+        {
+          "date": "2026-08-26",
+          "rows": 2250,
+          "reporting": 207,
+          "reportingRatio": 0.092,
+          "value": 261
+        },
+        {
+          "date": "2026-08-27",
+          "rows": 779,
+          "reporting": 76,
+          "reportingRatio": 0.0975609756097561,
+          "value": 98
+        }
+      ],
+      "busiestDate": "2026-08-20",
+      "busiestDateShare": 0.12643678160919541,
+      "evenShare": 0.0625,
+      "verdict": "partial-but-steady",
+      "naiveRatio": null,
+      "busiestDayRatio": null,
+      "totalValue": 6873,
+      "totalDenominator": 0,
+      "retrievedAt": "2026-09-08T21:40:02.698Z",
+      "pages": 646,
+      "reportedTotalRecordCount": 64528
+    },
+    {
+      "tableKey": "waste_egregation_api",
+      "label": "Waste segregation",
+      "unit": "households",
+      "measureLabel": "households segregating waste",
+      "rows": 64368,
+      "measure": "garbage_segregation",
+      "denominator": "total_households",
+      "entityGrain": "Secretariat",
+      "entities": 4023,
+      "entitiesNeverReporting": 2244,
+      "entitiesReportingEveryDay": 0,
+      "days": [
+        {
+          "date": "2026-08-12",
+          "rows": 4849,
+          "reporting": 2801,
+          "reportingRatio": 0.5776448752320066,
+          "value": 2187401
+        },
+        {
+          "date": "2026-08-13",
+          "rows": 4595,
+          "reporting": 17,
+          "reportingRatio": 0.0036996735582154514,
+          "value": 15843
+        },
+        {
+          "date": "2026-08-14",
+          "rows": 4256,
+          "reporting": 14,
+          "reportingRatio": 0.003289473684210526,
+          "value": 13598
+        },
+        {
+          "date": "2026-08-15",
+          "rows": 3774,
+          "reporting": 11,
+          "reportingRatio": 0.0029146793852676206,
+          "value": 9458
+        },
+        {
+          "date": "2026-08-16",
+          "rows": 4673,
+          "reporting": 8,
+          "reportingRatio": 0.0017119623368285898,
+          "value": 7272
+        },
+        {
+          "date": "2026-08-17",
+          "rows": 3461,
+          "reporting": 14,
+          "reportingRatio": 0.004045073678127709,
+          "value": 11644
+        },
+        {
+          "date": "2026-08-18",
+          "rows": 4824,
+          "reporting": 13,
+          "reportingRatio": 0.00269485903814262,
+          "value": 14521
+        },
+        {
+          "date": "2026-08-19",
+          "rows": 4317,
+          "reporting": 5,
+          "reportingRatio": 0.0011582117211026176,
+          "value": 4815
+        },
+        {
+          "date": "2026-08-20",
+          "rows": 5890,
+          "reporting": 13,
+          "reportingRatio": 0.0022071307300509336,
+          "value": 15832
+        },
+        {
+          "date": "2026-08-21",
+          "rows": 4664,
+          "reporting": 10,
+          "reportingRatio": 0.002144082332761578,
+          "value": 10529
+        },
+        {
+          "date": "2026-08-22",
+          "rows": 3913,
+          "reporting": 6,
+          "reportingRatio": 0.001533350370559673,
+          "value": 4864
+        },
+        {
+          "date": "2026-08-23",
+          "rows": 4699,
+          "reporting": 6,
+          "reportingRatio": 0.001276867418599702,
+          "value": 2802
+        },
+        {
+          "date": "2026-08-24",
+          "rows": 3083,
+          "reporting": 6,
+          "reportingRatio": 0.0019461563412260785,
+          "value": 7027
+        },
+        {
+          "date": "2026-08-25",
+          "rows": 4557,
+          "reporting": 18,
+          "reportingRatio": 0.003949967083607637,
+          "value": 18099
+        },
+        {
+          "date": "2026-08-26",
+          "rows": 2079,
+          "reporting": 17,
+          "reportingRatio": 0.008177008177008177,
+          "value": 20670
+        },
+        {
+          "date": "2026-08-27",
+          "rows": 734,
+          "reporting": 3,
+          "reportingRatio": 0.004087193460490463,
+          "value": 3217
+        }
+      ],
+      "busiestDate": "2026-08-12",
+      "busiestDateShare": 0.9317636965878228,
+      "evenShare": 0.0625,
+      "verdict": "single-day-concentration",
+      "naiveRatio": 0.031170662321206244,
+      "busiestDayRatio": 0.3872081867038639,
+      "totalValue": 2347592,
+      "totalDenominator": 75314152,
+      "retrievedAt": "2026-09-08T22:07:28.667Z",
+      "pages": 644,
+      "reportedTotalRecordCount": 64368
+    }
+  ],
+  "boundary": "Every one of these exports is 100% filled on every column. Filled is not reported: a present zero is counted here as a non-report, because that is what it is. No coverage ratio is published from them."
+}

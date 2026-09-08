@@ -233,19 +233,23 @@ describe('operational analytics selectors', () => {
     const audit = getDatasetUsageAudit();
     expect(audit.total).toBe(50);
     // +2 on 2026-09-08: the IHHL construction pair moved from documented to retained.
-    expect(audit.used).toBe(44);
-    expect(audit.primary).toBe(28);
+    expect(audit.used).toBe(48);
+    expect(audit.primary).toBe(32);
     expect(audit.supporting).toBe(16);
     // Gobardhan alone: authorized, and every route to it still fails.
     expect(audit.unavailable).toBe(0);
     // Documented on paper only, endpoint not live (3 PR + 10 CDMA that 404).
-    expect(audit.pending).toBe(3);
+    expect(audit.pending).toBe(2);
     // Live and readable on 2 September, no retained snapshot yet. This is the
     // only bucket that can be acted on without waiting for anyone else.
-    expect(audit.awaitingPull).toBe(3);
-    expect(audit.awaitingPullRows).toBe(193424);
+    // Nothing is reachable-but-unretained any more: the four secretariat-day exports
+    // were pulled in full on 2026-09-08.
+    expect(audit.awaitingPull).toBe(0);
+    expect(audit.awaitingPullRows).toBe(0);
     // Every entry lands in exactly one bucket.
     expect(audit.primary + audit.supporting + audit.pending + audit.unavailable + audit.awaitingPull).toBe(audit.total);
+    // The four secretariat-day exports are retained but not bundled, so they carry no
+    // in-app records — they reach the product as a reporting-continuity summary.
     expect(audit.rows.filter((row) => row.records > 0)).toHaveLength(44);
     // Reachable is not retained: an awaiting-pull row carries no records.
     expect(audit.rows.filter((row) => row.state === 'awaiting-pull').every((row) => row.records === 0)).toBe(true);

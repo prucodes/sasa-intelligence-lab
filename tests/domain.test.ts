@@ -57,32 +57,28 @@ describe('evidence-safe calculations', () => {
     expect(documentedIntegrationCatalogue).toHaveLength(3);
     expect(cdmaIntegrationCatalogue).toHaveLength(13);
     expect(readinessCatalogueStats.documentedDatasets).toBe(50);
-    expect(readinessCatalogueStats.documentedPending).toBe(6);
+    expect(readinessCatalogueStats.documentedPending).toBe(2);
     // The CDMA thirteen now sit in three distinct states, and the distinction between
     // them is the point: retained is not the same as reachable, and reachable is not
     // the same as documented.
     const cdmaAuthorized = cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED');
-    expect(cdmaAuthorized).toHaveLength(12);
+    expect(cdmaAuthorized).toHaveLength(13);
 
     // Two were granted in the September LGD pass and are fully retained (2026-09-08).
     const cdmaRetained = cdmaAuthorized.filter((dataset) => dataset.completePayload);
-    expect(cdmaRetained).toHaveLength(9);
+    expect(cdmaRetained).toHaveLength(13);
     expect(cdmaRetained.map((dataset) => dataset.tableKey)).toContain('housing_construction_of_ihhls_new1_api');
     expect(cdmaRetained.map((dataset) => dataset.tableKey)).toContain('compost_pits_api');
 
-    // Three are readable but far too large to retain in one page, so they stay unpulled.
-    const cdmaLive = cdmaAuthorized.filter((dataset) => !dataset.completePayload);
-    expect(cdmaLive).toHaveLength(3);
-    expect(cdmaLive.every((dataset) => (dataset.liveRowCount ?? 0) > 0)).toBe(true);
-    expect(cdmaLive.every((dataset) => dataset.liveCheckedOn === '2026-09-06')).toBe(true);
-    expect(cdmaLive.every((dataset) => dataset.retainedExcerpt === false)).toBe(true);
-
-    expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(1);
+    // Nothing is reachable-but-unretained: the four secretariat-day exports were
+    // pulled in full on 2026-09-08, so every CDMA key is now retained.
+    expect(cdmaAuthorized.filter((dataset) => !dataset.completePayload)).toHaveLength(0);
+    expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(0);
     // The invariant that survives all three states: nothing here is scoreable.
     expect(cdmaIntegrationCatalogue.every((dataset) => dataset.scoringEligibility === 'UNSCORED')).toBe(true);
     // 193,424 rows are readable today and none of them are in the product yet.
-    expect(readinessCatalogueStats.liveNotIngestedDatasets).toBe(3);
-    expect(readinessCatalogueStats.liveNotIngestedRows).toBe(193424);
+    expect(readinessCatalogueStats.liveNotIngestedDatasets).toBe(0);
+    expect(readinessCatalogueStats.liveNotIngestedRows).toBe(0);
     expect(readinessCatalogueStats.documentedPendingFields).toBe(24);
     // The SWPC operator source was retained 2026-09-08; the two gram-panchayat-grain
     // keys behind it are 26,702 and 3,965,247 rows and stay documented-only for now.

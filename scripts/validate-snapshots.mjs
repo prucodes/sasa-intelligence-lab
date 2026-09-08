@@ -61,8 +61,11 @@ for (const file of aggregates) {
     continue;
   }
   for (const [key, source] of sources) {
-    if (!source?.responseId || !source?.generatedAt || typeof source?.rows !== 'number') {
-      failures.push(`aggregates/${file}: ${key} provenance is incomplete (needs responseId, generatedAt, rows)`);
+    // A single-response export identifies itself by responseId; a paginated pull has
+    // hundreds of responses and identifies itself by page and row count instead.
+    const identified = source?.responseId || typeof source?.pages === 'number';
+    if (!identified || !source?.generatedAt || typeof source?.rows !== 'number') {
+      failures.push(`aggregates/${file}: ${key} provenance is incomplete (needs generatedAt, rows, and either responseId or pages)`);
     }
   }
   if (!rollup.boundary) failures.push(`aggregates/${file}: no reading boundary stated`);
