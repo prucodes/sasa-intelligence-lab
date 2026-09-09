@@ -26,6 +26,11 @@
  * The refresh token lives ~30 minutes (refresh_expires_in 1800) and rotates on every
  * use; this script keeps the newest one, so a continuous pull stays authenticated well
  * past the 300s access-token window. Nothing is persisted except the governed payloads.
+ *
+ * Pages are fetched three at a time. The bottleneck was never data volume — a million
+ * rows is a few hundred megabytes — but request count times latency, because the API
+ * pins page size at 100 however you ask. Three-way concurrency measured 0.88s per page
+ * against 2.74s serial, turning an eight-hour pull into three.
  */
 
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
@@ -38,6 +43,15 @@ const CLIENT_ID = 'data-lake-cli';
 const PAGE_SIZE = 100;
 /** Access tokens last 300s; refresh with margin so a slow page never straddles expiry. */
 const REFRESH_MARGIN_MS = 60_000;
+/**
+ * Pages fetched in parallel.
+ *
+ * Measured 2026-09-08 on the PR export: serial is 2.74s per page, two at a time 1.35s,
+ * three 0.88s, four 1.03s — four is slower than three, so the upstream saturates just
+ * past three. Zero failures at every level tested. Three it is; the September audit's
+ * warning about spurious 504s was at roughly thirty.
+ */
+const CONCURRENCY = 3;
 
 /**
  * Where a pull's raw pages live.
@@ -57,10 +71,21 @@ class Session {
     this.refreshToken = refreshToken;
     this.accessToken = null;
     this.expiresAt = 0;
+    /** In-flight refresh, shared by every caller that finds the token stale. */
+    this.refreshing = null;
   }
 
   async token() {
     if (this.accessToken && Date.now() < this.expiresAt - REFRESH_MARGIN_MS) return this.accessToken;
+    // With parallel pages in flight, several can find the token stale at once. Without
+    // this latch each would post its own refresh, and because refresh tokens ROTATE the
+    // second one would present a token the first had already spent.
+    if (this.refreshing) return this.refreshing;
+    this.refreshing = this.refresh().finally(() => { this.refreshing = null; });
+    return this.refreshing;
+  }
+
+  async refresh() {
     const body = new URLSearchParams({
       grant_type: 'refresh_token',
       client_id: CLIENT_ID,
@@ -180,29 +205,34 @@ async function ingestOne(session, tableKey, filters, fresh) {
   const done = fresh ? new Set() : await completedOffsets(dir);
   if (done.size) console.log(`Resuming: ${done.size} page(s) already retrieved.`);
 
-  let pageToken = done.size ? tokenForOffset(Math.max(...done) + PAGE_SIZE) : null;
+  // The first page establishes the true total, which is what makes the rest
+  // parallelisable: offsets can be computed rather than discovered one reply at a time.
+  const first = await fetchPage(session, tableKey, filters, done.has(0) ? tokenForOffset(0) : null);
+  const total = first.responseMetadata?.totalRecordCount ?? null;
+  if (!done.has(0)) {
+    await writeFile(resolve(dir, 'page-00000000.json'), JSON.stringify(first), 'utf8');
+    done.add(0);
+  }
+  if (total === null) throw new Error(`${tableKey}: the API returned no totalRecordCount, so the page count is unknown`);
+
+  const offsets = [];
+  for (let offset = PAGE_SIZE; offset < total; offset += PAGE_SIZE) if (!done.has(offset)) offsets.push(offset);
   let retained = done.size * PAGE_SIZE;
-  let total = null;
   let pages = done.size;
+  console.log(`  ${total.toLocaleString('en-IN')} rows · ${offsets.length} page(s) to fetch at concurrency ${CONCURRENCY}`);
 
-  for (;;) {
-    const offset = offsetOf(pageToken);
-    if (done.has(offset)) { pageToken = tokenForOffset(offset + PAGE_SIZE); continue; }
-
-    const payload = await fetchPage(session, tableKey, filters, pageToken);
-    const meta = payload.responseMetadata ?? {};
-    const rows = Array.isArray(payload.records) ? payload.records : [];
-    total = meta.totalRecordCount ?? total;
-
-    await writeFile(resolve(dir, `page-${String(offset).padStart(8, '0')}.json`), JSON.stringify(payload), 'utf8');
-    retained += rows.length;
-    pages += 1;
-    if (pages % 25 === 0 || !meta.hasNextPage) {
-      console.log(`  ${retained.toLocaleString('en-IN')}${total ? ` / ${total.toLocaleString('en-IN')}` : ''} rows · ${pages} pages`);
+  for (let index = 0; index < offsets.length; index += CONCURRENCY) {
+    const batch = offsets.slice(index, index + CONCURRENCY);
+    const payloads = await Promise.all(batch.map((offset) => fetchPage(session, tableKey, filters, tokenForOffset(offset))));
+    for (const [position, payload] of payloads.entries()) {
+      const rows = Array.isArray(payload.records) ? payload.records : [];
+      await writeFile(resolve(dir, `page-${String(batch[position]).padStart(8, '0')}.json`), JSON.stringify(payload), 'utf8');
+      retained += rows.length;
+      pages += 1;
     }
-
-    if (!meta.hasNextPage || !meta.nextPageToken) break;
-    pageToken = meta.nextPageToken;
+    if (pages % 75 < CONCURRENCY || index + CONCURRENCY >= offsets.length) {
+      console.log(`  ${retained.toLocaleString('en-IN')} / ${total.toLocaleString('en-IN')} rows · ${pages} pages`);
+    }
   }
 
   // Reported totals have been unreliable on filtered requests, so record both rather
