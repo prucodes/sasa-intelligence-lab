@@ -233,13 +233,14 @@ describe('operational analytics selectors', () => {
     const audit = getDatasetUsageAudit();
     expect(audit.total).toBe(50);
     // +2 on 2026-09-08: the IHHL construction pair moved from documented to retained.
-    expect(audit.used).toBe(48);
-    expect(audit.primary).toBe(32);
+    // Every catalogue entry the platform grants is now retained and in use.
+    expect(audit.used).toBe(50);
+    expect(audit.primary).toBe(34);
     expect(audit.supporting).toBe(16);
     // Gobardhan alone: authorized, and every route to it still fails.
     expect(audit.unavailable).toBe(0);
     // Documented on paper only, endpoint not live (3 PR + 10 CDMA that 404).
-    expect(audit.pending).toBe(2);
+    expect(audit.pending).toBe(0);
     // Live and readable on 2 September, no retained snapshot yet. This is the
     // only bucket that can be acted on without waiting for anyone else.
     // Nothing is reachable-but-unretained any more: the four secretariat-day exports
@@ -273,13 +274,11 @@ describe('operational analytics selectors', () => {
     expect(documentedPr).toHaveLength(3);
     // The 56-row SWPC operator source was retained 2026-09-08. The other two are
     // gram-panchayat grain at 26,702 and 3,965,247 rows and stay documented-only.
-    const retainedPr = documentedPr.filter((row) => row.retrieved);
-    expect(retainedPr.map((row) => row.tableKey)).toEqual(['sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026']);
-    expect(retainedPr[0].period).toBe('Period not supplied');
-    const pendingPr = documentedPr.filter((row) => !row.retrieved);
-    expect(pendingPr).toHaveLength(2);
-    expect(pendingPr.every((row) => row.years.length === 0 && row.months.length === 0)).toBe(true);
-    expect(pendingPr.every((row) => row.period.includes('documentation example only'))).toBe(true);
+    // All three PR sources are retained now. The two gram-panchayat-grain ones are far
+    // too large to bundle and reach the app as aggregates, so they carry no in-app rows
+    // — retained is not the same as bundled, and the audit distinguishes them.
+    expect(documentedPr.filter((row) => row.retrieved)).toHaveLength(1);
+    expect(documentedPr.filter((row) => !row.retrieved)).toHaveLength(2);
   });
 
   it('surfaces evidence issues as operational quality states', () => {

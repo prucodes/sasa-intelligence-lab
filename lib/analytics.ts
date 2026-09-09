@@ -1596,6 +1596,9 @@ const primaryDatasetUse = new Map<string, string>([
   ['identification_of_bulk_waste_generators_api', 'Reporting continuity: steady, from a minority of secretariats'],
   ['onsite_processing_of_wet_waste_bwg_api', 'Reporting continuity: 3,722 of 4,033 secretariats never report'],
   ['waste_egregation_api', 'Reporting continuity: 93.2% of segregation on one day'],
+  // Rural, retained in full and reaching the app as aggregates rather than bundled rows.
+  ['sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026', 'Rural sanitation: SWPC coverage and condition across 12,874 gram panchayats'],
+  ['sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026', 'Rural cohort: collection activity against the SWPC register'],
 ]);
 
 const supportingDatasetUse = new Map<string, string>([
@@ -1677,9 +1680,15 @@ export function getDatasetPeriodAvailability(): DatasetPeriodRow[] {
       tableKey: dataset.tableKey,
       years: [],
       months: [],
+      // No bundled snapshot is not the same as no data. Six exports are retained in
+      // full and too large to ship, so they reach the app as aggregates and carry no
+      // in-app rows. Calling those "Unavailable" would misreport the one thing this
+      // screen exists to state accurately.
       period: dataset.sourceState === 'DOCUMENTED — INGESTION PENDING'
         ? 'Not retained · documentation example only'
-        : 'Unavailable',
+        : dataset.completePayload
+          ? 'Retained in full · too large to bundle · reaches the app as an aggregate'
+          : 'Unavailable',
       retrieved: false,
       conflict: false,
     };

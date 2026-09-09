@@ -57,7 +57,7 @@ describe('evidence-safe calculations', () => {
     expect(documentedIntegrationCatalogue).toHaveLength(3);
     expect(cdmaIntegrationCatalogue).toHaveLength(13);
     expect(readinessCatalogueStats.documentedDatasets).toBe(50);
-    expect(readinessCatalogueStats.documentedPending).toBe(2);
+    expect(readinessCatalogueStats.documentedPending).toBe(0);
     // The CDMA thirteen now sit in three distinct states, and the distinction between
     // them is the point: retained is not the same as reachable, and reachable is not
     // the same as documented.
@@ -80,9 +80,10 @@ describe('evidence-safe calculations', () => {
     expect(readinessCatalogueStats.liveNotIngestedDatasets).toBe(0);
     expect(readinessCatalogueStats.liveNotIngestedRows).toBe(0);
     expect(readinessCatalogueStats.documentedPendingFields).toBe(24);
-    // The SWPC operator source was retained 2026-09-08; the two gram-panchayat-grain
-    // keys behind it are 26,702 and 3,965,247 rows and stay documented-only for now.
-    expect(documentedIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(2);
+    // All three PR sources are retained. The two gram-panchayat-grain ones reach the
+    // app as aggregates rather than bundled rows, which the joinEligibility records.
+    expect(documentedIntegrationCatalogue.every((dataset) => dataset.sourceState === 'AUTHORIZED')).toBe(true);
+    expect(documentedIntegrationCatalogue.filter((dataset) => dataset.joinEligibility.includes('TOO LARGE TO BUNDLE'))).toHaveLength(2);
     expect(documentedIntegrationCatalogue.every((dataset) => dataset.scoringEligibility === 'UNSCORED')).toBe(true);
     expect(documentedIntegrationCatalogue.map((dataset) => dataset.sourceGrain)).toEqual([
       'Gram Panchayat',

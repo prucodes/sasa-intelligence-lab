@@ -103,7 +103,8 @@ describe('application shell and screens', () => {
     expect(screen.getAllByText(/complete governed snapshot/i)).toHaveLength(44);
     
     // Thirteen are documented on paper only (3 PR + 10 CDMA whose keys 404 on live).
-    expect(screen.getAllByText(/documented · ingestion pending/i, { selector: '.dataset-name span' })).toHaveLength(2);
+    // Nothing is documented-only any more: every granted dataset is retained.
+    expect(screen.queryAllByText(/documented · ingestion pending/i, { selector: '.dataset-name span' })).toHaveLength(0);
     // Three are live and readable but not pulled, which reads differently and must.
     // Nothing is live-but-unpulled any more; all four were retained on 2026-09-08.
     expect(screen.queryAllByText(/live · [\d,]+ rows · complete pull pending/i, { selector: '.dataset-name span' })).toHaveLength(0);
