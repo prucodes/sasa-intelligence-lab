@@ -1,0 +1,58 @@
+/* A null result. Bars share a full scale so sameness reads as sameness. */
+.rural-cohort { --rc2-accent: #087f83; --rc2-warn: #b8791f; margin-block: 28px; color: var(--ink); }
+.rural-cohort :is(h2,h3,p) { margin: 0; }
+.rural-cohort summary:focus-visible { outline: 3px solid var(--rc2-accent); outline-offset: 4px; }
+.rc2-kicker { display: block; font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; color: var(--rc2-warn); margin-bottom: 10px; }
+.rc2-intro { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 34px; align-items: start; margin-bottom: 24px; }
+.rc2-intro h2 { font-size: clamp(22px,2.3vw,32px); line-height: 1.2; letter-spacing: -.04em; font-weight: 600; margin-bottom: 12px; }
+.rc2-intro h2 em { font-style: normal; font-family: Georgia,serif; font-weight: 400; color: var(--rc2-warn); }
+.rc2-intro p { font-size: 13px; line-height: 1.75; color: var(--muted); max-width: 62ch; }
+.rc2-summary { display: grid; gap: 2px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin: 0; }
+.rc2-summary > div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; background: var(--surface); padding: 13px 18px; }
+.rc2-summary dt { font-size: 11px; color: var(--muted); }
+.rc2-summary dd { margin: 0; font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; text-align: right; }
+.rc2-summary dd span { display: block; font-size: 10px; font-weight: 400; color: var(--muted); }
+
+.rc2-compare, .rc2-condition { border: 1px solid var(--line); border-radius: 14px; padding: 22px; background: var(--surface); margin-bottom: 16px; }
+.rc2-compare h3, .rc2-condition h3 { font-size: 15px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 16px; }
+.rc2-compare ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.rc2-compare li { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,2fr) auto; align-items: center; gap: 16px; }
+.rc2-label b { display: block; font-size: 13px; font-weight: 600; }
+.rc2-label small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.rc2-bar { height: 16px; border-radius: 8px; background: var(--line); overflow: hidden; }
+.rc2-bar i { display: block; height: 100%; background: var(--rc2-accent); }
+.rc2-compare strong { font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; }
+.rc2-scale { margin-top: 16px !important; font-size: 11px; line-height: 1.7; color: var(--muted); }
+
+.rc2-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+.rural-cohort table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 12px; }
+.rural-cohort th, .rural-cohort td { padding: 10px 14px; text-align: right; white-space: nowrap; }
+.rural-cohort thead th { font-size: 10px; color: var(--muted); font-weight: 650; }
+.rural-cohort th[scope=row] { text-align: left; font-weight: 500; }
+.rural-cohort tbody tr { border-top: 1px solid var(--line); }
+.rural-cohort td { font-variant-numeric: tabular-nums; }
+.rural-cohort em { font-style: normal; color: var(--muted); }
+.rc2-nonmono { margin-top: 14px !important; font-size: 12px; line-height: 1.75; color: var(--muted); }
+.rc2-nonmono b { color: var(--ink); }
+
+.rc2-readings { border: 1px solid #d8b483; border-left: 4px solid var(--rc2-warn); background: color-mix(in srgb, #e8a33d 8%, var(--surface)); border-radius: 12px; padding: 18px 20px; }
+.rc2-readings-tag { display: inline-block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #8a5a12; margin-bottom: 10px; }
+.rc2-readings ol { margin: 0 0 10px; padding-left: 20px; display: grid; gap: 8px; }
+.rc2-readings li { font-size: 13px; line-height: 1.7; color: var(--muted); }
+.rc2-readings li b { color: var(--ink); }
+.rc2-readings p { font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+.rc2-method { margin-top: 18px; }
+.rc2-method summary { font-size: 12px; font-weight: 650; cursor: pointer; color: var(--rc2-accent); }
+.rc2-method div { display: grid; gap: 10px; margin-top: 12px; }
+.rc2-method p { font-size: 11px; line-height: 1.75; color: var(--muted); overflow-wrap: anywhere; }
+
+.theme-dark .rural-cohort { --rc2-accent: #8bcec0; --rc2-warn: #efc58b; }
+.theme-dark .rc2-readings { border-color: #7d5a24; border-left-color: #e8a33d; }
+.theme-dark .rc2-readings-tag { color: #efc58b; }
+
+@media (max-width: 900px) {
+  .rc2-intro { grid-template-columns: 1fr; gap: 20px; }
+  .rc2-compare li { grid-template-columns: 1fr; gap: 8px; }
+  .rc2-compare strong { text-align: left; }
+}

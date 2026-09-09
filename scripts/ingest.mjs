@@ -39,7 +39,18 @@ const PAGE_SIZE = 100;
 /** Access tokens last 300s; refresh with margin so a slow page never straddles expiry. */
 const REFRESH_MARGIN_MS = 60_000;
 
-const rawDir = (tableKey) => resolve(process.cwd(), 'data/large-snapshots', tableKey);
+/**
+ * Where a pull's raw pages live.
+ *
+ * A filtered pull gets its own directory. Two months of one dataset written into the
+ * same folder would resume across each other and assemble into a set that is neither
+ * month — silently, because the page files look identical.
+ */
+const rawDir = (tableKey, filters = {}) => {
+  const keys = Object.keys(filters).sort();
+  const suffix = keys.length ? `__${keys.map((key) => `${key}-${filters[key]}`).join('_')}` : '';
+  return resolve(process.cwd(), 'data/large-snapshots', `${tableKey}${suffix}`);
+};
 
 class Session {
   constructor(refreshToken) {
@@ -123,7 +134,7 @@ async function main() {
   const rest = argv.filter((arg) => arg.startsWith('--') || argv[argv.indexOf(arg) - 1]?.startsWith('--'));
   const tableKeys = argv.filter((arg) => !rest.includes(arg));
   if (!tableKeys.length) {
-    console.error('Usage: node scripts/ingest.mjs <tableKey> [<tableKey> ...] [--month <YYYYMM>] [--year <YYYY>] [--fresh]');
+    console.error('Usage: node scripts/ingest.mjs <tableKey> [...] [--month <YYYYMM>] [--year <YYYY>] [--filter KEY=VALUE] [--fresh]');
     console.error(`Known keys: ${Object.keys(datasets).join(', ')}`);
     process.exit(1);
   }
@@ -131,11 +142,19 @@ async function main() {
   // confirmed by the platform audit on 2026-09-03. The source document's per-dataset
   // filter names (mnth_no, dstrt_id, district_id, ulb_id, dstrt_nm) are rejected with a
   // 400, and there is no general district filter. Default to a full unfiltered export.
+  // Filter names are per-dataset since the September revision: the SASA keys take
+  // `month_id`/`year`, the PR keys take uppercase `MONTH_ID`/`YEAR`. `--filter K=V`
+  // passes a name through verbatim rather than guessing which vocabulary applies.
   const filters = {};
   const monthIndex = rest.indexOf('--month');
   if (monthIndex >= 0) filters.month_id = rest[monthIndex + 1];
   const yearIndex = rest.indexOf('--year');
   if (yearIndex >= 0) filters.year = rest[yearIndex + 1];
+  for (let index = 0; index < rest.length; index += 1) {
+    if (rest[index] !== '--filter') continue;
+    const [name, ...value] = String(rest[index + 1] ?? '').split('=');
+    if (name && value.length) filters[name] = value.join('=');
+  }
   const fresh = rest.includes('--fresh');
 
   const refreshToken = process.env.AILAB_REFRESH_TOKEN;
@@ -156,7 +175,7 @@ async function main() {
 }
 
 async function ingestOne(session, tableKey, filters, fresh) {
-  const dir = rawDir(tableKey);
+  const dir = rawDir(tableKey, filters);
   await mkdir(dir, { recursive: true });
   const done = fresh ? new Set() : await completedOffsets(dir);
   if (done.size) console.log(`Resuming: ${done.size} page(s) already retrieved.`);
@@ -203,7 +222,7 @@ async function ingestOne(session, tableKey, filters, fresh) {
   if (manifest.countsAgree === false) {
     console.log(`Note: the API reported totalRecordCount ${total?.toLocaleString('en-IN')}, which does not match the ${retained.toLocaleString('en-IN')} rows actually returned. Both values are recorded in manifest.json.`);
   }
-  console.log(`Raw pages: data/large-snapshots/${tableKey}/  ·  next: node scripts/aggregate.mjs ${tableKey}`);
+  console.log(`Raw pages: ${dir.replace(process.cwd() + '/', '')}/  ·  next: node scripts/aggregate.mjs ${tableKey}`);
 }
 
 await main();

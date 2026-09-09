@@ -10,6 +10,7 @@ import { AnchoredSourceBrowser } from './anchored-source-browser';
 import { SourceReconciliationScreen } from './source-reconciliation';
 import { LgdCrosswalkPanel } from './lgd-crosswalk-panel';
 import { SecretariatCohort } from './secretariat-cohort';
+import { RuralCohort } from './rural-cohort';
 import { EvidenceIntegrity } from './evidence-integrity';
 import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
@@ -1786,6 +1787,7 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
       <div className="sf-next-action"><Icon name="arrow" size={24}/><div><span>Next owner action</span><b>{localIdentityReviewComplete ? 'Formal crosswalk sign-off + aligned current outcomes' : 'Complete identity review + obtain aligned current outcomes'}</b><p>{localIdentityReviewComplete ? 'Local decisions support review; they do not replace formal approval.' : 'Unreviewed names remain outside approved cross-source identity.'} Period, quality and policy conditions still apply.</p></div><a href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>Inspect readiness evidence <Icon name="arrow" size={15}/></a></div>
     </section>
     <SecretariatCohort/>
+    <RuralCohort/>
     <LgdCrosswalkPanel/>
     <CrosswalkWorkbench stats={stats} queue={queue} decisions={decisions} approved={approved} reviewed={reviewed} remaining={remaining} onDecide={decide} onClear={clearDecision} onApproveBulk={approveBulk}/>
     <VehiclePairing/>

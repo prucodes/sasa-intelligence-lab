@@ -4,6 +4,7 @@ import { getDeliveryPlans, getDistinctDeliveryPlans } from '@/lib/delivery-plan'
 import { governedSnapshotByKey, lgdIdentity, sourceCandidateKey } from '@/lib/snapshots';
 import { getDuplicateSourceGroups, getDuplicateSourceSummary } from '@/lib/duplicate-sources';
 import { getSecretariatCohort } from '@/lib/secretariat-cohort';
+import { getRuralCohort } from '@/lib/rural-cohort';
 
 describe('LGD crosswalk', () => {
   it('reads the mapping the source supplies, across every enriched dataset', () => {
@@ -211,5 +212,39 @@ describe('secretariat cohort', () => {
     expect(cohort.containmentBreaches).toBe(0);
     expect(cohort.points.every((point) => point.segregated <= point.collected)).toBe(true);
     expect(cohort.points.every((point) => point.segregationOfCollected === null || point.segregationOfCollected <= 1)).toBe(true);
+  });
+});
+
+describe('rural cohort — a null result reported as one', () => {
+  it('joins the register to the activity with nothing inferred', () => {
+    const cohort = getRuralCohort();
+    expect(cohort.identity.key).toBe('GRAM_PANCHAYAT_ID');
+    expect(cohort.identity.matched).toBe(cohort.identity.registered);
+    expect(cohort.identity.registeredWithoutActivity).toBe(0);
+    expect(cohort.identity.registerDisputed).toBe(0);
+  });
+
+  it('excludes a reporting outage rather than averaging it in', () => {
+    const cohort = getRuralCohort();
+    // 2026-08-02 reports at 2% against 70-93% on the other days. Averaging it in would
+    // depress every rate by a reporting failure rather than a delivery one.
+    expect(cohort.outageDays).toEqual(['2026-08-02']);
+    expect(cohort.usableDays).toHaveLength(6);
+    expect(cohort.days).toHaveLength(7);
+  });
+
+  it('finds no relationship, and says so rather than implying one', () => {
+    const cohort = getRuralCohort();
+    expect(cohort.noRelationship).toBe(true);
+    // Groups sit within a couple of points of each other on a full 0-100 scale.
+    expect(cohort.spreadPoints).toBeLessThan(5);
+    // No per-entity points ship: a scatter over a null result would imply a signal.
+    expect(cohort).not.toHaveProperty('points');
+  });
+
+  it('keeps the register’s unknown currency attached to the reading', () => {
+    const cohort = getRuralCohort();
+    expect(cohort.registerCurrency).toContain('no date column');
+    expect(cohort.boundary).toContain('currency is not');
   });
 });
