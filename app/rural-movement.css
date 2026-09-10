@@ -1,1 +1,7 @@
 .movement-series-story{padding:32px;background:linear-gradient(135deg,#123c42,#172c45);color:#fff;border-radius:20px}.movement-series-story .ew-kicker,.movement-series-story .ew-caption{color:#b8d5d9}.movement-series-value{display:block;font-size:clamp(40px,5vw,72px);font-weight:500;letter-spacing:-.05em;margin:20px 0 8px}.movement-series-story svg{width:100%;margin-top:25px;overflow:visible}.movement-series-story svg line{stroke:#ffffff20}.movement-series-story svg text{fill:#d9e9ed;font-size:12px}.movement-series-story svg circle{fill:#72d6c9}.movement-series-line{stroke:#72d6c9;stroke-width:3}.movement-series-table{overflow:auto}.movement-series-table table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}.movement-series-table th,.movement-series-table td{padding:14px 12px;border-bottom:1px solid var(--line,#dbe5eb);white-space:nowrap}.movement-series-table button{background:none;border:0;color:var(--ink);font:inherit;cursor:pointer}.movement-series-table button[aria-pressed=true]{color:var(--teal,#098c93);text-decoration:underline}
+
+/* The line carries the value; the area and halo only make it findable. */
+.movement-series-area { pointer-events: none; }
+.movement-series-halo { fill: var(--mv-line, #168d92); opacity: .13; }
+.movement-series .movement-series-line { stroke-linecap: round; stroke-linejoin: round; }
+.overview-selected .movement-geography-layout { --mv-line: #97c9b7; }

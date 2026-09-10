@@ -443,3 +443,131 @@
 @media (max-width: 760px) {
   .or-subject-strip .or-subject-buttons { display: none; }
 }
+
+/* ══ Direction: depth and restraint ═══════════════════════════════════════
+   The landing was correct but flat — every surface sat on the same plane and
+   nothing signalled quality before the numbers were read. The moves here are
+   the cheap ones that read as considered rather than decorated: a lit top
+   edge, one soft shadow, a barely-there grain so the dark canvas is matte
+   instead of plastic, and an entrance that resolves in under half a second.
+   Nothing here changes a value, a denominator or a colour's contrast. */
+
+.or-lede {
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    0 1px 2px rgba(6, 24, 26, .16),
+    0 12px 32px -12px rgba(6, 24, 26, .34),
+    0 32px 64px -32px rgba(6, 24, 26, .42);
+}
+
+/* Lit from above: a hairline highlight along the top edge, fading at the corners. */
+.or-lede::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding-top: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224, 245, 236, .34) 22%, rgba(224, 245, 236, .34) 78%, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grain, at the threshold of visibility. Kills the flat-fill look on the canvas. */
+.or-lede::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: .035;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.or-lede > * { position: relative; z-index: 2; }
+
+/* A glow anchored behind the figure, so the eye lands there without a rule or a box. */
+.or-lede-body { position: relative; }
+.or-lede-body::before {
+  content: '';
+  position: absolute;
+  right: -6%;
+  top: 50%;
+  width: 46%;
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(151, 201, 183, .16), transparent 68%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.or-lede-figure strong {
+  background: linear-gradient(168deg, #d9f2e6 4%, var(--ew-accent) 62%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The ledger reads as a row of facts, each with its own accent tick. */
+.or-lede-ledger div { position: relative; padding-left: 11px; }
+.or-lede-ledger div::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--ew-accent);
+  opacity: .5;
+}
+
+/* ── Subject cards: quieter at rest, more definite on contact ── */
+
+.or-subject-strip button {
+  background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--surface) 92%, var(--line)));
+  box-shadow: 0 1px 1px rgba(16, 47, 52, .04);
+}
+
+.or-subject-strip button:hover {
+  box-shadow: 0 4px 14px -6px rgba(16, 47, 52, .28);
+}
+
+.or-subject-strip button[aria-pressed='true'] {
+  background: linear-gradient(168deg, color-mix(in srgb, var(--ew-dark) 88%, #2f5f5a), var(--ew-dark));
+  box-shadow: 0 6px 18px -8px rgba(6, 24, 26, .5);
+}
+
+/* ── Entrance: one short, staggered resolve. Never on a repeat visit to the tab. ── */
+
+@keyframes or-rise {
+  from { opacity: 0; transform: translateY(9px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.or-lede-head,
+.or-lede-text,
+.or-lede-figure,
+.or-lede-ledger,
+.or-subject-strip > p,
+.or-subject-strip .or-subject-buttons {
+  animation: or-rise .46s cubic-bezier(.22, .68, .32, 1) backwards;
+}
+
+.or-lede-head        { animation-delay: .02s; }
+.or-lede-text        { animation-delay: .07s; }
+.or-lede-figure      { animation-delay: .13s; }
+.or-lede-ledger      { animation-delay: .19s; }
+.or-subject-strip > p              { animation-delay: .24s; }
+.or-subject-strip .or-subject-buttons { animation-delay: .28s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .or-lede-head, .or-lede-text, .or-lede-figure, .or-lede-ledger,
+  .or-subject-strip > p, .or-subject-strip .or-subject-buttons { animation: none; }
+  .or-subject-strip button, .or-subject-strip button:hover { transition: none; transform: none; }
+}

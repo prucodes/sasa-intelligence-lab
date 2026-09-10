@@ -27,9 +27,21 @@ export function RuralMovement({compact=false,href='/gap-radar?mode=governed&view
   :`Scheduled non-collection days are excluded: ${data.excludedDays.map(e=>e.days.map(d=>`${d.date} (${d.reason})`).join(', ')).filter(Boolean).join(' · ')}. Rates are read over the remaining working days of the same cohort.`}</p>
  <div className="movement-geography-layout"><div className="movement-series-story"><span className="ew-kicker">{district||'All matched districts'}</span><strong className="movement-series-value">{signed(change)}</strong><p>percentage points &mdash; {pct(points[0].collectionRate)} in {month(points[0].period)} to {pct(points.at(-1)!.collectionRate)} in {month(points.at(-1)!.period)}</p><small>{n(selected?.pairs??data.cohort.pairs)} matched GP-day observations in every month</small>
  <svg viewBox="0 0 520 220" role="img" aria-label={`${district||'Statewide'} first-week collection rates: ${points.map(p=>`${month(p.period)} ${pct(p.collectionRate)}`).join(', ')}`}>
+ <defs>
+  {/* The fill is decoration under a line that already carries the value; it fades out
+      well before the axis so it never reads as a quantity of its own. */}
+  <linearGradient id="mv-fill" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stopColor="var(--mv-line,#168d92)" stopOpacity=".22"/>
+   <stop offset="100%" stopColor="var(--mv-line,#168d92)" stopOpacity="0"/>
+  </linearGradient>
+  <filter id="mv-glow" x="-60%" y="-60%" width="220%" height="220%">
+   <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+ </defs>
  {[0,50,100].map(t=><g key={t}><line x1="45" x2="480" y1={175-t*1.3} y2={175-t*1.3}/><text x="35" y={179-t*1.3} textAnchor="end">{t}%</text></g>)}
- <polyline points={points.map((p,i)=>`${65+i*130},${175-p.collectionRate!*130}`).join(' ')} fill="none" className="movement-series-line"/>
- {points.map((p,i)=><g key={p.period}><circle cx={65+i*130} cy={175-p.collectionRate!*130} r="5"/><text x={65+i*130} y={160-p.collectionRate!*130} textAnchor="middle">{pct(p.collectionRate)}</text><text x={65+i*130} y="205" textAnchor="middle">{month(p.period)}</text></g>)}</svg>
+ <polygon className="movement-series-area" points={`65,175 ${points.map((p,i)=>`${65+i*130},${175-p.collectionRate!*130}`).join(' ')} ${65+(points.length-1)*130},175`} fill="url(#mv-fill)"/>
+ <polyline points={points.map((p,i)=>`${65+i*130},${175-p.collectionRate!*130}`).join(' ')} fill="none" className="movement-series-line" filter="url(#mv-glow)"/>
+ {points.map((p,i)=><g key={p.period}><circle className="movement-series-halo" cx={65+i*130} cy={175-p.collectionRate!*130} r="10"/><circle cx={65+i*130} cy={175-p.collectionRate!*130} r="5"/><text x={65+i*130} y={160-p.collectionRate!*130} textAnchor="middle">{pct(p.collectionRate)}</text><text x={65+i*130} y="205" textAnchor="middle">{month(p.period)}</text></g>)}</svg>
  <p className="ew-caption">Yes ÷ valid Yes/No collection reports, {basis==='all-days'?'all seven days':'working days only'}. Full 0–100% scale; the same GP and day-of-month observations are used throughout.</p></div>
  <DistrictMap rows={data.districts.map(d=>({district:d.district,value:d.changePercentagePoints,detail:`${n(d.pairs)} matched observations · ${d.points.map(p=>pct(p.collectionRate)).join(' → ')}`}))} selected={district} onSelect={setDistrict} title="May → August change by district" unit="percentage points" diverging/>
  </div>
