@@ -11,7 +11,10 @@ const pct=(v:number|null)=>v===null?'Not reported':`${(v*100).toFixed(2)}%`;
 // column heading or caption beside it carries the unit in words.
 const signed=(v:number)=>`${v>0?'+':''}${v.toFixed(2)}`;
 const month=(p:string)=>new Date(`${p}-02T12:00:00Z`).toLocaleDateString('en-GB',{month:'short',timeZone:'UTC'});
-export function RuralMovement({compact=false,href='/gap-radar?mode=governed&view=movement'}:{compact?:boolean;href?:string}) {
+/** `findingStated` means a lede above already reports the result, so this section
+ *  names its method instead of repeating the sentence. It follows `compact` by
+ *  default because the Overview lede always states it, and Gap Radar now does too. */
+export function RuralMovement({compact=false,findingStated=compact,href='/gap-radar?mode=governed&view=movement'}:{compact?:boolean;findingStated?:boolean;href?:string}) {
  const [basis,setBasis]=useState<RateBasis>('all-days');
  const data=useMemo(()=>getRuralMovement(basis),[basis]),[district,setDistrict]=useState(''),[showAll,setShowAll]=useState(false);
  const droppedRates=data.excludedDays.flatMap(e=>e.days.map(d=>d.collectionRate)).filter((v):v is number=>v!==null);
@@ -20,7 +23,7 @@ export function RuralMovement({compact=false,href='/gap-radar?mode=governed&view
  const change=(points.at(-1)!.collectionRate!-points[0].collectionRate!)*100;
  const rows=showAll?data.districts:data.districts.filter(d=>d.direction!=='mixed');
  return <section className="evidence-workspace movement-reference movement-series" data-compact={compact} aria-label="Four-month rural collection comparison">
- <header className="ew-heading"><div><span className="ew-kicker">Rural collection · May → August 2026</span><h2>{compact?<>Four months, one cohort,<br/><em>read the same way each time.</em></>:<>A modest statewide shift.<br/><em>{data.declining.length} districts decline at every step.</em></>}</h2><p>First seven days of each month · one common cohort · reported collection activity</p></div></header>
+ <header className="ew-heading"><div><span className="ew-kicker">Rural collection · May → August 2026</span><h2>{findingStated?<>Four months, one cohort,<br/><em>read the same way each time.</em></>:<>A modest statewide shift.<br/><em>{data.declining.length} districts decline at every step.</em></>}</h2><p>First seven days of each month · one common cohort · reported collection activity</p></div></header>
  <div className="ew-controls"><label>Days counted<select aria-label="Rural collection day basis" value={basis} onChange={e=>setBasis(e.target.value as RateBasis)}><option value="all-days">All seven days · includes the Sunday</option><option value="working-days">Working days only · excludes scheduled non-collection days</option></select></label></div>
  <p className="ew-caption">{basis==='all-days'
   ?`Each seven-day window contains one Sunday, and those Sundays report ${droppedRange} across the four months. They are the scheduled non-collection day, not a reporting failure. Every month carries exactly one, so the periods stay comparable, but the level sits below the rate on days collection was scheduled.`

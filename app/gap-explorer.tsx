@@ -22,5 +22,21 @@ export function GapExplorer(){
     }
   },[]);
   const active=capabilities.find(c=>c.id===selected)!;
-  return <div className="gap-explorer"><div className="gap-capability-note"><span><b>{capabilities.filter(c=>c.available).length} evidence reviews available</b> · eligibility assessed per comparison</span><span>Analytical comparisons · official ratings unassigned</span></div><div className="evidence-tabs" aria-label="Available gap analyses">{capabilities.map(c=><button key={c.id} aria-pressed={selected===c.id} disabled={!c.available} onClick={()=>setSelected(c.id)}>{c.label}</button>)}</div>{!['movement','ulb','service','rankings'].includes(selected)&&<p className="ew-caption">{active.scope} · {active.boundary}</p>}{active.available ? selected==='rankings'?<SubjectRankings/>:selected==='service'?<UlbServiceRadar/>:selected==='ulb'?<UlbRadar/>:selected==='movement'?<RuralMovement/>:selected==='register'?<InfrastructureSeries/>:<DeliveryPlans/>:<p>This comparison has no eligible retained evidence.</p>}</div>;
+  return <div className="gap-explorer">
+    <header className="gr-lede" aria-label="Selected comparison">
+      <div className="gr-lede-head">
+        <span className="gr-lede-kicker">{active.scope}</span>
+        <span className="gr-lede-count">{capabilities.filter(c=>c.available).length} comparisons available · assessed one at a time</span>
+      </div>
+      <div className="gr-lede-body" aria-live="polite">
+        <div className="gr-lede-text">
+          <h2>{active.finding}</h2>
+          <p>{active.boundary}</p>
+        </div>
+        <div className="gr-lede-figure">
+          <strong>{active.figure.value}</strong>
+          <small>{active.figure.unit}</small>
+        </div>
+      </div>
+    </header><div className="evidence-tabs" aria-label="Available gap analyses">{capabilities.map(c=><button key={c.id} aria-pressed={selected===c.id} disabled={!c.available} onClick={()=>setSelected(c.id)}>{c.label}</button>)}</div>{!['movement','ulb','service','rankings'].includes(selected)&&<p className="ew-caption">{active.scope} · {active.boundary}</p>}{active.available ? selected==='rankings'?<SubjectRankings/>:selected==='service'?<UlbServiceRadar/>:selected==='ulb'?<UlbRadar/>:selected==='movement'?<RuralMovement findingStated/>:selected==='register'?<InfrastructureSeries/>:<DeliveryPlans/>:<p>This comparison has no eligible retained evidence.</p>}</div>;
 }

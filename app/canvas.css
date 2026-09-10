@@ -188,3 +188,196 @@
 @media (prefers-reduced-motion: reduce) {
   .sr-focus-context { animation: none; }
 }
+
+/* ── Gap Radar's lede ─────────────────────────────────────────────────────
+   The screen went from a tab strip straight into an analysis, so it was the one
+   place that stated no finding before showing working. Each tab now leads with
+   the figure its own comparison rests on, and its own limit beneath it. */
+
+.gr-lede {
+  position: relative;
+  isolation: isolate;
+  margin: 22px 0 18px;
+  padding: clamp(24px, 2.8vw, 40px);
+  border-radius: 24px;
+  background: radial-gradient(ellipse at 100% 0, #35614b80, transparent 60%), linear-gradient(125deg, #0b252b, #10363a);
+  color: #e8f4ed;
+  box-shadow:
+    0 1px 2px rgba(6, 24, 26, .16),
+    0 14px 36px -14px rgba(6, 24, 26, .34),
+    0 40px 76px -40px rgba(6, 24, 26, .46);
+  animation: canvas-rise .46s cubic-bezier(.22, .68, .32, 1) backwards;
+  animation-delay: .04s;
+}
+
+.gr-lede::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: .035;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.gr-lede::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224, 245, 236, .3) 22%, rgba(224, 245, 236, .3) 78%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gr-lede > * { position: relative; z-index: 2; }
+
+.gr-lede-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gr-lede-kicker {
+  color: #97c9b7;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.gr-lede-count { font-size: 12px; color: #acc9c0; }
+
+.gr-lede-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(20px, 3vw, 46px);
+  margin-top: clamp(16px, 2vw, 26px);
+}
+
+.gr-lede-text h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.9vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -.038em;
+  font-weight: 500;
+  color: #e8f4ed;
+  text-wrap: balance;
+}
+
+.gr-lede-text p {
+  margin: 12px 0 0;
+  max-width: 62ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #acc9c0;
+}
+
+.gr-lede-figure { text-align: right; }
+
+.gr-lede-figure strong {
+  display: block;
+  font-size: clamp(44px, 5.4vw, 86px);
+  line-height: .94;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+  color: #edf8c9;
+}
+
+.gr-lede-figure small {
+  display: block;
+  margin-top: 10px;
+  margin-left: auto;
+  max-width: 24ch;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #acc9c0;
+}
+
+@media (max-width: 900px) {
+  .gr-lede-body { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .gr-lede-figure { text-align: left; }
+  .gr-lede-figure small { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) { .gr-lede { animation: none; } }
+
+/* ── The evidence label ───────────────────────────────────────────────────
+   "What this screen rests on" carries the provenance three screens depend on:
+   how many exports are bundled, how many rows, how many disputed values are
+   held out. All of it was set at 16px or below with nothing above it, so the
+   claim the product is proudest of read as the small print at the bottom of a
+   form. It gets the same treatment as the landing ledger: quiet labels, values
+   with weight, and an accent edge so the block reads as a statement. */
+
+.evidence-label {
+  padding: 22px 24px 10px;
+  border-radius: 16px;
+}
+
+.evidence-label > header {
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--line);
+}
+
+.evidence-label > header > .eyebrow {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: #0d7d78;
+}
+
+/* "What this screen rests on" is the statement, so it is the readable line here. */
+.evidence-label > header > b {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -.012em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.evidence-label dl > div {
+  align-items: baseline;
+  gap: 18px;
+  padding: 11px 0 11px 11px;
+  position: relative;
+}
+
+/* The accent tick the landing ledger uses, so a fact reads as a fact. */
+.evidence-label dl > div::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  border-radius: 2px;
+  background: #0d7d78;
+  opacity: .32;
+}
+
+.evidence-label dt {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.evidence-label dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.3;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
