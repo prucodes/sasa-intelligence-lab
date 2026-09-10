@@ -40,7 +40,7 @@ function CohortPlot({ points, district }: { points: CohortPoint[]; district: str
       </g>)}
       {plotted.map((point) => <circle key={point.code} className="sc-point"
         cx={x(Math.min(point.collectionRatio, 1))} cy={y(Math.min(point.segregationOfCollected!, 1))} r="2.6">
-        <title>{point.ulb} · {point.district}: {percent(point.collectionRatio)} collected, {percent(point.segregationOfCollected)} of that segregated</title>
+        <title>{`${point.ulb} · ${point.district}: ${percent(point.collectionRatio)} collected, ${percent(point.segregationOfCollected)} of that segregated`}</title>
       </circle>)}
       <text className="sc-axis-label" x={(pad.left + width - pad.right) / 2} y={height - 10} textAnchor="middle">Households collected from</text>
       <text className="sc-axis-label" transform="rotate(-90)" x={-(pad.top + height - pad.bottom) / 2} y={16} textAnchor="middle">Collected households segregating</text>
