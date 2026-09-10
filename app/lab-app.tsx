@@ -796,11 +796,20 @@ function PresenterStageFlow({ groups }: { groups: OperationalStageCohorts[] }) {
     const sourceY = rootTop + sourceHeights.slice(0, index).reduce((sum, value) => sum + value, 0);
     return { cohort, height, y, sourceHeight, sourceY };
   });
+  // The slide plotted the separation and never named it. In every one of these
+  // cohorts a single stage holds most of the records, and that is the finding.
+  const dominant = [...group.cohorts].sort((a, b) => b.count - a.count)[0];
+  const dominantShare = group.classified > 0 && dominant ? dominant.count / group.classified : null;
+
   return <div className="presenter-flow-story">
     <div className="presenter-title-row"><div><h1>Watch returned ULBs separate into operating stages.</h1><p className="presenter-lede">The width of every band is a count, not a score. Missing or conflicting rows never enter the flow.</p></div><div className="presenter-flow-tabs">{groups.map((item, index) => <button key={item.title} className={index === activeIndex ? 'active' : ''} onClick={() => setActiveIndex(index)}><b>{item.classified}</b><span>{item.title.replace(' pattern', '')}</span></button>)}</div></div>
+    {dominant && dominantShare !== null && <p className="presenter-flow-reading">
+      <strong>{dominant.count.toLocaleString('en-IN')} of {group.classified.toLocaleString('en-IN')}</strong>
+      <span>returned records sit in one stage, <b>{dominant.label.toLowerCase()}</b>, which is {formatPercent(dominantShare)} of the classified cohort. The remaining {group.cohorts.length - 1} stages divide what is left.</span>
+    </p>}
     <div className="presenter-flow-canvas">
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${group.title}: ${group.classified} returned ULB records classified across ${positive.length} populated and ${zero.length} empty stages`}>
-        <defs>{[['blocked','#c65e58'],['review','#d09736'],['progress','#3976d9'],['met','#179b96']].map(([tone,color]) => <linearGradient key={tone} id={`flow-${tone}`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor={color} stopOpacity=".7"/><stop offset="1" stopColor={color} stopOpacity=".16"/></linearGradient>)}</defs>
+        <defs>{[['blocked','#c65e58'],['review','#d09736'],['progress','#3976d9'],['met','#179b96']].map(([tone,color]) => <linearGradient key={tone} id={`flow-${tone}`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor={color} stopOpacity=".82"/><stop offset="1" stopColor={color} stopOpacity=".42"/></linearGradient>)}</defs>
         <rect className="flow-root" x={rootX} y={rootTop} width={rootW} height={rootHeight} rx="17"/>
         <text className="flow-root-count" x={rootX + rootW / 2} y={rootTop - 19} textAnchor="middle">{group.classified}</text>
         <text className="flow-root-label" x={rootX + rootW / 2} y={rootTop + rootHeight + 24} textAnchor="middle">CLASSIFIED</text>

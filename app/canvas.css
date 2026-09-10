@@ -657,3 +657,32 @@
   .aperture-canvas { grid-template-columns: minmax(0, 1fr); }
   .aperture-figure { font-size: 54px; }
 }
+
+/* The flow slide's reading. Same shape as the monitor's: the chart shows the
+   separation, this says what the separation is. */
+.presenter-flow-reading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 8px 20px;
+  margin: 0 0 16px;
+  padding: 15px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid #0d7d78;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ink) 2.5%, transparent);
+}
+
+.presenter-flow-reading > strong {
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1;
+  letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.presenter-flow-reading > span { font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+.presenter-flow-reading b { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 760px) { .presenter-flow-reading { grid-template-columns: minmax(0, 1fr); } }
