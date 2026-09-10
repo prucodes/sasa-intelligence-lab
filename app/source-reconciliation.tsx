@@ -21,7 +21,7 @@ function ShapePlot({ data, active, month, onMonth }: { data: Reconciliation; act
 /**
  * Mode isolation, matching the executive brief: governed findings must never appear in
  * Demo or Live. Neither mode has two sources sharing an identity frame, so neither can
- * show this analysis — and saying so is more useful than a synthetic stand-in.
+ * show this analysis, and saying so is more useful than a synthetic stand-in.
  */
 export function SourceReconciliationScreen({ mode, href }: { mode: 'DEMO' | 'SAMPLE' | 'LIVE'; href: (path: string) => string }) {
   if (mode === 'SAMPLE') return <ReconciliationWorkspace href={href}/>;

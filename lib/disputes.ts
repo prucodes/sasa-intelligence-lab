@@ -15,7 +15,7 @@ import { sourcePeriod } from './record-contract.mjs';
  * There is no rule that resolves this from inside the data: with no record ID,
  * submission date or revision number (finding A8) neither row is newer, better
  * sourced, or more authoritative. So the honest treatment is the one this module
- * supports — surface the disagreement, name both values, and let a person decide.
+ * supports, surface the disagreement, name both values, and let a person decide.
  */
 
 import type { SnapshotRecord } from '@/lib/snapshots';
@@ -60,7 +60,7 @@ export function isMeasureField(field: string): boolean {
 /**
  * Finds place-and-period groups whose rows disagree on at least one measure.
  *
- * Groups whose rows are byte-identical are not disputed — those are harmless
+ * Groups whose rows are byte-identical are not disputed, those are harmless
  * duplicates that deduplication already handles, and reporting them as conflicts
  * would bury the twelve that actually matter.
  */
@@ -126,7 +126,7 @@ export interface DisputeExclusion<T> {
  * A disputed figure is an unknown figure, so it is treated exactly as a
  * non-return: excluded from the numerator, and excluded from coverage too, since
  * that entity did not supply a usable value. Keeping both rows and summing them
- * — which is what happens without this — reports a number no source ever stated.
+ *, which is what happens without this, reports a number no source ever stated.
  * Nellore's sweeping machines were counted as 23 that way, from rows saying 19
  * and 4.
  *

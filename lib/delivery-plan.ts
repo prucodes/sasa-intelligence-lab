@@ -28,8 +28,8 @@ export interface PlanDistrict {
 }
 
 /**
- * `monthly` — the source reports a period, so a series can be drawn.
- * `point-in-time` — one target and one achievement per district, no period column at
+ * `monthly`, the source reports a period, so a series can be drawn.
+ * `point-in-time`, one target and one achievement per district, no period column at
  * all. Drawing a trend for these would invent a time dimension the source never gave.
  */
 export type Periodicity = 'monthly' | 'point-in-time';
@@ -51,7 +51,7 @@ export interface DeliveryPlan {
   reportedWorkName: string | null;
   /**
    * Set when another retained plan returns byte-identical rows. `soak_pits_api` serves
-   * Compost Pits data — same 336 rows, and its own `work_name` column says so. A
+   * Compost Pits data, same 336 rows, and its own `work_name` column says so. A
    * duplicate is excluded from every total rather than counted twice.
    */
   duplicateOf: string | null;
@@ -110,7 +110,7 @@ function periodOf(record: SnapshotRecord, strategy: PeriodStrategy): { monthId: 
  * Whether a source's id and name columns hold each other's values.
  *
  * A district name is not a number and an id is. When the "name" column parses as a
- * number for every row and the "id" column does not, the two are transposed — which is
+ * number for every row and the "id" column does not, the two are transposed, which is
  * what `itc_wow_schools_api` does. Reported rather than silently corrected, and detected
  * by shape so a fixed source stops being flagged without an edit here.
  */
@@ -279,7 +279,7 @@ function buildPlan(spec: PlanSpec, selectedPeriod: string | null = null): Delive
 /**
  * Every retained works plan, with duplicates marked.
  *
- * The duplicate is detected by comparing content, not by hardcoding a known bad key —
+ * The duplicate is detected by comparing content, not by hardcoding a known bad key , 
  * if the platform fixes `soak_pits_api` the flag disappears on the next pull, and if a
  * different endpoint starts duplicating another it is caught the same way.
  */

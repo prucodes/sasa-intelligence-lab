@@ -149,7 +149,7 @@ async function main() {
   if (!datasets.length) { console.log('No complete large snapshots to summarise.'); return; }
 
   await mkdir(OUT, { recursive: true });
-  // A paginated pull has no single responseId — it is hundreds of responses. The
+  // A paginated pull has no single responseId, it is hundreds of responses. The
   // identifying facts are the page count, the row count and when the pull ran.
   const generatedFrom = Object.fromEntries(datasets.map((dataset) => [dataset.tableKey, {
     generatedAt: dataset.retrievedAt,

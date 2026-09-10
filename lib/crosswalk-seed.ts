@@ -1,5 +1,5 @@
 /**
- * Seed crosswalk decisions — the reviewer working copy baked into the build.
+ * Seed crosswalk decisions, the reviewer working copy baked into the build.
  *
  * Crosswalk decisions live in localStorage, which a static host starts empty, so the
  * finished review (78 approvals recovering the previously-unreachable observations)
@@ -7,7 +7,7 @@
  * localStorage holds nothing; a reviewer who edits still overrides it in their browser.
  *
  * The three East Godavari Rajamahendravaram spellings, deferred during review, are
- * resolved here to ulb_id 28 (Rajahmundry / Rajamahendravaram, East Godavari) — the same
+ * resolved here to ulb_id 28 (Rajahmundry / Rajamahendravaram, East Godavari), the same
  * city renamed. Rajam (105) and Rajampet (49) are different towns and are left alone.
  *
  * Generated from the reviewer artifact; edit the workbench and re-export to change it.

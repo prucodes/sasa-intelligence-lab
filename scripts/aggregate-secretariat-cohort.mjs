@@ -11,8 +11,8 @@
  *
  * That makes a pairing possible that the rest of the product cannot do: collection
  * coverage against the share of collected waste that was segregated, same entities,
- * same day, same denominator. It is emphatically NOT a performance score — one day is
- * not a performance basis and no scoring policy exists — so the output carries positions
+ * same day, same denominator. It is emphatically NOT a performance score, one day is
+ * not a performance basis and no scoring policy exists, so the output carries positions
  * and the gates they clear, never a rank.
  *
  * Output: data/aggregates/secretariat-cohort.json (committed, bundled).

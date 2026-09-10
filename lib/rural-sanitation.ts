@@ -3,8 +3,8 @@ import aggregate from '@/data/aggregates/rural-swpc-districts.json';
 /**
  * Rural solid-waste processing, rolled up from the PR gram-panchayat export.
  *
- * This is the first rural evidence in the product. Everything else describes ULBs —
- * urban local bodies — so nothing here joins to anything there, and the two must not be
+ * This is the first rural evidence in the product. Everything else describes ULBs , 
+ * urban local bodies, so nothing here joins to anything there, and the two must not be
  * added together or compared. A district appears in both, but "gram panchayats with a
  * processing centre" and "ULBs with a processing facility" are different populations
  * counted under the same district name.

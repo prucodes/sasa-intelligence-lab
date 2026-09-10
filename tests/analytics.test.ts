@@ -207,13 +207,13 @@ describe('operational analytics selectors', () => {
     const count = (id: string) => issues.find((issue) => issue.id === id)?.count;
     // 38, not 46. compost_pits, magic_drains and soak_pits carry their period as a
     // YYYYMM `month` with no `year` column, which recordPeriodParts used to decode only
-    // for `month_id` — so all twelve of their months resolved to no period and
+    // for `month_id`, so all twelve of their months resolved to no period and
     // currentSnapshotRecords returned the whole file. A "latest-period" count was
     // therefore scanning twelve months for those three sources. Their eight genuine
     // duplicate rows sit in October, November, January and August, not in the latest
     // period, so they correctly fall outside this metric now.
     expect(count('recon-duplicates')).toBe(38);
-    // 159, not 243. The same period fix removes exactly 84 false flags — 28 districts in
+    // 159, not 243. The same period fix removes exactly 84 false flags, 28 districts in
     // each of the three works sources. Grouping on entity + period label had collapsed all
     // twelve of a district's monthly rows into one "period not supplied" bucket, and twelve
     // distinct monthly signatures in one bucket read as an ambiguous entity-period. Twelve
@@ -262,7 +262,7 @@ describe('operational analytics selectors', () => {
     // Every entry lands in exactly one bucket.
     expect(audit.primary + audit.supporting + audit.pending + audit.unavailable + audit.awaitingPull).toBe(audit.total);
     // The four secretariat-day exports are retained but not bundled, so they carry no
-    // in-app records — they reach the product as a reporting-continuity summary.
+    // in-app records, they reach the product as a reporting-continuity summary.
     expect(audit.rows.filter((row) => row.records > 0)).toHaveLength(50);
     expect(audit.rows.find(row=>row.tableKey==='msw_door_to_door_collection_api')?.period).toContain('completeness unproven');
     // Reachable is not retained: an awaiting-pull row carries no records.
@@ -289,7 +289,7 @@ describe('operational analytics selectors', () => {
     // gram-panchayat grain at 26,702 and 3,965,247 rows and stay documented-only.
     // All three PR sources are retained now. The two gram-panchayat-grain ones are far
     // too large to bundle and reach the app as aggregates, so they carry no in-app rows
-    // — retained is not the same as bundled, and the audit distinguishes them.
+    //, retained is not the same as bundled, and the audit distinguishes them.
     expect(documentedPr.filter((row) => row.retrieved)).toHaveLength(1);
     expect(documentedPr.filter((row) => !row.retrieved)).toHaveLength(2);
   });

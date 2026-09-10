@@ -1,7 +1,7 @@
 /**
  * Named findings: who is carrying the gap, not how large the gap is.
  *
- * Every headline this product showed was a statewide aggregate — "7.0% delivery
+ * Every headline this product showed was a statewide aggregate, "7.0% delivery
  * ratio", "0.2% completion". Both are true and both are unactionable, because a
  * ratio over 83 ULBs cannot tell an officer which office to call. The evidence to
  * answer that was already retained at ULB grain; it was simply never surfaced.
@@ -148,7 +148,7 @@ function undeliveredOrders(): Finding | null {
  * Household toilets approved by MoHUA where nothing has been built.
  *
  * Entities are ranked by open approvals, and `stalled` distinguishes the ones with
- * no construction under way from those merely running behind — the difference
+ * no construction under way from those merely running behind, the difference
  * between a programme that is slow and one that has not begun.
  */
 function stalledApprovals(): Finding | null {

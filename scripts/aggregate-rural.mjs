@@ -4,7 +4,7 @@
  *   node scripts/aggregate-rural.mjs
  *
  * `sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026` is 26,702
- * rows / 7.7 MB — retained as evidence in data/large-snapshots, far too large to bundle
+ * rows / 7.7 MB, retained as evidence in data/large-snapshots, far too large to bundle
  * into a static site. It is also the only rural evidence the product has: 12,874 gram
  * panchayats across 659 blocks, with SWPC presence and working condition.
  *

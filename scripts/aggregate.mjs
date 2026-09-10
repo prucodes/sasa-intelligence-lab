@@ -149,7 +149,7 @@ export function rollUpToUlb(rows, config) {
 async function main() {
   const tableKey = process.argv[2];
   // Mirrors ingest.mjs: a filtered pull lands in a suffixed directory, so aggregating it
-  // needs the same filters or it reads the wrong month — or nothing at all.
+  // needs the same filters or it reads the wrong month, or nothing at all.
   const filters = {};
   const args = process.argv.slice(3);
   for (let index = 0; index < args.length; index += 1) {

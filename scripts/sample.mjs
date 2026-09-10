@@ -6,8 +6,8 @@
  *   node scripts/sample.mjs <tableKey> [--pages 25] [--month <YYYYMM>] [--year <YYYY>]
  *
  * A 64,000-row dataset is ~640 pages of 100. Paging through all of them needs a
- * refresh token and ten-plus minutes; but the only question here — is the measure
- * column actually populated, or all zeros? — is answered by a spread. So this
+ * refresh token and ten-plus minutes; but the only question here, is the measure
+ * column actually populated, or all zeros?, is answered by a spread. So this
  * hits evenly-spaced offsets across the whole file and reports the distribution.
  * Twenty-five pages is 2,500 rows drawn from end to end, which fits inside one
  * 300-second access token.

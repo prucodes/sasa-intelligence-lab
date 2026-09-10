@@ -4,15 +4,15 @@ import { governedSnapshots, type SnapshotEnvelope, type SnapshotRecord } from '.
  * Endpoints that serve the same dataset.
  *
  * The September 2026 platform revision merged several sources and kept serving them
- * under their old keys. Three endpoints — `sasa_50_percent_greencover_api`,
- * `sasa_50_percent_rejuvenation_api` and `sasa_50_percent_green_spaces_api` — now return
+ * under their old keys. Three endpoints, `sasa_50_percent_greencover_api`,
+ * `sasa_50_percent_rejuvenation_api` and `sasa_50_percent_green_spaces_api`, now return
  * byte-identical rows carrying all three programmes' measures in one table.
  * `soak_pits_api` returns Compost Pits rows and says so in its own `work_name` column.
  *
  * Treating those as separate programmes double- and triple-counts them. Nothing about a
  * dataset's name reveals this, so it is detected from content: identical row sets mean
  * one dataset, however many keys it answers to. The first key alphabetically is treated
- * as canonical purely so the choice is stable and explainable — not because it is more
+ * as canonical purely so the choice is stable and explainable, not because it is more
  * correct than the others.
  *
  * Detection is by content, so if the platform separates them again the duplicate flag

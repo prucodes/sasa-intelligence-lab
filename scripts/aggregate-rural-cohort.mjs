@@ -14,7 +14,7 @@
  * for in the first place.
  *
  * Two honest limits are carried in the output rather than smoothed over. The register has
- * NO date column, so whether it describes August is unknown — it is a state of unknown
+ * NO date column, so whether it describes August is unknown, it is a state of unknown
  * currency, not an August fact. And 2026-08-02 reports at 2% against 70-93% on the other
  * six days, so it is identified and excluded from the rate rather than dragging it down.
  *
@@ -45,7 +45,7 @@ async function main() {
   }
   // The paginator re-serves rows. The August pull holds 280,371 raw rows carrying only
   // 91,427 distinct panchayat-days, and 187,791 of those repeats span pages rather than
-  // sitting inside one — the shape of an unstably ordered offset window, not of a source
+  // sitting inside one, the shape of an unstably ordered offset window, not of a source
   // that genuinely repeats itself. Counting raw rows would weight a panchayat-day by how
   // many times the API happened to hand it back. Collapse exact repeats on the declared
   // key, and hold every conflicting variant out rather than choosing between them.
@@ -180,7 +180,7 @@ async function main() {
      * Raw rows against distinct panchayat-days, and what the difference is made of.
      * `completeness` is the limit that matters: the pull stopped when raw rows matched
      * the reported total, which under this paginator shows only that enough requests
-     * were made — not that every distinct record was served.
+     * were made, not that every distinct record was served.
      */
     recordQuality: {
       key: 'GRAM_PANCHAYAT_ID|COLLECTION_DATE',
@@ -197,7 +197,7 @@ async function main() {
     centreNotStated: points.filter((point) => point.hasCentre === null).length,
     collectionRateWithCentre: rate(withCentre),
     collectionRateWithoutCentre: rate(withoutCentre),
-    // The register carries no date, so it is a state of unknown currency — not an
+    // The register carries no date, so it is a state of unknown currency, not an
     // August fact. Every reading below inherits that limit.
     registerCurrency: 'unknown — the SWPC register has no date column',
     boundary: `Undated facility register joined by GP ID to ${days.length} observed days of August 2026. Exact repeated GP/date records are collapsed. All observed days are included; a low-activity day is not assumed to be an outage. This descriptive comparison does not establish a programme effect or the absence of a relationship.`,

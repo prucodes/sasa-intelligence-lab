@@ -3,7 +3,7 @@
  *
  * The CDMA datasets are documented but not yet provisioned, and the column names are
  * expected to change once the standardisation pass adds LGD master columns. Everything
- * downstream — ingestion, aggregation, reconciliation — reads through this file, so a
+ * downstream, ingestion, aggregation, reconciliation, reads through this file, so a
  * rename is a one-line edit here rather than a rewrite of the pipeline.
  *
  * Each candidate field list is tried in order and the first present, non-empty key wins.

@@ -4,15 +4,15 @@
  *   node --max-old-space-size=4096 scripts/aggregate-ulb-service-series.mjs
  *
  * `aggregate-ulb-service.mjs` builds one carefully verified day (2026-08-12). Both source
- * exports actually hold sixteen — 12 to 27 August 2026 — so the single day was an
+ * exports actually hold sixteen, 12 to 27 August 2026, so the single day was an
  * aggregation choice, not a limit of the evidence.
  *
  * Sixteen days is the difference between a dot and a diagnosis. A ULB sitting at 16%
  * collection on one day cannot be distinguished from a ULB that had one bad day; across
  * sixteen it can. That is precisely the gate `lib/secretariat-cohort.ts` names as shut:
  * "One reported day. A single day describes a day; it does not establish how an entity
- * performs." This does not open it by itself — no policy thresholds are approved, and the
- * references below stay explicitly draft — but it removes the evidentiary half of it.
+ * performs." This does not open it by itself, no policy thresholds are approved, and the
+ * references below stay explicitly draft, but it removes the evidentiary half of it.
  *
  * This REUSES buildUlbServiceSnapshot rather than reimplementing it, so every identity,
  * containment and denominator assertion Codex wrote applies unchanged to all sixteen days.

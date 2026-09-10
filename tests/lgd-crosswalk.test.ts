@@ -102,7 +102,7 @@ describe('delivery plans', () => {
     expect(compost.boundary).toContain('not added across months');
     expect(compost.selectedMonth?.monthId).toBe('202608');
     expect(compost.deliveredToDate).toBe(compost.selectedMonth?.achievement);
-    // District totals must reconcile to the elapsed window, not the whole plan — the
+    // District totals must reconcile to the elapsed window, not the whole plan, the
     // seven unreported months carry a target that is not anyone's shortfall.
     const districtAchievement = compost.districts.reduce((sum, district) => sum + district.achievement, 0);
     const districtTarget = compost.districts.reduce((sum, district) => sum + district.target, 0);

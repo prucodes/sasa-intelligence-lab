@@ -1,5 +1,5 @@
 /**
- * The monthly series at gram-panchayat grain — every month retained, compared honestly.
+ * The monthly series at gram-panchayat grain, every month retained, compared honestly.
  *
  *   node --max-old-space-size=6144 scripts/aggregate-month-series.mjs
  *
@@ -10,16 +10,16 @@
  * the easiest way to publish a calendar artefact as programme performance, so this
  * reports two things and keeps them apart:
  *
- *   1. COMPARABLE — every month restricted to days 1..N, where N is the shortest month
+ *   1. COMPARABLE, every month restricted to days 1..N, where N is the shortest month
  *      retained (7, set by August). Panchayat-days are paired on the same panchayat and
  *      the same day-of-month across every month in the series, and a panchayat is kept
  *      only where it carries a valid measurement in ALL of them. One cohort, one window.
- *   2. CONTEXT — each month's own rate over its own days, explicitly not comparable
+ *   2. CONTEXT, each month's own rate over its own days, explicitly not comparable
  *      because the denominators differ.
  *
  * Every month is deduplicated on the declared key first. The paginator is stable (offset
  * 5,000 fetched three times returns identical rows), so the 1-46x multiplicity is the
- * source repeating itself rather than pages being re-served — but a panchayat-day handed
+ * source repeating itself rather than pages being re-served, but a panchayat-day handed
  * back three times is still one panchayat-day, and counting raw rows would weight it by
  * how often the source happens to repeat it.
  *

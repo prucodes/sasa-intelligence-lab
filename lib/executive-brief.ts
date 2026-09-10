@@ -32,7 +32,7 @@ export function getExecutiveBrief(mode:DataMode) {
 
 export function executiveBriefText(brief:ReturnType<typeof getExecutiveBrief>,preparedAt:string):string {
   return [
-    `SASA INTELLIGENCE LAB — ${brief.title.toUpperCase()}`,
+    `SASA INTELLIGENCE LAB · ${brief.title.toUpperCase()}`,
     `Export prepared: ${preparedAt} (not a source update time)`,
     `SCOPE: ${brief.scope}`,
     brief.governed?brief.boundary:'Switch to Governed data for an authenticated retained-evidence brief.',
@@ -45,7 +45,7 @@ export function executiveBriefText(brief:ReturnType<typeof getExecutiveBrief>,pr
       `Largest reported quantities: ${issue.rows.filter(row=>row.value>0).slice(0,3).map(row=>`${row.ulb} (${row.district}): ${briefNumber(row.value)} ${issue.unit}`).join('; ') || 'None returned in the eligible cohort.'}`,
       issue.boundary,
     ]),
-    ...(brief.governed?['','HISTORICAL OUTCOMES — NOT ALIGNED WITH OPERATIONS',...brief.sources.filter(source=>outcomeKeys.includes(source.key)).map(source=>`${source.name}: ${source.latestRows} source rows · ${source.period}. Row counts are not certified entity counts.`),'','NEXT REVIEW ACTIONS',...brief.nextActions,'','SOURCE PROVENANCE — RESPONSE TIME IS NOT THE REPORTING PERIOD',...brief.sources.map(source=>`${source.name} | ${source.key} | latest period ${source.period} | ${source.rows} retained rows across all periods | response ${source.responseId} | response generated ${source.generatedAt}`)]:[]),
+    ...(brief.governed?['','HISTORICAL OUTCOMES · NOT ALIGNED WITH OPERATIONS',...brief.sources.filter(source=>outcomeKeys.includes(source.key)).map(source=>`${source.name}: ${source.latestRows} source rows · ${source.period}. Row counts are not certified entity counts.`),'','NEXT REVIEW ACTIONS',...brief.nextActions,'','SOURCE PROVENANCE · RESPONSE TIME IS NOT THE REPORTING PERIOD',...brief.sources.map(source=>`${source.name} | ${source.key} | latest period ${source.period} | ${source.rows} retained rows across all periods | response ${source.responseId} | response generated ${source.generatedAt}`)]:[]),
     '',
   ].join('\n');
 }

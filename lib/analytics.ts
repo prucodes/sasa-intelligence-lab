@@ -792,7 +792,7 @@ export function getDistrictCollectionAssetSummary(): DistrictCollectionAssetSumm
     assets,
     // These headline sums obey the same rule as the asset table: a place reported
     // twice with different figures is excluded, never summed. Without this, Nellore's
-    // 19 and 4 were both counted as 23 — a number no source stated.
+    // 19 and 4 were both counted as 23, a number no source stated.
     compactors: sum(excludeDisputed(currentSnapshotRecords(compactorsSource), 'no_of_units').records.map((record) => numberValue(record.no_of_units))),
     sweepingMachines: sum(sweepingUsable.records.map((record) => numberValue(record.no_of_machines_supplied))),
     sweepingDisputedExcluded: sweepingUsable.excludedEntities,
@@ -1148,7 +1148,7 @@ export function getSupportingProgrammePortfolio(): SupportingProgrammeItem[] {
     //
     // The retained August vintage returns them as three separate datasets with generic
     // `target`/`achievement` columns. The September platform revision merged them into one
-    // table — served under all three keys — where each programme has its own named
+    // table, served under all three keys, where each programme has its own named
     // columns. Listing the specific name first and the generic one as fallback means the
     // same config reads the right measure from either vintage, and that adopting the
     // merged table is a data swap rather than a rewrite. Because each entry reads a
@@ -1414,7 +1414,7 @@ const gridSourceLabels: Record<string, string> = {
 
 /**
  * The full anchored coverage grid: every entity in the source-provided registry against every
- * ULB-grain source. Absence is a first-class value here — a cell is 'not-returned' because the
+ * ULB-grain source. Absence is a first-class value here, a cell is 'not-returned' because the
  * source returned no row for that entity, which is never the same as a reported zero.
  */
 export function getEvidenceCoverageGrid(aliases: Map<string, string> = new Map()): CoverageGrid {
@@ -1576,7 +1576,7 @@ const primaryDatasetUse = new Map<string, string>([
   ['sbm_construction_of_ihhls_new1_api', 'Cross-source reconciliation: SBM IHHL construction'],
   // The September 2026 LGD vintage. These six supply the entity mapping the identity
   // gate is assessed against, so each one is read for its crosswalk as well as its
-  // measures — including where its mapping contradicts itself.
+  // measures, including where its mapping contradicts itself.
   ['ihhl_new_identification_new1_api', 'Supplied LGD crosswalk and identity-reach evidence'],
   ['swacch_survekshan_info_new1_api', 'Supplied LGD crosswalk; retained 2024 outcome year'],
   ['fstps_stps_cotreatment_new1_api', 'Supplied LGD crosswalk; configured KLD registry'],
@@ -1623,7 +1623,7 @@ export function getDatasetUsageAudit(): DatasetUsageAudit {
   const rows = readinessCatalogue.map<DatasetUsageRow>((dataset) => {
     const source = governedSnapshotByKey.get(dataset.tableKey);
     const aggregate = aggregateEvidenceByKey.get(dataset.tableKey);
-    const state: DatasetUsageState = dataset.sourceState === 'DOCUMENTED — INGESTION PENDING'
+    const state: DatasetUsageState = dataset.sourceState === 'DOCUMENTED · INGESTION PENDING'
       ? 'pending'
       : primaryDatasetUse.has(dataset.tableKey)
         ? 'primary'
@@ -1682,7 +1682,7 @@ export function getDatasetPeriodAvailability(): DatasetPeriodRow[] {
       // full and too large to ship, so they reach the app as aggregates and carry no
       // in-app rows. Calling those "Unavailable" would misreport the one thing this
       // screen exists to state accurately.
-      period: dataset.sourceState === 'DOCUMENTED — INGESTION PENDING'
+      period: dataset.sourceState === 'DOCUMENTED · INGESTION PENDING'
         ? 'Not retained · documentation example only'
         : dataset.completePayload
           ? 'Retained in full · too large to bundle · reaches the app as an aggregate'
@@ -1727,9 +1727,9 @@ const severityRank: Record<InboxItem['severity'], number> = { blocked: 0, review
 /**
  * One prioritised worklist from every deterministic check in the product.
  *
- * These conditions already existed but were scattered across four screens — the
+ * These conditions already existed but were scattered across four screens, the
  * reconciliation workspace, the quality conditions list, the facility status queue and
- * the analytics tabs — so nobody could see the whole review load in one place. Nothing
+ * the analytics tabs, so nobody could see the whole review load in one place. Nothing
  * here is inferred; each item names the rule that produced it.
  */
 export function getReviewInbox(): InboxItem[] {
@@ -1765,7 +1765,7 @@ export function getReviewInbox(): InboxItem[] {
 
   // Seven quality conditions restate a reconciliation check under a different id and
   // title. Listing both would double the apparent review load, so the reconciliation
-  // version wins — it carries the explicit rule text.
+  // version wins, it carries the explicit rule text.
   const restatedByReconciliation = new Set([
     'duplicates', 'ambiguous-entity-period', 'percentage-reconciliation', 'denominators',
     'above-target', 'balance-reconciliation', 'period-conflicts',
@@ -1931,7 +1931,7 @@ export interface ClearanceRankContrast {
  * This is deliberately NOT the Gap Radar. That plots reported implementation
  * against a same-period outcome and classifies the result; nothing here supports
  * a classification. The two axes are two years apart, so no causal reading is
- * available and none is offered — the panel states the gap rather than hiding it.
+ * available and none is offered, the panel states the gap rather than hiding it.
  *
  * This historical-outcome pairing has more spread than zero-heavy completion
  * and supply rates. Same-source operational counts can also be compared, but

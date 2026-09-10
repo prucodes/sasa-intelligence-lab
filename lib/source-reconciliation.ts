@@ -17,7 +17,7 @@ import {
  * a shared identity and reports what the join actually establishes.
  *
  * It is deliberately built to be able to say no. A join can succeed completely and the
- * two sources still not be combinable — and when the evidence says so, the result
+ * two sources still not be combinable, and when the evidence says so, the result
  * carries a refusal, not a total.
  */
 
@@ -251,7 +251,7 @@ export function reconcileSources(left: ReconciliationSourceSpec, right: Reconcil
 export const ihhlConstructionSources: [ReconciliationSourceSpec, ReconciliationSourceSpec] = [
   {
     tableKey: 'housing_construction_of_ihhls_new1_api',
-    label: 'Housing — construction of IHHLs',
+    label: 'Housing · construction of IHHLs',
     department: 'Housing',
     districtField: 'lgd_district_name',
     targetField: 'construction_of_ihhls_target_units',
@@ -259,7 +259,7 @@ export const ihhlConstructionSources: [ReconciliationSourceSpec, ReconciliationS
   },
   {
     tableKey: 'sbm_construction_of_ihhls_new1_api',
-    label: 'SBM — construction of IHHLs',
+    label: 'SBM · construction of IHHLs',
     department: 'Swachh Bharat Mission',
     districtField: 'lgd_district_name',
     targetField: 'ihhls_target_units',

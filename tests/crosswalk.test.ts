@@ -76,7 +76,7 @@ describe('district scoping guards the ambiguous-name traps', () => {
   it('flags the Kurnool Atmakur rather than taking its higher-scoring Nellore match', () => {
     const item = find('Atmakur K', 'Kurnool');
     expect(item?.tier).toBe('cross-district');
-    // The top raw-similarity candidate is the wrong district — the flag is what prevents the error.
+    // The top raw-similarity candidate is the wrong district, the flag is what prevents the error.
     expect(item?.candidates.every((candidate) => !candidate.sameDistrict)).toBe(true);
   });
 

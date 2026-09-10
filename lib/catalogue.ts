@@ -22,7 +22,7 @@ export interface CatalogueDataset {
   payloadEvidence: string;
   joinEligibility: string;
   scoringEligibility: 'UNSCORED';
-  sourceState: 'AUTHORIZED' | 'DOCUMENTED — INGESTION PENDING';
+  sourceState: 'AUTHORIZED' | 'DOCUMENTED · INGESTION PENDING';
   sourceGrain?: 'District' | 'Gram Panchayat' | 'Gram Panchayat · Date' | 'Secretariat · Day';
   /**
    * Rows the live API reports for this dataset, recorded when the endpoint was
@@ -59,11 +59,11 @@ const catalogueTuples: CatalogueTuple[] = [
   ['Identification of New IHHLs', 'sasa_sac_identification_of_new_ihhls_api', 'Sanitation outcomes', ['percentage_of_achievement','month_name','ulb_name','district_name','inserted_date','year','month_number','completed','ihhls_approved_by_mohua','no_of_benf_identified','fin_year','under_construction']],
   ['Compactor Machinery', 'sasa_sac_machinery_compactors_api', 'Collection & machinery', ['inserted_date','month_number','no_of_units','fin_year','year','district_name','month_name','ulb_name']],
   ['E-Autos Service Model', 'sasa_sac_machinery_e_autos_service_model_api', 'Collection & machinery', ['year','no_of_vehicles_supplied_in_nos','fin_year','mnth_no','ulb_name','month_name','inserted_date','district_name','target','actual_wrk_order_issued','percentage']],
-  ['MSW Processing — CBG Units', 'sasa_sac_msw_processing_facilities_cbg_units_api', 'Waste management', ['financial_year','inserted_date','ulb_name','district_name','status_tx','month_number','month_name','total_tpd','year']],
-  ['MSW Processing — ISWM Facilities', 'sasa_sac_msw_processing_facilities_iswm_facilities_api', 'Waste management', ['total_tpd','dry_tpd','district_name','status_tx','year','inserted_date','month_number','month_name','ulb_name','financial_year','wet_tpd']],
-  ['Swachh Survekshan — GFC Status', 'sasa_sac_swacch_survekshan_information_gfc_status_api', 'Sanitation outcomes', ['year','gfc_status','ulb_name','inserted_date','district_name']],
-  ['Swachh Survekshan — National Rank', 'sasa_sac_swacch_survekshan_information_national_rank_api', 'Sanitation outcomes', ['national_rank','inserted_date','district_name','year','ulb_name']],
-  ['Swachh Survekshan — ODF Status', 'sasa_sac_swacch_survekshan_information_odf_status_api', 'Sanitation outcomes', ['district_name','ulb_name','odf_status','inserted_date','year']],
+  ['MSW Processing · CBG Units', 'sasa_sac_msw_processing_facilities_cbg_units_api', 'Waste management', ['financial_year','inserted_date','ulb_name','district_name','status_tx','month_number','month_name','total_tpd','year']],
+  ['MSW Processing · ISWM Facilities', 'sasa_sac_msw_processing_facilities_iswm_facilities_api', 'Waste management', ['total_tpd','dry_tpd','district_name','status_tx','year','inserted_date','month_number','month_name','ulb_name','financial_year','wet_tpd']],
+  ['Swachh Survekshan · GFC Status', 'sasa_sac_swacch_survekshan_information_gfc_status_api', 'Sanitation outcomes', ['year','gfc_status','ulb_name','inserted_date','district_name']],
+  ['Swachh Survekshan · National Rank', 'sasa_sac_swacch_survekshan_information_national_rank_api', 'Sanitation outcomes', ['national_rank','inserted_date','district_name','year','ulb_name']],
+  ['Swachh Survekshan · ODF Status', 'sasa_sac_swacch_survekshan_information_odf_status_api', 'Sanitation outcomes', ['district_name','ulb_name','odf_status','inserted_date','year']],
 ];
 
 const retainedExcerptKeys = new Set([
@@ -156,7 +156,7 @@ export const authorizedCatalogue = [...serpCatalogue, ...sasaCatalogue];
  */
 export const lgdRevisionCatalogue: CatalogueDataset[] = [
   {
-    catalogueName: 'Swachh Survekshan Information — Combined (LGD)',
+    catalogueName: 'Swachh Survekshan Information · Combined (LGD)',
     tableKey: 'swacch_survekshan_info_new1_api',
     programme: 'SASA CDMA',
     theme: 'Sanitation outcomes',
@@ -290,7 +290,7 @@ export const documentedIntegrationCatalogue: CatalogueDataset[] = [
  * SASA_CDMA, documented in section 15 of the integration guide. The guide has since
  * grown to 13 datasets, and a live cross-check on 2026-09-06 shows the guide runs
  * ahead of this account's grants: only three keys are readable on the Data Lake
- * (door-to-door collection, bulk-waste generators, on-site wet-waste — ~64,000 rows
+ * (door-to-door collection, bulk-waste generators, on-site wet-waste, ~64,000 rows
  * each, secretariat · day grain). The guide spelling for the other ten returns 403;
  * the alternate `waste_segregation_api` spelling returns 404. They remain
  * documented-pending and contribute nothing to analytics.
@@ -300,7 +300,7 @@ export const documentedIntegrationCatalogue: CatalogueDataset[] = [
  * `collected_households` was non-zero on essentially one day (Aug 12) against a fully
  * populated household denominator; `no_of_bwgs` filled ~24% of secretariats with a
  * tiny sum; `wet_waste_processing_bwgs` under 10%. So the rows exist but do not yet
- * support a coverage or performance measure — the honest state is UNSCORED.
+ * support a coverage or performance measure, the honest state is UNSCORED.
  *
  * `waste_segregation_api` is listed as `waste_egregation_api` in the section index and
  * as `waste_segregation_api` elsewhere; the former returns 403 and the latter 404,
@@ -572,7 +572,7 @@ export const readinessCatalogueStats = {
    * gram-panchayat keys return 404; the 10 further CDMA concepts currently resolve to
    * 403 using the guide spelling (the alternate waste-segregation spelling is 404).
    */
-  notProvisioned: readinessCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING').length,
+  notProvisioned: readinessCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED · INGESTION PENDING').length,
   /** Derived from completePayload rather than a length sum, so it means what it says. */
   documentedPending: notYetIngested.length,
   documentedPendingFields: documentedIntegrationCatalogue.reduce((total, dataset) => total + dataset.fieldCount, 0),

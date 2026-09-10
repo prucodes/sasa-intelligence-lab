@@ -6,7 +6,7 @@
  * The integration guide runs ahead of the deployment, so keys appear in the docs
  * before they resolve. This queries each one and reports live / 404 / 5xx with its
  * totalRecordCount, so the morning after a data drop you can see at a glance what
- * came online — then sample.mjs a new key for fill rate and ingest.mjs to pull it.
+ * came online, then sample.mjs a new key for fill rate and ingest.mjs to pull it.
  *
  * Serial and gentle (concurrency 1): firing these in parallel returns spurious 504s.
  * The token is read from the environment for the run only and never written to disk.

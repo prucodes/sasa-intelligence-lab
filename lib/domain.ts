@@ -233,7 +233,7 @@ const demoDiagnostics: Diagnostic[] = demoRadar.map((item, index) => ({
     provenance: 'Local fixture · not a SASA source record',
     grain: 'ULB', normalizedCandidate: `demo fixture ${index + 1}`, formula: 'Illustrative fixture policy only',
   }],
-  qualityFlags: item.reasons.length ? ['Required fixture value intentionally omitted'] : ['Synthetic data — not an official finding'],
+  qualityFlags: item.reasons.length ? ['Required fixture value intentionally omitted'] : ['Synthetic data, not an official finding'],
 }));
 
 const datasetNameByKey = new Map(authorizedCatalogue.map((dataset) => [dataset.tableKey, dataset.catalogueName]));
@@ -270,7 +270,7 @@ function makeSnapshotEvidence(snapshot: SnapshotEnvelope, record: SnapshotRecord
     period: recordPeriodLabel(record),
     rawFields: record,
     joinMethod: anchor ? 'IHHL source row used as the local profile anchor' : 'Normalized district + ULB name candidate',
-    matchStatus: anchor ? 'Source identity retained; cross-source mapping unreviewed' : 'Unreviewed — excluded from scoring',
+    matchStatus: anchor ? 'Source identity retained; cross-source mapping unreviewed' : 'Unreviewed · excluded from scoring',
     freshness: `Snapshot generated ${snapshot.responseMetadata.generatedAt}`,
     provenance: snapshotProvenance(snapshot),
     grain: record.ulb_name || record.ulb_nm ? 'ULB' : 'District',
@@ -374,7 +374,7 @@ const sampleDiagnostics: Diagnostic[] = uniqueIhhlRecords.map((ihhlRecord) => {
     district,
     reportingContext: hasOutcome ? `Operational: ${operationalPeriod} · Outcomes: 2024` : `Operational snapshot: ${operationalPeriod}`,
     state: 'UNSCORED',
-    title: fstpConflict ? 'Source period conflict — review required' : hasOutcome ? 'Period and identity review required' : 'Identity review required',
+    title: fstpConflict ? 'Source period conflict · review required' : hasOutcome ? 'Period and identity review required' : 'Identity review required',
     summary: 'Complete governed rows are retained, but cross-source identity has not been approved and outcome periods are not assumed to align.',
     metrics: [
       recordMetric('IHHL pipeline', ihhlRecord, (record) => `${record.completed} / ${record.ihhls_approved_by_mohua}`, () => completion.value === null ? 'completed / approved · ratio unavailable' : `${Math.round(completion.value * 100)}% completed / approved`, 'violet'),
@@ -404,7 +404,7 @@ function joinReadinessFor(columns: string[]): string {
 const sampleReadinessRows: ReadinessRow[] = readinessCatalogue.map((dataset) => {
   const snapshot = governedSnapshotByKey.get(dataset.tableKey);
   const aggregate = aggregateEvidenceByKey.get(dataset.tableKey);
-  const documentedPending = dataset.sourceState === 'DOCUMENTED — INGESTION PENDING';
+  const documentedPending = dataset.sourceState === 'DOCUMENTED · INGESTION PENDING';
   const complete = Boolean(snapshot)
     && snapshot!.responseMetadata.hasNextPage === false
     && snapshot!.responseMetadata.totalRecordCount === snapshot!.records.length;
@@ -537,7 +537,7 @@ const liveDiagnostic: Diagnostic = {
 };
 
 const liveData: ModeDataset = {
-  mode: 'LIVE', banner: 'Live connector · on the roadmap — on-demand authenticated pull, not yet enabled',
+  mode: 'LIVE', banner: 'Live connector · on the roadmap. On-demand authenticated pull, not yet enabled',
   overview: [
     { label: 'Collection & Machinery', value: '—', detail: 'access pending', tone: 'neutral' },
     { label: 'Processing & Facilities', value: '—', detail: 'access pending', tone: 'neutral' },

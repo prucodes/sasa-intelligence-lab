@@ -10,7 +10,7 @@
  *
  * Credentials are never read from, or written to, the repository. Mint a refresh
  * token yourself with the documented password grant (datalakes.ailivinglabs.ap.gov.in
- * /docs#authentication) — the password goes only to the identity endpoint, never here —
+ * /docs#authentication), the password goes only to the identity endpoint, never here , 
  * then supply the refresh_token in the environment for the run only:
  *
  *   # you run this; it prints access_token + refresh_token
@@ -27,8 +27,8 @@
  * use; this script keeps the newest one, so a continuous pull stays authenticated well
  * past the 300s access-token window. Nothing is persisted except the governed payloads.
  *
- * Pages are fetched three at a time. The bottleneck was never data volume — a million
- * rows is a few hundred megabytes — but request count times latency, because the API
+ * Pages are fetched three at a time. The bottleneck was never data volume, a million
+ * rows is a few hundred megabytes, but request count times latency, because the API
  * pins page size at 100 however you ask. Three-way concurrency measured 0.88s per page
  * against 2.74s serial, turning an eight-hour pull into three.
  */
@@ -47,7 +47,7 @@ const REFRESH_MARGIN_MS = 60_000;
  * Pages fetched in parallel.
  *
  * Measured 2026-09-08 on the PR export: serial is 2.74s per page, two at a time 1.35s,
- * three 0.88s, four 1.03s — four is slower than three, so the upstream saturates just
+ * three 0.88s, four 1.03s, four is slower than three, so the upstream saturates just
  * past three. Zero failures at every level tested. Three it is; the September audit's
  * warning about spurious 504s was at roughly thirty.
  */
@@ -58,7 +58,7 @@ const CONCURRENCY = 3;
  *
  * A filtered pull gets its own directory. Two months of one dataset written into the
  * same folder would resume across each other and assemble into a set that is neither
- * month — silently, because the page files look identical.
+ * month, silently, because the page files look identical.
  */
 const rawDir = (tableKey, filters = {}) => {
   const keys = Object.keys(filters).sort();
@@ -162,7 +162,7 @@ async function completedOffsets(dir) {
   try {
     const files = await readdir(dir);
     // manifest.json lives in this directory too, and stripping its non-digits yields
-    // 0 — which would count it as a completed page 0 on every resume.
+    // 0, which would count it as a completed page 0 on every resume.
     return new Set(files.filter((name) => /^page-\d+\.json$/.test(name)).map((name) => Number(name.replace(/\D/g, ''))));
   } catch {
     return new Set();
@@ -193,7 +193,7 @@ async function main() {
     console.error(`Known keys: ${Object.keys(datasets).join(', ')}`);
     process.exit(1);
   }
-  // The live API accepts only `month_id` (YYYYMM, e.g. 202607) and `year` as filters —
+  // The live API accepts only `month_id` (YYYYMM, e.g. 202607) and `year` as filters , 
   // confirmed by the platform audit on 2026-09-03. The source document's per-dataset
   // filter names (mnth_no, dstrt_id, district_id, ulb_id, dstrt_nm) are rejected with a
   // 400, and there is no general district filter. Default to a full unfiltered export.
@@ -203,12 +203,12 @@ async function main() {
   const filters = {};
   // `--months 6,5` pulls several months of ONE key inside a single session. The refresh
   // chain lives in this process and rotates on every use, so two sequential invocations
-  // would need two separately minted tokens — and an unattended overnight run cannot ask
+  // would need two separately minted tokens, and an unattended overnight run cannot ask
   // for the second. Sharing the session is what makes a multi-month pull survive alone.
   // `--districts 743,791` pulls one month district by district instead of paging the whole
   // month by offset. The result set is ordered by district, and offset cost grows with
   // depth: the tail of a 1.24M-row month runs at ~1.8s/page where the head runs at ~1.0s.
-  // Filtering to one district keeps every offset under ~85,000, so the rate stays flat —
+  // Filtering to one district keeps every offset under ~85,000, so the rate stays flat , 
   // and it avoids the deep offsets where the API starts returning 504s.
   const districtsIndex = rest.indexOf('--districts');
   const districtList = districtsIndex >= 0 && rest[districtsIndex + 1]
@@ -238,7 +238,7 @@ async function main() {
   // One Session for every dataset in the run. Refresh tokens ROTATE on use and the new
   // one is held in memory, so a second process started with the original token can find
   // it already spent. Passing several keys to one invocation is therefore not a
-  // convenience — it is the only reliable way to pull more than one dataset per token.
+  // convenience, it is the only reliable way to pull more than one dataset per token.
   const session = new Session(refreshToken);
   for (const tableKey of tableKeys) {
     if (districtList) {

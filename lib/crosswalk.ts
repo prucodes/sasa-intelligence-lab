@@ -10,8 +10,8 @@ import { seedDecisions } from '@/lib/crosswalk-seed';
  * Entity resolution against a source-provided anchor registry.
  *
  * Three MEPMA-family exports carry a real `ulb_id`. Within that family the mapping is
- * internally consistent — no id resolves to more than one name and no name to more than
- * one id — so it is usable as an anchor spine for proposing matches from other sources.
+ * internally consistent, no id resolves to more than one name and no name to more than
+ * one id, so it is usable as an anchor spine for proposing matches from other sources.
  *
  * Nothing here approves a match. Every proposal is a candidate for human review, and the
  * scoring in `similarity` is a ranking hint only. Naive name similarity produces confident
@@ -154,7 +154,7 @@ const CANDIDATE_FLOOR = 0.62;
 const SAME_DISTRICT_FLOOR = 0.45;
 
 /**
- * District names vary as much as ULB names — Anantapur/Ananthapur, Nandyal/Nandyala,
+ * District names vary as much as ULB names, Anantapur/Ananthapur, Nandyal/Nandyala,
  * Kadapa/YSR Kadapa, Ambedkar Konaseema/Dr. B.R Ambedkar Konaseema, West Godavari/
  * West Godavari District. Comparing them by exact signature silently broke district
  * scoping and pushed correct same-district matches into the cross-district bucket.
@@ -310,7 +310,7 @@ const decisionListeners = new Set<() => void>();
 
 /**
  * The reviewed crosswalk that ships with the build. Used as the fallback whenever a
- * browser holds no decisions of its own — so a static host, which starts localStorage
+ * browser holds no decisions of its own, so a static host, which starts localStorage
  * empty for every visitor, still shows the finished review rather than a blank queue.
  * A reviewer's own edits are written to localStorage and take precedence from then on.
  * Returned as the server snapshot too, so the prerendered HTML already reflects it and
@@ -368,7 +368,7 @@ export function approvedAliases(decisions: Record<string, Decision>): Map<string
 export function serializeDecisions(decisions: Decision[], stats: CrosswalkStats): string {
   return JSON.stringify({
     artifact: 'candidate-ulb-crosswalk',
-    status: 'UNAPPROVED — reviewer working copy',
+    status: 'UNAPPROVED · reviewer working copy',
     anchorTableKey: ANCHOR_TABLE_KEY,
     anchorSize: stats.anchorSize,
     generatedAt: new Date().toISOString(),

@@ -4,13 +4,13 @@
  *   AILAB_ACCESS_TOKEN=<300s token from /playground/token> \
  *   node scripts/retain-snapshot.mjs <tableKey> [<tableKey> ...]
  *
- * Writes the same envelope shape the large `ingest.mjs` pulls produce — requestEcho,
- * responseMetadata, records — directly into data/full-snapshots, so a retained dataset
+ * Writes the same envelope shape the large `ingest.mjs` pulls produce, requestEcho,
+ * responseMetadata, records, directly into data/full-snapshots, so a retained dataset
  * looks identical downstream however it was fetched.
  *
  * It pages through the whole dataset and refuses to write a partial retention. A snapshot
  * holding only the first 100 of 336 rows would be indistinguishable from a complete one
- * downstream, and `isCompleteSnapshot` would still call it complete — so anything that
+ * downstream, and `isCompleteSnapshot` would still call it complete, so anything that
  * does not reconcile to the reported total is skipped rather than written.
  *
  * A 64,000-row dataset is ~640 pages, which does not fit inside one 300-second access
@@ -39,7 +39,7 @@ const CACHE = resolve(process.cwd(), 'data/.retain-cache');
  * export alone is 26,702 rows / 7.7 MB, and the CDMA secretariat-day files are ~64,500
  * rows each. Those belong in data/large-snapshots (git-ignored), where `aggregate.mjs`
  * can roll them up to something small enough to bundle. Retaining them is still worth
- * doing — it is the difference between "not pulled" and "pulled, too big to ship".
+ * doing, it is the difference between "not pulled" and "pulled, too big to ship".
  */
 const BUNDLE_ROW_LIMIT = 2_000;
 const RETRYABLE = new Set([429, 500, 502, 503, 504]);
@@ -116,7 +116,7 @@ async function main() {
         try {
           payload = await query(token, tableKey, requestId, records.length ? tokenForOffset(records.length) : null);
         } catch (error) {
-          // An expired token is not a failed pull — the cache holds everything so far.
+          // An expired token is not a failed pull, the cache holds everything so far.
           if (String(error.message).startsWith('HTTP 401')) { expired = true; break; }
           throw error;
         }
@@ -139,7 +139,7 @@ async function main() {
       }
       // Never fall back to records.length for the total. If no page ever succeeded,
       // `0 === 0` would reconcile and write an empty envelope that isCompleteSnapshot
-      // reports as complete — the precise failure this script exists to prevent.
+      // reports as complete, the precise failure this script exists to prevent.
       const total = metadata.totalRecordCount;
       if (total === undefined) {
         console.error(`  ⟳ ${tableKey} · no page retrieved${expired ? ' (token expired before the first request)' : ''}. Nothing written — rerun with a fresh token.`);

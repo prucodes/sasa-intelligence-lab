@@ -2675,7 +2675,7 @@ td { border-bottom: 1px solid #eaf0f7; }
    Six distinct surfaces so panels stop reading as one repeated white card.
    ========================================================================== */
 
-/* 1 — Analytics / chart card: violet-blue wash + wave texture. */
+/* 1, Analytics / chart card: violet-blue wash + wave texture. */
 .pulse-panel,
 .analytical-hero,
 .funnel-panel,
@@ -2694,7 +2694,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .pulse-panel::after,
 .funnel-panel::after { opacity: .07; }
 
-/* 2 — Data table card: crisp white plate with a cool header shelf. */
+/* 2, Data table card: crisp white plate with a cool header shelf. */
 .analytics-table-panel,
 .readiness-table-panel,
 .coverage-panel,
@@ -2705,7 +2705,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   border-color: rgba(203,219,235,.95);
 }
 
-/* 3 — Diagnostics / evidence card: teal-leaning analytical surface. */
+/* 3, Diagnostics / evidence card: teal-leaning analytical surface. */
 .evidence-panel,
 .insight-brief,
 .blocker-panel,
@@ -2718,7 +2718,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   border-color: rgba(190,220,226,.95);
 }
 
-/* 4 — Quality / metric card: warm neutral so review states stand apart. */
+/* 4, Quality / metric card: warm neutral so review states stand apart. */
 .gates-panel,
 .maturity-panel,
 .quality-view-grid > .panel:first-child,
@@ -2729,7 +2729,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   border-color: rgba(228,220,206,.95);
 }
 
-/* 5 — Gap / quadrant backplate: the four-state wash from the mockup. */
+/* 5, Gap / quadrant backplate: the four-state wash from the mockup. */
 .radar-panel,
 .sample-radar-state {
   background:
@@ -2744,7 +2744,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   border-color: rgba(217,209,240,.95);
 }
 
-/* 6 — Dashboard overview card: the neutral base plate. */
+/* 6, Dashboard overview card: the neutral base plate. */
 .gap-summary,
 .why-panel,
 .outcome-context-card,
@@ -2841,7 +2841,7 @@ td { border-bottom: 1px solid #eaf0f7; }
    in large pastel medallions, inner tinted strips, and semantic numbers.
    ========================================================================== */
 
-/* S1 — Panel roles stay perceptible but quiet. The mockups are near-white. */
+/* S1, Panel roles stay perceptible but quiet. The mockups are near-white. */
 .pulse-panel,
 .analytical-hero,
 .funnel-panel,
@@ -2910,7 +2910,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   border-color: rgba(214,214,238,.9);
 }
 
-/* S2 — The hero sits ON the page, as it does in every UI mockup:
+/* S2, The hero sits ON the page, as it does in every UI mockup:
    no heavy card, title against the canvas, circuit lines running off-right. */
 .page-intro {
   min-height: 112px;
@@ -2938,7 +2938,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .theme-dark .page-intro { background: none; border: 0; box-shadow: none; }
 .theme-dark .page-intro > .intro-circuit { opacity: .42; }
 
-/* S3 — Large pastel medallions are the mockups' signature colour carrier. */
+/* S3, Large pastel medallions are the mockups' signature colour carrier. */
 .panel-icon {
   width: 42px; height: 42px;
   border-radius: 13px;
@@ -2964,7 +2964,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .municipal-icon { width: 56px; height: 56px; }
 .guide-item .status-pill { padding: 7px 11px; font-size:11px; }
 
-/* S4 — KPI detail lines become the mockups' tinted inner strip. */
+/* S4, KPI detail lines become the mockups' tinted inner strip. */
 .metric-card > div:last-child { gap: 2px; }
 .metric-card small,
 .mini-kpi small {
@@ -2985,7 +2985,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 26%, transparent);
 }
 
-/* S5 — Nav active is a filled pill in the mockups, not a hard rail. */
+/* S5, Nav active is a filled pill in the mockups, not a hard rail. */
 .sidebar nav a.active {
   color: #0b5f86;
   background: linear-gradient(135deg, rgba(37,99,235,.1), rgba(14,165,164,.09));
@@ -2998,12 +2998,12 @@ td { border-bottom: 1px solid #eaf0f7; }
   box-shadow: inset 0 0 0 1px rgba(45,212,208,.24);
 }
 
-/* S6 — The sidebar illustration carries real weight in every mockup. */
+/* S6, The sidebar illustration carries real weight in every mockup. */
 .sidebar-art { height: 232px; opacity: .92; }
 .sidebar-art img { width: 124%; margin-left: -12%; }
 .theme-dark .sidebar-art img { opacity: .55; }
 
-/* S7 — Quadrant labels: icon + title + description, as in the radar mockup. */
+/* S7, Quadrant labels: icon + title + description, as in the radar mockup. */
 .quadrant-label {
   max-width: 46%;
   padding: 9px 11px;
@@ -3016,7 +3016,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .quadrant-label svg { flex: 0 0 auto; }
 .theme-dark .quadrant-label { background: rgba(16,36,68,.88); box-shadow: 0 4px 14px rgba(2,10,26,.5), inset 0 0 0 1px rgba(122,162,214,.16); }
 
-/* S8 — Guide rows read as icon + coloured heading + description. */
+/* S8, Guide rows read as icon + coloured heading + description. */
 .guide-item { display: grid; grid-template-columns: 44px 1fr; gap: 11px; align-items: start; min-height: 72px; }
 .guide-item p { margin: 5px 0 0; grid-column: 2; }
 .guide-item .status-pill { grid-column: 2; }
@@ -3029,11 +3029,11 @@ td { border-bottom: 1px solid #eaf0f7; }
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 3px 10px rgba(23,63,110,.06);
 }
 
-/* S9 — Bottom strips get the mockups' larger circular icons and airier rhythm. */
+/* S9, Bottom strips get the mockups' larger circular icons and airier rhythm. */
 .integration-strip, .quality-strip { padding: 16px 18px; }
 .integration-strip .why-item, .quality-strip .why-item { min-height: 62px; }
 
-/* S10 — Circuit runs along the top band; the illustration sits below it,
+/* S10, Circuit runs along the top band; the illustration sits below it,
    so the two decorative layers stop competing for the same corner. */
 .page-intro > .intro-circuit {
   right: -30px; top: -18px;
@@ -3047,7 +3047,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .intro-gap-radar .intro-art { bottom: -14px; }
 @media (max-width: 900px) { .page-intro > .intro-circuit { display: none; } }
 
-/* S11 — Guide rows: medallion + semantic heading + description (radar mockup). */
+/* S11, Guide rows: medallion + semantic heading + description (radar mockup). */
 .guide-item {
   display: grid;
   grid-template-columns: 44px minmax(0,1fr);
@@ -3080,7 +3080,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .theme-dark .guide-investigate { --guide-tone: #fbc36a; }
 .theme-dark .guide-unscored { --guide-tone: #a7bad6; }
 
-/* S12 — Amber on navy goes muddy; keep the accent in the rail and icon only. */
+/* S12, Amber on navy goes muddy; keep the accent in the rail and icon only. */
 .theme-dark .gates-panel,
 .theme-dark .maturity-panel,
 .theme-dark .quality-view-grid > .panel:first-child,
@@ -3112,7 +3112,7 @@ td { border-bottom: 1px solid #eaf0f7; }
    filled status pill, and elevated trust cards.
    ========================================================================== */
 
-/* T1 — The signature landscape band replaces the plain skyline. */
+/* T1, The signature landscape band replaces the plain skyline. */
 .app-shell::after {
   height: 178px;
   background: url('/assets/sasa/landscape-strip.svg') center bottom / 100% auto no-repeat;
@@ -3125,7 +3125,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 @media (max-width: 900px) { .app-shell::after { left: 0; height: 132px; opacity: .48; } }
 @media (max-width: 620px) { .app-shell::after { height: 104px; opacity: .4; } }
 
-/* T2 — Title lockup: brand mark beside the H1, as on every concept board. */
+/* T2, Title lockup: brand mark beside the H1, as on every concept board. */
 .page-intro > div:first-child { position: relative; padding-left: 74px; }
 .page-intro > div:first-child::before {
   content: '';
@@ -3145,7 +3145,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   .page-intro > div:first-child::before { display: none; }
 }
 
-/* T3 — Header status pill: filled navy/teal, like "Transparent by design". */
+/* T3, Header status pill: filled navy/teal, like "Transparent by design". */
 .topbar .lab-tag {
   padding: 7px 14px;
   border: 0;
@@ -3157,7 +3157,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .topbar .lab-tag > span { color: #5fe0da; }
 .theme-dark .topbar .lab-tag { color: #dff6f7; background: linear-gradient(120deg, #0e4a63, #123a63); box-shadow: 0 6px 18px rgba(2,10,26,.45), inset 0 0 0 1px rgba(255,255,255,.08); }
 
-/* T4 — Diagnostics focal card goes fully dark, with tiles inside it. */
+/* T4, Diagnostics focal card goes fully dark, with tiles inside it. */
 .diagnostic-main {
   background:
     radial-gradient(ellipse 34rem 20rem at 96% 0%, rgba(124,58,237,.3), transparent 62%),
@@ -3199,7 +3199,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .diagnostic-main .case-limit > span { color: #6fe6e0; background: rgba(14,165,164,.2); }
 .diagnostic-heading { border-bottom: 1px solid rgba(122,162,214,.2); }
 
-/* T5 — Trust strips become elevated cards with large circular icons. */
+/* T5, Trust strips become elevated cards with large circular icons. */
 .integration-strip,
 .quality-strip {
   gap: 12px;
@@ -3239,7 +3239,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   box-shadow: var(--elev-2);
 }
 
-/* T6 — Keep the reserved footer band in step with the landscape height. */
+/* T6, Keep the reserved footer band in step with the landscape height. */
 @media (max-width: 900px) { .content { padding-bottom: 118px; } }
 @media (max-width: 620px) { .content { padding-bottom: 92px; } }
 
@@ -3249,11 +3249,11 @@ td { border-bottom: 1px solid #eaf0f7; }
    landscape carries real vegetation colour.
    ========================================================================== */
 
-/* U1 — Footer landscape sits forward, as on the boards. */
+/* U1, Footer landscape sits forward, as on the boards. */
 .app-shell::after { opacity: .72; height: 186px; }
 .theme-dark.app-shell::after { opacity: .3; filter: saturate(.5) brightness(.5) hue-rotate(190deg); }
 
-/* U2 — Guide rows become tinted cards ("Why this matters" on the radar board). */
+/* U2, Guide rows become tinted cards ("Why this matters" on the radar board). */
 .quadrant-guide .guide-item {
   padding: 13px 14px;
   border: 1px solid color-mix(in srgb, var(--guide-tone, var(--slate)) 22%, transparent);
@@ -3270,7 +3270,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   box-shadow: 0 3px 10px rgba(2,10,26,.3);
 }
 
-/* U3 — "Why this is unscored" reads as its own tinted panel with a filled mark. */
+/* U3, "Why this is unscored" reads as its own tinted panel with a filled mark. */
 .quality-panel {
   background:
     radial-gradient(ellipse 22rem 14rem at 2% 0%, rgba(124,58,237,.13), transparent 62%),
@@ -3298,7 +3298,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .theme-dark .quality-panel li { border-color: rgba(154,140,224,.26); background: rgba(20,38,78,.6); }
 .theme-dark .quality-panel .panel-icon { background: linear-gradient(145deg, #7c3aed, #4f63e0); }
 
-/* U4 — Evidence Inspector rows: backplated, value-forward. */
+/* U4, Evidence Inspector rows: backplated, value-forward. */
 .evidence-panel .evidence-rows { display: grid; gap: 7px; }
 .evidence-panel .evidence-row {
   min-height: 44px;
@@ -3314,7 +3314,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .theme-dark .evidence-panel .evidence-row svg { color: #5fe0da; }
 .evidence-details .evidence-row { background: rgba(248,251,253,.9); }
 
-/* U5 — Blocker and gate rows also get their own plates. */
+/* U5, Blocker and gate rows also get their own plates. */
 .scoring-blocker,
 .radar-blockers > div {
   padding: 11px 12px;
@@ -3330,7 +3330,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .theme-dark .scoring-blocker,
 .theme-dark .radar-blockers > div { border-color: var(--line); background: rgba(20,42,80,.6); }
 
-/* U6 — Summary rows on the overview panel match the same treatment. */
+/* U6, Summary rows on the overview panel match the same treatment. */
 .summary-list { gap: 8px; }
 .summary-list > div {
   padding: 9px 12px;
@@ -3341,7 +3341,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 }
 .theme-dark .summary-list > div { border-color: var(--line); background: rgba(20,42,80,.6); }
 
-/* U7 — "Why this matters" items get plates too, and the panels breathe more. */
+/* U7, "Why this matters" items get plates too, and the panels breathe more. */
 .why-panel .why-item {
   padding: 12px 13px;
   border: 1px solid rgba(206,222,240,.85);
@@ -3355,14 +3355,14 @@ td { border-bottom: 1px solid #eaf0f7; }
 .pulse-panel, .gap-summary, .why-panel { padding: 19px; }
 .quadrant-guide, .evidence-panel, .quality-panel, .blocker-panel, .overlap-panel { padding: 19px; }
 
-/* U8 — Focal card hugs its content instead of stretching to the side column. */
+/* U8, Focal card hugs its content instead of stretching to the side column. */
 .diagnostics-layout { align-items: start; }
 
 /* ============================================================================
    V. Footer background elements from the concept boards.
    ========================================================================== */
 
-/* V1 — The landscape sits taller and more present so its elements read. */
+/* V1, The landscape sits taller and more present so its elements read. */
 .app-shell::after { height: 214px; opacity: .8; mask-image: linear-gradient(180deg, transparent, #000 42%); }
 .content { padding-bottom: 132px; }
 .theme-dark.app-shell::after { opacity: .34; filter: saturate(.55) brightness(.5) hue-rotate(190deg); }
@@ -3370,7 +3370,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 @media (max-width: 900px) { .app-shell::after { left: 0; height: 152px; opacity: .58; } .content { padding-bottom: 118px; } }
 @media (max-width: 620px) { .app-shell::after { height: 112px; opacity: .46; } .content { padding-bottom: 92px; } }
 
-/* V2 — Rule that breaks around centered text, with terminal diamonds.
+/* V2, Rule that breaks around centered text, with terminal diamonds.
    Applied to the coverage lines that already exist on these screens. */
 .data-coverage-footer,
 .readiness-count-footer {
@@ -3423,7 +3423,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   .data-coverage-footer::after, .readiness-count-footer::after { display: none; }
 }
 
-/* V3 — Trust cards carry the boards' larger colour-cycled medallions. */
+/* V3, Trust cards carry the boards' larger colour-cycled medallions. */
 .integration-strip .why-item:nth-child(1) > span,
 .quality-strip .why-item:nth-child(1) > span { color: var(--teal-dark); background: linear-gradient(150deg, rgba(14,165,164,.2), rgba(14,165,164,.08)); }
 .integration-strip .why-item:nth-child(2) > span,
@@ -3441,7 +3441,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 .theme-dark .integration-strip .why-item:nth-child(4) > span,
 .theme-dark .quality-strip .why-item:nth-child(4) > span { color: #6ee7a0; background: rgba(22,163,74,.18); }
 
-/* V4 — Dark: the landscape elements still need to read as a ground plane. */
+/* V4, Dark: the landscape elements still need to read as a ground plane. */
 .theme-dark.app-shell::after { opacity: .46; filter: saturate(.6) brightness(.62) hue-rotate(192deg); }
 
 /* ============================================================================
@@ -3468,24 +3468,24 @@ td { border-bottom: 1px solid #eaf0f7; }
   .content { padding-bottom: 96px; }
 }
 
-/* W2 — Cooler, quieter ground so the scene stays behind the data. */
+/* W2, Cooler, quieter ground so the scene stays behind the data. */
 .app-shell::after { opacity: .78; }
 .theme-dark.app-shell::after { opacity: .46; }
 
-/* W3 — Dark: keep the ground readable without lifting it off the navy. */
+/* W3, Dark: keep the ground readable without lifting it off the navy. */
 .theme-dark.app-shell::after {
   opacity: .58;
   filter: saturate(.62) brightness(.72) contrast(.92) hue-rotate(186deg);
 }
 
-/* W4 — Dark: the pale scene reads as a light haze over navy, not a darkened
+/* W4, Dark: the pale scene reads as a light haze over navy, not a darkened
    image (brightness filters crushed it into the background entirely). */
 .theme-dark.app-shell::after {
   opacity: .26;
   filter: saturate(.45) hue-rotate(188deg);
 }
 
-/* X — Current-data intelligence expansion: quiet internal workspaces, not new dashboards. */
+/* X, Current-data intelligence expansion: quiet internal workspaces, not new dashboards. */
 .internal-view-switch {
   width: max-content;
   max-width: 100%;
@@ -3673,7 +3673,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   .internal-view-switch button { flex: 1; padding-inline: 10px; }
 }
 
-/* Analytics wow pass — stronger compositions, still evidence-first. */
+/* Analytics wow pass, stronger compositions, still evidence-first. */
 .overview-intelligence-layout {
   position: relative;
   display: grid;
@@ -3818,7 +3818,7 @@ td { border-bottom: 1px solid #eaf0f7; }
   .journey-loss { display: none; }
 }
 
-/* Modern source-ratio visualization — three independent measures, never a score. */
+/* Modern source-ratio visualization, three independent measures, never a score. */
 .signal-orbit-card { min-height: 330px; align-items: stretch; text-align: left; }
 .orbit-heading { display: flex; flex-direction: column; gap: 3px; }
 .orbit-heading > b { color: #fff; font-size: 15px; }
@@ -4294,7 +4294,7 @@ td { border-bottom: 1px solid #eaf0f7; }
 }
 table td, table th { font-variant-numeric: tabular-nums; }
 
-/* Three ratios, three separate baselines — no nesting, no implied composite. */
+/* Three ratios, three separate baselines, no nesting, no implied composite. */
 .signal-gauges { display: flex; gap: 10px; justify-content: space-between; margin: 4px 0 2px; }
 .signal-gauge { flex: 1 1 0; min-width: 0; text-align: center; }
 .signal-gauge svg { display: block; width: 100%; max-width: 74px; margin: 0 auto; }
@@ -4418,7 +4418,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 .overview-focus-rail { align-self: start; }
 .overview-focus-rail > .radar-activation-card { min-height: 0; }
 
-/* Three ratios, three separate baselines — no nesting, no implied composite. */
+/* Three ratios, three separate baselines, no nesting, no implied composite. */
 .signal-ratios-card { background: linear-gradient(150deg, #10265c, #1b2f6b 45%, #3a2a70); color: #eaf2fb; border: 1px solid rgba(120,160,220,.2); display: flex; flex-direction: column; gap: 11px; padding: 17px 18px; }
 .signal-ratios-card .eyebrow { color: #7fd8e5; }
 .ratios-title { font-size: 15px; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
@@ -4737,7 +4737,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 .theme-dark .tray-controls input, .theme-dark .tray-controls select { background: rgba(14,32,72,.7); border-color: rgba(120,160,220,.22); color: #dceaf8; }
 .theme-dark .tray-notice { background: rgba(14,32,72,.6); border-color: rgba(120,160,220,.18); }
 
-/* Overview executive pass — put the decision read inside the opening composition,
+/* Overview executive pass, put the decision read inside the opening composition,
    then keep the entity and geography evidence dense enough for a laptop viewport. */
 .page-overview .intro-overview { display: block; min-height: 156px; padding-top: 9px; }
 .page-overview .intro-overview > div:first-child { max-width: 790px; }
@@ -5371,7 +5371,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   .presenter-hint { display: none; }
 }
 
-/* Presenter v2 — executive briefing canvas. The density is deliberate: each
+/* Presenter v2, executive briefing canvas. The density is deliberate: each
    chapter carries its evidence context instead of behaving like a sparse slide. */
 .presenter {
   --presenter-glow: rgba(24, 168, 160, .1);
@@ -5632,7 +5632,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   .stage-cohort-foot { margin: 0 -15px; padding: 11px 15px; }
 }
 
-/* Presenter v3 — actual visual analytics: geographic signal, alluvial stage
+/* Presenter v3, actual visual analytics: geographic signal, alluvial stage
    flow, and concentration curve. These intentionally break out of card-grid
    dashboard language and give each chapter one dominant visual. */
 .presenter-map-tabs { display: flex; gap: 7px; }
@@ -5767,7 +5767,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   .presenter-nav { position: fixed; left: clamp(22px,4vw,68px); right: clamp(22px,4vw,68px); bottom: 0; width: auto; min-height: 64px; padding: 8px 0; background: color-mix(in srgb,var(--background) 92%,transparent); backdrop-filter: blur(14px); }
 }
 
-/* Presenter v4 — the opening and closing beats use a single visual field.
+/* Presenter v4, the opening and closing beats use a single visual field.
    Every dial remains independently denominated; the runway exposes why review
    can proceed while scoring stays gated. */
 .aperture-status, .runway-verdict { flex: none; min-width: 190px; padding: 13px 16px; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb,var(--surface) 91%,transparent); box-shadow: 0 15px 45px rgba(29,52,86,.08); }
@@ -5860,7 +5860,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   .runway-gate { top: 184px; height: 119px; }
 }
 
-/* Presenter closing beat — deliberately editorial and calm. The vertical rule
+/* Presenter closing beat, deliberately editorial and calm. The vertical rule
    is the evidence boundary; actions and withheld judgements remain distinct. */
 .boundary-mark { flex: none; min-width: 205px; padding: 14px 17px; border: 1px solid color-mix(in srgb,var(--violet) 35%,var(--line)); border-radius: 13px; background: linear-gradient(145deg,rgba(113,58,237,.075),color-mix(in srgb,var(--surface) 94%,transparent)); }
 .boundary-mark span, .boundary-mark small { display: block; font-size:11px; color: var(--muted); }.boundary-mark span { text-transform: uppercase; letter-spacing: .11em; }.boundary-mark b { display: block; margin: 6px 0 2px; color: var(--violet); font-size: 22px; letter-spacing: .08em; }
@@ -5879,7 +5879,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 @media (max-width: 650px) { .boundary-now ol { grid-template-columns: 1fr; gap: 8px; }.boundary-now li { min-height: 0; display: grid; grid-template-columns: 35px 1fr; gap: 8px; }.boundary-now li + li::before { display: none; }.boundary-now li b { margin-top: 0; }.boundary-now li small { grid-column: 2; }.boundary-mark { width: 100%; margin-top: 14px; } }
 @media (max-height: 780px) and (min-width: 1001px) { .boundary-composition { height: 350px; min-height: 350px; }.boundary-now,.boundary-held { padding-top: 19px; padding-bottom: 19px; }.boundary-now ol { margin-top: 14px; }.boundary-now li { min-height: 148px; padding-top: 13px; }.boundary-now li b { margin-top: 12px; }.boundary-next { min-height: 45px; margin-top: 8px; } }
 
-/* Operational Analytics v2 — a quiet command deck and evidence brief shared
+/* Operational Analytics v2, a quiet command deck and evidence brief shared
    across all four domains. The redesign changes hierarchy, not data meaning. */
 .analytics-control-deck { margin: 0 0 13px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb,var(--surface) 96%,transparent); box-shadow: 0 12px 32px rgba(28,62,104,.065); }
 .operational-domain-tabs.analytics-tabs { min-height: 70px; margin: 0; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); overflow: hidden; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
@@ -5966,7 +5966,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   .district-signal-panel .presenter-map-ranking { display: block; }
 }
 
-/* ULB Diagnostics v2 — identity stays high-contrast; evidence becomes a calm,
+/* ULB Diagnostics v2, identity stays high-contrast; evidence becomes a calm,
    selectable workspace and the inspector becomes a compact audit ledger. */
 .diagnostics-layout { grid-template-columns: minmax(0,1.48fr) minmax(355px,.68fr); gap: 15px; align-items: start; }
 .diagnostic-main { overflow: hidden; border: 1px solid var(--line); border-top: 0; border-radius: 18px; background: color-mix(in srgb,var(--surface) 97%,transparent); box-shadow: 0 18px 48px rgba(25,55,92,.09); }
@@ -6002,7 +6002,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .entity-picker-popover { left: 0; right: auto; }.entity-picker-browser { grid-template-columns: 145px minmax(0,1fr); }.entity-picker-popover [role="listbox"] { max-height: 290px; } }
 @media (max-width: 520px) { .entity-picker-browser { grid-template-columns: 1fr; }.entity-picker-browser > nav { max-height: 150px; border-right: 0; border-bottom: 1px solid var(--line); } }
 
-/* Header briefing action — a contained control, never a label spilling out of
+/* Header briefing action, a contained control, never a label spilling out of
    an icon circle. It collapses cleanly before the header becomes crowded. */
 .topbar .present-button {
   width: auto;
@@ -6045,7 +6045,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   .topbar .present-button span { display: none; }
 }
 
-/* Data Readiness v3 — one activation narrative before the detailed evidence. */
+/* Data Readiness v3, one activation narrative before the detailed evidence. */
 .readiness-command { margin: 7px 0 13px; padding: 19px 21px 13px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: radial-gradient(circle at 88% -45%,rgba(113,58,237,.16),transparent 37%),radial-gradient(circle at 9% 105%,rgba(24,168,160,.13),transparent 30%),linear-gradient(145deg,color-mix(in srgb,var(--surface) 98%,transparent),color-mix(in srgb,var(--background) 78%,transparent)); box-shadow: 0 18px 46px rgba(25,55,92,.08); }
 .readiness-command > header { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }.readiness-command .eyebrow { display:block; color:var(--teal-dark); font-size:11px; }.readiness-command h2 { margin:4px 0 3px; color:var(--ink); font-size:19px; letter-spacing:-.023em; }.readiness-command header p { margin:0; color:var(--muted); font-size:11px; }.command-state,.temporal-held { flex:none; display:inline-flex; align-items:center; gap:6px; padding:6px 9px; border:1px solid color-mix(in srgb,var(--violet) 36%,var(--line)); border-radius:999px; color:var(--violet); background:rgba(113,58,237,.065); font-size:11px; font-weight:800; letter-spacing:.1em; }
 .activation-layout { display:grid; grid-template-columns:minmax(0,1fr) 292px; gap:17px; align-items:stretch; margin-top:14px; }.activation-pipeline { min-width:0; margin:0; padding:0; display:flex; align-items:center; gap:7px; list-style:none; }.activation-pipeline > svg { flex:none; color:#91a6bb; }.activation-pipeline li { min-width:0; min-height:76px; flex:1 1 0; padding:11px 12px 9px; display:flex; flex-direction:column; justify-content:center; border:1px solid var(--line); border-radius:12px; background:color-mix(in srgb,var(--surface) 95%,transparent); box-shadow:inset 0 1px rgba(255,255,255,.6); }.activation-pipeline li small { color:var(--muted); font-size:11px; font-weight:760; text-transform:uppercase; letter-spacing:.09em; }.activation-pipeline li b { margin:4px 0 2px; color:var(--ink); font-size:25px; line-height:1; letter-spacing:-.045em; font-variant-numeric:tabular-nums; }.activation-pipeline li span { color:var(--muted); font-size:11px; line-height:1.25; }.activation-pipeline .stage-granted { border-color:color-mix(in srgb,var(--blue) 28%,var(--line)); }.activation-pipeline .stage-retained { border-color:color-mix(in srgb,var(--teal) 42%,var(--line)); background:linear-gradient(145deg,rgba(24,168,160,.08),color-mix(in srgb,var(--surface) 96%,transparent)); }.activation-pipeline .stage-retained b { color:var(--teal-dark); }.activation-pipeline .stage-held { border-color:color-mix(in srgb,var(--violet) 40%,var(--line)); background:linear-gradient(145deg,rgba(113,58,237,.09),color-mix(in srgb,var(--surface) 96%,transparent)); }.activation-pipeline .stage-held b { color:var(--violet); }
@@ -6060,7 +6060,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .readiness-command > header,.temporal-readiness > header { flex-direction:column; }.activation-pipeline { display:grid; grid-template-columns:1fr 16px 1fr; }.activation-pipeline > svg { transform:rotate(90deg); justify-self:center; }.activation-pipeline > svg:nth-of-type(2) { grid-column:2; }.activation-pipeline li { min-height:68px; }.activation-pipeline li.stage-held { grid-column:2 / 4; }.readiness-command > footer { align-items:flex-start; flex-direction:column; }.temporal-facts { max-width:none; }.inbox-lane > header small { max-width:34ch; } }
 @media (max-width: 520px) { .activation-pipeline { grid-template-columns:1fr; }.activation-pipeline > svg { transform:rotate(90deg); }.activation-pipeline li.stage-held { grid-column:auto; }.activation-exceptions,.temporal-runway,.temporal-facts { grid-template-columns:1fr; }.temporal-year { min-height:80px; }.temporal-facts > div { min-height:66px; }.inbox-lane > header { grid-template-columns:26px minmax(0,1fr); }.inbox-lane > header strong { display:none; } }
 
-/* Data Readiness v4 — visual first, audit detail on demand. */
+/* Data Readiness v4, visual first, audit detail on demand. */
 .activation-next { margin-top:10px; padding:10px 12px; display:grid; grid-template-columns:30px minmax(0,1fr) auto; gap:10px; align-items:center; border:1px solid color-mix(in srgb,var(--teal) 34%,var(--line)); border-radius:12px; background:linear-gradient(105deg,rgba(24,168,160,.075),rgba(37,99,235,.035)); }.activation-next > span { width:29px; height:29px; display:grid; place-items:center; border-radius:9px; color:var(--teal-dark); background:rgba(24,168,160,.11); }.activation-next small { display:block; color:var(--teal-dark); font-size:11px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }.activation-next b { display:block; margin-top:2px; color:var(--ink); font-size:11px; }.activation-next p { margin:2px 0 0; color:var(--muted); font-size:11px; line-height:1.35; }.activation-next em { padding:5px 8px; border-radius:999px; color:var(--violet); background:rgba(113,58,237,.08); font-size:11px; font-style:normal; font-weight:780; white-space:nowrap; }
 
 .supporting-portfolio-disclosure { margin-bottom:15px; border:1px solid var(--line); border-radius:14px; background:color-mix(in srgb,var(--surface) 96%,transparent); overflow:hidden; }.supporting-portfolio-disclosure > summary,.coverage-audit > summary,.anchor-grid-audit > summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px 15px; list-style:none; cursor:pointer; }.supporting-portfolio-disclosure > summary::-webkit-details-marker,.coverage-audit > summary::-webkit-details-marker,.anchor-grid-audit > summary::-webkit-details-marker { display:none; }.supporting-portfolio-disclosure > summary > span,.coverage-audit > summary > span,.anchor-grid-audit > summary > span { min-width:0; display:flex; align-items:center; gap:9px; }.supporting-portfolio-disclosure > summary > span > svg,.coverage-audit > summary > span > svg,.anchor-grid-audit > summary > span > svg { flex:none; color:var(--teal-dark); }.supporting-portfolio-disclosure summary b,.coverage-audit summary b,.anchor-grid-audit summary b { display:block; color:var(--ink); font-size:11px; }.supporting-portfolio-disclosure summary small,.coverage-audit summary small,.anchor-grid-audit summary small { display:block; margin-top:2px; color:var(--muted); font-size:11px; }.supporting-portfolio-disclosure > summary > svg,.coverage-audit > summary > span:last-child svg,.anchor-grid-audit > summary > span:last-child svg { flex:none; color:var(--muted); transform:rotate(90deg); transition:transform .16s ease; }.supporting-portfolio-disclosure[open] > summary > svg,.coverage-audit[open] > summary > span:last-child svg,.anchor-grid-audit[open] > summary > span:last-child svg { transform:rotate(-90deg); }.supporting-portfolio-disclosure .programme-portfolio { margin:0; border:0; border-top:1px solid var(--line); border-radius:0; box-shadow:none; }
@@ -6078,13 +6078,13 @@ table td, table th { font-variant-numeric: tabular-nums; }
 @media (max-width: 700px) { .activation-next { grid-template-columns:30px minmax(0,1fr); }.activation-next em { grid-column:2; justify-self:start; }.source-readiness-row { grid-template-columns:20px minmax(90px,.55fr) minmax(120px,1fr); }.source-counts { grid-column:2 / -1; grid-template-columns:repeat(3,auto); justify-content:end; gap:14px; margin-top:-5px; }.coverage-view > .coverage-dashboard > .coverage-side { grid-template-columns:1fr; }.anchor-source-profile > header { align-items:flex-start; flex-direction:column; }.anchor-source-row { grid-template-columns:92px minmax(120px,1fr); }.anchor-source-row > span:last-child { grid-column:2; margin-top:-3px; }.temporal-facts { grid-template-columns:repeat(2,1fr); }.coverage-audit > summary,.anchor-grid-audit > summary { align-items:flex-start; }.coverage-audit > summary > span:last-child,.anchor-grid-audit > summary > span:last-child { white-space:nowrap; } }
 @media (max-width: 520px) { .readiness-command { padding-inline:14px; }.activation-pipeline { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }.activation-pipeline > svg { display:none; }.activation-pipeline li.stage-held { grid-column:auto; }.activation-exceptions { grid-template-columns:repeat(3,minmax(0,1fr)); }.activation-next { padding:10px; }.source-readiness-panel { padding:15px 13px 12px; }.source-readiness-row { grid-template-columns:18px 86px minmax(100px,1fr); gap:6px; }.source-rank { font-size:11px; }.source-name b { font-size:11px; }.source-name small { font-size:11px; }.source-stack { height:11px; }.source-counts { gap:10px; font-size:11px; }.source-counts small { font-size:11px; }.supporting-portfolio-disclosure > summary,.coverage-audit > summary,.anchor-grid-audit > summary { padding:11px; }.coverage-audit > summary > span:last-child,.anchor-grid-audit > summary > span:last-child { font-size:0; }.coverage-audit > summary > span:last-child svg,.anchor-grid-audit > summary > span:last-child svg { width:15px; }.anchor-source-profile { padding:11px; }.anchor-source-row { grid-template-columns:78px minmax(100px,1fr); gap:7px; }.anchor-source-row > span:last-child { font-size:11px; }.anchor-source-row em { white-space:nowrap; }.temporal-facts { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 
-/* Quality v4 — blockers first, secondary evidence on demand. */
+/* Quality v4, blockers first, secondary evidence on demand. */
 .inbox-lane > summary { min-height:34px; margin:0 2px; display:grid; grid-template-columns:28px minmax(0,1fr) auto 16px; gap:8px; align-items:center; list-style:none; cursor:pointer; }.inbox-lane > summary::-webkit-details-marker,.disputed-audit > summary::-webkit-details-marker { display:none; }.inbox-lane > summary > span { width:26px; height:26px; display:grid; place-items:center; border-radius:8px; }.inbox-lane > summary b { display:block; color:var(--ink); font-size:11px; }.inbox-lane > summary small { display:block; margin-top:2px; color:var(--muted); font-size:11px; }.inbox-lane > summary strong { color:var(--muted); font-size:15px; }.inbox-lane > summary > svg { color:var(--muted); transform:rotate(90deg); transition:transform .16s ease; }.inbox-lane[open] > summary > svg { transform:rotate(-90deg); }.inbox-lane[open] > summary { margin-bottom:9px; }.lane-blocked > summary > span { color:var(--red); background:rgba(220,85,85,.1); }.lane-review > summary > span { color:#a6611b; background:rgba(239,143,52,.12); }.lane-info > summary > span { color:var(--blue); background:rgba(37,99,235,.1); }
 .disputed-audit { margin-top:12px; border:1px solid color-mix(in srgb,var(--orange) 36%,var(--line)); border-radius:11px; overflow:hidden; background:color-mix(in srgb,var(--surface) 97%,transparent); }.disputed-audit > summary { min-height:54px; padding:10px 13px; display:flex; align-items:center; justify-content:space-between; gap:14px; list-style:none; cursor:pointer; }.disputed-audit > summary > span { min-width:0; display:flex; align-items:center; gap:9px; }.disputed-audit > summary > span:first-child > svg { flex:none; color:#a6611b; }.disputed-audit summary b { display:block; color:var(--ink); font-size:11px; }.disputed-audit summary small { display:block; margin-top:2px; color:var(--muted); font-size:11px; }.disputed-audit > summary > span:last-child { flex:none; color:#a6611b; font-size:11px; font-weight:760; }.disputed-audit > summary > span:last-child svg { color:var(--muted); transform:rotate(90deg); transition:transform .16s ease; }.disputed-audit[open] > summary > span:last-child svg { transform:rotate(-90deg); }.disputed-audit[open] > summary { border-bottom:1px solid var(--line); }.disputed-audit .disputed-list { border:0; border-radius:0; }
 .theme-dark .inbox-lane > summary b,.theme-dark .disputed-audit summary b { color:#edf6ff; }.theme-dark .disputed-audit { border-color:rgba(239,152,66,.28); background:rgba(15,39,63,.78); }
 @media (max-width: 520px) { .inbox-lane > summary { grid-template-columns:26px minmax(0,1fr) auto 14px; }.inbox-lane > summary strong { font-size:12px; }.disputed-audit > summary { padding:10px; }.disputed-audit > summary > span:last-child { font-size:0; }.disputed-audit > summary > span:last-child svg { width:15px; } }
 
-/* Gap Radar crosswalk v4 — completion is the headline; the working controls
+/* Gap Radar crosswalk v4, completion is the headline; the working controls
    recede into an audit disclosure once there is no decision queue left. */
 .crosswalk-workbench.is-complete { gap:12px; }
 .crosswalk-complete { display:grid; grid-template-columns:44px minmax(260px,.82fr) minmax(440px,1.35fr); gap:15px; align-items:center; padding:16px 17px; overflow:hidden; border:1px solid color-mix(in srgb,var(--teal) 42%,var(--line)); border-radius:15px; background:radial-gradient(circle at 97% 0,rgba(37,99,235,.09),transparent 31%),linear-gradient(120deg,rgba(24,168,160,.095),color-mix(in srgb,var(--surface) 97%,transparent) 49%,rgba(113,58,237,.035)); }
@@ -6103,7 +6103,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 @media (max-width:1100px) { .crosswalk-complete { grid-template-columns:42px minmax(240px,1fr); }.complete-facts { grid-column:1 / -1; }.payoff-next { grid-template-columns:120px minmax(0,1fr); } }
 @media (max-width:700px) { .crosswalk-complete { grid-template-columns:38px minmax(0,1fr); padding:13px; }.complete-mark { width:37px; height:37px; border-radius:12px; }.complete-facts { grid-template-columns:repeat(2,minmax(0,1fr)); }.complete-facts > div:nth-child(3) { border-left:0; border-top:1px solid var(--line); }.complete-facts > div:nth-child(4) { border-top:1px solid var(--line); }.payoff-result { grid-template-columns:32px minmax(0,1fr); }.payoff-icon { width:31px; height:31px; }.payoff-remaining { grid-column:2; padding:8px 0 0; display:grid; grid-template-columns:auto 1fr; gap:3px 8px; align-items:baseline; border-left:0; border-top:1px solid var(--line); }.payoff-remaining small { grid-column:2; }.payoff-next { grid-template-columns:1fr; }.payoff-next ol { grid-template-columns:1fr; }.crosswalk-audit-tools[open] > .crosswalk-controls { align-items:stretch; flex-direction:column; }.crosswalk-audit-tools[open] .crosswalk-export { margin-left:0; } }
 
-/* Operational Analytics v3 — browseable, source-locked ULB comparison. */
+/* Operational Analytics v3, browseable, source-locked ULB comparison. */
 .operational-compare { padding:0; overflow:hidden; border-color:color-mix(in srgb,var(--blue) 24%,var(--line)); background:radial-gradient(circle at 96% -12%,rgba(37,99,235,.085),transparent 32%),color-mix(in srgb,var(--surface) 98%,transparent); }
 .operational-compare-head { padding:16px 18px 13px; display:grid; grid-template-columns:minmax(0,1fr) 255px; gap:22px; align-items:end; border-bottom:1px solid var(--line); }.operational-compare-head .eyebrow { display:block; color:var(--blue); font-size:11px; }.operational-compare-head h2 { margin:4px 0 3px; color:var(--ink); font-size:17px; letter-spacing:-.025em; }.operational-compare-head p { max-width:720px; margin:0; color:var(--muted); font-size:11px; line-height:1.45; }
 .operational-compare-picker { display:grid; grid-template-columns:1fr auto; gap:5px 7px; }.operational-compare-picker label { grid-column:1 / -1; color:var(--muted); font-size:11px; font-weight:760; letter-spacing:.08em; text-transform:uppercase; }.operational-compare-picker select { min-width:0; height:34px; padding:0 9px; border:1px solid color-mix(in srgb,var(--blue) 31%,var(--line)); border-radius:9px; color:var(--ink); background:var(--surface); font-size:11px; }.operational-compare-picker button { height:34px; padding:0 10px; border:1px solid var(--line); border-radius:9px; color:var(--teal-dark); background:color-mix(in srgb,var(--surface) 94%,transparent); font-size:11px; font-weight:720; cursor:pointer; }.operational-compare-picker button:disabled,.operational-compare-picker select:disabled { opacity:.5; cursor:default; }
@@ -6114,7 +6114,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
 .operational-compare-card > footer { min-height:39px; padding:8px 11px; display:flex; align-items:center; justify-content:space-between; gap:9px; border-top:1px solid var(--line); background:color-mix(in srgb,var(--background) 38%,transparent); }.operational-compare-card > footer > span { display:flex; align-items:center; gap:4px; color:var(--muted); font-size:11px; }.operational-compare-card > footer svg { color:var(--violet); }.operational-compare-card .drill-link { flex:none; }
 .operational-compare-boundary { margin:0; padding:9px 18px 10px; display:flex; align-items:flex-start; gap:6px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; line-height:1.4; }.operational-compare-boundary svg { flex:none; color:var(--violet); }.operational-compare-boundary b { flex:none; color:var(--ink); }.operational-compare-boundary span { min-width:0; }
 
-/* Data Readiness v5 — acceptance process for the next retained vintage. */
+/* Data Readiness v5, acceptance process for the next retained vintage. */
 .snapshot-gate { padding:0; overflow:hidden; border-color:color-mix(in srgb,var(--teal) 28%,var(--line)); background:radial-gradient(circle at 97% 0,rgba(24,168,160,.09),transparent 30%),color-mix(in srgb,var(--surface) 98%,transparent); }.snapshot-gate > header { padding:15px 18px 12px; display:flex; align-items:flex-start; justify-content:space-between; gap:18px; border-bottom:1px solid var(--line); }.snapshot-gate .eyebrow { display:block; color:var(--teal-dark); font-size:11px; }.snapshot-gate h2 { margin:4px 0 3px; color:var(--ink); font-size:17px; letter-spacing:-.025em; }.snapshot-gate header p { max-width:730px; margin:0; color:var(--muted); font-size:11px; line-height:1.45; }.snapshot-wait { flex:none; min-width:170px; padding:8px 10px; display:grid; grid-template-columns:10px 1fr; gap:1px 6px; align-items:center; border:1px solid color-mix(in srgb,var(--blue) 30%,var(--line)); border-radius:10px; background:rgba(37,99,235,.05); }.snapshot-wait i { grid-row:1 / 3; width:8px; height:8px; border-radius:50%; background:var(--blue); box-shadow:0 0 0 4px rgba(37,99,235,.09); }.snapshot-wait b { color:var(--blue); font-size:11px; letter-spacing:.08em; }.snapshot-wait small { color:var(--muted); font-size:11px; }
 .snapshot-baseline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-bottom:1px solid var(--line); }.snapshot-baseline > span { min-height:68px; padding:10px 14px; display:grid; grid-template-columns:auto 1fr; grid-template-rows:auto auto; column-gap:7px; align-content:center; border-right:1px solid var(--line); }.snapshot-baseline > span:last-child { border-right:0; }.snapshot-baseline small { grid-column:1 / -1; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.08em; }.snapshot-baseline strong { color:var(--ink); font-size:22px; line-height:1; letter-spacing:-.04em; }.snapshot-baseline em { align-self:end; padding-bottom:2px; color:var(--muted); font-size:11px; font-style:normal; }.snapshot-baseline .has-review { background:rgba(239,143,52,.045); }.snapshot-baseline .has-review strong { color:#b96c1d; }
 .snapshot-steps { margin:0; padding:13px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; list-style:none; }.snapshot-steps li { min-width:0; min-height:93px; position:relative; padding:11px; display:grid; grid-template-columns:28px minmax(0,1fr); gap:8px; align-items:start; border:1px solid var(--line); border-radius:12px; background:color-mix(in srgb,var(--surface) 97%,transparent); }.snapshot-steps li > span { width:27px; height:27px; display:grid; place-items:center; border-radius:9px; color:var(--teal-dark); background:rgba(24,168,160,.09); }.snapshot-steps li > div > small { display:block; color:var(--teal-dark); font-size:11px; font-weight:790; letter-spacing:.08em; }.snapshot-steps li b { display:block; margin-top:3px; color:var(--ink); font-size:11px; }.snapshot-steps li p { margin:3px 0 0; color:var(--muted); font-size:11px; line-height:1.35; }.snapshot-steps li > svg { position:absolute; right:-14px; top:39px; z-index:2; padding:2px; color:#91a6bb; background:var(--surface); border-radius:50%; }

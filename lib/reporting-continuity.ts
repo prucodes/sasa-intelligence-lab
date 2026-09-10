@@ -61,7 +61,7 @@ export interface ReportingContinuity {
 const READINGS: Record<ContinuityVerdict, { title: string; reading: string }> = {
   'single-day-concentration': {
     title: 'One day carries the evidence',
-    reading: 'Most of the reported value falls on a single day. The remaining days are present, filled, and almost entirely zero — so any rate computed across the whole export is set by one day and diluted by the rest.',
+    reading: 'Most of the reported value falls on a single day. The remaining days are present, filled, and almost entirely zero, so any rate computed across the whole export is set by one day and diluted by the rest.',
   },
   'partial-but-steady': {
     title: 'A minority of entities, every day',

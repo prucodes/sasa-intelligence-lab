@@ -12,7 +12,7 @@ export type GlossaryEntry = {
  * Add abbreviations or evidence terms here whenever a new source is activated.
  */
 export const glossaryEntries: GlossaryEntry[] = [
-  { term: 'percentage point', definition: 'The plain difference between two percentages. Moving from 74.71% to 73.42% is a fall of 1.29 percentage points — not a fall of 1.29 percent, which would be a different and smaller number.', category: 'Product terms', aliases: ['percentage points', 'pp'] },
+  { term: 'percentage point', definition: 'The plain difference between two percentages. Moving from 74.71% to 73.42% is a fall of 1.29 percentage points, not a fall of 1.29 percent, which would be a different and smaller number.', category: 'Product terms', aliases: ['percentage points', 'pp'] },
   { term: 'UNSCORED', definition: 'No score is shown because one or more evidence gates are not met. It is not a low or poor score.', category: 'Product terms' },
   { term: 'dataset grain', definition: 'The level represented by each source record, such as a district, ULB, facility, or household. A district record is never presented as a ULB record.', category: 'Product terms' },
   { term: 'configured capacity', definition: 'The source-reported designed or rated capacity of an asset. It does not measure actual throughput, uptime, or utilization.', category: 'Product terms' },

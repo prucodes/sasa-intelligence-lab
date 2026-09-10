@@ -6,14 +6,14 @@
  * A pull's manifest records `countsAgree: retainedRows === reportedTotalRecordCount`.
  * That is not a completeness check. This API pins page size at 100 and pages by offset
  * over a result set whose order is not stable, so it can re-serve rows it has already
- * given and skip rows it has not — and the raw count still lands on the reported total,
+ * given and skip rows it has not, and the raw count still lands on the reported total,
  * because the count only reflects how many requests were made.
  *
  * Measured on the August PR pull: 280,371 raw rows matching the reported total exactly,
  * carrying only 91,427 distinct panchayat-days, with 187,791 of the repeats spanning
  * pages rather than sitting inside one.
  *
- * So this reports the number that actually matters — distinct keys held — against the
+ * So this reports the number that actually matters, distinct keys held, against the
  * observed entity x period grid, plus the shape of the repetition. It asserts nothing
  * about the source: an unobserved combination may never have existed upstream. It draws
  * the distinction the manifest cannot.

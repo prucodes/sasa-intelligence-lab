@@ -67,9 +67,9 @@ export function getDiagnosticReadings(records:EvidenceRecord[]):DiagnosticReadin
         : periodConflict ? 'Period conflict: month number is 7; month name is JUNE. No alignment is assumed.'
           : null;
     const note = state === 'missing' ? 'No usable reading for this source’s latest retained period. Missing is not zero.'
-      : warning ?? (spec.family === 'delivery' ? denominator === 0 ? 'No rate: the denominator is reported as zero.' : ratio === null ? 'No rate: a required measurement was not returned.' : 'Reported quantity only—not service quality or an explanation of cause.'
-        : spec.family === 'facility' ? 'Configured capacity—not actual throughput or utilization.'
-          : 'Historical 2024 context—not a current operational outcome.');
+      : warning ?? (spec.family === 'delivery' ? denominator === 0 ? 'No rate: the denominator is reported as zero.' : ratio === null ? 'No rate: a required measurement was not returned.' : 'Reported quantity only, not service quality or an explanation of cause.'
+        : spec.family === 'facility' ? 'Configured capacity, not actual throughput or utilization.'
+          : 'Historical 2024 context, not a current operational outcome.');
     return {
       id:spec.id,title:spec.title,family:spec.family,period,source:first?.dataset ?? authorizedCatalogue.find(source=>source.tableKey===spec.key)?.catalogueName ?? spec.title,
       evidenceIds:current.map(record=>record.id),fields,value,

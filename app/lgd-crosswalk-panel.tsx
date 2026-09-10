@@ -37,7 +37,7 @@ export function LgdCrosswalkPanel() {
         <h2 id="lgd-panel-title">The source now states its own identity.<br/><em>It does not agree with itself.</em></h2>
         <p>
           Six retained datasets carry LGD district and mandal codes beside the departmental
-          label — a mapping the source asserts rather than one this product inferred. That
+          label, a mapping the source asserts rather than one this product inferred. That
           makes it evidence. It does not make it correct.
         </p>
       </div>
@@ -68,7 +68,7 @@ export function LgdCrosswalkPanel() {
       <p className="lgd-lead">
         One departmental district label mapped to two different LGD districts <b>inside a
         single dataset</b>. Each of these is the source disagreeing with itself, not a
-        naming question — so none of them can be resolved here.
+        naming question, so none of them can be resolved here.
       </p>
       <ul className="lgd-contradictions">
         {crosswalk.selfContradictions.map((entry) => <li key={`${entry.tableKey}-${entry.sourceDistrict}`}>
@@ -85,7 +85,7 @@ export function LgdCrosswalkPanel() {
       <p className="lgd-lead">
         Where the LGD label differs from the departmental one. A respelling can be read as
         one place; an unrelated pair cannot, and is routed to a reviewer rather than applied.
-        This is triage, not a verdict — <b>Rajamahendravaram</b> and <b>Rajahmundry</b> are
+        This is triage, not a verdict: <b>Rajamahendravaram</b> and <b>Rajahmundry</b> are
         the same city, and the check cannot see that.
       </p>
       <div className="lgd-relabel-groups">
@@ -119,7 +119,7 @@ export function LgdCrosswalkPanel() {
     {tab === 'unmapped' && <div className="lgd-body">
       <p className="lgd-lead">
         Source identities appearing in an LGD-enriched dataset with no LGD mandal code on
-        any row. A blank code is not a missing lookup this product may fill in — it is the
+        any row. A blank code is not a missing lookup this product may fill in. It is the
         platform stating that it did not map this entity.
       </p>
       <ul className="lgd-unmapped">

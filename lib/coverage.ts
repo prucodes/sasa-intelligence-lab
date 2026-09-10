@@ -46,7 +46,7 @@ export type CoverageTier = 'full' | 'partial' | 'thin';
  * number without the denominator beside it.
  *
  * The thin boundary sits at three quarters deliberately. An earlier draft put it
- * at 60%, which meant nothing in the product ever qualified — the collection
+ * at 60%, which meant nothing in the product ever qualified, the collection
  * ratio rests on 83 of 123 ULBs (67%) and still rendered at full strength. A
  * figure missing a third of the state is thin by any reasonable reading, so the
  * band was moved to where it does some work.

@@ -1,5 +1,5 @@
 /**
- * July against August at gram-panchayat grain — the product's first real period comparison.
+ * July against August at gram-panchayat grain, the product's first real period comparison.
  *
  *   node --max-old-space-size=4096 scripts/aggregate-july-august.mjs
  *

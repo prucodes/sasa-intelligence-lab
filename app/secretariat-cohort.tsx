@@ -12,7 +12,7 @@ const percent = (value: number | null) => value === null ? 'No rate' : `${Math.r
  *
  * The axes are two ratios from one reported day. Nothing is ranked, no quadrant is
  * labelled good or bad, and the entities that reported no collection are drawn on their
- * own axis line rather than at zero — because "collected nothing" and "reported nothing"
+ * own axis line rather than at zero, because "collected nothing" and "reported nothing"
  * are different facts and must not share a position.
  */
 function CohortPlot({ points, district }: { points: CohortPoint[]; district: string }) {
@@ -47,7 +47,7 @@ function CohortPlot({ points, district }: { points: CohortPoint[]; district: str
     </svg>
     {silent.length > 0 && <p className="sc-silent">
       <i aria-hidden="true"/><b>{format(silent.length)}</b> secretariats reported no collection on this day and are
-      not plotted. They have no segregation rate because there is no denominator — that is
+      not plotted. They have no segregation rate because there is no denominator. That is
       absent evidence, not a zero, and placing them at the origin would invent a reading.
     </p>}
   </figure>;
@@ -67,7 +67,7 @@ export function SecretariatCohort() {
           Collection and segregation both key on a numeric secretariat code, both report
           the same {format(data.identity.collectionCodes)} codes on {data.day}, and they
           agree on the household denominator for every one. No names are matched, so
-          nothing here rests on an inference — which is why identity, period and
+          nothing here rests on an inference, which is why identity, period and
           denominator finally pass. Performance still does not.
         </p>
       </div>

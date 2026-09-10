@@ -73,7 +73,7 @@ describe('evidence-safe calculations', () => {
     // Nothing is reachable-but-unretained: the four secretariat-day exports were
     // pulled in full on 2026-09-08, so every CDMA key is now retained.
     expect(cdmaAuthorized.filter((dataset) => !dataset.completePayload)).toHaveLength(0);
-    expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED — INGESTION PENDING')).toHaveLength(0);
+    expect(cdmaIntegrationCatalogue.filter((dataset) => dataset.sourceState === 'DOCUMENTED · INGESTION PENDING')).toHaveLength(0);
     // The invariant that survives all three states: nothing here is scoreable.
     expect(cdmaIntegrationCatalogue.every((dataset) => dataset.scoringEligibility === 'UNSCORED')).toBe(true);
     // 193,424 rows are readable today and none of them are in the product yet.

@@ -81,7 +81,7 @@ describe('the IHHL finding names the stalled approvals', () => {
 });
 
 /**
- * Ranking legacy waste by tonnage put GVMC first — a ULB that has cleared 88% of
+ * Ranking legacy waste by tonnage put GVMC first, a ULB that has cleared 88% of
  * the largest dump in the state. The share remaining is the honest order.
  */
 describe('the legacy finding ranks by share remaining, not mass', () => {

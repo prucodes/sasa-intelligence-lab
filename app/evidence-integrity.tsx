@@ -14,7 +14,7 @@ const format = (value: number) => value.toLocaleString('en-IN');
  * Every other panel reports what the data says. This one reports what the data does to
  * itself: a supplied identity mapping that contradicts itself, and endpoints serving
  * rows another endpoint already returned. Both were found by this product rather than
- * declared by the platform, and both change how every number above should be read — so
+ * declared by the platform, and both change how every number above should be read, so
  * they belong on the first screen, not buried in a methods note.
  */
 export function EvidenceIntegrity({ href }: { href: (path: string) => string }) {

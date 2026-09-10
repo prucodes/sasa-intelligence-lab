@@ -164,7 +164,7 @@ export function normalizeSourceName(value: string | undefined): string {
  * The LGD-enriched exports retained on 2026-09-08 carry BOTH spellings: `dstrt_nm` /
  * `ulb_nm` hold the original departmental label, while `district_name` / `mandal_name`
  * hold the LGD master label the platform mapped it to. Every earlier export carries only
- * one spelling. So `dstrt_nm` is preferred wherever present — otherwise this key would
+ * one spelling. So `dstrt_nm` is preferred wherever present, otherwise this key would
  * silently mean "source label" for old datasets and "LGD label" for new ones, and the
  * same ULB would not match itself across the two vintages.
  *
@@ -226,7 +226,7 @@ function monthNumber(value: string | undefined): number | null {
  *
  * This used to be decoded for `month_id` alone. `compost_pits_api`, `magic_drains_api`
  * and `soak_pits_api` carry it as `month` and have no `year` column at all, so every one
- * of their rows resolved to no period — and `currentSnapshotRecords`, finding no sort
+ * of their rows resolved to no period, and `currentSnapshotRecords`, finding no sort
  * keys, fell back to returning the whole file. Thirteen retained months were being shown
  * as a single current period, and `snapshotPeriod` reported 'Period not supplied'.
  */
@@ -270,7 +270,7 @@ function recordPeriodSortKey(record: SnapshotRecord): number | null {
 /**
  * Records for one reported period. With no period the latest returned period is used,
  * which is the long-standing behaviour. Passing a period id selects that period instead
- * and returns nothing when the dataset did not report it — absence stays visible rather
+ * and returns nothing when the dataset did not report it, absence stays visible rather
  * than silently falling back to another month.
  */
 export function currentSnapshotRecords(snapshot: SnapshotEnvelope | undefined, periodId?: string | null): SnapshotRecord[] {
@@ -308,7 +308,7 @@ export interface PeriodOption {
 
 /**
  * Every fully-dated period actually present in the retained operational responses.
- * 2024 outcome rows carry a year with no month and are deliberately excluded — they are
+ * 2024 outcome rows carry a year with no month and are deliberately excluded, they are
  * a separate descriptive view, not an operational period a reviewer can select.
  */
 export function operationalPeriodOptions(): PeriodOption[] {

@@ -93,7 +93,7 @@ describe('application shell and screens', () => {
     fireEvent.click(screen.getByRole('button', { name: /Processing facility/i }));
     expect(screen.getByText('total_tpd')).toBeInTheDocument();
     expect(screen.getByText('30', { selector: 'b' })).toBeInTheDocument();
-    expect(screen.getByText(/unreviewed — excluded from scoring/i, { selector: '.evidence-row b' })).toBeInTheDocument();
+    expect(screen.getByText(/unreviewed · excluded from scoring/i, { selector: '.evidence-row b' })).toBeInTheDocument();
     expect(screen.getByText(/candidate identity awaiting review/i)).toBeInTheDocument();
     expect(screen.getByText('Grain')).toBeInTheDocument();
     expect(screen.getByText('Formula / check')).toBeInTheDocument();

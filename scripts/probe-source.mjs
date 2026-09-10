@@ -10,7 +10,7 @@
  *    pull can match its reported row count while never being served some records.
  *
  * B. Does August exist beyond the 7th? The month filter returns 2026-08-01..07 only. That
- *    does not establish the source lacks later dates — it establishes that this query
+ *    does not establish the source lacks later dates, it establishes that this query
  *    does not return them. Ask by date instead, with a known-good date as the control:
  *    if the control returns nothing either, date filtering does not work on this table
  *    and the whole test is void rather than evidence of missing data.

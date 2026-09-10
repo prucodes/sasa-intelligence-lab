@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 /**
  * React 19 renders <title> only when it has a single child. Given several JSX children
  * the server emits an empty <title></title> while the client fills it in, and every
- * hydration of that tree fails — React then discards the prerendered HTML and re-renders
+ * hydration of that tree fails, React then discards the prerendered HTML and re-renders
  * the whole page, which on a static host is visible as a flash on first load.
  *
  * The SVG tooltips on the ULB radar broke every route this way. The rule is cheap to
@@ -56,7 +56,7 @@ describe('SVG titles survive hydration', () => {
     expect(titleChildren('{row ? `${row.district}: ${row.detail}` : shape.d}')).toBe(1);
     // The shape that broke: separate expressions with literal text between them.
     // Whitespace-only text between expressions is skipped here, so this is a lower
-    // bound on JSX's own count — which is all the rule needs.
+    // bound on JSX's own count, which is all the rule needs.
     expect(titleChildren('{a}: {b} {c}')).toBeGreaterThan(1);
     expect(titleChildren('{a} · {b} collection')).toBeGreaterThan(1);
     expect(titleChildren('{a}{b}')).toBe(2);

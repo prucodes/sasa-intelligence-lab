@@ -71,7 +71,7 @@ export function RuralSanitation() {
       </ul>
       {data.presentWithoutCondition > 0 && <p className="rs-gap">
         <b>{format(data.presentWithoutCondition)}</b> panchayats report a processing centre but
-        state no working condition. That is missing evidence about a centre that exists — not a
+        state no working condition. That is missing evidence about a centre that exists, not a
         centre that is broken, and not a centre that is fine.
       </p>}
     </div>
@@ -137,7 +137,7 @@ export function RuralSanitation() {
         <p>{data.boundary}</p>
         <p>
           Rolled up from <code>sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026</code>
-          {' '}(26,702 rows, retained in data/large-snapshots — too large to bundle) and
+          {' '}(26,702 rows, retained in data/large-snapshots, too large to bundle) and
           {' '}<code>sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026</code> (56 rows).
           A gram panchayat on several rows is counted once and only where every row agrees;
           {data.heldOut === 0 ? ' no panchayat disagreed with itself in this vintage.' : ` ${data.heldOut} disagreed and are held out.`}

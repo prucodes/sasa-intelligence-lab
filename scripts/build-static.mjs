@@ -11,7 +11,7 @@
  *    any host, not only ones that map /foo -> foo.html;
  *  - the client assets (_next, /assets, geojson) beside them;
  *  - app/icon.svg, which the prerender references but does not copy;
- *  - .nojekyll — without it GitHub Pages runs Jekyll and drops _next/ (leading
+ *  - .nojekyll, without it GitHub Pages runs Jekyll and drops _next/ (leading
  *    underscore), which silently 404s every script and stylesheet.
  *
  * Pass --base when hosting under a project subpath (username.github.io/repo). It
@@ -80,7 +80,7 @@ async function main() {
  *
  * vinext's prerender does not honour Next basePath (it errors out), so the site is
  * built at root and the known absolute tokens are rewritten here instead. Each token
- * is specific enough to prefix blindly — none contains another, and the base is added
+ * is specific enough to prefix blindly, none contains another, and the base is added
  * exactly once because the build is fresh. This covers HTML, the CSS url() references
  * a runtime helper could never reach, the route strings baked into the JS chunks, and
  * the RSC payloads used for client navigation.
@@ -88,7 +88,7 @@ async function main() {
 async function rewriteBase(dir, base) {
   // Route tokens are read from app/ rather than listed here. A hardcoded list silently
   // stopped prefixing /reconciliation when that route was added, which 404s the nav link
-  // on Pages while every local check passes — so the list is derived and then verified.
+  // on Pages while every local check passes, so the list is derived and then verified.
   // '/_next/' is intentionally NOT included: assetPrefix already prefixes those and the
   // webpack runtime publicPath, which a text rewrite cannot reach for lazy chunks.
   const routeTokens = await appRouteTokens();

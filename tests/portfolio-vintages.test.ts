@@ -53,7 +53,7 @@ describe('supporting portfolio across both source vintages', () => {
     const byKey = (key: string) => portfolio.find((item) => item.tableKey === key)!;
 
     // Green spaces 10+20 target / 2+8 achieved; green cover 6+4 / 5+3;
-    // rejuvenation 4+6 / 1+3. One table, three distinct measures — no triple-count.
+    // rejuvenation 4+6 / 1+3. One table, three distinct measures, no triple-count.
     expect(byKey('sasa_50_percent_green_spaces_api').target).toBe(30);
     expect(byKey('sasa_50_percent_green_spaces_api').achievement).toBe(10);
     expect(byKey('sasa_50_percent_greencover_api').target).toBe(10);

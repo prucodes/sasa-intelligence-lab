@@ -12,7 +12,7 @@ import aggregate from '@/data/aggregates/secretariat-cohort.json';
  * So three of the five scoring gates open. The other two do not, and this module is
  * careful about which: one reported day is not a basis for performance, and no scoring
  * policy has been approved. What it produces is positions with their gate status
- * attached — never a rank, never a label.
+ * attached, never a rank, never a label.
  */
 
 export interface CohortPoint {

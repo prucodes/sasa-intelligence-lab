@@ -44,7 +44,7 @@ if (records !== 6509) failures.push(`expected 6,509 retained rows, found ${recor
  * A dataset too large to bundle reaches the app as a rollup, and that rollup is what a
  * reviewer actually sees. Its source sits in data/large-snapshots, which is git-ignored,
  * so on any other machine the rollup is the only artefact present. It therefore has to
- * carry its own provenance and reconcile against itself — otherwise a hand-edited or
+ * carry its own provenance and reconcile against itself, otherwise a hand-edited or
  * stale aggregate would pass every check in this file.
  */
 const aggregateDir = resolve(process.cwd(), 'data/aggregates');

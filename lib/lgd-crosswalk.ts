@@ -11,14 +11,14 @@ import {
  * The source-supplied LGD crosswalk.
  *
  * Until September 2026 the app had no canonical entity identity. Every cross-source
- * question failed the same gate — `ULB_MATCH_UNREVIEWED` — because matching two
+ * question failed the same gate, `ULB_MATCH_UNREVIEWED`, because matching two
  * departments' spellings of a ULB name is an inference, and an inference is not
  * evidence. The 28 August audit asked the platform for an authoritative ULB master.
  *
  * What arrived instead is better in one respect and worse in another. The LGD-enriched
  * exports carry the mapping *inside the fact rows*: each row states its own departmental
  * label and the LGD district/mandal code the platform assigned it. That is a mapping the
- * source asserts, not one we inferred — so it can be used as evidence. But it is
+ * source asserts, not one we inferred, so it can be used as evidence. But it is
  * incomplete, it disagrees with itself in places, and it is only present on six datasets.
  *
  * This module reads that mapping out, measures exactly how far it reaches, and reports
@@ -31,7 +31,7 @@ import {
  *
  * "Anantapur" / "ANANTHAPURAMU" and "Baptla" / "BAPATLA" are spellings of one district.
  * "SPSR Nellore" / "KURNOOL" are two different districts 300km apart. The product must
- * not treat those the same way, and it must not decide which is correct — so this only
+ * not treat those the same way, and it must not decide which is correct, so this only
  * separates "same name, written differently" from "a different name was used", and the
  * second is routed to a human rather than applied.
  */
@@ -114,8 +114,8 @@ export interface CrosswalkCoverage {
 }
 
 /**
- * `spelling` — the same district written differently; safe to read as one place.
- * `unrelated` — the two labels are not spelling variants of each other. That may be a
+ * `spelling`, the same district written differently; safe to read as one place.
+ * `unrelated`, the two labels are not spelling variants of each other. That may be a
  * genuine boundary change, a rename the heuristic cannot see (Rajamahendravaram is
  * Rajahmundry), or a mapping defect. This is triage for a reviewer, never a verdict.
  */
@@ -261,7 +261,7 @@ export interface IdentityReach {
 }
 
 /**
- * How far the crosswalk reaches across everything retained — not just the six datasets
+ * How far the crosswalk reaches across everything retained, not just the six datasets
  * that supplied it. This is the number that matters for the identity gate: a mapping
  * covering six of forty-three datasets does not make the other thirty-seven scoreable.
  */
@@ -317,7 +317,7 @@ export interface VintageCorroboration {
  * can do something it has never been able to do: check a number against an independent
  * return of the same number, rather than against nothing.
  *
- * Agreement is not proof the figures are right — both could repeat one upstream error.
+ * Agreement is not proof the figures are right, both could repeat one upstream error.
  * It establishes only that the September reissue did not alter the measures, which is
  * exactly the question a reviewer asks when a source is republished.
  */
