@@ -595,6 +595,7 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
     {
       id: 'collection', tone: 'teal', label: 'Collection procurement', period: findings.find((item) => item.tab === 'collection')?.period ?? 'Current period',
       ratio: collection.deliveryRatio, ratioLabel: 'supplied / target', numerator: collection.supplied, denominator: collection.target,
+      numeratorLabel: 'supplied', denominatorLabel: 'ordered',
       pressureBasis: 'ordered − supplied',
       stages: [['Target', collection.target], ['Work orders', collection.workOrders], ['Supplied', collection.supplied]] as Array<[string, number]>,
       gap: findings.find((item) => item.tab === 'collection'),
@@ -602,6 +603,7 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
     {
       id: 'sanitation', tone: 'violet', label: 'IHHL delivery', period: findings.find((item) => item.tab === 'sanitation')?.period ?? 'Current period',
       ratio: ihhl.completionRatio, ratioLabel: 'completed / approved', numerator: ihhl.completed, denominator: ihhl.approved,
+      numeratorLabel: 'completed', denominatorLabel: 'approved',
       pressureBasis: 'approved − completed',
       stages: [['Approved', ihhl.approved], ['Under construction', ihhl.underConstruction], ['Completed', ihhl.completed]] as Array<[string, number]>,
       gap: findings.find((item) => item.tab === 'sanitation'),
@@ -609,6 +611,7 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
     {
       id: 'legacy', tone: 'blue', label: 'Legacy-waste clearance', period: legacy.period,
       ratio: legacy.clearanceRatio, ratioLabel: 'reported cleared / target', numerator: legacy.achievement, denominator: legacy.target,
+      numeratorLabel: 'reported cleared', denominatorLabel: 'target',
       pressureBasis: `source-reported balance · ${legacy.balanceConflicts} arithmetic conflict flagged`,
       stages: [['Target', legacy.target], ['Reported cleared', legacy.achievement], ['Reported balance', legacy.balance]] as Array<[string, number]>,
       gap: findings.find((item) => item.tab === 'processing'),
@@ -616,33 +619,31 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
   ];
 
   return <div className="presenter-aperture">
-    <div className="presenter-title-row"><div><h1>One operating picture. Three sharply different realities.</h1><p className="presenter-lede">Each instrument has its own source, period, and denominator. Read the contrast, never combine the dials.</p></div><div className="aperture-status"><span>Current evidence state</span><b>3 source signals</b><small>0 composite scores</small></div></div>
+    <div className="presenter-title-row">
+      <div>
+        <h1>One operating picture. Three sharply different realities.</h1>
+        <p className="presenter-lede">Each instrument has its own source, period and denominator. Read the contrast, never combine them.</p>
+      </div>
+    </div>
+
     <section className="aperture-canvas" aria-label="Three source-separated operational instruments">
       {lanes.map((lane) => {
         const ratio = lane.ratio === null ? null : Math.max(0, Math.min(lane.ratio, 1));
-        const lead = lane.gap?.entities[0];
-        const stageBase = Math.max(lane.stages[0]?.[1] ?? 0, 1);
         return <article key={lane.id} className={`aperture-lane tone-${lane.tone}`}>
           <header><span>{lane.label}</span><small>{lane.period}</small></header>
-          <div className="aperture-dial">
-            <svg viewBox="0 0 164 164" role="img" aria-label={`${formatPercent(ratio)} ${lane.ratioLabel}`}>
-              <circle className="dial-guides" cx="82" cy="82" r="75" pathLength="100"/>
-              <circle className="dial-track" cx="82" cy="82" r="64"/>
-              <circle className="dial-value" cx="82" cy="82" r="64" pathLength="100" strokeDasharray={ratio === null ? '0 100' : `${ratio * 100} ${100 - ratio * 100}`} transform="rotate(-90 82 82)"/>
-              <circle className="dial-cap" cx="82" cy="18" r="3.5"/>
-            </svg>
-            <div><strong>{ratio === null ? 'Not returned' : formatPercent(ratio)}</strong><span>{lane.ratioLabel}</span></div>
-          </div>
-          <div className="aperture-fraction"><b>{lane.numerator.toLocaleString('en-IN')}</b><span>of</span><b>{lane.denominator.toLocaleString('en-IN')}</b></div>
-          <div className="aperture-trajectory" role="img" aria-label={`${lane.label} returned source path: ${lane.stages.map(([label, value]) => `${label} ${value.toLocaleString('en-IN')}`).join(', ')}`}>
-            {lane.stages.map(([label, value]) => <span key={label}><b>{label}</b><i><em style={{ width: `${Math.max(1.2, value / stageBase * 100)}%` }}/></i><strong>{compactMetric(value)}</strong></span>)}
-          </div>
-          <div className="aperture-pressure"><strong title={`Operational pressure · ${lane.pressureBasis}`}>{lane.gap?.headline}</strong>{lead && <span><b>{lead.ulb}</b> is the largest returned item · {lead.display}</span>}</div>
-          <footer><span>{lane.gap ? formatCoverage(lane.gap.coverage) : '—'} ULBs returned</span><b>{lane.gap ? notReturned(lane.gap.coverage) : '—'} absent</b></footer>
+          <strong className="aperture-figure">{ratio === null ? 'Not returned' : formatPercent(ratio)}</strong>
+          <p className="aperture-basis">
+            {lane.numerator.toLocaleString('en-IN')} {lane.numeratorLabel} of {lane.denominator.toLocaleString('en-IN')} {lane.denominatorLabel}
+          </p>
+          <p className="aperture-consequence">{lane.gap?.headline}</p>
         </article>;
       })}
-      <div className="aperture-baseline"><span><Icon name="shield" size={14}/> Source-separated instruments</span><span>Each rail uses its own lane&rsquo;s first figure</span><span>{governedSnapshotStats.completeDatasets} complete exports</span><span>{governedSnapshotStats.records.toLocaleString('en-IN')} retained rows</span><strong>UNSCORED</strong></div>
     </section>
+
+    <p className="aperture-baseline">
+      Three sources, three periods, three denominators. No score combines them, and none is assigned a rank.
+      {' '}{governedSnapshotStats.completeDatasets} complete exports · {governedSnapshotStats.records.toLocaleString('en-IN')} retained rows · <b>UNSCORED</b>
+    </p>
   </div>;
 }
 
