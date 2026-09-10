@@ -32,17 +32,16 @@
 @media(prefers-reduced-motion:reduce){.overview-selected *{transition:none!important;scroll-behavior:auto!important}}
 .overview-selected :is(.vi-map-review,.movement-geography-layout) .district-evidence-map{--vi-increase:#b2dfc1;--vi-decrease:#deb48a;--vi-soft:#244a49;--surface:#123438;--muted:#b3cdca;--line:#ffffff24;--ink:#e3efeb}
 
-/* A choropleth cannot sit on a gradient. The panel's radial gradient runs from #234d48
-   at its focus to #0b282e at the edge — a 1.64:1 swing — so one district value rendered
-   lighter or darker purely by where the district happens to sit, and the bottom of the
-   scale (1.05:1 against the focus) disappeared into the panel entirely.
-   The stage gets a flat ground of its own, and the scale is mixed against that ground. */
-.overview-selected :is(.vi-map-review,.movement-geography-layout) .district-map-stage,
-.overview-selected :is(.vi-map-review,.movement-geography-layout) .map-scale i {
-  --map-base: #0c2529;
-  background-color: var(--map-base);
-  background-image: none;
-  border-radius: 16px;
-}
-.overview-selected :is(.vi-map-review,.movement-geography-layout) .district-map-stage { padding: 10px; }
-.overview-selected :is(.vi-map-review,.movement-geography-layout) .district-evidence-map { --map-base: #0c2529; }
+/* A choropleth on a gradient has a real problem: the panel runs #234d48 at its focus
+   to #0b282e at the edge, so an identical value renders lighter or darker purely by
+   where the district sits, and the bottom of the scale disappeared into the panel.
+   The first fix painted a flat plate behind the map. That solved the measurement and
+   cost more than it was worth - it overrode the concentric-ring texture the stage
+   already had, drew a hard rectangle inside a rounded panel, and applied to only two
+   of the three places a map appears, so the maps stopped matching each other.
+   Instead: every map mixes its scale against one dark base, wherever it sits, and every
+   district carries a hairline edge. The ground stays the panel, the rings stay, and a
+   district near zero is still a legible shape rather than a hole. */
+.overview-selected .district-evidence-map { --map-base: #0c2529; }
+.overview-selected .district-map-stage path { stroke: #ffffff38; stroke-width: .75; }
+.overview-selected .district-map-stage path:is(:hover,:focus,.is-selected) { stroke: #f0f6c9; stroke-width: 2.4; }

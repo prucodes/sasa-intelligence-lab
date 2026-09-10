@@ -490,29 +490,10 @@
 
 .or-lede > * { position: relative; z-index: 2; }
 
-/* A glow anchored behind the figure, so the eye lands there without a rule or a box. */
+/* The glow and the gradient text fill that sat here measured 1.39:1 against the panel
+   and 1.57:1 across a glyph: both painted, neither visible. Removed rather than tuned —
+   the budget went to size and separation below, which read from across a room. */
 .or-lede-body { position: relative; }
-.or-lede-body::before {
-  content: '';
-  position: absolute;
-  right: -6%;
-  top: 50%;
-  width: 46%;
-  aspect-ratio: 1;
-  translate: 0 -50%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(151, 201, 183, .16), transparent 68%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.or-lede-figure strong {
-  background: linear-gradient(168deg, #d9f2e6 4%, var(--ew-accent) 62%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 /* The ledger reads as a row of facts, each with its own accent tick. */
 .or-lede-ledger div { position: relative; padding-left: 11px; }
 .or-lede-ledger div::before {
@@ -570,4 +551,51 @@
   .or-lede-head, .or-lede-text, .or-lede-figure, .or-lede-ledger,
   .or-subject-strip > p, .or-subject-strip .or-subject-buttons { animation: none; }
   .or-subject-strip button, .or-subject-strip button:hover { transition: none; transform: none; }
+}
+
+/* ══ Commit harder: size, separation, one canvas ══════════════════════════
+   Two of the five earlier moves measured invisible — a glow at 1.39:1 against
+   the panel and a gradient spanning 1.57:1 across a glyph. Both are gone. What
+   replaces them is the pair that reads from across a room: how big the number
+   is, and how clearly the panel is a different plane from the page. */
+
+.or-lede {
+  padding: clamp(28px, 3.2vw, 48px);
+  border-radius: 26px;
+  box-shadow:
+    0 2px 4px rgba(6, 24, 26, .2),
+    0 18px 44px -16px rgba(6, 24, 26, .44),
+    0 48px 90px -44px rgba(6, 24, 26, .55);
+}
+
+.or-lede-figure strong {
+  font-size: clamp(52px, 7vw, 104px);
+  line-height: .92;
+  letter-spacing: -.055em;
+  color: var(--ew-accent);
+}
+
+.or-lede-figure small {
+  font-size: 12.5px;
+  max-width: 26ch;
+}
+
+.or-lede-text h1 {
+  font-size: clamp(30px, 3.7vw, 52px);
+  line-height: 1.08;
+}
+
+/* The ledger carries the same weight as the lede rather than trailing it. */
+.or-lede-ledger dd { font-size: 20px; }
+
+/* One canvas: the selected subject's evidence sits on the same plane as the lede,
+   so the landing reads as a single surface rather than a panel above a page. */
+.overview-selected > section,
+.overview-selected > .or-workspace {
+  border-radius: 22px;
+}
+
+@media (max-width: 760px) {
+  .or-lede { padding: 20px; border-radius: 20px; }
+  .or-lede-figure strong { font-size: 46px; }
 }
