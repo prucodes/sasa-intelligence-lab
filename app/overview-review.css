@@ -345,7 +345,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Subject strip ─────────────────────────────────────────────────────── */
+/* ── Subject strip ─────────────────────────────────────────────────────────
+   A fixed column count orphans the last row whenever the subject count is not a
+   multiple of it — eight subjects in a six-wide grid left one card beside a gap
+   two-thirds the width of the section. These flex-grow instead, so whatever the
+   count, the final row divides the full width between the cards it has. */
+
+.or-subject-strip { margin-bottom: 22px; }
 
 .or-subject-strip > p {
   font-size: 12px;
@@ -355,60 +361,78 @@
 }
 
 .or-subject-strip .or-subject-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 6px;
-  padding: 6px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .or-subject-strip button {
+  flex: 1 1 230px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  min-height: 56px;
-  padding: 10px 12px;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 74px;
+  padding: 13px 15px;
   text-align: left;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface);
   color: var(--muted);
   cursor: pointer;
-  transition: background .16s ease, color .16s ease;
+  transition: border-color .16s ease, background .16s ease, transform .16s ease;
 }
 
 .or-subject-strip button b {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 550;
-  line-height: 1.25;
+  line-height: 1.3;
+  letter-spacing: -.01em;
   color: var(--ink);
 }
 
 .or-subject-strip button small {
   font-size: 10.5px;
   line-height: 1.4;
-  opacity: .8;
+  opacity: .85;
 }
 
-.or-subject-strip button:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.or-subject-strip button:hover {
+  border-color: color-mix(in srgb, var(--ink) 26%, transparent);
+  transform: translateY(-1px);
+}
+
+.or-subject-strip button:focus-visible {
+  outline: 2px solid var(--ew-accent, #347565);
+  outline-offset: 2px;
+}
 
 .or-subject-strip button[aria-pressed='true'] {
   --ew-dark: #173f41;
   --ew-light: #f5f8f0;
   background: var(--ew-dark);
+  border-color: var(--ew-dark);
+  transform: none;
 }
-
-.theme-dark .or-lede { --ew-dark: #102f34; --ew-light: #eff7ed; }
-.theme-dark .or-subject-strip button[aria-pressed='true'] { --ew-dark: #102f34; --ew-light: #eff7ed; }
 
 .or-subject-strip button[aria-pressed='true'] b,
-.or-subject-strip button[aria-pressed='true'] small {
-  color: var(--ew-light);
+.or-subject-strip button[aria-pressed='true'] small { color: var(--ew-light); }
+
+.or-subject-strip button[aria-pressed='true'] small { opacity: .8; }
+
+.theme-dark .or-lede { --ew-dark: #102f34; --ew-light: #eff7ed; }
+/* In dark theme the selected canvas sits close to the page ground, so selection
+   is carried by the accent edge rather than by the fill alone. */
+.theme-dark .or-subject-strip button[aria-pressed='true'] {
+  --ew-dark: #102f34;
+  --ew-light: #eff7ed;
+  border-color: #97c9b7;
 }
 
-.or-subject-strip button[aria-pressed='true'] small { opacity: .78; }
+@media (prefers-reduced-motion: reduce) {
+  .or-subject-strip button { transition: none; }
+  .or-subject-strip button:hover { transform: none; }
+}
 
 @media (max-width: 900px) {
   .or-lede-body { grid-template-columns: minmax(0, 1fr); align-items: start; }
