@@ -1,0 +1,129 @@
+/**
+ * One canvas vocabulary, defined once and applied wherever a dark panel appears.
+ *
+ * The Overview landing was given depth on its own, which made it the only screen
+ * that read as considered — the product looked like one good page next to four
+ * plainer ones. These are the same moves, stated once here rather than repeated
+ * per screen, so the five screens sit on the same plane and drift together if
+ * they drift at all.
+ *
+ * Three families carry a dark canvas: `.or-lede` on the Overview, `.sf-dark`
+ * inside the Gap Radar / Operational Analytics / Data Readiness cards, and
+ * `.ew-primary` inside the evidence workspaces. The first floats and keeps its
+ * own shadow; the other two are inset regions clipped by a rounded parent, so
+ * they take the surface treatment and leave elevation to the card around them.
+ */
+
+/* ── Elevation: the card, not the canvas inside it ───────────────────────── */
+
+.screen-feature,
+.evidence-workspace .ew-reading {
+  border-radius: 22px;
+  box-shadow:
+    0 1px 2px rgba(6, 24, 26, .06),
+    0 12px 32px -14px rgba(6, 24, 26, .18),
+    0 32px 64px -40px rgba(6, 24, 26, .24);
+}
+
+.theme-dark .screen-feature,
+.theme-dark .evidence-workspace .ew-reading {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, .3),
+    0 14px 34px -14px rgba(0, 0, 0, .46);
+}
+
+/* ── Surface: grain and a lit top edge on every dark canvas ──────────────── */
+
+.screen-feature .sf-dark,
+.evidence-workspace .ew-primary {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Grain at the threshold of visibility — enough that the fill is not flat. */
+.screen-feature .sf-dark::after,
+.evidence-workspace .ew-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .035;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Lit from above, fading at the corners. */
+.screen-feature .sf-dark::before,
+.evidence-workspace .ew-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224, 245, 236, .3) 22%, rgba(224, 245, 236, .3) 78%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.screen-feature .sf-dark > *,
+.evidence-workspace .ew-primary > * { position: relative; z-index: 2; }
+
+/* ── Figures: one ceiling, so a headline number is the same size everywhere ─ */
+
+.screen-feature .sf-dark strong,
+.evidence-workspace .ew-primary > strong {
+  font-size: clamp(44px, 5.4vw, 86px);
+  line-height: .94;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Navigation: tabs read as the same cards the Overview subjects do ─────── */
+
+.evidence-tabs > button {
+  min-height: 54px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--surface) 92%, var(--line)));
+  box-shadow: 0 1px 1px rgba(16, 47, 52, .04);
+  transition: border-color .16s ease, background .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.evidence-tabs > button:hover:not([disabled]) {
+  border-color: color-mix(in srgb, var(--ink) 26%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px -6px rgba(16, 47, 52, .28);
+}
+
+.evidence-tabs > button[aria-pressed='true'] {
+  background: linear-gradient(168deg, #1d4b4c, #173f41);
+  border-color: #173f41;
+  color: #f5f8f0;
+  transform: none;
+}
+
+.theme-dark .evidence-tabs > button[aria-pressed='true'] {
+  background: linear-gradient(168deg, #14383c, #102f34);
+  border-color: #97c9b7;
+}
+
+/* ── Entrance: the same short resolve the landing uses ───────────────────── */
+
+@keyframes canvas-rise {
+  from { opacity: 0; transform: translateY(9px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.screen-feature .sf-dark,
+.evidence-workspace .ew-reading {
+  animation: canvas-rise .46s cubic-bezier(.22, .68, .32, 1) backwards;
+  animation-delay: .05s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-feature .sf-dark,
+  .evidence-workspace .ew-reading { animation: none; }
+  .evidence-tabs > button,
+  .evidence-tabs > button:hover:not([disabled]) { transition: none; transform: none; }
+}

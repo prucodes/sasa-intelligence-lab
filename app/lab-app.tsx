@@ -17,6 +17,7 @@ import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import './screen-features.css';
+import './canvas.css';
 import './evidence-content.css';
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { DataMode, GapAssessment, GapState, MetricRow } from '@/lib/domain';
