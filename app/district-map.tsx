@@ -27,7 +27,11 @@ export function DistrictMap({rows,selected,onSelect,title,unit,diverging=false,m
       {shapes.map(shape=>{
         const row=matchDistrictMeasure(shape.d,rows,shapes);const value=row?.value;
         const ink=diverging&&value!==null&&value!==undefined&&value<0?'var(--vi-decrease)':'var(--vi-increase)';
-        const fill=value===null||value===undefined?`url(#${hatch})`:`color-mix(in srgb, ${ink} ${12+Math.min(1,Math.abs(value)/extent)*80}%, var(--surface))`;
+        // Mixed toward the map's own ground, not the ambient --surface. On a dark panel
+        // that override made the bottom of the scale the same colour as the panel behind
+        // it, so districts near zero vanished. The floor keeps the lowest value tinted
+        // enough to read as a filled district rather than a hole.
+        const fill=value===null||value===undefined?`url(#${hatch})`:`color-mix(in srgb, ${ink} ${18+Math.min(1,Math.abs(value)/extent)*74}%, var(--map-base, var(--surface)))`;
         return <path key={shape.d} d={shape.path} fill={fill} className={selected&&row?.district===selected?'is-selected':''} role={row?'button':undefined} tabIndex={row?0:undefined} aria-pressed={row?selected===row.district:undefined} aria-label={row?`${row.district}: ${format(row.value)}`:`${shape.d}: no uniquely matched source district`} onClick={()=>row&&onSelect(selected===row.district?'':row.district)} onKeyDown={e=>{if(row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onSelect(selected===row.district?'':row.district);}}}><title>{row?`${row.district}: ${format(row.value)}. ${row.detail}`:shape.d}</title></path>;
       })}
     </svg>:<p className="map-unavailable">{failed?'Map unavailable. Every source district remains in the selector.':'Loading district boundaries…'}</p>}</div>

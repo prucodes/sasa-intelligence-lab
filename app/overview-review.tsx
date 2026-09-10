@@ -86,7 +86,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   const ruralShift = ruralClose - ruralOpen;
   const subjects = [
     {id:'rural-change',title:'Rural collection change',scope:'Common GP-day cohort · May → August',detail:`${ruralOpen.toFixed(2)}% → ${ruralClose.toFixed(2)}% · ${ruralChange.cohort.pairs.toLocaleString('en-IN')} pairs`,
-      lede:{value:`${ruralShift>0?'+':''}${ruralShift.toFixed(2)}`,unit:'percentage points, May → August',
+      lede:{value:`${ruralShift>0?'+':''}${ruralShift.toFixed(2)}`,unit:`percentage points — ${ruralOpen.toFixed(2)}% in May to ${ruralClose.toFixed(2)}% in August`,
         finding:<>A modest statewide shift, and <em>{ruralChange.declining.length} districts that decline at every step.</em></>,
         support:`${ruralChange.cohort.pairs.toLocaleString('en-IN')} panchayat-days carrying a valid measurement in every one of the four retained months.`}},
     {id:'works',title:'Works delivery & plans',scope:'District · 2026–27',detail:'Reported months + forward targets',

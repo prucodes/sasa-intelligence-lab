@@ -31,3 +31,18 @@
 @media(max-width:760px){.overview-selected :is(.vi-map-review,.movement-geography-layout,.ew-reading){padding:12px;min-height:0;grid-template-columns:1fr;gap:0}.overview-selected .district-map-stage{height:285px}.overview-selected :is(.ew-primary,.vi-map-finding)>strong,.overview-selected .movement-series-value{font-size:56px}.overview-selected .rural-sanitation .vi-geography-section{padding:0}}
 @media(prefers-reduced-motion:reduce){.overview-selected *{transition:none!important;scroll-behavior:auto!important}}
 .overview-selected :is(.vi-map-review,.movement-geography-layout) .district-evidence-map{--vi-increase:#b2dfc1;--vi-decrease:#deb48a;--vi-soft:#244a49;--surface:#123438;--muted:#b3cdca;--line:#ffffff24;--ink:#e3efeb}
+
+/* A choropleth cannot sit on a gradient. The panel's radial gradient runs from #234d48
+   at its focus to #0b282e at the edge — a 1.64:1 swing — so one district value rendered
+   lighter or darker purely by where the district happens to sit, and the bottom of the
+   scale (1.05:1 against the focus) disappeared into the panel entirely.
+   The stage gets a flat ground of its own, and the scale is mixed against that ground. */
+.overview-selected :is(.vi-map-review,.movement-geography-layout) .district-map-stage,
+.overview-selected :is(.vi-map-review,.movement-geography-layout) .map-scale i {
+  --map-base: #0c2529;
+  background-color: var(--map-base);
+  background-image: none;
+  border-radius: 16px;
+}
+.overview-selected :is(.vi-map-review,.movement-geography-layout) .district-map-stage { padding: 10px; }
+.overview-selected :is(.vi-map-review,.movement-geography-layout) .district-evidence-map { --map-base: #0c2529; }
