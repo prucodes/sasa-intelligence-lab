@@ -78,34 +78,42 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   const ruralChange = getRuralMovement();
   // Each of these reads real retained evidence; none is a placeholder. A subject without a
   // figure it can stand on would get no figure rather than a decorative one.
-  const centres = useMemo(() => getRuralSanitation(), []);
-  const continuity = useMemo(() => getReportingContinuity(), []);
-  const plans = useMemo(() => getDistinctDeliveryPlans(), []);
+  const centres = getRuralSanitation();
+  const continuity = getReportingContinuity();
+  const plans = getDistinctDeliveryPlans();
   const ruralOpen = (ruralChange.series[0].comparable.collectionRate ?? 0) * 100;
   const ruralClose = (ruralChange.series.at(-1)!.comparable.collectionRate ?? 0) * 100;
   const ruralShift = ruralClose - ruralOpen;
+  // Distinct, not raw: the four-month pull holds three copies of every panchayat-day.
+  const ruralDistinct = Object.values(ruralChange.recordQuality).reduce((n,quality)=>n+quality.uniqueRows,0);
   const subjects = [
     {id:'rural-change',title:'Rural collection change',scope:'Common GP-day cohort · May → August',detail:`${ruralOpen.toFixed(2)}% → ${ruralClose.toFixed(2)}% · ${ruralChange.cohort.pairs.toLocaleString('en-IN')} pairs`,
+      scale:{label:'Panchayat-days read',value:ruralDistinct.toLocaleString('en-IN')},
       lede:{value:`${ruralShift>0?'+':''}${ruralShift.toFixed(2)}`,unit:`percentage points — ${ruralOpen.toFixed(2)}% in May to ${ruralClose.toFixed(2)}% in August`,
         finding:<>A modest statewide shift, and <em>{ruralChange.declining.length} districts that decline at every step.</em></>,
         support:`${ruralChange.cohort.pairs.toLocaleString('en-IN')} panchayat-days carrying a valid measurement in every one of the four retained months.`}},
     {id:'works',title:'Works delivery & plans',scope:'District · 2026–27',detail:'Reported months + forward targets',
+      scale:{label:'District rows read',value:plans.reduce((n,plan)=>n+plan.districts.length,0).toLocaleString('en-IN')},
       lede:{value:String(plans.length),unit:'distinct monthly programmes',
         finding:<>Reported months and forward targets, <em>never summed together.</em></>,
         support:'Each programme keeps its own selected month; no cross-month total is formed from targets that describe different periods.'}},
     ...issues.map(issue=>({id:issue.id,title:issue.title,scope:`ULB · ${issue.period}`,detail:`${short(issue.total)} ${issue.quantity}`,
+      scale:{label:'ULB rows read',value:issue.rows.length.toLocaleString('en-IN')},
       lede:{value:short(issue.total),unit:issue.quantity,
         finding:<>{issue.title} · <em>{issue.period} as the source reported it.</em></>,
         support:`Totalled across returned districts only. Rows the source did not return are absent rather than zero.`}})),
     {id:'rural-centres',title:'Rural processing centres',scope:'Gram panchayat register',detail:'Presence, condition & inconsistencies',
+      scale:{label:'Gram panchayats read',value:centres.panchayats.toLocaleString('en-IN')},
       lede:{value:centres.coverageRatio===null?'Not reported':`${(centres.coverageRatio*100).toFixed(1)}%`,unit:`of ${centres.panchayats.toLocaleString('en-IN')} panchayats report a centre`,
         finding:<>Most panchayats report a processing centre, <em>and its condition varies.</em></>,
         support:`${centres.fullyFunctioning.toLocaleString('en-IN')} fully functioning, ${centres.partiallyFunctioning.toLocaleString('en-IN')} partially, ${centres.notFunctioning.toLocaleString('en-IN')} not functioning. The register carries no effective date.`}},
     {id:'reporting',title:'Daily reporting patterns',scope:'Source-specific daily evidence',detail:'Activity, genuine zeros & missing data',
+      scale:{label:'Daily records read',value:continuity.rows.toLocaleString('en-IN')},
       lede:{value:`${continuity.concentrated} of ${continuity.datasets.length}`,unit:'daily sources concentrate on one day',
         finding:<>Retained daily sources differ, and <em>some report on a single day.</em></>,
         support:`${continuity.rows.toLocaleString('en-IN')} retained records across ${continuity.entities.toLocaleString('en-IN')} entities. A blank measurement is counted apart from a reported zero.`}},
     {id:'programmes',title:'Community, green & water',scope:'ULB and district · kept separate',detail:'Explore one programme by place and period',
+      scale:{label:'Programmes read',value:String(geographicProgrammes.length)},
       lede:{value:String(geographicProgrammes.length),unit:'programmes with returned geography',
         finding:<>Community, green and water programmes, <em>each kept at its own grain.</em></>,
         support:'ULB-grain and district-grain programmes are never merged into one ranking; select one to see its own population and period.'}},
@@ -113,8 +121,6 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
 
   const chooseSubject=(id:string)=>{setSubject(id);if(issues.some(issue=>issue.id===id)){setSelected(id as ReviewIssueId);chooseDistrict('');}};
   const current = subjects.find(item=>item.id===subject) ?? subjects[0];
-  // Distinct, not raw: the four-month pull holds three copies of every panchayat-day.
-  const ruralDistinct = Object.values(ruralChange.recordQuality).reduce((n,quality)=>n+quality.uniqueRows,0);
 
   return <div className="overview-review" data-issue={selected}>
     <header className="or-lede" aria-label="Selected review subject">
@@ -133,7 +139,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
         </div>
       </div>
       <dl className="or-lede-ledger">
-        <div><dt>Panchayat-days read</dt><dd>{ruralDistinct.toLocaleString('en-IN')}</dd></div>
+        <div><dt>{current.scale.label}</dt><dd>{current.scale.value}</dd></div>
         <div><dt>Complete snapshots</dt><dd>{governedSnapshotStats.completeDatasets}</dd></div>
         <div><dt>Authorized routes</dt><dd>{readinessCatalogueStats.platformAvailable}</dd></div>
         <div><dt>Scoring eligible</dt><dd>None · gates unmet</dd></div>
