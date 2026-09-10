@@ -819,6 +819,27 @@ function ReportedOperationsMonitor({ series }: { series: ReturnType<typeof getCo
   const tones = ['teal', 'blue', 'violet'];
   const conflictCount = series.reduce((total, item) => total + item.percentageConflicts, 0);
 
+  // The panel drew five months of three programmes and said nothing about them. What it
+  // shows is worth stating: coverage swings across an order of magnitude, and the three
+  // programmes reach their lowest point in the same month, which points at how the month
+  // was reported rather than at three independent collapses. Both claims are derived
+  // here, so the sentence changes if the data does rather than going quietly stale.
+  const reported = series.flatMap((item) => item.points.filter((point) => point.coverage !== null));
+  const lowest = reported.length ? Math.min(...reported.map((point) => point.coverage!)) : null;
+  const highest = reported.length ? Math.max(...reported.map((point) => point.coverage!)) : null;
+  const periodTotals = months.map((month, index) => ({
+    month,
+    total: series.reduce((sum, item) => sum + (item.points[index]?.coverage ?? 0), 0),
+  }));
+  const weakest = periodTotals.length ? periodTotals.reduce((low, item) => (item.total < low.total ? item : low)) : null;
+  const weakestIndex = weakest ? months.indexOf(weakest.month) : -1;
+  // Only claim a shared trough when every series really is at its own minimum there.
+  const sharedTrough = weakestIndex >= 0 && series.length > 1 && series.every((item) => {
+    const values = item.points.map((point) => point.coverage).filter((value): value is number => value !== null);
+    const here = item.points[weakestIndex]?.coverage;
+    return here !== null && here !== undefined && values.length > 0 && here <= Math.min(...values) + 0.005;
+  });
+
   const groupWidth = plotWidth / Math.max(months.length, 1);
   const barWidth = Math.min(26, (groupWidth * 0.62) / Math.max(series.length, 1));
   const groupInner = barWidth * series.length + 6 * (series.length - 1);
@@ -826,6 +847,12 @@ function ReportedOperationsMonitor({ series }: { series: ReturnType<typeof getCo
 
   return <article className="panel reported-operations-monitor">
     <header><PanelTitle icon="chart" title="Reported Operations Monitor" subtitle="Five retained reporting periods · one column per reported value · hover any column for its source figures"/><div className="monitor-state"><span className="live-dot"/>REAL RETAINED HISTORY</div></header>
+    {lowest !== null && highest !== null && <p className="monitor-reading">
+      <strong>{(lowest * 100).toFixed(1)}% to {(highest * 100).toFixed(1)}%</strong>
+      <span>Reported coverage across {months.length} months and {series.length} programmes.
+        {sharedTrough && weakest ? ` All ${series.length} reach their lowest point in ${weakest.month}, which describes how that month was reported rather than three separate collapses.` : ''}
+        {conflictCount > 0 ? ` ${conflictCount.toLocaleString('en-IN')} records state a percentage that disagrees with their own target and achievement; those are held out.` : ''}</span>
+    </p>}
     <div className="monitor-layout">
       <div className="history-chart-wrap">
         <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Reported target coverage from March through July 2026 for three community programmes" onMouseLeave={() => setActive('')}>
