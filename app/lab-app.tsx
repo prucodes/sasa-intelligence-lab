@@ -64,6 +64,7 @@ import type { CollectionProcurementSummary, ContrastPoint, DistrictSignalMap, Ih
 import { governedSnapshotByKey, governedSnapshotStats, operationalPeriodOptions } from '@/lib/snapshots';
 import { getIdentityReach, getLgdCrosswalk } from '@/lib/lgd-crosswalk';
 import { readinessCatalogueStats } from '@/lib/catalogue';
+import { getRuralMovement } from '@/lib/rural-movement';
 import { getRevisionInventory } from '@/lib/source-revisions';
 import { distributionOf, ordinal, peerContext, type Distribution } from '@/lib/comparison';
 import { datasetVintages, formatPeriodLabel, formatRetrievalDate, vintageSummary } from '@/lib/vintage';
@@ -529,8 +530,12 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
     getLegacyWasteStageCohorts(),
   ], []);
   const signalMaps = useMemo(() => getDistrictSignalMaps(), []);
+  // The briefing read only the urban sources, so four months of rural collection - the
+  // only evidence here with a time series behind it - never reached the room.
+  const rural = getRuralMovement();
+  const ruralWorkingDays = getRuralMovement('working-days');
   const [beat, setBeat] = useState(0);
-  const beatCount = 5;
+  const beatCount = 6;
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -542,7 +547,7 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
     return () => window.removeEventListener('keydown', onKey);
   }, [onExit]);
 
-  const beatTitles = ['Executive read', 'District signal map', 'Operating flow', 'Concentration', 'Decision boundary'];
+  const beatTitles = ['Executive read', 'Rural trajectory', 'District signal map', 'Operating flow', 'Concentration', 'Decision boundary'];
 
   return <div className={`presenter theme-${colorTheme}`} role="dialog" aria-modal="true" aria-label="Presenter briefing">
     <div className="presenter-top">
@@ -559,13 +564,15 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
 
       {beat === 0 && <PresenterExecutiveAperture findings={findings} collection={collection} ihhl={ihhl} legacy={legacy}/>}
 
-      {beat === 1 && <PresenterSignalMap maps={signalMaps}/>}
+      {beat === 1 && <PresenterRuralTrajectory rural={rural} workingDays={ruralWorkingDays}/>}
 
-      {beat === 2 && <PresenterStageFlow groups={stageGroups}/>}
+      {beat === 2 && <PresenterSignalMap maps={signalMaps}/>}
 
-      {beat === 3 && <PresenterConcentration findings={findings}/>}
+      {beat === 3 && <PresenterStageFlow groups={stageGroups}/>}
 
-      {beat === 4 && <PresenterDecisionRunway disputed={disputed}/>}
+      {beat === 4 && <PresenterConcentration findings={findings}/>}
+
+      {beat === 5 && <PresenterDecisionRunway disputed={disputed}/>}
     </div>
 
     <div className="presenter-nav">
@@ -638,6 +645,80 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
       })}
       <div className="aperture-baseline"><span><Icon name="shield" size={14}/> Source-separated instruments</span><span>{governedSnapshotStats.completeDatasets} complete exports</span><span>{governedSnapshotStats.records.toLocaleString('en-IN')} retained rows</span><strong>UNSCORED</strong></div>
     </section>
+  </div>;
+}
+
+/** The one comparison in this product with four months behind it, and the only beat
+ *  that can show a direction rather than a position. Both bases are stated because the
+ *  level moves twelve points between them while the trend does not. */
+function PresenterRuralTrajectory({ rural, workingDays }: {
+  rural: ReturnType<typeof getRuralMovement>;
+  workingDays: ReturnType<typeof getRuralMovement>;
+}) {
+  const points = rural.series.map((entry) => entry.comparable.collectionRate);
+  const open = points[0];
+  const close = points[points.length - 1];
+  const shift = open === null || close === null ? null : (close - open) * 100;
+  const workingOpen = workingDays.series[0].comparable.collectionRate;
+  const workingClose = workingDays.series[workingDays.series.length - 1].comparable.collectionRate;
+  const workingShift = workingOpen === null || workingClose === null ? null : (workingClose - workingOpen) * 100;
+  const month = (period: string) => new Date(`${period}-02T12:00:00Z`).toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' });
+  const pct = (value: number | null) => value === null ? 'Not reported' : `${(value * 100).toFixed(2)}%`;
+  const signed = (value: number | null) => value === null ? '—' : `${value > 0 ? '+' : ''}${value.toFixed(2)}`;
+  const movers = [...rural.declining, ...rural.rising]
+    .sort((a, b) => Math.abs(b.changePercentagePoints ?? 0) - Math.abs(a.changePercentagePoints ?? 0)).slice(0, 6);
+  const plotted = points.filter((value): value is number => value !== null);
+  const floor = Math.min(...plotted) - 0.04;
+  const span = Math.max(0.08, Math.max(...plotted) + 0.04 - floor);
+
+  return <div className="presenter-rural">
+    <div className="presenter-title-row">
+      <div>
+        <h1>Four months, read the same way each time.</h1>
+        <p>One cohort of {rural.cohort.pairs.toLocaleString('en-IN')} panchayat-days, present with a valid measurement in every month. Reported movement, not a programme effect.</p>
+      </div>
+      <div className="presenter-rural-figure">
+        <strong>{signed(shift)}</strong>
+        <small>percentage points, {month(rural.periods[0])} to {month(rural.periods[rural.periods.length - 1])}</small>
+      </div>
+    </div>
+
+    <div className="presenter-rural-layout">
+      <div className="presenter-rural-plot">
+        <svg viewBox="0 0 560 260" role="img" aria-label={`Statewide reported collection ${rural.periods.map((period, index) => `${month(period)} ${pct(points[index])}`).join(', ')}`}>
+          <defs>
+            <linearGradient id="pr-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#168d92" stopOpacity=".26"/><stop offset="100%" stopColor="#168d92" stopOpacity="0"/>
+            </linearGradient>
+          </defs>
+          {[0, 1, 2].map((step) => <line key={step} className="pr-grid" x1="54" x2="530" y1={40 + step * 70} y2={40 + step * 70}/>)}
+          <polygon fill="url(#pr-fill)" points={`54,180 ${plotted.map((value, index) => `${54 + index * 159},${180 - (value - floor) / span * 140}`).join(' ')} ${54 + (plotted.length - 1) * 159},180`}/>
+          <polyline className="pr-line" fill="none" points={plotted.map((value, index) => `${54 + index * 159},${180 - (value - floor) / span * 140}`).join(' ')}/>
+          {plotted.map((value, index) => <g key={rural.periods[index]}>
+            <circle className="pr-halo" cx={54 + index * 159} cy={180 - (value - floor) / span * 140} r="12"/>
+            <circle className="pr-dot" cx={54 + index * 159} cy={180 - (value - floor) / span * 140} r="5.5"/>
+            <text className="pr-value" x={54 + index * 159} y={180 - (value - floor) / span * 140 - 22} textAnchor="middle">{pct(value)}</text>
+            <text className="pr-month" x={54 + index * 159} y="212" textAnchor="middle">{month(rural.periods[index])}</text>
+          </g>)}
+        </svg>
+        <p className="presenter-rural-basis">
+          Every seven-day window holds one Sunday, the scheduled non-collection day. Counting only the days collection was scheduled, the same cohort reads{' '}
+          <b>{pct(workingOpen)} to {pct(workingClose)}</b> and moves {signed(workingShift)} points: the level rises, the direction does not change.
+        </p>
+      </div>
+
+      <div className="presenter-rural-movers">
+        <span className="presenter-eyebrow">{rural.declining.length} decline at every step · {rural.rising.length} rise at every step</span>
+        <ol>
+          {movers.map((district) => <li key={district.district}>
+            <b>{district.district}</b>
+            <span>{district.points.map((point) => pct(point.collectionRate)).join(' → ')}</span>
+            <strong className={(district.changePercentagePoints ?? 0) < 0 ? 'is-down' : 'is-up'}>{signed(district.changePercentagePoints)}</strong>
+          </li>)}
+        </ol>
+        <p className="presenter-boundary">Day-of-month pairing holds the weekday mix roughly constant rather than removing it. No month is completely covered.</p>
+      </div>
+    </div>
   </div>;
 }
 

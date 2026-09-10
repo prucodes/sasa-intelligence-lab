@@ -409,3 +409,134 @@
 .monitor-reading > span { font-size: 12.5px; line-height: 1.6; color: var(--muted); }
 
 @media (max-width: 760px) { .monitor-reading { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── Briefing: the rural trajectory beat ──────────────────────────────────
+   The briefing read only the urban sources, so four months of rural collection
+   never reached the room. This beat carries the one comparison with a time
+   series behind it, on both day bases, because the level moves twelve points
+   between them while the direction does not. */
+
+.presenter-rural { display: grid; gap: 22px; }
+
+.presenter-rural-figure { text-align: right; }
+
+.presenter-rural-figure strong {
+  display: block;
+  font-size: clamp(46px, 5vw, 80px);
+  line-height: .94;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+  color: #0d7d78;
+}
+
+.presenter-rural-figure small {
+  display: block;
+  margin-top: 8px;
+  margin-left: auto;
+  max-width: 24ch;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.presenter-rural-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, .85fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.presenter-rural-plot {
+  padding: 20px 22px 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.presenter-rural-plot svg { width: 100%; height: auto; }
+.pr-grid { stroke: var(--line); }
+.pr-line { stroke: #0d7d78; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.pr-halo { fill: #0d7d78; opacity: .13; }
+.pr-dot { fill: #0d7d78; stroke: var(--surface); stroke-width: 1.5; }
+.pr-value { fill: var(--ink); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.pr-month { fill: var(--muted); font-size: 12px; }
+
+.presenter-rural-basis {
+  margin: 14px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.presenter-rural-basis b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.presenter-rural-movers {
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.presenter-rural-movers ol {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.presenter-rural-movers li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.presenter-rural-movers li:last-child { border-bottom: 0; }
+.presenter-rural-movers li b { font-size: 13px; font-weight: 600; color: var(--ink); }
+.presenter-rural-movers li span { grid-column: 1; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.presenter-rural-movers li strong {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+}
+
+.presenter-rural-movers li strong.is-down { color: #c2463c; }
+.presenter-rural-movers li strong.is-up { color: #0d7d78; }
+
+@media (max-width: 1000px) {
+  .presenter-rural-layout { grid-template-columns: minmax(0, 1fr); }
+  .presenter-rural-figure { text-align: left; }
+  .presenter-rural-figure small { margin-left: 0; }
+}
+
+/* ── Briefing: stop truncating the labels on the executive read ────────────
+   The source-path rails fixed their label column at 82px, so "Under
+   construction", "Reported cleared" and "Reported balance" all rendered
+   clipped. A truncated data label in a briefing projected on a wall is worse
+   than a narrower bar, so the label takes the width it needs and the bar
+   flexes, keeping a 35px floor. The caption above them wraps rather than
+   ending in an ellipsis mid-sentence. */
+
+.aperture-trajectory > span {
+  grid-template-columns: minmax(82px, max-content) minmax(35px, 1fr) 35px;
+}
+
+.aperture-trajectory > span > b {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1.25;
+}
+
+.aperture-trajectory > small {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1.45;
+}

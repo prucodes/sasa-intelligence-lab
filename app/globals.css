@@ -5403,7 +5403,7 @@ table td, table th { font-variant-numeric: tabular-nums; }
   align-items: center; gap: 8px; color: var(--muted); border: 0; border-bottom: 2px solid transparent;
   background: transparent; text-align: left;
 }
-.presenter-progress button b { font-size:11px; color: #91a0b5; letter-spacing: .08em; }
+.presenter-progress button b { font-size:11px; color: #687382; letter-spacing: .08em; }
 .presenter-progress button span { display: block; width: auto; height: auto; border-radius: 0; background: none; font-size:11px; font-weight: 680; transition: none; }
 .presenter-progress button.active { color: var(--ink); border-bottom-color: var(--teal); background: linear-gradient(to top, rgba(24,168,160,.06), transparent 70%); }
 .presenter-progress button.active b { color: var(--teal-dark); }
