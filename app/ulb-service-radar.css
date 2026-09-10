@@ -7,3 +7,13 @@
 @media(max-width:700px){.usr-basis{grid-template-columns:1fr;gap:12px}}
 /* Calm action cards, consistent with the SASA teal/navy overview. */
 .usr-category{border-radius:18px;padding:20px;background:linear-gradient(135deg,color-mix(in srgb,currentColor 5%,var(--surface,#fff)),var(--surface,#fff));box-shadow:0 6px 20px #15355205;text-align:left}.usr-category-top b{font-size:15px;line-height:1.4}.usr-category-top strong{font-size:30px;font-weight:500}.usr-examples{padding-top:14px;margin-top:14px}.usr-zone-labels text{font-weight:650;font-size:11px;paint-order:stroke;stroke:var(--surface,#fff);stroke-width:8;stroke-linejoin:round}.usr-categories>p{line-height:1.7}
+
+/* Quadrant captions are annotations laid over the plot, so they carry the same
+   halo the ULB names use and are drawn last. Before this a point sat straight
+   through "Doing well on both". */
+.usr-zone-labels text { paint-order: stroke; stroke: var(--surface); stroke-width: 4.5px; stroke-linejoin: round; }
+
+/* 102 points on one day means overlap. A thin surface-coloured rim separates a
+   stack into countable marks instead of one blob, without moving any of them. */
+.usr-dot circle.usr-mark { stroke: var(--surface); stroke-width: 1.1px; }
+.usr-dot:is(:hover, :focus-within) circle.usr-mark { stroke-width: 1.6px; }
