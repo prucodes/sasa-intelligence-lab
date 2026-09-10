@@ -626,16 +626,26 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
       </div>
     </div>
 
-    <section className="aperture-canvas" aria-label="Three source-separated operational instruments">
-      {lanes.map((lane) => {
+    {/* One scale, three bars. Three boxes at identical size said these were three
+        equivalent things; drawn against a common 0-100% track the disparity is the
+        first thing visible, which is what the headline claims. Bars are exact: the
+        0.2% lane renders as the hairline it is, with no minimum width propping it up. */}
+    <section className="aperture-scale" aria-label="Three source-separated instruments on a common 0 to 100 per cent scale">
+      {[...lanes].sort((a, b) => (b.ratio ?? -1) - (a.ratio ?? -1)).map((lane) => {
         const ratio = lane.ratio === null ? null : Math.max(0, Math.min(lane.ratio, 1));
-        return <article key={lane.id} className={`aperture-lane tone-${lane.tone}`}>
-          <header><span>{lane.label}</span><small>{lane.period}</small></header>
+        return <article key={lane.id} className={`aperture-row tone-${lane.tone}`}>
+          <header>
+            <span>{lane.label}</span>
+            <small>{lane.period}</small>
+          </header>
+          <div className="aperture-bar" role="img" aria-label={`${formatPercent(ratio)} ${lane.ratioLabel}`}>
+            <i><em style={{ width: ratio === null ? '0%' : `${ratio * 100}%` }}/></i>
+          </div>
           <strong className="aperture-figure">{ratio === null ? 'Not returned' : formatPercent(ratio)}</strong>
-          <p className="aperture-basis">
-            {lane.numerator.toLocaleString('en-IN')} {lane.numeratorLabel} of {lane.denominator.toLocaleString('en-IN')} {lane.denominatorLabel}
+          <p className="aperture-row-basis">
+            <b>{lane.gap?.headline}</b>
+            {' '}{lane.numerator.toLocaleString('en-IN')} {lane.numeratorLabel} of {lane.denominator.toLocaleString('en-IN')} {lane.denominatorLabel}.
           </p>
-          <p className="aperture-consequence">{lane.gap?.headline}</p>
         </article>;
       })}
     </section>
