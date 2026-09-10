@@ -13,14 +13,14 @@
 .dp-summary > div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; background: var(--surface); padding: 13px 18px; }
 .dp-summary dt { font-size: 11px; color: var(--muted); }
 .dp-summary dd { margin: 0; font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; text-align: right; }
-.dp-summary dd span { display: block; font-size: 10px; font-weight: 400; color: var(--muted); }
+.dp-summary dd span { display: block; font-size:11px; font-weight: 400; color: var(--muted); }
 
 .dp-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0,1fr); background: #edf2eb; border: 1px solid #d2ddd5; border-radius: 14px 14px 0 0; overflow: hidden; }
 .dp-tabs button { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; padding: 16px 20px; border: 0; border-right: 1px solid #d2ddd5; background: transparent; color: #193c3e; cursor: pointer; text-align: left; transition: background .18s,box-shadow .18s; }
 .dp-tabs button:last-child { border-right: 0; }
 .dp-tabs button:hover { background: #e1ebde; }
 .dp-tabs button.is-selected { background: #e4eddd; box-shadow: inset 0 4px #3b7160; }
-.dp-tabs span { font-size: 10px; color: #52736a; }
+.dp-tabs span { font-size:11px; color: #52736a; }
 .dp-tabs b { font-size: 14px; font-weight: 650; }
 .dp-tabs small { font-size: 11px; color: #526c65; font-variant-numeric: tabular-nums; }
 
@@ -32,7 +32,7 @@
 .dp-actual { position: absolute; bottom: 0; width: 62%; background: var(--dp-actual); border-radius: 4px 4px 0 0; }
 /* Plan-only months are an outline, never a filled bar that could read as a gap. */
 .dp-col.is-planned .dp-target { background: transparent; border: 1px dashed color-mix(in srgb, var(--dp-accent) 40%, transparent); border-bottom: 0; }
-.dp-col span { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
+.dp-col span { font-size:11px; color: var(--muted); letter-spacing: .04em; }
 .dp-col.is-planned span { opacity: .6; }
 
 .dp-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 16px; margin-top: 18px !important; font-size: 11px; color: var(--muted); }
@@ -41,10 +41,10 @@
 .dp-key-planned { border: 1px dashed color-mix(in srgb, var(--dp-accent) 45%, transparent); background: transparent; }
 .dp-boundary { margin-top: 12px !important; font-size: 11px; line-height: 1.7; color: var(--muted); max-width: 90ch; }
 
-.dp-duplicate { margin-top: 20px; border: 1px solid #d8b483; border-left: 4px solid #b8791f; background: color-mix(in srgb, #e8a33d 9%, var(--surface)); border-radius: 12px; padding: 18px 20px; }
-.dp-duplicate-tag { display: inline-block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #8a5a12; margin-bottom: 8px; }
+.dp-duplicate { margin-top: 20px; border: 1px solid #d8b483; border-left: 4px solid #a26a1b; background: color-mix(in srgb, #e8a33d 9%, var(--surface)); border-radius: 12px; padding: 18px 20px; }
+.dp-duplicate-tag { display: inline-block; font-size:11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #8a5a12; margin-bottom: 8px; }
 .dp-duplicate p { font-size: 13px; line-height: 1.7; max-width: 92ch; }
-.dp-duplicate code { font-size: 11px; background: color-mix(in srgb, #b8791f 12%, transparent); padding: 1px 5px; border-radius: 4px; }
+.dp-duplicate code { font-size: 11px; background: color-mix(in srgb, #a26a1b 12%, transparent); padding: 1px 5px; border-radius: 4px; }
 
 .dp-districts { margin-top: 26px; }
 .dp-districts h3 { font-size: 17px; font-weight: 550; letter-spacing: -.02em; margin-bottom: 14px; }
@@ -52,7 +52,7 @@
 .dp-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
 .delivery-plans table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 12px; }
 .delivery-plans th, .delivery-plans td { padding: 10px 14px; text-align: right; white-space: nowrap; }
-.delivery-plans thead th { font-size: 10px; color: var(--muted); font-weight: 650; background: var(--surface); }
+.delivery-plans thead th { font-size:11px; color: var(--muted); font-weight: 650; background: var(--surface); }
 .delivery-plans th[scope=row] { text-align: left; font-weight: 500; white-space: normal; min-width: 150px; }
 .delivery-plans tbody tr { border-top: 1px solid var(--line); }
 .delivery-plans td { font-variant-numeric: tabular-nums; }
@@ -63,7 +63,7 @@
 .dp-method summary { font-size: 12px; font-weight: 650; cursor: pointer; color: var(--dp-accent); }
 .dp-method div { display: grid; gap: 10px; margin-top: 12px; }
 .dp-method p { font-size: 11px; line-height: 1.75; color: var(--muted); overflow-wrap: anywhere; }
-.dp-method code { font-size: 10px; }
+.dp-method code { font-size:11px; }
 
 .theme-dark .delivery-plans { --dp-accent: #8bcec0; --dp-actual: #6fae9a; --dp-target: #2f4a4b; }
 .theme-dark .dp-tabs { background: #16292c; border-color: #2c4448; }
@@ -92,7 +92,7 @@
 .dp-flat-bar { height: 10px; border-radius: 6px; background: var(--dp-target); overflow: hidden; }
 .dp-flat-bar i { display: block; height: 100%; background: var(--dp-actual); }
 .dp-flat p { font-size: 11px; line-height: 1.7; color: var(--muted); }
-.dp-transposed { margin-top: 14px !important; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #b8791f; background: color-mix(in srgb, #e8a33d 8%, var(--surface)); font-size: 12px; line-height: 1.7; color: var(--muted); }
+.dp-transposed { margin-top: 14px !important; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #a26a1b; background: color-mix(in srgb, #e8a33d 8%, var(--surface)); font-size: 12px; line-height: 1.7; color: var(--muted); }
 .dp-transposed b { color: var(--ink); }
-.dp-transposed code { font-size: 11px; background: color-mix(in srgb, #b8791f 14%, transparent); padding: 1px 5px; border-radius: 4px; }
+.dp-transposed code { font-size: 11px; background: color-mix(in srgb, #a26a1b 14%, transparent); padding: 1px 5px; border-radius: 4px; }
 .theme-dark .dp-transposed { border-left-color: #e8a33d; }

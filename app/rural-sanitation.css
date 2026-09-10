@@ -14,7 +14,7 @@
 .rs-summary > div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; background: var(--surface); padding: 13px 18px; }
 .rs-summary dt { font-size: 11px; color: var(--muted); }
 .rs-summary dd { margin: 0; font-size: 19px; font-weight: 650; font-variant-numeric: tabular-nums; text-align: right; }
-.rs-summary dd span { display: block; font-size: 10px; font-weight: 400; color: var(--muted); }
+.rs-summary dd span { display: block; font-size:11px; font-weight: 400; color: var(--muted); }
 
 .rs-condition { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-bottom: 24px; }
 .rs-condition-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
@@ -36,7 +36,7 @@
 .rs-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
 .rural-sanitation table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 12px; }
 .rural-sanitation th, .rural-sanitation td { padding: 10px 14px; text-align: right; white-space: nowrap; }
-.rural-sanitation thead th { font-size: 10px; color: var(--muted); font-weight: 650; background: var(--surface); }
+.rural-sanitation thead th { font-size:11px; color: var(--muted); font-weight: 650; background: var(--surface); }
 .rural-sanitation th[scope=row] { text-align: left; font-weight: 500; white-space: normal; min-width: 140px; }
 .rural-sanitation tbody tr { border-top: 1px solid var(--line); }
 .rural-sanitation tbody tr:hover { background: color-mix(in srgb, var(--rs-accent) 4%, transparent); }
@@ -50,7 +50,7 @@
 .rs-method summary { font-size: 12px; font-weight: 650; cursor: pointer; color: var(--rs-accent); }
 .rs-method div { display: grid; gap: 10px; margin-top: 12px; }
 .rs-method p { font-size: 11px; line-height: 1.75; color: var(--muted); overflow-wrap: anywhere; }
-.rs-method code { font-size: 10px; }
+.rs-method code { font-size:11px; }
 
 .theme-dark .rural-sanitation { --rs-accent: #8bcec0; --rs-full: #6fae9a; --rs-partial: #e0bc55; --rs-none: #e0855a; }
 .theme-dark .rs-mismatch { color: #efc58b; }

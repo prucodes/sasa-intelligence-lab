@@ -14,7 +14,7 @@
 .sr-intro { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 0 24px; }
 .sr-intro h1 { font-size: clamp(25px,2.5vw,38px); line-height: 1.2; letter-spacing: -.045em; font-weight: 600; margin-top: 6px; }
 .sr-edition { display: flex; flex-direction: column; gap: 6px; text-align: right; }
-.sr-edition > span { color: var(--muted); font-size: 10px; letter-spacing: .13em; font-weight: 700; }
+.sr-edition > span { color: var(--muted); font-size:11px; letter-spacing: .13em; font-weight: 700; }
 .sr-edition b { display: flex; gap: 14px; align-items: center; font-size: 12px; font-weight: 550; }
 
 .sr-workspace { border-radius: 22px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 20px 55px #1535370a; }
@@ -24,7 +24,7 @@
 .sr-stage::before { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(ellipse at 76% 40%,#31645588,transparent 55%),linear-gradient(125deg,#0b252b,#0f3238); pointer-events: none; }
 .sr-story { padding: 34px 0 34px 36px; align-self: center; animation: sr-story-enter .35s ease both; }
 @keyframes sr-story-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-.sr-story-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; color: #b3cfcb; font-size: 10px; letter-spacing: .13em; }
+.sr-story-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; color: #b3cfcb; font-size:11px; letter-spacing: .13em; }
 .sr-story-top > span:first-child { color: var(--sr-left); }
 .sr-story h2 { font-size: 24px; line-height: 1.3; font-weight: 450; letter-spacing: -.02em; color: #e5f2ea; }
 .sr-hero-value { margin: 8px 0 2px; font-size: clamp(64px,7.8vw,116px); line-height: 1.08; font-weight: 500; letter-spacing: -.075em; font-variant-numeric: tabular-nums; color: #effacf; }
@@ -32,7 +32,7 @@
 .sr-hero-scope { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 12px; color: #abc6c1; }
 .sr-hero-scope i { width: 5px; height: 5px; border-radius: 50%; background: var(--sr-left); flex: 0 0 auto; }
 .sr-hero-insight { margin-top: 32px; padding-left: 18px; border-left: 2px solid #b8ecc77a; }
-.sr-hero-insight > span { color: #a9c8c1; font-size: 9px; font-weight: 650; letter-spacing: .14em; }
+.sr-hero-insight > span { color: #a9c8c1; font-size:11px; font-weight: 650; letter-spacing: .14em; }
 .sr-hero-insight p { margin: 9px 0 8px; font-size: clamp(18px,1.9vw,26px); line-height: 1.4; letter-spacing: -.02em; font-weight: 350; max-width: 360px; }
 .sr-hero-insight b { font-weight: 650; color: #effacf; }
 .sr-hero-insight small { display: block; color: #aac6c0; font-size: 11px; line-height: 1.65; max-width: 380px; }
@@ -42,11 +42,11 @@
 .sr-shape::before { content: ''; position: absolute; inset: 12% 8%; border: 1px solid #90b1a21a; border-radius: 50%; background: repeating-radial-gradient(ellipse at center,transparent 0 48px,#96bfa51a 49px 50px,transparent 51px 100px); transform: rotate(-24deg); pointer-events: none; }
 .sr-shape figcaption { position: relative; }
 .sr-shape figcaption span { display: block; font-size: 14px; font-weight: 550; color: #e0eeea; }
-.sr-shape figcaption b { display: block; margin-top: 5px; color: #abc6c1; font-size: 10px; font-weight: 400; line-height: 1.6; max-width: 330px; }
+.sr-shape figcaption b { display: block; margin-top: 5px; color: #abc6c1; font-size:11px; font-weight: 400; line-height: 1.6; max-width: 330px; }
 .sr-shape svg { display: block; width: 100%; height: auto; margin: 14px 0 4px; position: relative; overflow: visible; }
 .sr-grid { stroke: #ffffff14; stroke-width: 1; }
 .sr-axis { stroke: #ffffff2e; stroke-width: 1; }
-.sr-month { fill: #a5c1b9; font-size: 10px; letter-spacing: .08em; }
+.sr-month { fill: #a5c1b9; font-size:11px; letter-spacing: .08em; }
 .sr-line polyline { stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; opacity: .45; transition: opacity .2s,stroke-width .2s; }
 .sr-line circle { opacity: .45; transition: opacity .2s; }
 .sr-line.is-active polyline { opacity: 1; stroke-width: 3; }
@@ -62,19 +62,19 @@
 
 /* Segmented source selector, mirroring the Overview issue strip. */
 .sr-sources { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); background: #edf2eb; border-bottom: 1px solid #d2ddd5; }
-.sr-selector-basis { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; padding: 10px 20px; border-bottom: 1px solid #d2ddd5; color: #3e6057; font-size: 10px; font-weight: 650; }
-.sr-selector-basis span { font-size: 9px; font-weight: 400; color: #526c65; }
+.sr-selector-basis { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; padding: 10px 20px; border-bottom: 1px solid #d2ddd5; color: #3e6057; font-size:11px; font-weight: 650; }
+.sr-selector-basis span { font-size:11px; font-weight: 400; color: #526c65; }
 .sr-sources > button { position: relative; display: flex; gap: 12px; align-items: center; min-height: 102px; padding: 21px 20px; text-align: left; border: 0; border-right: 1px solid #d2ddd5; background: transparent; color: #193c3e; cursor: pointer; transition: background .18s,box-shadow .18s; }
 .sr-sources > button:last-child { border-right: 0; }
 .sr-sources > button:hover { background: #e1ebde; }
 .sr-sources > button.is-selected { background: #e4eddd; box-shadow: inset 0 4px #3b7160; }
-.sr-source-index { font-size: 10px; color: #52736a; align-self: flex-start; margin-top: 3px; }
+.sr-source-index { font-size:11px; color: #52736a; align-self: flex-start; margin-top: 3px; }
 .sr-source-copy { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
 .sr-source-copy b { font-size: 13px; font-weight: 650; }
-.sr-source-copy small { font-size: 10px; line-height: 1.5; max-width: 165px; color: #526c65; }
+.sr-source-copy small { font-size:11px; line-height: 1.5; max-width: 165px; color: #526c65; }
 .sr-source-figures { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
 .sr-source-figures strong { font-size: clamp(20px,2vw,28px); font-weight: 600; letter-spacing: -.04em; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.sr-source-figures small { font-size: 10px; color: #526c65; }
+.sr-source-figures small { font-size:11px; color: #526c65; }
 
 .sr-detail-layout { display: grid; grid-template-columns: minmax(0,.75fr) minmax(0,1.25fr); gap: 50px; padding: 38px; }
 .sr-focus-context h2 { font-size: clamp(28px,2.9vw,42px); line-height: 1.16; letter-spacing: -.05em; font-weight: 450; margin: 16px 0; }
@@ -97,8 +97,8 @@
 .sr-scroll { overflow-x: auto; }
 .source-reconciliation table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 12px; }
 .source-reconciliation th, .source-reconciliation td { padding: 10px 12px; text-align: right; white-space: nowrap; }
-.source-reconciliation thead th { font-size: 10px; color: var(--muted); font-weight: 650; }
-.source-reconciliation thead tr:first-child th[scope=colgroup] { text-align: center; letter-spacing: .1em; text-transform: uppercase; font-size: 9px; padding-bottom: 4px; }
+.source-reconciliation thead th { font-size:11px; color: var(--muted); font-weight: 650; }
+.source-reconciliation thead tr:first-child th[scope=colgroup] { text-align: center; letter-spacing: .1em; text-transform: uppercase; font-size:11px; padding-bottom: 4px; }
 .source-reconciliation thead tr:first-child th.is-active { color: var(--sr-accent); }
 .source-reconciliation th[scope=row] { text-align: left; font-weight: 500; white-space: normal; min-width: 150px; }
 .source-reconciliation tbody tr { border-top: 1px solid var(--line); }
@@ -107,7 +107,7 @@
 .source-reconciliation td.is-active { color: var(--ink); font-weight: 550; }
 /* The divider is the point: nothing is ever totalled across it. */
 .sr-col-right { border-left: 2px solid var(--line); }
-.sr-table-note { font-size: 10px; line-height: 1.7; color: var(--muted); margin-top: 14px; max-width: 62ch; }
+.sr-table-note { font-size:11px; line-height: 1.7; color: var(--muted); margin-top: 14px; max-width: 62ch; }
 
 .sr-source-line { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding: 14px 38px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--sr-accent) 4%, var(--surface)); font-size: 10px; color: var(--muted); }
 .sr-source-line b { color: var(--ink); }

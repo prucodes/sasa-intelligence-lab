@@ -1,5 +1,5 @@
 /* Evidence integrity: conditions the product found in the sources themselves. */
-.evidence-integrity { --ei-accent: #087f83; --ei-warn: #b8791f; margin-top: 30px; color: var(--ink); }
+.evidence-integrity { --ei-accent: #087f83; --ei-warn: #a26a1b; margin-top: 30px; color: var(--ink); }
 .evidence-integrity :is(h2,p) { margin: 0; }
 .evidence-integrity a:focus-visible { outline: 3px solid var(--ei-accent); outline-offset: 4px; }
 .ei-kicker { display: block; font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; color: var(--ei-warn); margin-bottom: 8px; }
@@ -14,7 +14,7 @@
 .ei-value { display: flex; flex-direction: column; align-items: center; min-width: 62px; }
 .ei-value strong { font-size: clamp(30px,3.4vw,44px); line-height: 1; font-weight: 600; letter-spacing: -.05em; font-variant-numeric: tabular-nums; color: var(--ei-warn); }
 .ei-finding[data-empty=true] .ei-value strong { color: var(--ei-accent); }
-.ei-value span { font-size: 10px; color: var(--muted); text-align: center; margin-top: 6px; line-height: 1.4; }
+.ei-value span { font-size:11px; color: var(--muted); text-align: center; margin-top: 6px; line-height: 1.4; }
 .ei-copy { min-width: 0; }
 .ei-copy b { display: block; font-size: 14px; font-weight: 650; letter-spacing: -.01em; margin-bottom: 6px; }
 .ei-copy p { font-size: 12px; line-height: 1.7; color: var(--muted); }

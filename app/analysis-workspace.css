@@ -77,4 +77,4 @@
 
 /* A unit belongs with the column heading, so the cells under it stay bare numbers
    and no abbreviation has to be invented to make them fit. */
-.th-unit { display:block; margin-top:3px; font-size:10px; font-weight:400; letter-spacing:.02em; text-transform:none; color:var(--muted); }
+.th-unit { display:block; margin-top:3px; font-size:11px; font-weight:400; letter-spacing:.02em; text-transform:none; color:var(--muted); }
