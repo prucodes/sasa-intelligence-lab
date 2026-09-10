@@ -215,3 +215,207 @@
   .or-audit > summary span { display: block; margin: 8px 0 0; }
 }
 @media (prefers-reduced-motion: reduce) { .overview-review * { transition: none !important; animation: none !important; } }
+
+/* ── Landing lede ──────────────────────────────────────────────────────────
+   The Overview opened on a title and an eight-card menu: a reader met the
+   product's navigation before any of its evidence. The lede carries the
+   selected subject's own figure on the same dark canvas the analysis
+   workspaces use, so the landing reads as a finding and the subject strip
+   below it is navigation rather than the first thing to solve. */
+
+.or-lede {
+  /* The workspace palette is scoped to .evidence-workspace, so the lede declares the
+     same tokens locally rather than hoisting them to :root for one section. */
+  --ew-accent: #97c9b7;
+  --ew-dark: #173f41;
+  --ew-light: #f5f8f0;
+  background: var(--ew-dark);
+  color: var(--ew-light);
+  border-radius: 22px;
+  padding: clamp(22px, 2.6vw, 36px);
+  margin-bottom: 20px;
+}
+
+.or-lede-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.or-lede-kicker {
+  color: var(--ew-accent);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.or-lede-edition {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ew-light);
+  font-size: 12px;
+  font-weight: 550;
+  opacity: .82;
+}
+
+.or-lede-edition:hover { opacity: 1; }
+
+.or-lede-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(20px, 3vw, 48px);
+  margin: clamp(18px, 2vw, 28px) 0 0;
+}
+
+.or-lede-text h1 {
+  font-size: clamp(26px, 3.1vw, 44px);
+  line-height: 1.14;
+  letter-spacing: -.04em;
+  font-weight: 500;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.or-lede-text h1 em {
+  font: inherit;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  color: var(--ew-accent);
+}
+
+.or-lede-text p {
+  margin: 14px 0 0;
+  max-width: 62ch;
+  font-size: 13px;
+  line-height: 1.65;
+  opacity: .82;
+}
+
+.or-lede-figure {
+  text-align: right;
+  min-width: 0;
+}
+
+.or-lede-figure strong {
+  display: block;
+  font-size: clamp(38px, 4.6vw, 68px);
+  line-height: 1;
+  font-weight: 450;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ew-accent);
+}
+
+.or-lede-figure small {
+  display: block;
+  margin-top: 10px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  opacity: .78;
+  max-width: 22ch;
+  margin-left: auto;
+}
+
+.or-lede-ledger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(18px, 3vw, 44px);
+  margin: clamp(22px, 2.4vw, 32px) 0 0;
+  padding-top: 18px;
+  border-top: 1px solid currentColor;
+  border-color: color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.or-lede-ledger dt {
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .62;
+}
+
+.or-lede-ledger dd {
+  margin: 5px 0 0;
+  font-size: 17px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Subject strip ─────────────────────────────────────────────────────── */
+
+.or-subject-strip > p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.or-subject-strip .or-subject-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 6px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.or-subject-strip button {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 56px;
+  padding: 10px 12px;
+  text-align: left;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background .16s ease, color .16s ease;
+}
+
+.or-subject-strip button b {
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.or-subject-strip button small {
+  font-size: 10.5px;
+  line-height: 1.4;
+  opacity: .8;
+}
+
+.or-subject-strip button:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+
+.or-subject-strip button[aria-pressed='true'] {
+  --ew-dark: #173f41;
+  --ew-light: #f5f8f0;
+  background: var(--ew-dark);
+}
+
+.theme-dark .or-lede { --ew-dark: #102f34; --ew-light: #eff7ed; }
+.theme-dark .or-subject-strip button[aria-pressed='true'] { --ew-dark: #102f34; --ew-light: #eff7ed; }
+
+.or-subject-strip button[aria-pressed='true'] b,
+.or-subject-strip button[aria-pressed='true'] small {
+  color: var(--ew-light);
+}
+
+.or-subject-strip button[aria-pressed='true'] small { opacity: .78; }
+
+@media (max-width: 900px) {
+  .or-lede-body { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .or-lede-figure { text-align: left; }
+  .or-lede-figure small { margin-left: 0; }
+}
+
+@media (max-width: 760px) {
+  .or-subject-strip .or-subject-buttons { display: none; }
+}

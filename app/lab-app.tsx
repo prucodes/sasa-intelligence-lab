@@ -221,13 +221,16 @@ function useUrlParam<T extends string>(param: string, allowed: readonly T[], fal
   return [value, set];
 }
 
-export function LabApp({ page, initialUlbKey, initialMode = 'DEMO', initialColorTheme = 'light', initialAnalyticsTab = 'collection' }: { page: Page; initialUlbKey?: string; initialMode?: DataMode; initialColorTheme?: ColorTheme; initialAnalyticsTab?: AnalyticsTab }) {
+export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialColorTheme = 'light', initialAnalyticsTab = 'collection' }: { page: Page; initialUlbKey?: string; initialMode?: DataMode; initialColorTheme?: ColorTheme; initialAnalyticsTab?: AnalyticsTab }) {
   const [mode, setMode] = useState<DataMode>(initialMode);
   const [colorTheme, setColorTheme] = useState<ColorTheme>(initialColorTheme);
   const [aboutOpen, setAboutOpen] = useState(false);
-  // On a static host the prerendered HTML is always the default (DEMO · light); the URL's
+  // Governed evidence is the product; the synthetic DEMO fixture is a capability story
+  // reachable at ?mode=demo. Opening on DEMO meant an unqualified link showed illustrative
+  // numbers to anyone who did not know to add a query parameter.
+  // On a static host the prerendered HTML is always the default (SAMPLE · light); the URL's
   // real mode/theme are applied on mount. Keep the shell hidden until that resolves so a
-  // shared ?mode=governed link never flashes synthetic DEMO values before hydration.
+  // shared ?mode=demo link never flashes governed values before hydration.
   const [booted, setBooted] = useState(false);
   // Presenter (Briefing) mode: a focused, chrome-free walk through the governed evidence.
   const [presenting, setPresenting] = useState(false);

@@ -9,13 +9,13 @@ const shapes = [{ d: 'Kurnool', path: 'M0 0L10 0L10 10Z' }, { d: 'No matched dis
 describe('connected overview interactions', () => {
   it('keeps issue, district, map, list and concentration in sync', () => {
     render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
-    const buttons = screen.getByRole('region', { name: 'Operational review issues' });
+    const buttons = screen.getByRole('navigation', { name: 'Operational review subjects' });
     expect(within(buttons).getAllByRole('button')).toHaveLength(8);
     expect(within(buttons).getByRole('button', { name: /Rural collection change/ })).toHaveAttribute('aria-pressed', 'true');
     fireEvent.click(within(buttons).getByRole('button', { name: /Vehicle delivery/ }));
     fireEvent.click(screen.getByRole('button', { name: /^Kurnool:/ }));
     expect(screen.getByRole('combobox', { name: 'Review district' })).toHaveValue('Kurnool');
-    expect(buttons).toHaveAccessibleDescription(/Totals across returned districts/);
+    expect(buttons).toHaveAccessibleDescription(/Totals cover returned districts only/);
     expect(screen.getByText(/One square = one usable ULB/)).toBeInTheDocument();
     const expected = getOverviewIssues()[0].rows.filter((row) => row.district === 'Kurnool' && row.value > 0);
     const list = screen.getByRole('list', { name: 'ULBs in selected review scope' });

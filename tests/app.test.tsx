@@ -9,8 +9,16 @@ describe('application shell and screens', () => {
     window.history.replaceState({}, '', '/');
   });
 
-  it('renders accessible primary navigation and mode control', () => {
+  it('opens on governed evidence, not the synthetic fixture', () => {
+    // An unqualified link is the one a department actually receives. It must not show
+    // illustrative numbers to someone who did not know to add a query parameter.
     render(<LabApp page="overview" />);
+    expect(screen.getByRole('combobox', { name: /data mode/i })).toHaveValue('SAMPLE');
+    expect(screen.getByText(/authenticated, governed SASA evidence/i)).toBeInTheDocument();
+  });
+
+  it('renders accessible primary navigation and mode control', () => {
+    render(<LabApp page="overview" initialMode="DEMO" />);
     const navigation = screen.getByRole('complementary', { name: /primary navigation/i });
     expect(navigation).toBeInTheDocument();
     expect(navigation.querySelectorAll('nav a')).toHaveLength(6);
@@ -19,7 +27,7 @@ describe('application shell and screens', () => {
   });
 
   it('switches between light and dark presentation themes', () => {
-    const { container } = render(<LabApp page="overview" />);
+    const { container } = render(<LabApp page="overview" initialMode="DEMO" />);
     const shell = container.querySelector('.app-shell');
     expect(shell).toHaveClass('theme-light');
     fireEvent.click(screen.getByRole('button', { name: /switch to dark theme/i }));
@@ -44,12 +52,13 @@ describe('application shell and screens', () => {
   });
 
   it('switches modes without mixing synthetic and sample values', () => {
-    render(<LabApp page="overview" />);
+    render(<LabApp page="overview" initialMode="DEMO" />);
     fireEvent.change(screen.getByRole('combobox', { name: /data mode/i }), { target: { value: 'SAMPLE' } });
     expect(screen.getByText(/authenticated, governed SASA evidence/i)).toBeInTheDocument();
     expect(screen.getAllByText(/6,509/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { name: /the operational picture/i })).toBeInTheDocument();
-    expect(screen.getByLabelText('Operational review issues')).toHaveTextContent(/Vehicle delivery.*Household toilets.*Legacy waste/i);
+    // The landing leads with the selected subject's finding, not a section label.
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/decline at every step/i);
+    expect(screen.getByLabelText('Operational review subjects')).toHaveTextContent(/Vehicle delivery.*Household toilets.*Legacy waste/i);
     expect(screen.getByLabelText('Four-month rural collection comparison')).toHaveTextContent('85,769');
     fireEvent.click(screen.getByRole('button', {name:/Household toilets/}));
     expect(screen.getByLabelText('Connected district and ULB review')).toHaveTextContent(/approvals awaiting completion/i);
@@ -59,7 +68,7 @@ describe('application shell and screens', () => {
   });
 
   it('supports an explicit unscored state in the radar', () => {
-    render(<LabApp page="gap-radar" />);
+    render(<LabApp page="gap-radar" initialMode="DEMO" />);
     expect(screen.getAllByText('Unscored').length).toBeGreaterThan(0);
     expect(screen.getByLabelText(/two by two performance gap matrix/i)).toBeInTheDocument();
   });
@@ -73,7 +82,7 @@ describe('application shell and screens', () => {
   });
 
   it('shows evidence disclosure in diagnostics', () => {
-    render(<LabApp page="diagnostics" initialUlbKey="demo-delta" />);
+    render(<LabApp page="diagnostics" initialMode="DEMO" initialUlbKey="demo-delta" />);
     expect(screen.getByRole('heading', { level: 2, name: /evidence inspector/i })).toBeInTheDocument();
     expect(screen.getByText(/local fixture · not a sasa source record/i)).toBeInTheDocument();
   });
@@ -91,7 +100,7 @@ describe('application shell and screens', () => {
   });
 
   it('labels readiness requirements as gates', () => {
-    render(<LabApp page="data-readiness" />);
+    render(<LabApp page="data-readiness" initialMode="DEMO" />);
     expect(screen.getByRole('heading', { name: /activation gates/i })).toBeInTheDocument();
     expect(screen.getByText(/requirements, not current capabilities/i)).toBeInTheDocument();
     expect(screen.queryByLabelText('Evidence activation pipeline')).not.toBeInTheDocument();
