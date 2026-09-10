@@ -19,6 +19,8 @@
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+import { sourceNumber } from '../lib/record-contract.mjs';
 
 const LARGE = resolve(process.cwd(), 'data/large-snapshots');
 const OUT = resolve(process.cwd(), 'data/aggregates');
@@ -30,9 +32,11 @@ const text = (value) => String(value ?? '').trim();
 const stated = (value) => text(value) !== '';
 
 async function main() {
-  const source = JSON.parse(await readFile(resolve(LARGE, `${RATHAMS}.json`), 'utf8'));
+  const currentRegister=resolve(LARGE,'current',RATHAMS,'complete.json');
+  const source = JSON.parse(await readFile(existsSync(currentRegister)?currentRegister:resolve(LARGE, `${RATHAMS}.json`), 'utf8'));
+  const currentOperators=resolve('data/current-snapshots',`${OPERATORS}.json`);
   const operatorsSource = JSON.parse(
-    await readFile(resolve(process.cwd(), 'data/full-snapshots', `${OPERATORS}.json`), 'utf8'),
+    await readFile(existsSync(currentOperators)?currentOperators:resolve(process.cwd(), 'data/full-snapshots', `${OPERATORS}.json`), 'utf8'),
   );
 
   // One entry per gram panchayat, built only from rows that agree with each other.
@@ -73,6 +77,8 @@ async function main() {
         partiallyFunctioning: 0,
         notFunctioning: 0,
         conditionNotStated: 0,
+        conditionConflicts:0,
+        functionalWithoutCentre:0,
         disputed: 0,
       });
     }
@@ -82,13 +88,22 @@ async function main() {
     if (entry.block) district.blocks.add(entry.block);
     if (!stated(entry.hasSwpc)) district.swpcNotStated += 1;
     else if (entry.hasSwpc.toLowerCase() === 'yes') district.withSwpc += 1;
-    else district.withoutSwpc += 1;
+    else if(entry.hasSwpc.toLowerCase()==='no') district.withoutSwpc += 1;
+    else district.swpcNotStated += 1;
 
     const condition = entry.condition.toLowerCase();
+    if(entry.hasSwpc.toLowerCase()!=='yes') {
+      if(stated(entry.condition)) {
+        district.conditionConflicts++;
+        if(condition.startsWith('fully')||condition.startsWith('partially')) district.functionalWithoutCentre++;
+      }
+      continue;
+    }
     if (!stated(entry.condition)) district.conditionNotStated += 1;
     else if (condition.startsWith('fully')) district.fullyFunctioning += 1;
     else if (condition.startsWith('partially')) district.partiallyFunctioning += 1;
-    else district.notFunctioning += 1;
+    else if(condition.startsWith('not')) district.notFunctioning += 1;
+    else district.conditionNotStated += 1;
   }
 
   // Mandal operators, deduplicated the same way: identical repeats collapse to one.
@@ -99,8 +114,8 @@ async function main() {
     const existing = operators.get(id);
     if (!existing) {
       operators.set(id, {
-        operators: Number(text(row.SWACHCH_RATHAM_MANDAL_OPERATORS)),
-        reported: Number(text(row.SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS)),
+        operators: sourceNumber(row.SWACHCH_RATHAM_MANDAL_OPERATORS),
+        reported: sourceNumber(row.SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS),
         signature,
         disputed: false,
       });
@@ -122,6 +137,8 @@ async function main() {
         partiallyFunctioning: district.partiallyFunctioning,
         notFunctioning: district.notFunctioning,
         conditionNotStated: district.conditionNotStated,
+        conditionConflicts:district.conditionConflicts,
+        functionalWithoutCentre:district.functionalWithoutCentre,
         disputedPanchayats: district.disputed,
         // Null rather than 0 when the source disagreed with itself or said nothing.
         mandalOperators: operator && !operator.disputed && Number.isFinite(operator.operators) ? operator.operators : null,
@@ -131,7 +148,7 @@ async function main() {
     .sort((a, b) => b.panchayats - a.panchayats || a.district.localeCompare(b.district));
 
   const manifest = {
-    version: 1,
+    version: 2,
     generatedFrom: {
       [RATHAMS]: {
         responseId: source.responseMetadata.responseId,

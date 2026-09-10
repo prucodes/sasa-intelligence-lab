@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "datasets": {
     "cd_waste_process_plants_revival_new1_api": {
       "tableKey": "cd_waste_process_plants_revival_new1_api",
@@ -10,12 +10,12 @@
         "2026-06": {
           "rows": 3,
           "content": "291f9f127a596345",
-          "entities": "a023356da90ae32b"
+          "entities": "1b6101cf4d9e3003"
         },
         "2026-07": {
           "rows": 3,
           "content": "b2bbad3e80110e4c",
-          "entities": "a023356da90ae32b"
+          "entities": "1b6101cf4d9e3003"
         }
       }
     },
@@ -25,65 +25,65 @@
       "rows": 336,
       "content": "09c27c3cad488014",
       "periods": {
-        "2026-202604": {
+        "2026-04": {
           "rows": 27,
           "content": "c39ffa2733dfcaf6",
-          "entities": "43e2ef1a5972909f"
+          "entities": "a1260838c0baa316"
         },
-        "2026-202605": {
+        "2026-05": {
           "rows": 28,
           "content": "74e5ec1b35e482c7",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202606": {
+        "2026-06": {
           "rows": 27,
           "content": "29c2e0aef09ac470",
-          "entities": "43e2ef1a5972909f"
+          "entities": "a1260838c0baa316"
         },
-        "2026-202607": {
+        "2026-07": {
           "rows": 27,
           "content": "44f424d756e2d549",
-          "entities": "43e2ef1a5972909f"
+          "entities": "a1260838c0baa316"
         },
-        "2026-202608": {
+        "2026-08": {
           "rows": 29,
           "content": "7a17962cf406b0fe",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202609": {
+        "2026-09": {
           "rows": 28,
           "content": "246c125bd945ae89",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202610": {
+        "2026-10": {
           "rows": 29,
           "content": "6e108d93ff8df68c",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202611": {
+        "2026-11": {
           "rows": 29,
           "content": "7dd536b2bf9fb039",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202612": {
+        "2026-12": {
           "rows": 28,
           "content": "ffea469143c868f7",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202701": {
+        "2027-01": {
           "rows": 28,
           "content": "29d2d24ee9bf1dcf",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202702": {
+        "2027-02": {
           "rows": 28,
           "content": "67e51d75df98d6a5",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202703": {
+        "2027-03": {
           "rows": 28,
           "content": "ce9c6c4d5dbcf6e2",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         }
       }
     },
@@ -96,17 +96,17 @@
         "2026-05": {
           "rows": 28,
           "content": "64eb2c7f7b5909d4",
-          "entities": "536190fd3d5425e0"
+          "entities": "a3ce0e9d45cdfb04"
         },
         "2026-06": {
           "rows": 28,
           "content": "1dc300670400e929",
-          "entities": "536190fd3d5425e0"
+          "entities": "a3ce0e9d45cdfb04"
         },
         "2026-07": {
           "rows": 28,
           "content": "1a361399688c518d",
-          "entities": "536190fd3d5425e0"
+          "entities": "a3ce0e9d45cdfb04"
         }
       }
     },
@@ -119,12 +119,12 @@
         "2026-06": {
           "rows": 35,
           "content": "7acb1ee4809cbfd2",
-          "entities": "5f5945840873c25b"
+          "entities": "62834b6f2504da84"
         },
         "2026-07": {
           "rows": 35,
           "content": "7815ee1df47991dd",
-          "entities": "5f5945840873c25b"
+          "entities": "62834b6f2504da84"
         }
       }
     },
@@ -160,12 +160,12 @@
         "2026-06": {
           "rows": 125,
           "content": "f19a6345bf39954e",
-          "entities": "36ff4b6d2bb6c443"
+          "entities": "253728e87e94f6e0"
         },
         "2026-07": {
           "rows": 121,
           "content": "8b727e6efaf051b8",
-          "entities": "36ff4b6d2bb6c443"
+          "entities": "4b771e558c30e2d0"
         }
       }
     },
@@ -178,7 +178,7 @@
         "unperiodized": {
           "rows": 24,
           "content": "c98cd85e8e1385ae",
-          "entities": "9916f5c13a4840e8"
+          "entities": "c5c55ac86101a13c"
         }
       }
     },
@@ -188,65 +188,65 @@
       "rows": 336,
       "content": "170c8c7e4750d623",
       "periods": {
-        "2026-202604": {
+        "2026-04": {
           "rows": 28,
           "content": "2d7e72c30c7192e3",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202605": {
+        "2026-05": {
           "rows": 28,
           "content": "86624ecd9af45f06",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202606": {
+        "2026-06": {
           "rows": 28,
           "content": "89bf182920ac7fd7",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202607": {
+        "2026-07": {
           "rows": 28,
           "content": "fbcf1a97d6637c5e",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202608": {
+        "2026-08": {
           "rows": 28,
           "content": "4d01946a14dce3bf",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202609": {
+        "2026-09": {
           "rows": 28,
           "content": "4b68d6f63be6523e",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202610": {
+        "2026-10": {
           "rows": 27,
           "content": "3de2f76ddd3a897c",
-          "entities": "4e96ac28d0cde5a8"
+          "entities": "27ed23778ab12cff"
         },
-        "2026-202611": {
+        "2026-11": {
           "rows": 29,
           "content": "08bd29e34e576b90",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202612": {
+        "2026-12": {
           "rows": 27,
           "content": "fdbdfcafd20ab61a",
-          "entities": "4e96ac28d0cde5a8"
+          "entities": "27ed23778ab12cff"
         },
-        "2026-202701": {
+        "2027-01": {
           "rows": 29,
           "content": "f2dc032d365f5dab",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202702": {
+        "2027-02": {
           "rows": 28,
           "content": "1aad7b7fcedb60c6",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202703": {
+        "2027-03": {
           "rows": 28,
           "content": "9ff83c0a487d097d",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         }
       }
     },
@@ -259,12 +259,12 @@
         "2026-06": {
           "rows": 6,
           "content": "73ba4abf0161dcfa",
-          "entities": "ec322b04ee30ff95"
+          "entities": "142047e824102fc4"
         },
         "2026-07": {
           "rows": 6,
           "content": "c660a44050b34360",
-          "entities": "ec322b04ee30ff95"
+          "entities": "142047e824102fc4"
         }
       }
     },
@@ -277,12 +277,12 @@
         "2026-06": {
           "rows": 126,
           "content": "284fa16cc7fb547d",
-          "entities": "d615134752cd23b6"
+          "entities": "4e58d2229b2bf7cc"
         },
         "2026-07": {
           "rows": 120,
           "content": "edb918c7434a6fdb",
-          "entities": "86da54a747086309"
+          "entities": "eab21a19e4320a00"
         }
       }
     },
@@ -295,12 +295,12 @@
         "2026-06": {
           "rows": 120,
           "content": "b80892584821ae0a",
-          "entities": "9fcc132859136e01"
+          "entities": "fbfc350186513589"
         },
         "2026-07": {
           "rows": 124,
           "content": "72a58950df6b9b44",
-          "entities": "35f4523c0b6a2818"
+          "entities": "bd6154f123c8e179"
         }
       }
     },
@@ -313,12 +313,12 @@
         "2026-06": {
           "rows": 120,
           "content": "c73c3165b64b8810",
-          "entities": "9fcc132859136e01"
+          "entities": "fbfc350186513589"
         },
         "2026-07": {
           "rows": 124,
           "content": "bb3e08a7f089583c",
-          "entities": "35f4523c0b6a2818"
+          "entities": "bd6154f123c8e179"
         }
       }
     },
@@ -331,12 +331,12 @@
         "2026-06": {
           "rows": 120,
           "content": "d3ab33f39e7b8451",
-          "entities": "9fcc132859136e01"
+          "entities": "fbfc350186513589"
         },
         "2026-07": {
           "rows": 124,
           "content": "05e6738648f21f39",
-          "entities": "35f4523c0b6a2818"
+          "entities": "bd6154f123c8e179"
         }
       }
     },
@@ -349,7 +349,7 @@
         "2026-08": {
           "rows": 26,
           "content": "66865bc580faac55",
-          "entities": "6f2d650c25027755"
+          "entities": "a6eef479c53fb763"
         }
       }
     },
@@ -362,7 +362,7 @@
         "2026-08": {
           "rows": 26,
           "content": "f80d4119351601ad",
-          "entities": "6f2d650c25027755"
+          "entities": "a6eef479c53fb763"
         }
       }
     },
@@ -372,15 +372,10 @@
       "rows": 84,
       "content": "d4e43ce573311320",
       "periods": {
-        "2026-05": {
-          "rows": 56,
-          "content": "608e1f204301d544",
-          "entities": "583641b2bbd5d056"
-        },
-        "2026-07": {
-          "rows": 28,
-          "content": "d81994844a0f0318",
-          "entities": "583641b2bbd5d056"
+        "unperiodized": {
+          "rows": 84,
+          "content": "d4e43ce573311320",
+          "entities": "da46c2d87a8dcca5"
         }
       }
     },
@@ -393,7 +388,7 @@
         "unperiodized": {
           "rows": 28,
           "content": "adf1422bcbfccdd4",
-          "entities": "536190fd3d5425e0"
+          "entities": "a3ce0e9d45cdfb04"
         }
       }
     },
@@ -403,20 +398,10 @@
       "rows": 84,
       "content": "3a746969acb500f4",
       "periods": {
-        "2026-05": {
-          "rows": 28,
-          "content": "4fbfa246b5c9bb86",
-          "entities": "536190fd3d5425e0"
-        },
-        "2026-06": {
-          "rows": 28,
-          "content": "913bbf9f1837fc7c",
-          "entities": "536190fd3d5425e0"
-        },
-        "2026-07": {
-          "rows": 28,
-          "content": "065990dc9b81431f",
-          "entities": "536190fd3d5425e0"
+        "unperiodized": {
+          "rows": 84,
+          "content": "3a746969acb500f4",
+          "entities": "da46c2d87a8dcca5"
         }
       }
     },
@@ -426,30 +411,30 @@
       "rows": 615,
       "content": "116fbfa0bc2a738c",
       "periods": {
-        "no-year-202603": {
+        "2026-03": {
           "rows": 123,
           "content": "e713a4d1d2a590e3",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202604": {
+        "2026-04": {
           "rows": 123,
           "content": "ae7ea8b7e55242d4",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202605": {
+        "2026-05": {
           "rows": 123,
           "content": "a1d20f918ba556b8",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202606": {
+        "2026-06": {
           "rows": 123,
           "content": "870b19a6a9992c55",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202607": {
+        "2026-07": {
           "rows": 123,
           "content": "6f4071b185019f59",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         }
       }
     },
@@ -462,12 +447,12 @@
         "2026-06": {
           "rows": 24,
           "content": "6a69c38fc8074c40",
-          "entities": "1da7faba8152395e"
+          "entities": "9916f5c13a4840e8"
         },
         "2026-07": {
           "rows": 24,
           "content": "faa17035abfb43cc",
-          "entities": "1da7faba8152395e"
+          "entities": "9916f5c13a4840e8"
         }
       }
     },
@@ -477,30 +462,30 @@
       "rows": 615,
       "content": "4bfe6a94ab3cfe2b",
       "periods": {
-        "no-year-202603": {
+        "2026-03": {
           "rows": 123,
           "content": "6717aef83031be7f",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202604": {
+        "2026-04": {
           "rows": 123,
           "content": "47a0519ed28bb082",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202605": {
+        "2026-05": {
           "rows": 123,
           "content": "156c38e5e022958d",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202606": {
+        "2026-06": {
           "rows": 123,
           "content": "3d6ca4780894ad0d",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202607": {
+        "2026-07": {
           "rows": 123,
           "content": "722d4e38581442ff",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         }
       }
     },
@@ -510,30 +495,30 @@
       "rows": 615,
       "content": "2f09405b1e21434f",
       "periods": {
-        "no-year-202603": {
+        "2026-03": {
           "rows": 123,
           "content": "29c4d69b71d1e9cb",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202604": {
+        "2026-04": {
           "rows": 123,
           "content": "3be05dad6fae8f69",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202605": {
+        "2026-05": {
           "rows": 123,
           "content": "0393065796882404",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202606": {
+        "2026-06": {
           "rows": 123,
           "content": "61fcde725d82cc7b",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         },
-        "no-year-202607": {
+        "2026-07": {
           "rows": 123,
           "content": "00369c8d8ac78c64",
-          "entities": "76318bd6de501668"
+          "entities": "d12d92d4488aa40d"
         }
       }
     },
@@ -546,7 +531,7 @@
         "unperiodized": {
           "rows": 56,
           "content": "801b84a669f8998d",
-          "entities": "cbe5cfdf7c2118a9"
+          "entities": "a3ce0e9d45cdfb04"
         }
       }
     },
@@ -559,12 +544,12 @@
         "2026-06": {
           "rows": 3,
           "content": "2856675de731945b",
-          "entities": "ea3b871cf8f58305"
+          "entities": "4a7d8d7a7948632d"
         },
         "2026-07": {
           "rows": 3,
           "content": "e5c8c503925eecc4",
-          "entities": "ea3b871cf8f58305"
+          "entities": "4a7d8d7a7948632d"
         }
       }
     },
@@ -646,12 +631,12 @@
         "2026-06": {
           "rows": 35,
           "content": "61fc3fa00f29aa9c",
-          "entities": "a6d9f8fd63b9ee74"
+          "entities": "d409bc870d87cdf7"
         },
         "2026-07": {
           "rows": 35,
           "content": "d18668b9d6088326",
-          "entities": "a6d9f8fd63b9ee74"
+          "entities": "d409bc870d87cdf7"
         }
       }
     },
@@ -664,12 +649,12 @@
         "2026-06": {
           "rows": 127,
           "content": "aff24862dd51d000",
-          "entities": "084e8bdedc90eeea"
+          "entities": "89702a2639f2bace"
         },
         "2026-07": {
           "rows": 119,
           "content": "7f7c3a214cdea96a",
-          "entities": "20419202f9637b12"
+          "entities": "c26258b81c3e7618"
         }
       }
     },
@@ -682,12 +667,12 @@
         "2026-06": {
           "rows": 12,
           "content": "3b19950b894325df",
-          "entities": "257a4bc2e673786a"
+          "entities": "348e9b3f3b2c6fde"
         },
         "2026-07": {
           "rows": 12,
           "content": "818c979880a5377c",
-          "entities": "257a4bc2e673786a"
+          "entities": "348e9b3f3b2c6fde"
         }
       }
     },
@@ -700,12 +685,12 @@
         "2026-06": {
           "rows": 82,
           "content": "e2e2cc590c96853a",
-          "entities": "fd8c25f193b85293"
+          "entities": "fb6d610a2805dce6"
         },
         "2026-07": {
           "rows": 84,
           "content": "73e6385a71c355e2",
-          "entities": "67d7d10e26bf3ad8"
+          "entities": "069f9e733cd57f6c"
         }
       }
     },
@@ -718,12 +703,12 @@
         "2026-06": {
           "rows": 6,
           "content": "ee099c39ada49c99",
-          "entities": "3e18f9b16d916b53"
+          "entities": "160d59a788e05edc"
         },
         "2026-07": {
           "rows": 6,
           "content": "053b4c802f28c70f",
-          "entities": "3e18f9b16d916b53"
+          "entities": "160d59a788e05edc"
         }
       }
     },
@@ -736,12 +721,12 @@
         "2026-06": {
           "rows": 108,
           "content": "16d7e22b4ce604a1",
-          "entities": "8251458c70afcb3b"
+          "entities": "246c4e92108e6764"
         },
         "2026-07": {
           "rows": 108,
           "content": "abb6dcebe49fe659",
-          "entities": "8251458c70afcb3b"
+          "entities": "246c4e92108e6764"
         }
       }
     },
@@ -751,10 +736,10 @@
       "rows": 5,
       "content": "ba71c43cd40e3234",
       "periods": {
-        "2024-no-month": {
+        "2024": {
           "rows": 5,
           "content": "ba71c43cd40e3234",
-          "entities": "cfb71c2f6edc1608"
+          "entities": "11629db650f7daa1"
         }
       }
     },
@@ -764,10 +749,10 @@
       "rows": 74,
       "content": "a8d06737d48ea2bc",
       "periods": {
-        "2024-no-month": {
+        "2024": {
           "rows": 74,
           "content": "a8d06737d48ea2bc",
-          "entities": "b83628dac26b26d5"
+          "entities": "40c7d24d894b4cdb"
         }
       }
     },
@@ -777,10 +762,10 @@
       "rows": 85,
       "content": "5c10cfc30143ae56",
       "periods": {
-        "2024-no-month": {
+        "2024": {
           "rows": 85,
           "content": "5c10cfc30143ae56",
-          "entities": "f18e4091e10e7626"
+          "entities": "b714d533d3f3d9ba"
         }
       }
     },
@@ -793,12 +778,12 @@
         "2026-06": {
           "rows": 14,
           "content": "5ca7aba4d6e2fe65",
-          "entities": "754be3571b53ceb4"
+          "entities": "92b194f3e5d7d429"
         },
         "2026-07": {
           "rows": 14,
           "content": "6441eee93dd5a424",
-          "entities": "754be3571b53ceb4"
+          "entities": "92b194f3e5d7d429"
         }
       }
     },
@@ -811,17 +796,17 @@
         "2026-05": {
           "rows": 28,
           "content": "ad12c10a99e287e4",
-          "entities": "536190fd3d5425e0"
+          "entities": "da46c2d87a8dcca5"
         },
         "2026-06": {
           "rows": 28,
           "content": "a423bf064834bd8e",
-          "entities": "536190fd3d5425e0"
+          "entities": "da46c2d87a8dcca5"
         },
         "2026-07": {
           "rows": 28,
           "content": "66094bcaf321b7f3",
-          "entities": "536190fd3d5425e0"
+          "entities": "da46c2d87a8dcca5"
         }
       }
     },
@@ -834,7 +819,7 @@
         "2026-07": {
           "rows": 28,
           "content": "fcfe064380cff728",
-          "entities": "834d3230e012f4fc"
+          "entities": "1b693c51bc4529b3"
         }
       }
     },
@@ -847,7 +832,7 @@
         "2026-07": {
           "rows": 28,
           "content": "46662b7ac6094b51",
-          "entities": "834d3230e012f4fc"
+          "entities": "1b693c51bc4529b3"
         }
       }
     },
@@ -860,7 +845,7 @@
         "2026-07": {
           "rows": 28,
           "content": "5e1c515ad3bdfd73",
-          "entities": "834d3230e012f4fc"
+          "entities": "1b693c51bc4529b3"
         }
       }
     },
@@ -873,12 +858,12 @@
         "2026-06": {
           "rows": 122,
           "content": "a0485ed7407976bb",
-          "entities": "2268c14a76055f5c"
+          "entities": "8d505fd5a8d417c3"
         },
         "2026-07": {
           "rows": 120,
           "content": "886d94ca19b681db",
-          "entities": "2268c14a76055f5c"
+          "entities": "95439bbf7a01a979"
         }
       }
     },
@@ -888,65 +873,65 @@
       "rows": 336,
       "content": "09c27c3cad488014",
       "periods": {
-        "2026-202604": {
+        "2026-04": {
           "rows": 27,
           "content": "c39ffa2733dfcaf6",
-          "entities": "43e2ef1a5972909f"
+          "entities": "a1260838c0baa316"
         },
-        "2026-202605": {
+        "2026-05": {
           "rows": 28,
           "content": "74e5ec1b35e482c7",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202606": {
+        "2026-06": {
           "rows": 27,
           "content": "29c2e0aef09ac470",
-          "entities": "43e2ef1a5972909f"
+          "entities": "a1260838c0baa316"
         },
-        "2026-202607": {
+        "2026-07": {
           "rows": 27,
           "content": "44f424d756e2d549",
-          "entities": "43e2ef1a5972909f"
+          "entities": "a1260838c0baa316"
         },
-        "2026-202608": {
+        "2026-08": {
           "rows": 29,
           "content": "7a17962cf406b0fe",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202609": {
+        "2026-09": {
           "rows": 28,
           "content": "246c125bd945ae89",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202610": {
+        "2026-10": {
           "rows": 29,
           "content": "6e108d93ff8df68c",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202611": {
+        "2026-11": {
           "rows": 29,
           "content": "7dd536b2bf9fb039",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202612": {
+        "2026-12": {
           "rows": 28,
           "content": "ffea469143c868f7",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202701": {
+        "2027-01": {
           "rows": 28,
           "content": "29d2d24ee9bf1dcf",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202702": {
+        "2027-02": {
           "rows": 28,
           "content": "67e51d75df98d6a5",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         },
-        "2026-202703": {
+        "2027-03": {
           "rows": 28,
           "content": "ce9c6c4d5dbcf6e2",
-          "entities": "834d3230e012f4fc"
+          "entities": "27602db4b92b7878"
         }
       }
     },
@@ -956,10 +941,10 @@
       "rows": 206,
       "content": "3a3352e2bcbbb394",
       "periods": {
-        "2024-no-month": {
+        "2024": {
           "rows": 206,
           "content": "3a3352e2bcbbb394",
-          "entities": "886da95c333674e6"
+          "entities": "bbaa51fbf74405d4"
         }
       }
     }

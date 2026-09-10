@@ -1,14 +1,10 @@
+import { sourcePeriod, sourceEntity } from '../lib/record-contract.mjs';
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 export const snapshotDir = resolve(process.cwd(), 'data/full-snapshots');
 export const manifestPath = resolve(process.cwd(), 'data/snapshot-fingerprints.json');
-
-const monthNumbers = new Map([
-  ['JANUARY', 1], ['FEBRUARY', 2], ['MARCH', 3], ['APRIL', 4], ['MAY', 5], ['JUNE', 6],
-  ['JULY', 7], ['AUGUST', 8], ['SEPTEMBER', 9], ['OCTOBER', 10], ['NOVEMBER', 11], ['DECEMBER', 12],
-]);
 
 function digest(value) {
   return createHash('sha256').update(value).digest('hex').slice(0, 16);
@@ -24,22 +20,9 @@ function hashRows(rows) {
   return digest(rows.map(canonicalRow).sort().join('\n'));
 }
 
-// The period a row reports itself to be in. Snapshots use four different month fields.
-export function periodOf(row) {
-  const year = row.year ?? row.fin_year?.slice(0, 4) ?? row.financial_year?.slice(0, 4) ?? '';
-  const rawMonth = row.month_number ?? row.month_id ?? row.mnth_no ?? row.month ?? '';
-  const named = monthNumbers.get(String(row.month_name ?? row.month ?? '').trim().toUpperCase());
-  const month = Number.parseInt(rawMonth, 10);
-  const resolved = Number.isFinite(month) ? month : named;
-  if (!year && resolved === undefined) return 'unperiodized';
-  return `${year || 'no-year'}-${resolved === undefined ? 'no-month' : String(resolved).padStart(2, '0')}`;
-}
-
-function entityOf(row) {
-  const district = String(row.district_name ?? row.dstrt_nm ?? '').trim().toUpperCase();
-  const ulb = String(row.ulb_name ?? '').trim().toUpperCase();
-  return `${district}|${ulb}`;
-}
+// Missing periods stay explicit; YYYYMM, daily dates and current identity fields are supported.
+export const periodOf = (row) => sourcePeriod(row) ?? 'unperiodized';
+const entityOf = (row) => sourceEntity(row) ?? 'unidentified';
 
 export function fingerprintEnvelope(envelope) {
   const rows = Array.isArray(envelope.records) ? envelope.records : [];
@@ -76,7 +59,7 @@ export async function fingerprintDirectory() {
     const envelope = JSON.parse(await readFile(resolve(snapshotDir, file), 'utf8'));
     datasets[file.replace(/\.json$/, '')] = fingerprintEnvelope(envelope);
   }
-  return { version: 1, datasets };
+  return { version: 2, datasets };
 }
 
 // Returns one plain-language line per difference. Empty means the vintage is intact.

@@ -17,7 +17,12 @@ import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { datasets, periodOf, pick, pickNumber } from './dataset-map.mjs';
 
-const rawDir = (tableKey) => resolve(process.cwd(), 'data/large-snapshots', tableKey);
+/** Must mirror `rawDir` in ingest.mjs, or a filtered pull cannot be aggregated. */
+const rawDir = (tableKey, filters = {}) => {
+  const keys = Object.keys(filters).sort();
+  const suffix = keys.length ? `__${keys.map((key) => `${key}-${filters[key]}`).join('_')}` : '';
+  return resolve(process.cwd(), 'data/large-snapshots', `${tableKey}${suffix}`);
+};
 const outDir = resolve(process.cwd(), 'data/aggregates');
 
 /** Accumulator for one entity in one period. */
@@ -143,13 +148,25 @@ export function rollUpToUlb(rows, config) {
 
 async function main() {
   const tableKey = process.argv[2];
+  // Mirrors ingest.mjs: a filtered pull lands in a suffixed directory, so aggregating it
+  // needs the same filters or it reads the wrong month — or nothing at all.
+  const filters = {};
+  const args = process.argv.slice(3);
+  for (let index = 0; index < args.length; index += 1) {
+    if (args[index] === '--month' && args[index + 1]) filters.month_id = args[index += 1];
+    else if (args[index] === '--year' && args[index + 1]) filters.year = args[index += 1];
+    else if (args[index] === '--filter' && args[index + 1]) {
+      const [name, ...value] = args[index += 1].split('=');
+      if (name && value.length) filters[name] = value.join('=');
+    }
+  }
   const config = datasets[tableKey];
   if (!config) {
     console.error(`Unknown dataset "${tableKey ?? ''}". Known keys: ${Object.keys(datasets).join(', ')}`);
     process.exit(1);
   }
 
-  const dir = rawDir(tableKey);
+  const dir = rawDir(tableKey, filters);
   let files;
   try {
     files = (await readdir(dir)).filter((name) => name.startsWith('page-') && name.endsWith('.json')).sort();

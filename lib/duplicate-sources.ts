@@ -88,6 +88,14 @@ export function getDuplicateSourceSummary(): DuplicateSourceSummary {
     groups,
     redundantKeys: groups.reduce((total, group) => total + group.duplicates.length, 0),
     redundantRows: groups.reduce((total, group) => total + group.rows * group.duplicates.length, 0),
-    boundary: 'Detected by comparing row content, not dataset names. A duplicate is excluded from totals but still retained: which endpoint a department reads from is itself a fact worth keeping.',
+    boundary: 'Detected by comparing row content, not dataset names. Repeated endpoint copies are excluded from content totals and combined programme use. Raw-retention counts still include them and are labelled separately.',
   };
+}
+
+/** Physical retention and endpoint-distinct content are different facts. */
+export function getCorpusEvidenceCounts() {
+  const aliases=duplicateSourceKeys();
+  const rawRows=governedSnapshots.reduce((sum,source)=>sum+source.records.length,0);
+  const rowsExcludingAliases=governedSnapshots.filter(source=>!aliases.has(source.responseMetadata.tableKey)).reduce((sum,source)=>sum+source.records.length,0);
+  return {rawRows,rowsExcludingAliases,aliasRows:rawRows-rowsExcludingAliases,aliasRoutes:aliases.size};
 }

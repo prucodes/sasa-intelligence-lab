@@ -1,3 +1,4 @@
+import currentCatalogue from '@/data/current-catalogue.json';
 export type CatalogueTheme =
   | 'Collection & machinery'
   | 'Waste management'
@@ -561,12 +562,11 @@ const liveNotIngested = notYetIngested.filter((dataset) => typeof dataset.liveRo
 
 export const readinessCatalogueStats = {
   documentedDatasets: readinessCatalogue.length,
-  /**
-   * Datasets the platform actually grants this account, confirmed against the published
-   * API docs (`/docs#authentication`) on 2026-09-03: the account has access to exactly 33.
-   * Computed from sourceState so it cannot drift from the catalogue.
-   */
-  platformAvailable: readinessCatalogue.filter((dataset) => dataset.sourceState === 'AUTHORIZED').length,
+  /** Current account catalogue, separate from retained historical routes. */
+  platformAvailable: currentCatalogue.authorizedRoutes,
+  currentCheckedAt: currentCatalogue.checkedAt,
+  notInCurrentCatalogue: readinessCatalogue.filter(dataset=>!currentCatalogue.datasets.some(current=>current.key===dataset.tableKey)).length,
+  freshResponsesRetained: currentCatalogue.datasets.filter(dataset=>dataset.status==='retained').length,
   /**
    * Keys documented in a source doc but not readable by this account. The 3 SASA PR
    * gram-panchayat keys return 404; the 10 further CDMA concepts currently resolve to

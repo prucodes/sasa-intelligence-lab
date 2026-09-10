@@ -8,6 +8,16 @@ import { readinessCatalogueStats } from '@/lib/catalogue';
 import { governedSnapshotStats } from '@/lib/snapshots';
 import { datasets, diagnosticsKeyFor } from '@/lib/domain';
 import './overview-review.css';
+import './overview-consistency.css';
+import './evidence-expansion.css';
+import { RuralMovement } from './rural-movement';
+import { DeliveryPlans } from './delivery-plans';
+import {ProgrammeExplorer} from './programme-explorer';
+import { RuralSanitation } from './rural-sanitation';
+import { ReportingContinuity } from './reporting-continuity';
+import { getRuralMovement } from '@/lib/rural-movement';
+import { getCorpusEvidenceCounts } from '@/lib/duplicate-sources';
+
 
 const format = (value: number) => value.toLocaleString('en-IN', { maximumFractionDigits: 1 });
 const short = (value: number) => value >= 1_000_000 ? `${(value / 1_000_000).toFixed(2)}M` : format(value);
@@ -24,6 +34,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
 }) {
   const issues = useMemo(() => getOverviewIssues(), []);
   const movements = useMemo(() => getReportedMovements(), []);
+  const [subject, setSubject] = useState('rural-change');
   const [selected, setSelected] = useState<ReviewIssueId>('sanitation');
   const [district, setDistrict] = useState('');
   const [showAll, setShowAll] = useState(false);
@@ -58,6 +69,19 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
     ? `${movement.decreased} lower · ${movement.increased} higher · ${movement.unchanged} unchanged`
     : `All ${movement.matched} matched ULBs repeated the same reported value.`;
   const scopeName = district || 'All returned districts';
+  const urban = issues.some(issue=>issue.id===subject);
+  const corpus = getCorpusEvidenceCounts();
+  const ruralChange = getRuralMovement();
+  const subjects = [
+    {id:'rural-change',title:'Rural collection change',scope:'Common GP-day cohort · May → August',detail:`${(ruralChange.series[0].comparable.collectionRate*100).toFixed(2)}% → ${(ruralChange.series.at(-1)!.comparable.collectionRate*100).toFixed(2)}% · ${ruralChange.cohort.pairs.toLocaleString('en-IN')} pairs`},
+    {id:'works',title:'Works delivery & plans',scope:'District · 2026–27',detail:'Reported months + forward targets'},
+    ...issues.map(issue=>({id:issue.id,title:issue.title,scope:`ULB · ${issue.period}`,detail:`${short(issue.total)} ${issue.quantity}`})),
+    {id:'rural-centres',title:'Rural processing centres',scope:'Gram panchayat register',detail:'Presence, condition & inconsistencies'},
+    {id:'reporting',title:'Daily reporting patterns',scope:'Source-specific daily evidence',detail:'Activity, genuine zeros & missing data'},
+    {id:'programmes',title:'Community, green & water',scope:'ULB and district · kept separate',detail:'Explore one programme by place and period'},
+  ];
+
+  const chooseSubject=(id:string)=>{setSubject(id);if(issues.some(issue=>issue.id===id)){setSelected(id as ReviewIssueId);chooseDistrict('');}};
 
   return <div className="overview-review" data-issue={selected}>
     <header className="or-intro">
@@ -65,7 +89,18 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
       <a className="or-edition" href={href('/data-readiness')}><span>GOVERNED EVIDENCE</span><b>2026 operational review <Arrow/></b></a>
     </header>
 
-    <section className="or-workspace" aria-label="Connected district and ULB review">
+    <section className="overview-subjects" aria-label="Operational review issues" aria-describedby="or-selector-basis">
+      <p id="or-selector-basis">Choose a subject <span>Totals across returned districts where supported · each view keeps its own population and period</span></p>
+      <label className="overview-mobile-subject">Review subject<select value={subject} onChange={event=>chooseSubject(event.target.value)}>{subjects.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select><small>{subjects.find(item=>item.id===subject)?.scope}</small></label>
+      <div>{subjects.map((item,index)=><button key={item.id} aria-pressed={subject===item.id} onClick={()=>chooseSubject(item.id)}><span>{String(index+1).padStart(2,'0')} / {item.scope}</span><b>{item.title}</b><small>{item.detail}</small></button>)}</div>
+    </section>
+    <div className="overview-selected" aria-live="polite">
+    {subject==='rural-change' && <RuralMovement compact href={`${href('/gap-radar')}&view=movement`}/>}
+    {subject==='works' && <DeliveryPlans overview/>}
+    {subject==='rural-centres' && <RuralSanitation/>}
+    {subject==='reporting' && <ReportingContinuity/>}
+    {subject==='programmes' && <ProgrammeExplorer/>}
+    {urban && <><section className="or-workspace" aria-label="Connected district and ULB review">
       <div className="or-stage">
         <div className="or-story" key={selected}>
           <div className="or-story-top"><span>0{issues.indexOf(active) + 1} / REVIEW FOCUS</span><span>{active.period}</span></div>
@@ -97,12 +132,6 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
         </div>
 
       </div>
-      <section className="or-issues" aria-label="Operational review issues" aria-describedby="or-selector-basis">
-        <p id="or-selector-basis" className="or-selector-basis">Choose a review focus <span>Totals across returned districts · source periods shown in the selected view</span></p>
-        {issues.map((issue, index) => <button key={issue.id} type="button" aria-pressed={selected === issue.id} className={selected === issue.id ? 'is-selected' : ''} onClick={() => { setSelected(issue.id); chooseDistrict(''); }}>
-          <span className="or-issue-index">0{index + 1}</span><span className="or-issue-copy"><b>{issue.title}</b><small>{issue.quantity}</small></span><strong>{issue.rows.length ? short(issue.total) : 'Not returned'}</strong><span className="or-issue-arrow" aria-hidden="true">↗</span>
-        </button>)}
-      </section>
       <div className="or-detail-layout">
         <aside className="or-focus-context">
           <span className="or-kicker">From scale to action</span>
@@ -136,9 +165,11 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
       <div className="or-reading"><span className="or-kicker">Read this correctly</span><p>{active.boundary}</p><small>Unchanged reports do not prove inactivity. Two periods do not establish a persistent trend.</small></div>
     </section>
 
-    <section className="or-readiness" aria-label="Evidence scope and decision boundary"><div><span className="or-kicker">Ready for descriptive review</span><p><b>{governedSnapshotStats.completeDatasets}</b> complete datasets <span> / {readinessCatalogueStats.platformAvailable} granted</span> · {format(governedSnapshotStats.records)} retained rows</p><small>{anchorRegistry.length} observed ULB-name candidates provide a working reference, not an official statewide denominator.</small></div><a href={href('/gap-radar')}><span>Scoring remains</span><b>UNSCORED</b><small>Inspect activation gates →</small></a></section>
-    {integrity}
+    </>}
+    </div>
+    <section className="or-readiness" aria-label="Evidence scope and decision boundary"><div><span className="or-kicker">Ready for descriptive review</span><p><b>{governedSnapshotStats.completeDatasets}</b> historical exports <span> · {readinessCatalogueStats.platformAvailable} current catalogue routes</span> · {format(corpus.rawRows)} raw retained rows</p><small>{anchorRegistry.length} observed ULB-name candidates provide a working reference. {format(corpus.rowsExcludingAliases)} bundled rows after excluding repeated endpoint copies; internal row duplicates are a separate check.</small></div><a href={href('/gap-radar')}><span>Evidence investigations</span><b>OPEN GAP RADAR</b><small>Inspect changes, cohorts & works →</small></a></section>
+    {integrity&&<details className="vi-disclosure"><summary>Source quality findings and revision checks</summary>{integrity}</details>}
     <div className="or-context-links"><a href={`${href('/operational-analytics')}&tab=processing`}><span>Supporting evidence</span><b>Processing facilities & source statuses</b><Arrow/></a><a href={`${href('/operational-analytics')}&tab=outcomes`}><span>Historical context / 2024</span><b>Swachh outcomes & reported ranks</b><Arrow/></a></div>
-    <details className="or-audit"><summary>Methods & additional retained history <span>Source rules and community programmes</span></summary><div><p>{active.rows.length} ULB candidates have the fields needed for this issue. Missing or conflicting measurements are held out; genuine zeros stay in the cohort. Shortfalls are calculated per ULB before summing, so excess delivery in one ULB never cancels another ULB’s shortfall.</p><p>The map and ranking use the same eligible records. Concentration means the top five’s share of the selected source’s reported shortfall. Map matching does not approve a cross-source identity.</p>{children}</div></details>
+    <details className="or-audit"><summary>Methods & additional retained history <span>Source rules and community programmes</span></summary><div><p>For the urban review, {active.rows.length} ULB candidates have the fields needed for this issue. Missing or conflicting measurements are held out; genuine zeros stay in the cohort. Shortfalls are calculated per ULB before summing, so excess delivery in one ULB never cancels another ULB’s shortfall.</p><p>The map and ranking use the same eligible records. Concentration means the top five’s share of the selected source’s reported shortfall. Map matching does not approve a cross-source identity.</p>{children}</div></details>
   </div>;
 }

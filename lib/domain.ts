@@ -1,4 +1,6 @@
-import { authorizedCatalogue, authorizedCatalogueStats, readinessCatalogue, readinessCatalogueStats } from '@/lib/catalogue';
+import { getCorpusEvidenceCounts } from './duplicate-sources';
+import { aggregateEvidenceByKey } from './aggregate-evidence';
+import { authorizedCatalogue, readinessCatalogue, readinessCatalogueStats } from '@/lib/catalogue';
 import type { Coverage } from '@/lib/coverage';
 import {
   governedSnapshotByKey,
@@ -401,6 +403,7 @@ function joinReadinessFor(columns: string[]): string {
 
 const sampleReadinessRows: ReadinessRow[] = readinessCatalogue.map((dataset) => {
   const snapshot = governedSnapshotByKey.get(dataset.tableKey);
+  const aggregate = aggregateEvidenceByKey.get(dataset.tableKey);
   const documentedPending = dataset.sourceState === 'DOCUMENTED — INGESTION PENDING';
   const complete = Boolean(snapshot)
     && snapshot!.responseMetadata.hasNextPage === false
@@ -413,13 +416,13 @@ const sampleReadinessRows: ReadinessRow[] = readinessCatalogue.map((dataset) => 
     fields: dataset.fieldCount,
     frequency: dataset.frequency,
     columns: dataset.columns,
-    records: snapshot?.records.length ?? null,
-    period: snapshot ? snapshotPeriod(snapshot) : documentedPending ? 'Not retained · documentation example only' : 'Unavailable',
+    records: snapshot?.records.length ?? aggregate?.rows ?? null,
+    period: snapshot ? snapshotPeriod(snapshot) : aggregate ? aggregate.period : documentedPending ? 'Not retained · documentation example only' : 'Unavailable',
     snapshotComplete: complete,
     dataLakeLink: dataset.dataLakeLink,
     publicSchema: dataset.schemaVerification,
-    payloadEvidence: documentedPending ? dataset.payloadEvidence : complete ? `COMPLETE SNAPSHOT · ${snapshot!.records.length} ROWS` : 'SOURCE ERROR · NO SNAPSHOT',
-    joinReadiness: documentedPending ? dataset.joinEligibility : joinReadinessFor(dataset.columns),
+    payloadEvidence: aggregate && !snapshot ? `AGGREGATE RETAINED · ${aggregate.quality}` : documentedPending ? dataset.payloadEvidence : complete ? `COMPLETE SNAPSHOT · ${snapshot!.records.length} ROWS` : 'SOURCE ERROR · NO SNAPSHOT',
+    joinReadiness: aggregate && !snapshot ? aggregate.grain : documentedPending ? dataset.joinEligibility : joinReadinessFor(dataset.columns),
     eligibility: 'UNSCORED',
     representative: dataset.retainedExcerpt,
     sourceState: dataset.sourceState,
@@ -508,15 +511,15 @@ const sampleData: ModeDataset = {
   ], radar: sampleRadar, diagnostics: sampleDiagnostics,
   readiness: {
     cards: [
-      { label: 'Authorized datasets', value: String(authorizedCatalogueStats.authorizedDatasets), detail: `${readinessCatalogueStats.documentedDatasets} documented · ${readinessCatalogueStats.documentedPending} ingestion pending`, tone: 'teal' },
-      { label: 'Complete snapshots', value: `${governedSnapshotStats.completeDatasets} / ${governedSnapshotStats.authorizedDatasets}`, detail: 'pagination totals reconciled', tone: 'blue' },
-      { label: 'Retained records', value: governedSnapshotStats.records.toLocaleString('en-IN'), detail: 'authenticated governed JSON rows', tone: 'green' },
+      { label: 'Current authorized routes', value: String(readinessCatalogueStats.platformAvailable), detail: `Current account catalogue · separate from retained historical exports`, tone: 'teal' },
+      { label: 'Complete snapshots', value: String(governedSnapshotStats.completeDatasets), detail: 'Bundled historical exports · response totals reconciled', tone: 'blue' },
+      { label: 'Retained raw records', value: governedSnapshotStats.records.toLocaleString('en-IN'), detail: `${getCorpusEvidenceCounts().rowsExcludingAliases.toLocaleString('en-IN')} after repeated endpoint copies are excluded`, tone: 'green' },
       { label: 'ULB candidates', value: String(governedSnapshotStats.baselineUlbCandidates), detail: `${governedSnapshotStats.baselineUlbRows} latest-period IHHL rows · ${currentIhhlCandidateCount} current candidates`, tone: 'violet' },
     ], rows: sampleReadinessRows,
     gates: [
       { title: 'Governed source access', detail: `${readinessCatalogueStats.platformAvailable} account-granted endpoints; ${readinessCatalogueStats.liveNotIngestedDatasets} readable CDMA responses await complete retention`, state: 'met' },
-      { title: 'Complete paginated snapshots', detail: '29 complete; Gobardhan export currently fails', state: 'blocked' },
-      { title: 'Documented PR integrations', detail: 'Three additional schemas are known; full authenticated exports and semantic review remain pending', state: 'blocked' },
+      { title: 'Bundled response totals reconcile', detail: `${governedSnapshotStats.completeDatasets} of ${governedSnapshotStats.retrievedDatasets} bundled exports reconcile to response metadata; Gobardhan is retained. Grid coverage is assessed separately.`, state: governedSnapshotStats.completeDatasets===governedSnapshotStats.retrievedDatasets ? 'met' : 'blocked' },
+      { title: 'Rural matched comparison available', detail: 'May through August days 1–7 support one validated common GP-day cohort and reported first-week trajectories.', state: 'met' },
       { title: 'Reviewed ULB crosswalk', detail: 'Required because selected sources expose names only', state: 'blocked' },
       { title: 'Same-year outcome data', detail: 'Required before any asset–outcome flag', state: 'blocked' },
       { title: 'Persistent bottleneck evidence', detail: 'Requires at least six consecutive validated months', state: 'future' },

@@ -1,19 +1,7 @@
+import { uniqueSourceRecords } from './record-contract.mjs';
 import { governedSnapshotByKey, normalizeSourceName, type SnapshotRecord } from './snapshots';
 
-/**
- * Plan against delivery, over a full financial year.
- *
- * Everything else in this product compares two reported periods and says so plainly:
- * "two periods do not establish a persistent trend." The CDMA works datasets retained on
- * 2026-09-08 are the first sources with a real horizon — a target for every month of
- * 2026-27, and achievement filled in as months elapse.
- *
- * That makes one genuinely new reading possible, and it is narrower than it looks. A
- * month with no achievement figure has not been reported, and an unreported month is not
- * a month of zero delivery. So the elapsed window is derived from the data itself: the
- * last month any district reported an achievement. Everything after that is plan only,
- * and is drawn and counted separately.
- */
+/** Selected-period target and achievement. Additivity across months is unconfirmed. */
 
 export interface PlanMonth {
   /** `YYYYMM` as the source encodes it. */
@@ -25,6 +13,8 @@ export interface PlanMonth {
   achievement: number | null;
   /** No district reported an achievement for this month. */
   unreported: boolean;
+  reportedDistricts:number;
+  targetDistricts:number;
 }
 
 export interface PlanDistrict {
@@ -33,6 +23,8 @@ export interface PlanDistrict {
   achievement: number;
   /** Months in the elapsed window this district never reported. */
   silentMonths: number;
+  targetMissing:boolean;
+  achievementMissing:boolean;
 }
 
 /**
@@ -72,11 +64,14 @@ export interface DeliveryPlan {
   plannedTotal: number;
   plannedToDate: number;
   deliveredToDate: number;
-  /** Delivered / planned across the elapsed window only. Null if nothing is planned. */
+  /** Achievement / target for selected-period districts with both measures. */
   paceToDate: number | null;
   rows: number;
   excluded: number;
   boundary: string;
+  selectedMonth:PlanMonth|null;
+  retrievedAt:string;
+  expectedDistricts:number;
 }
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -168,7 +163,7 @@ function contentSignature(records: SnapshotRecord[]): string {
     .join('\n');
 }
 
-function buildPlan(spec: PlanSpec): DeliveryPlan | null {
+function buildPlan(spec: PlanSpec, selectedPeriod: string | null = null): DeliveryPlan | null {
   const snapshot = governedSnapshotByKey.get(spec.tableKey);
   if (!snapshot) return null;
 
@@ -181,28 +176,23 @@ function buildPlan(spec: PlanSpec): DeliveryPlan | null {
   // both shapes. That bucket never becomes a PlanMonth, so nothing is drawn for it.
   const UNPERIODIZED = '';
 
-  for (const record of snapshot.records) {
+  const prepared = snapshot.records.flatMap(record => {
     const period = periodOf(record, spec.period);
     const district = pick(record, spec.districtFields);
-    if (!district || (spec.period !== 'none' && !period)) { excluded += 1; continue; }
-    const key = normalizeSourceName(district);
-    labels.set(key, district);
-    const cell: Cell = {
-      target: measurement(pick(record, spec.targetFields) || undefined),
-      achievement: measurement(pick(record, spec.achievementFields) || undefined),
-    };
-    const bucket = period?.monthId ?? UNPERIODIZED;
-    if (!byMonth.has(bucket)) byMonth.set(bucket, new Map());
-    const districts = byMonth.get(bucket)!;
-    const existing = districts.get(key);
-    if (existing && JSON.stringify(existing) !== JSON.stringify(cell)) {
-      // Two different measurements for one district-period: neither is selected.
-      districts.set(key, { target: null, achievement: null });
-      excluded += 1;
-      continue;
-    }
-    districts.set(key, cell);
+    if (!district || (spec.period !== 'none' && !period)) { excluded++; return []; }
+    return [{ key: `${period?.monthId ?? UNPERIODIZED}|${normalizeSourceName(district)}`, bucket: period?.monthId ?? UNPERIODIZED, district,
+      target: measurement(pick(record,spec.targetFields) || undefined), achievement: measurement(pick(record,spec.achievementFields) || undefined) }];
+  });
+  const unique = uniqueSourceRecords(prepared, (row: typeof prepared[number])=>row.key, (row: typeof prepared[number])=>JSON.stringify([row.target,row.achievement]));
+  excluded += unique.quality.conflictingRows + unique.quality.missingKeyRows;
+  // Keep the observed district frame even when a conflicting cell is held out.
+  for (const row of prepared) {
+    const key=normalizeSourceName(row.district);
+    labels.set(key,row.district);
+    if(!byMonth.has(row.bucket)) byMonth.set(row.bucket,new Map());
+    byMonth.get(row.bucket)!.set(key,{target:null,achievement:null});
   }
+  for (const row of unique.records) byMonth.get(row.bucket)!.set(normalizeSourceName(row.district),{target:row.target,achievement:row.achievement});
 
   const monthIds = [...byMonth.keys()].filter((id) => id !== UNPERIODIZED).sort();
   const months: PlanMonth[] = monthIds.map((monthId) => {
@@ -217,6 +207,8 @@ function buildPlan(spec: PlanSpec): DeliveryPlan | null {
       target: targets.length ? targets.reduce((sum, cell) => sum + cell.target!, 0) : null,
       achievement: reported.length ? reported.reduce((sum, cell) => sum + cell.achievement!, 0) : null,
       unreported: reported.length === 0,
+      reportedDistricts:reported.length,
+      targetDistricts:targets.length,
     };
   });
 
@@ -226,17 +218,18 @@ function buildPlan(spec: PlanSpec): DeliveryPlan | null {
   const elapsed = lastReported >= 0 ? months.slice(0, lastReported + 1) : [];
   const remaining = lastReported >= 0 ? months.slice(lastReported + 1) : months;
 
-  // For a point-in-time source the whole (single) bucket is the counted scope.
+  // These sources do not establish additivity. Count one selected source month only.
+  const selectedMonth = (selectedPeriod ? months.find(m=>m.monthId===selectedPeriod.replace('-','')) : elapsed.at(-1)) ?? null;
   const countedBuckets = spec.period === 'none'
     ? [UNPERIODIZED]
-    : elapsed.map((month) => month.monthId);
+    : selectedMonth ? [selectedMonth.monthId] : [];
   const counted = new Set(countedBuckets);
 
   const districtTotals = new Map<string, PlanDistrict>();
   for (const [bucket, districts] of byMonth) {
     if (!counted.has(bucket)) continue;
     for (const [key, cell] of districts) {
-      const entry = districtTotals.get(key) ?? { district: labels.get(key) ?? key, target: 0, achievement: 0, silentMonths: 0 };
+      const entry = districtTotals.get(key) ?? { district: labels.get(key) ?? key, target: 0, achievement: 0, silentMonths: 0, targetMissing:cell.target===null, achievementMissing:cell.achievement===null };
       if (cell.target !== null) entry.target += cell.target;
       if (cell.achievement !== null) entry.achievement += cell.achievement; else entry.silentMonths += 1;
       districtTotals.set(key, entry);
@@ -245,9 +238,10 @@ function buildPlan(spec: PlanSpec): DeliveryPlan | null {
 
   const plannedToDate = [...districtTotals.values()].reduce((sum, district) => sum + district.target, 0);
   const deliveredToDate = [...districtTotals.values()].reduce((sum, district) => sum + district.achievement, 0);
-  const plannedTotal = spec.period === 'none'
-    ? plannedToDate
-    : months.reduce((sum, month) => sum + (month.target ?? 0), 0);
+  const plannedTotal = plannedToDate; // Compatibility field: no cross-month sum is supported.
+  const paired = [...districtTotals.values()].filter(d=>!d.targetMissing && !d.achievementMissing);
+  const pairedTarget = paired.reduce((sum,d)=>sum+d.target,0);
+  const pairedAchievement = paired.reduce((sum,d)=>sum+d.achievement,0);
 
   const units = [...new Set(snapshot.records.map((record) => String(record.units ?? '').trim()).filter(Boolean))];
   const workNames = [...new Set(snapshot.records.map((record) => String(record.work_name ?? '').trim()).filter(Boolean))];
@@ -270,12 +264,15 @@ function buildPlan(spec: PlanSpec): DeliveryPlan | null {
     plannedTotal,
     plannedToDate,
     deliveredToDate,
-    paceToDate: plannedToDate > 0 ? deliveredToDate / plannedToDate : null,
+    paceToDate: pairedTarget > 0 ? pairedAchievement / pairedTarget : null,
     rows: snapshot.records.length,
     excluded,
+    selectedMonth,
+    retrievedAt:snapshot.responseMetadata.generatedAt,
+    expectedDistricts:labels.size,
     boundary: spec.period === 'none'
       ? 'The source returns one target and one achievement per district with no reporting period. No trend is shown because none is reported.'
-      : 'Months after the last reported achievement carry a plan only and are never counted as shortfall. A month a district did not report is not a month of zero delivery.',
+      : 'The headline and district table describe one selected reporting month. Whether achievements are monthly additions or cumulative positions is unconfirmed, so values are not added across months. Missing achievements remain unreported.',
   };
 }
 
@@ -286,8 +283,8 @@ function buildPlan(spec: PlanSpec): DeliveryPlan | null {
  * if the platform fixes `soak_pits_api` the flag disappears on the next pull, and if a
  * different endpoint starts duplicating another it is caught the same way.
  */
-export function getDeliveryPlans(): DeliveryPlan[] {
-  const plans = SPECS.map(buildPlan).filter((plan): plan is DeliveryPlan => plan !== null);
+export function getDeliveryPlans(selectedPeriod: string | null = null): DeliveryPlan[] {
+  const plans = SPECS.map(spec=>buildPlan(spec,selectedPeriod)).filter((plan): plan is DeliveryPlan => plan !== null);
   const signatures = new Map<string, string>();
   for (const plan of plans) {
     const snapshot = governedSnapshotByKey.get(plan.tableKey);

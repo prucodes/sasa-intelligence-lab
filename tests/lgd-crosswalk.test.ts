@@ -76,7 +76,7 @@ describe('delivery plans', () => {
     expect(compost.remaining).toHaveLength(7);
     // Unreported months carry a target and no achievement, and are never a shortfall.
     expect(compost.remaining.every((month) => month.unreported && month.achievement === null)).toBe(true);
-    expect(compost.plannedToDate).toBeLessThan(compost.plannedTotal);
+    expect(compost.plannedToDate).toBe(compost.plannedTotal);
     expect(compost.paceToDate).toBeCloseTo(compost.deliveredToDate / compost.plannedToDate);
   });
 
@@ -97,16 +97,18 @@ describe('delivery plans', () => {
     expect(plans.find((plan) => plan.id === 'magic-drains')!.unit).toBe('KMs');
   });
 
-  it('scopes district totals to the elapsed window and counts silent months', () => {
+  it('scopes district totals to one selected reporting month', () => {
     const compost = getDeliveryPlans().find((plan) => plan.id === 'compost-pits')!;
-    expect(compost.boundary).toContain('is not a month of zero delivery');
+    expect(compost.boundary).toContain('not added across months');
+    expect(compost.selectedMonth?.monthId).toBe('202608');
+    expect(compost.deliveredToDate).toBe(compost.selectedMonth?.achievement);
     // District totals must reconcile to the elapsed window, not the whole plan — the
     // seven unreported months carry a target that is not anyone's shortfall.
     const districtAchievement = compost.districts.reduce((sum, district) => sum + district.achievement, 0);
     const districtTarget = compost.districts.reduce((sum, district) => sum + district.target, 0);
     expect(districtAchievement).toBe(compost.deliveredToDate);
     expect(districtTarget).toBe(compost.plannedToDate);
-    expect(districtTarget).toBeLessThan(compost.plannedTotal);
+    expect(districtTarget).toBe(compost.plannedTotal);
     // Every district reported in all five elapsed months, so there is nothing silent
     // to report yet. The counter still has to exist and be zero, not absent.
     expect(compost.districts.every((district) => district.silentMonths === 0)).toBe(true);
@@ -215,7 +217,7 @@ describe('secretariat cohort', () => {
   });
 });
 
-describe('rural cohort — a null result reported as one', () => {
+describe('rural cohort — descriptive evidence', () => {
   it('joins the register to the activity with nothing inferred', () => {
     const cohort = getRuralCohort();
     expect(cohort.identity.key).toBe('GRAM_PANCHAYAT_ID');
@@ -224,27 +226,38 @@ describe('rural cohort — a null result reported as one', () => {
     expect(cohort.identity.registerDisputed).toBe(0);
   });
 
-  it('excludes a reporting outage rather than averaging it in', () => {
+  it('retains the low-activity day without declaring an outage', () => {
     const cohort = getRuralCohort();
-    // 2026-08-02 reports at 2% against 70-93% on the other days. Averaging it in would
-    // depress every rate by a reporting failure rather than a delivery one.
-    expect(cohort.outageDays).toEqual(['2026-08-02']);
-    expect(cohort.usableDays).toHaveLength(6);
-    expect(cohort.days).toHaveLength(7);
+    expect(cohort.outageDays).toEqual([]);
+    expect(cohort.usableDays).toHaveLength(7);
+    expect(cohort.anomalousDays).toContain('2026-08-02');
+    expect(cohort.groups.every(g => g.panchayatDays <= g.panchayats * 7)).toBe(true);
   });
 
-  it('finds no relationship, and says so rather than implying one', () => {
+  it('reports the with/without difference without asserting no relationship', () => {
     const cohort = getRuralCohort();
-    expect(cohort.noRelationship).toBe(true);
-    // Groups sit within a couple of points of each other on a full 0-100 scale.
-    expect(cohort.spreadPoints).toBeLessThan(5);
-    // No per-entity points ship: a scatter over a null result would imply a signal.
-    expect(cohort).not.toHaveProperty('points');
+    expect(cohort.spreadPoints).toBeCloseTo(0.17, 2);
+    expect(cohort).not.toHaveProperty('noRelationship');
+    expect(cohort.recordQuality.uniqueRows).toBe(91427);
+    expect(cohort.recordQuality.rawRows).toBe(280371);
+    expect(cohort.observedGridGap).toBe(2030);
   });
 
   it('keeps the register’s unknown currency attached to the reading', () => {
     const cohort = getRuralCohort();
     expect(cohort.registerCurrency).toContain('no date column');
-    expect(cohort.boundary).toContain('currency is not');
+    expect(cohort.boundary).toContain('does not establish');
   });
+});
+
+it('does not add cumulative-looking CSC and drain positions across months',()=>{
+  const plans=getDeliveryPlans();
+  const csc=plans.find(p=>p.id==='sanitary-complexes')!;
+  expect(csc.deliveredToDate).toBe(2758);
+  expect(csc.plannedToDate).toBe(6429);
+  const drains=plans.find(p=>p.id==='magic-drains')!;
+  expect(drains.deliveredToDate).toBeCloseTo(32.757,3);
+  const may=getDeliveryPlans('202605').find(p=>p.id==='sanitary-complexes')!;
+  expect(may.deliveredToDate).toBe(1179);
+  expect(may.selectedMonth?.monthId).toBe('202605');
 });

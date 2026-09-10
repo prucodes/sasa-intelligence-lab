@@ -121,7 +121,12 @@ async function main() {
           throw error;
         }
         const page = payload.responseMetadata ?? {};
-        if (!pages) metadata = page;
+        // Always adopt the newest metadata. Pinning it to the cached first page meant a
+        // resume measured itself against the total the dataset had on the EARLIER run,
+        // so a dataset that had since grown reconciled against the old total and was
+        // written as a complete envelope while silently short. It also stamped the
+        // envelope with day-one provenance for rows fetched days later.
+        metadata = page;
         const rows = Array.isArray(payload.records) ? payload.records : [];
         if (!rows.length) break;
         await mkdir(cacheDir, { recursive: true });

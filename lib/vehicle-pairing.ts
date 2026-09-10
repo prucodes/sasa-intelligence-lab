@@ -3,8 +3,11 @@ import { currentSnapshotRecords, governedSnapshotByKey, governedSnapshotStats, s
 export const vehicleSourceKey = 'sasa_sac_machinery_e_autos_service_model_api';
 export interface VehiclePoint { key:string; ulb:string; district:string; orders:number; supplied:number }
 
-function measurement(raw:string | undefined):number | null {
-  if (raw === undefined || raw.trim() === '') return null;
+function measurement(raw:string | undefined | null):number | null {
+  // Ten retained snapshots carry JSON null, so `SnapshotRecord`'s string typing is not
+  // true of the data. `??` at the call site falls through null, which means both
+  // candidate columns being null hands this a null rather than undefined.
+  if (raw === undefined || raw === null || raw.trim() === '') return null;
   const value = Number(raw);
   return Number.isFinite(value) && value >= 0 ? value : null;
 }

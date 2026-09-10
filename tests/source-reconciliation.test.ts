@@ -16,7 +16,7 @@ describe('cross-source reconciliation', () => {
   it('refuses to combine two sources whose targets never coincide', () => {
     const result = getIhhlReconciliation();
     expect(result.targetsCoincide).toBe(0);
-    expect(result.refusal).toContain('two separate programmes');
+    expect(result.refusal).toContain('Source definitions must establish scope and accounting basis');
     // The refusal is the finding. No combined total is exposed for a caller to render.
     expect(result).not.toHaveProperty('combinedTarget');
     expect(result).not.toHaveProperty('combinedAchievement');

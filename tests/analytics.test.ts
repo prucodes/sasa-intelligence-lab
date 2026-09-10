@@ -205,8 +205,20 @@ describe('operational analytics selectors', () => {
   it('builds deterministic source-reconciliation queues', () => {
     const issues = getSourceReconciliationIssues();
     const count = (id: string) => issues.find((issue) => issue.id === id)?.count;
-    expect(count('recon-duplicates')).toBe(46);
-    expect(count('recon-ambiguous')).toBe(243);
+    // 38, not 46. compost_pits, magic_drains and soak_pits carry their period as a
+    // YYYYMM `month` with no `year` column, which recordPeriodParts used to decode only
+    // for `month_id` — so all twelve of their months resolved to no period and
+    // currentSnapshotRecords returned the whole file. A "latest-period" count was
+    // therefore scanning twelve months for those three sources. Their eight genuine
+    // duplicate rows sit in October, November, January and August, not in the latest
+    // period, so they correctly fall outside this metric now.
+    expect(count('recon-duplicates')).toBe(38);
+    // 159, not 243. The same period fix removes exactly 84 false flags — 28 districts in
+    // each of the three works sources. Grouping on entity + period label had collapsed all
+    // twelve of a district's monthly rows into one "period not supplied" bucket, and twelve
+    // distinct monthly signatures in one bucket read as an ambiguous entity-period. Twelve
+    // months of reporting is not twelve conflicting rows for one month.
+    expect(count('recon-ambiguous')).toBe(159);
     expect(count('recon-percentage')).toBe(296);
     expect(count('recon-zero-target')).toBe(104);
     expect(count('recon-above-target')).toBe(22);
@@ -251,7 +263,8 @@ describe('operational analytics selectors', () => {
     expect(audit.primary + audit.supporting + audit.pending + audit.unavailable + audit.awaitingPull).toBe(audit.total);
     // The four secretariat-day exports are retained but not bundled, so they carry no
     // in-app records — they reach the product as a reporting-continuity summary.
-    expect(audit.rows.filter((row) => row.records > 0)).toHaveLength(44);
+    expect(audit.rows.filter((row) => row.records > 0)).toHaveLength(50);
+    expect(audit.rows.find(row=>row.tableKey==='msw_door_to_door_collection_api')?.period).toContain('completeness unproven');
     // Reachable is not retained: an awaiting-pull row carries no records.
     expect(audit.rows.filter((row) => row.state === 'awaiting-pull').every((row) => row.records === 0)).toBe(true);
   });
@@ -283,13 +296,13 @@ describe('operational analytics selectors', () => {
 
   it('surfaces evidence issues as operational quality states', () => {
     const issues = getDataQualityIssues();
-    expect(issues.find((item) => item.id === 'duplicates')?.count).toBe(46);
+    expect(issues.find((item) => item.id === 'duplicates')?.count).toBe(38);
     expect(issues.find((item) => item.id === 'period-conflicts')?.count).toBe(35);
     // Gobardhan recovered on 2026-09-08; no authorized endpoint is unavailable now.
     expect(issues.find((item) => item.id === 'unavailable')?.count).toBe(0);
     expect(issues.find((item) => item.id === 'pagination')?.count).toBe(0);
-    expect(issues.find((item) => item.id === 'documented-pr')?.count).toBe(3);
-    expect(issues.find((item) => item.id === 'pr-pagination')?.count).toBe(1);
+    expect(issues.find((item) => item.id === 'documented-pr')?.count).toBe(0);
+    expect(issues.find((item) => item.id === 'pr-pagination')?.count).toBe(0);
     expect(issues.find((item) => item.id === 'pr-semantics')?.count).toBe(2);
     expect(issues.find((item) => item.id === 'stale-filter-contracts')?.count).toBe(13);
     expect((issues.find((item) => item.id === 'history')?.count ?? 0)).toBeGreaterThan(0);

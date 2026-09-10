@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { getRuralSanitation } from '@/lib/rural-sanitation';
+import {DistrictMap} from './district-map';
 import './rural-sanitation.css';
 
 const format = (value: number) => value.toLocaleString('en-IN');
@@ -11,8 +12,10 @@ type SortKey = 'panchayats' | 'coverage' | 'functioning';
 export function RuralSanitation() {
   const data = useMemo(() => getRuralSanitation(), []);
   const [sort, setSort] = useState<SortKey>('panchayats');
+  const [district,setDistrict]=useState('');
+  const [measure,setMeasure]=useState('presence');
 
-  const rows = [...data.districts].sort((a, b) => {
+  const rows = [...data.districts].filter(d=>!district||d.district===district).sort((a, b) => {
     const cover = (district: typeof a) => {
       const stated = district.withSwpc + district.withoutSwpc;
       return stated > 0 ? district.withSwpc / stated : -1;
@@ -33,23 +36,26 @@ export function RuralSanitation() {
     <header className="rs-intro">
       <div>
         <span className="rs-kicker">Rural evidence / gram panchayat grain</span>
-        <h2 id="rs-title">Twelve thousand villages,<br/><em>counted for the first time.</em></h2>
+        <h2 id="rs-title">Where centres exist.<br/><em>How they are reported to work.</em></h2>
         <p>
-          Every other view in this product describes urban local bodies. This one describes
-          gram panchayats — a different population under the same district names. Nothing
-          here may be added to, or compared with, a ULB figure.
+          This register describes gram panchayats: centre presence and reported condition. Rural and urban populations remain separate, even where district names are shared.
         </p>
       </div>
-      <dl className="rs-summary">
+
+    </header>
+
+    <div className="vi-geography-section"><div className="ew-controls"><label>Map measure<select aria-label="Centre map measure" value={measure} onChange={e=>setMeasure(e.target.value)}><option value="presence">Processing centre present</option><option value="functioning">Fully functioning among stated conditions</option></select></label></div><div className="vi-map-review"><div className="rs-map-story"><span className="rs-kicker">The register picture</span>      <dl className="rs-summary">
         <div><dt>Gram panchayats</dt><dd>{format(data.panchayats)}<span> across {format(data.blocks)} blocks</span></dd></div>
         <div><dt>With a processing centre</dt><dd>{data.coverageRatio === null ? 'Not stated' : `${Math.round(data.coverageRatio * 100)}%`}<span> {format(data.withSwpc)} of {format(data.withSwpc + data.withoutSwpc)} stated</span></dd></div>
         <div><dt>Held out for disagreement</dt><dd>{data.heldOut}<span> of {format(data.sourceRows)} source rows</span></dd></div>
-      </dl>
-    </header>
-
-    <div className="rs-condition">
+      </dl><p>Presence and working condition describe the undated register. They do not establish service outcomes.</p></div><DistrictMap rows={data.districts.map(d=>{
+      const denominator=measure==='presence'?d.withSwpc+d.withoutSwpc:d.fullyFunctioning+d.partiallyFunctioning+d.notFunctioning;
+      const numerator=measure==='presence'?d.withSwpc:d.fullyFunctioning;
+      return {district:d.district,value:denominator>0?numerator/denominator*100:null,detail:`${format(numerator)} / ${format(denominator)} GPs ${measure==='presence'?'with stated centre presence':'with a present centre and stated condition'} · ${format(d.conditionNotStated)} present centres lack a condition`};
+    })} selected={district} onSelect={setDistrict} title={measure==='presence'?'Centre presence by district':'Reported functioning by district'} unit="%" maximum={100}/></div></div>
+    <details className="vi-disclosure"><summary>Statewide centre condition and register checks</summary><div className="rs-condition">
       <div className="rs-condition-head">
-        <span className="rs-kicker">Reported working condition</span>
+        <span className="rs-kicker">Working condition · centres reported present</span>
         <b>{format(conditionTotal)} panchayats stated a condition</b>
       </div>
       <div className="rs-condition-bar" role="img"
@@ -70,7 +76,8 @@ export function RuralSanitation() {
       </p>}
     </div>
 
-    <div className="rs-table-panel">
+    <p className="rs-note"><b>{format(data.districts.reduce((sum,d)=>sum+d.conditionConflicts,0))} register inconsistencies:</b> a condition is stated where a centre is not reported present. Of these, {format(data.districts.reduce((sum,d)=>sum+d.functionalWithoutCentre,0))} state fully or partially functioning. These condition claims are excluded from the centre-condition totals.</p>
+    </details><div className="rs-table-panel">
       <header className="rs-table-head">
         <div>
           <span className="rs-kicker">By district</span>

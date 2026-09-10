@@ -69,3 +69,14 @@ describe('drift detection', () => {
     expect(drift.join('\n')).toContain('snapshot file is missing');
   });
 });
+
+it('resolves compact months, month_no and rural collection dates',()=>{
+  expect(periodOf({month:'202604',year:'2026'})).toBe('2026-04');
+  expect(periodOf({month_no:'8',year:'2026'})).toBe('2026-08');
+  expect(periodOf({COLLECTION_DATE:'2026-08-02'})).toBe('2026-08');
+});
+it('detects revised ULB identities in current ulb_nm schemas',()=>{
+  const before=manifest([{district_id:'1',ulb_nm:'Town A',month:'202608',value:'10'}]);
+  const after=manifest([{district_id:'1',ulb_nm:'Town B',month:'202608',value:'10'}]);
+  expect(compareManifests(before,after).join(' ')).toContain('covers different entities');
+});

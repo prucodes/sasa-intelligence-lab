@@ -1,3 +1,4 @@
+import { sourcePeriod } from './record-contract.mjs';
 /**
  * Disputed values: the same place and period reported twice with different numbers.
  *
@@ -47,7 +48,7 @@ function identity(record: SnapshotRecord) {
   return {
     district: text(record.district_name ?? record.dstrt_nm ?? record.api_district_name),
     entity: text(record.ulb_name ?? record.ulb_nm ?? record.village_name ?? record.secretariat_name),
-    period: text(record.month_number ?? record.mnth_no ?? record.month_id ?? record.month ?? record.month_name ?? record.mnth_nm),
+    period: sourcePeriod(record) ?? text(record.month_number ?? record.month_no ?? record.mnth_no ?? record.month_id ?? record.month ?? record.month_name ?? record.mnth_nm),
   };
 }
 
@@ -132,7 +133,9 @@ export interface DisputeExclusion<T> {
  * Byte-identical duplicates are not disputes and are left to normal
  * deduplication; only genuine disagreement is removed here.
  */
-export function excludeDisputed<T extends SnapshotRecord>(records: T[], field: string): DisputeExclusion<T> {
+export function excludeDisputed<T extends SnapshotRecord>(records: T[], field: string | ((record: T) => unknown)): DisputeExclusion<T> {
+  if (typeof field === 'string' && records.length && !records.some(record=>Object.hasOwn(record,field))) throw new Error(`Dispute measure is absent: ${field}`);
+  const valueOf = typeof field === 'function' ? field : (record:T)=>record[field];
   const groups = new Map<string, T[]>();
   records.forEach((record) => {
     const { district, entity, period } = identity(record);
@@ -144,7 +147,7 @@ export function excludeDisputed<T extends SnapshotRecord>(records: T[], field: s
   const disputedKeys = new Set<string>();
   groups.forEach((rows, key) => {
     if (rows.length < 2) return;
-    const values = new Set(rows.map((row) => text(row[field])));
+    const values = new Set(rows.map((row) => typeof field === 'string' ? text(valueOf(row)) : JSON.stringify(valueOf(row))));
     if (values.size > 1) disputedKeys.add(key);
   });
 

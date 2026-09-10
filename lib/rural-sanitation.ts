@@ -28,6 +28,8 @@ export interface RuralDistrict {
   partiallyFunctioning: number;
   notFunctioning: number;
   conditionNotStated: number;
+  conditionConflicts:number;
+  functionalWithoutCentre:number;
   disputedPanchayats: number;
   mandalOperators: number | null;
   reportedMandalOperators: number | null;
@@ -61,7 +63,6 @@ export function getRuralSanitation(): RuralSanitation {
   const withoutSwpc = sum((district) => district.withoutSwpc);
   const swpcNotStated = sum((district) => district.swpcNotStated);
   const stated = withSwpc + withoutSwpc;
-  const conditionStated = sum((district) => district.fullyFunctioning + district.partiallyFunctioning + district.notFunctioning);
 
   return {
     districts,
@@ -78,7 +79,7 @@ export function getRuralSanitation(): RuralSanitation {
     conditionNotStated: sum((district) => district.conditionNotStated),
     // A centre reported present with no condition is a gap in the evidence, not a
     // broken centre. It is counted separately so it cannot be read as either.
-    presentWithoutCondition: Math.max(withSwpc - conditionStated, 0),
+    presentWithoutCondition: sum(d=>d.conditionNotStated),
     heldOut: aggregate.panchayatsHeldOut,
     sourceRows: Object.values(aggregate.generatedFrom).reduce((total, entry) => total + (entry as { rows: number }).rows, 0),
     boundary: aggregate.boundary,

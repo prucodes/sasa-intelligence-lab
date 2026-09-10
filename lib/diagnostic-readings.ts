@@ -33,13 +33,13 @@ const specs = [
 function raw(record:EvidenceRecord, keys:readonly string[]):string | null {
   for (const key of keys) {
     const value = record.rawFields[key];
-    if (value !== undefined && value !== null) return String(value).trim() || null;
+    if (value !== undefined && value !== null && String(value).trim() !== '') return String(value).trim();
   }
   return null;
 }
 function numeric(value:string | null):number | null {
   if (value === null) return null;
-  const result = Number(value);
+  const result = Number(value.replace(/,/g,''));
   return Number.isFinite(result) && result >= 0 ? result : null;
 }
 

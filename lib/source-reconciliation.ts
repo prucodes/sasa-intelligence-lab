@@ -1,3 +1,4 @@
+import { sourcePeriod } from './record-contract.mjs';
 import {
   currentSnapshotRecords,
   governedSnapshotByKey,
@@ -36,6 +37,7 @@ export type AchievementBasis = 'non-decreasing' | 'varies' | 'indeterminate';
 export interface ReconciliationCell {
   district: string;
   month: number;
+  periodKey: string;
   target: number | null;
   achievement: number | null;
 }
@@ -48,8 +50,8 @@ export interface ReconciliationSourceState {
   districtsWithSeries: number;
   constantTargetDistricts: number;
   basis: AchievementBasis;
-  latestTarget: number;
-  latestAchievement: number;
+  latestTarget: number | null;
+  latestAchievement: number | null;
   disputed: number;
   missing: number;
 }
@@ -57,6 +59,7 @@ export interface ReconciliationSourceState {
 export interface ReconciliationRow {
   district: string;
   month: number;
+  periodKey: string;
   left: ReconciliationCell;
   right: ReconciliationCell;
   /** True only when both sources returned an identical target for this cell. */
@@ -68,6 +71,7 @@ export interface Reconciliation {
   right: ReconciliationSourceState;
   months: number[];
   monthLabels: string[];
+  periods: Array<{key:string;label:string}>;
   rows: ReconciliationRow[];
   matched: number;
   leftOnly: string[];
@@ -87,12 +91,6 @@ function measurement(raw: string | undefined): number | null {
   return Number.isFinite(value) && value >= 0 ? value : null;
 }
 
-function monthOf(record: SnapshotRecord): number | null {
-  const raw = record.month_no ?? record.mnth_no ?? record.month_number ?? record.month_id;
-  const value = Number(String(raw ?? '').trim());
-  return Number.isInteger(value) && value >= 1 && value <= 12 ? value : null;
-}
-
 /**
  * One cell per district-month. Repeated identical measurements collapse to one; a
  * district-month that reports two different measurements is held out entirely, because
@@ -103,9 +101,9 @@ function cellsOf(records: SnapshotRecord[], spec: ReconciliationSourceSpec) {
   let missing = 0;
   for (const record of records) {
     const district = normalizeSourceName(record[spec.districtField]);
-    const month = monthOf(record);
-    if (!district || month === null) { missing += 1; continue; }
-    const key = `${district}|${month}`;
+    const period = sourcePeriod(record);
+    if (!district || !period || !/^\d{4}-\d{2}$/.test(period)) { missing += 1; continue; }
+    const key = `${district}|${period}`;
     groups.set(key, [...(groups.get(key) ?? []), record]);
   }
 
@@ -120,7 +118,8 @@ function cellsOf(records: SnapshotRecord[], spec: ReconciliationSourceSpec) {
     // The display label comes from the first row of the group; the join key is normalized.
     cells.set(key, {
       district: String(group[0][spec.districtField]).trim(),
-      month: Number(key.split('|')[1]),
+      month: Number(key.split('|')[1].slice(5)),
+      periodKey: key.split('|')[1],
       target: values[0].target,
       achievement: values[0].achievement,
     });
@@ -131,15 +130,15 @@ function cellsOf(records: SnapshotRecord[], spec: ReconciliationSourceSpec) {
 /**
  * Whether a source's achievement column ever falls as the month advances.
  *
- * A year-to-date column cannot decrease; a per-month column usually does somewhere. This
- * does not prove which one a source is — a monthly series can rise by chance — so the
+ * Revisions can lower cumulative figures and monthly figures can rise throughout.
+ * Neither pattern proves an accounting basis, so the
  * verdict is only ever 'non-decreasing' or 'varies', never "cumulative" or "monthly".
  * Naming the observation rather than the conclusion is the point.
  */
 function classify(cells: Map<string, ReconciliationCell>): Pick<ReconciliationSourceState, 'basis' | 'nonDecreasingDistricts' | 'districtsWithSeries' | 'constantTargetDistricts'> {
   const byDistrict = new Map<string, ReconciliationCell[]>();
   for (const cell of cells.values()) {
-    const key = normalizeSourceName(cell.district);
+    const key = `${normalizeSourceName(cell.district)}|${cell.periodKey.slice(0,4)}`;
     byDistrict.set(key, [...(byDistrict.get(key) ?? []), cell]);
   }
   let nonDecreasing = 0;
@@ -160,21 +159,24 @@ function classify(cells: Map<string, ReconciliationCell>): Pick<ReconciliationSo
   return { basis, nonDecreasingDistricts: nonDecreasing, districtsWithSeries: withSeries, constantTargetDistricts: constantTarget };
 }
 
-function latestMonth(cells: Map<string, ReconciliationCell>): number | null {
-  const months = [...cells.values()].map((cell) => cell.month);
-  return months.length ? Math.max(...months) : null;
+function latestMonth(cells: Map<string, ReconciliationCell>): string | null {
+  return [...cells.values()].map(cell=>cell.periodKey).sort().at(-1) ?? null;
+}
+export function sumReturned(values: Array<number | null>): number | null {
+  const valid = values.filter((value):value is number=>value!==null);
+  return valid.length ? valid.reduce((sum,value)=>sum+value,0) : null;
 }
 
 function stateOf(snapshot: SnapshotEnvelope, spec: ReconciliationSourceSpec): ReconciliationSourceState & { cells: Map<string, ReconciliationCell> } {
   const { cells, disputed, missing } = cellsOf(snapshot.records, spec);
   const month = latestMonth(cells);
-  const latest = [...cells.values()].filter((cell) => cell.month === month);
+  const latest = [...cells.values()].filter((cell) => cell.periodKey === month);
   return {
     spec,
     period: recordPeriodLabel(currentSnapshotRecords(snapshot)[0] ?? snapshot.records[0] ?? {}),
     ...classify(cells),
-    latestTarget: latest.reduce((sum, cell) => sum + (cell.target ?? 0), 0),
-    latestAchievement: latest.reduce((sum, cell) => sum + (cell.achievement ?? 0), 0),
+    latestTarget: sumReturned(latest.map(cell=>cell.target)),
+    latestAchievement: sumReturned(latest.map(cell=>cell.achievement)),
     disputed,
     missing,
     cells,
@@ -206,12 +208,13 @@ export function reconcileSources(left: ReconciliationSourceSpec, right: Reconcil
     rows.push({
       district: leftCell.district,
       month: leftCell.month,
+      periodKey: leftCell.periodKey,
       left: leftCell,
       right: rightCell,
       targetsCoincide: leftCell.target !== null && leftCell.target === rightCell.target,
     });
   }
-  rows.sort((a, b) => b.month - a.month || a.district.localeCompare(b.district));
+  rows.sort((a, b) => b.periodKey.localeCompare(a.periodKey) || a.district.localeCompare(b.district));
 
   const months = [...new Set(rows.map((row) => row.month))].sort((a, b) => a - b);
   const targetsCoincide = rows.filter((row) => row.targetsCoincide).length;
@@ -219,15 +222,16 @@ export function reconcileSources(left: ReconciliationSourceSpec, right: Reconcil
   // The two refusal conditions, in the order a reviewer would check them. Both are
   // statements about the sources, not about delivery.
   const refusal = targetsCoincide === 0 && rows.length > 0
-    ? `No district-month reports the same target in both sources (0 of ${rows.length}). These are two separate programmes, not one programme reported twice.`
+    ? `No district-month reports the same target in both sources (0 of ${rows.length}). Source definitions must establish scope and accounting basis before these figures can be combined.`
     : leftState.basis !== rightState.basis
-      ? 'The two achievement columns do not behave the same way across periods, so they are not on a common accounting basis.'
-      : null;
+      ? 'The achievement patterns differ. Source definitions are needed to establish a common accounting basis.'
+      : 'Matching values or patterns alone do not establish shared scope or accounting basis.';
 
   return {
     left: leftState,
     right: rightState,
     months,
+    periods: [...new Set(rows.map(row=>row.periodKey))].sort().map(key=>({key,label:`${MONTHS[Number(key.slice(5))-1]} ${key.slice(0,4)}`})),
     monthLabels: months.map((month) => MONTHS[month - 1] ?? String(month)),
     rows,
     matched: rows.length,

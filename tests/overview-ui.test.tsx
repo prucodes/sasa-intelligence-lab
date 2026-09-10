@@ -10,7 +10,8 @@ describe('connected overview interactions', () => {
   it('keeps issue, district, map, list and concentration in sync', () => {
     render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
     const buttons = screen.getByRole('region', { name: 'Operational review issues' });
-    expect(within(buttons).getByRole('button', { name: /Household toilets/ })).toHaveAttribute('aria-pressed', 'true');
+    expect(within(buttons).getAllByRole('button')).toHaveLength(8);
+    expect(within(buttons).getByRole('button', { name: /Rural collection change/ })).toHaveAttribute('aria-pressed', 'true');
     fireEvent.click(within(buttons).getByRole('button', { name: /Vehicle delivery/ }));
     fireEvent.click(screen.getByRole('button', { name: /^Kurnool:/ }));
     expect(screen.getByRole('combobox', { name: 'Review district' })).toHaveValue('Kurnool');
@@ -29,6 +30,7 @@ describe('connected overview interactions', () => {
 
   it('supports keyboard map selection and a usable fallback without boundaries', () => {
     const { rerender } = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    fireEvent.click(screen.getByRole('button', { name: /Household toilets/ }));
     const district = screen.getByRole('button', { name: /^Kurnool:/ });
     fireEvent.keyDown(district, { key: 'Enter' });
     expect(district).toHaveAttribute('aria-pressed', 'true');

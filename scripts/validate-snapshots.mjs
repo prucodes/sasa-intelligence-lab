@@ -1,3 +1,5 @@
+import { validateCurrentSnapshots } from './validate-current-snapshots.mjs';
+import { validateAggregate } from './aggregate-contract.mjs';
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { compareManifests, fingerprintDirectory, manifestPath } from './fingerprint.mjs';
@@ -55,6 +57,7 @@ try {
 let aggregateRows = 0;
 for (const file of aggregates) {
   const rollup = JSON.parse(await readFile(resolve(aggregateDir, file), 'utf8'));
+  failures.push(...validateAggregate(file, rollup));
   const sources = Object.entries(rollup.generatedFrom ?? {});
   if (!sources.length) {
     failures.push(`aggregates/${file}: no source provenance recorded`);
@@ -97,11 +100,15 @@ try {
   else failures.push(`fingerprint manifest could not be read: ${error.message}`);
 }
 
+const staged = await validateCurrentSnapshots();
+failures.push(...staged.errors);
+
 if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
 
+console.log(`${staged.count} staged current response files match their sync hashes; schema promotion remains separate.`);
 console.log(`Validated ${files.length} complete full exports and ${records.toLocaleString('en-IN')} retained rows.`);
 // Gobardhan served 502 for weeks and was the one authorized endpoint with no retained
 // response. It recovered before the 2026-09-08 pull, so this line reports the state
@@ -109,7 +116,7 @@ console.log(`Validated ${files.length} complete full exports and ${records.toLoc
 console.log(`${tableKeys.has('sasa_establishment_of_gobardhan_units_api') ? 'Gobardhan is retained (endpoint recovered)' : 'Gobardhan remains unavailable'}; ${prefiltered} active full exports retain source-default geographic filters.`);
 console.log(`${periodConflicts} FSTP rows retain the observed month-number/month-name conflict and remain unscored.`);
 if (aggregates.length) {
-  console.log(`${aggregates.length} aggregate(s) covering ${aggregateRows.toLocaleString('en-IN')} source entities carry provenance and reconcile to their own district totals.`);
+  console.log(`${aggregates.length} aggregate(s) covering ${aggregateRows.toLocaleString('en-IN')} source entities carry provenance and pass their measure, population and ratio reconciliation contracts.`);
 }
 console.log(manifestRecorded
   ? 'Per-period content fingerprints match the recorded vintage.'

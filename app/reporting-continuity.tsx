@@ -1,123 +1,32 @@
 'use client';
+import { useMemo, useState, type CSSProperties } from 'react';
+import { getReportingContinuity } from '@/lib/reporting-continuity';
+import './analysis-workspace.css';
+import './visual-intelligence.css';
 
-import { useMemo, useState } from 'react';
-import { continuityReading, getReportingContinuity } from '@/lib/reporting-continuity';
-import './reporting-continuity.css';
-
-const format = (value: number) => value.toLocaleString('en-IN');
-const percent = (value: number | null) => value === null ? '—' : `${(value * 100).toFixed(1)}%`;
-
-/**
- * Reporting continuity, drawn as days rather than totals.
- *
- * Each bar is the share of entities that reported anything that day. Height is
- * participation, not volume — because volume is exactly what misleads here: one day at
- * 58% participation carries 94.6% of the door-to-door export's reported collection.
- */
-function ParticipationChart({ days, measureLabel }: { days: ReturnType<typeof getReportingContinuity>['datasets'][number]['days']; measureLabel: string }) {
-  return <div className="rc-chart" role="img"
-    aria-label={`Share of entities reporting each day. ${days.map((day) => `${day.date}: ${day.reporting} of ${day.rows}`).join('; ')}.`}>
-    {days.map((day) => {
-      const ratio = day.reportingRatio ?? 0;
-      return <div key={day.date} className="rc-col">
-        <div className="rc-stack"><i style={{ height: `${Math.max(ratio * 100, ratio > 0 ? 1.5 : 0)}%` }} data-silent={ratio < 0.02}/></div>
-        <span>{day.date.slice(8)}</span>
-      </div>;
-    })}
-    <span className="rc-sr-only">Each bar is the share of entities reporting any {measureLabel} that day.</span>
-  </div>;
-}
+const number = (value: number) => value.toLocaleString('en-IN');
+const percent = (value: number | null) => value === null ? 'Not available' : `${(value * 100).toFixed(1)}%`;
 
 export function ReportingContinuity() {
   const data = useMemo(() => getReportingContinuity(), []);
-  const [selected, setSelected] = useState(
-    data.datasets.find((dataset) => dataset.verdict === 'single-day-concentration')?.tableKey ?? data.datasets[0]?.tableKey ?? '',
-  );
-  const dataset = data.datasets.find((item) => item.tableKey === selected) ?? data.datasets[0];
+  const [key, setKey] = useState('msw_door_to_door_collection_api');
+  const [date, setDate] = useState<string | null>(null);
+  const dataset = data.datasets.find(d => d.tableKey === key) ?? data.datasets[0];
   if (!dataset) return null;
-  const reading = continuityReading(dataset.verdict);
-  const reporting = dataset.entities - dataset.entitiesNeverReporting;
-
-  return <section className="reporting-continuity" aria-labelledby="rc-title">
-    <header className="rc-intro">
-      <div>
-        <span className="rc-kicker">Filled is not reported</span>
-        <h2 id="rc-title">Nothing is missing.<br/><em>Almost nothing was reported.</em></h2>
-        <p>
-          These secretariat-day exports arrive 100% complete on every column, so every
-          completeness check in this product passes them. The defect is a value that is
-          present and zero — indistinguishable from &ldquo;nothing happened&rdquo; unless you
-          look at who reported, and when.
-        </p>
-      </div>
-      <dl className="rc-summary">
-        <div><dt>Rows retained</dt><dd>{format(dataset.rows)}<span> {dataset.entityGrain ?? 'row'} · day</span></dd></div>
-        <div><dt>Entities ever reporting</dt><dd>{format(reporting)}<span> of {format(dataset.entities)}</span></dd></div>
-        <div><dt>Reporting every day</dt><dd>{format(dataset.entitiesReportingEveryDay)}<span> of {format(dataset.entities)}</span></dd></div>
-      </dl>
-    </header>
-
-    <div className="rc-tabs" role="tablist" aria-label="Retained secretariat-day exports">
-      {data.datasets.map((item, index) => <button key={item.tableKey} type="button" role="tab"
-        aria-selected={item.tableKey === dataset.tableKey}
-        aria-label={`${item.label}: ${continuityReading(item.verdict).title}`}
-        className={item.tableKey === dataset.tableKey ? 'is-selected' : ''}
-        onClick={() => setSelected(item.tableKey)}>
-        <span>{String(index + 1).padStart(2, '0')}</span>
-        <b>{item.label}</b>
-        <small>{format(item.rows)} rows · {item.days.length} days</small>
-      </button>)}
+  const day = dataset.days.find(d => d.date === date) ?? dataset.days.find(d => d.date === dataset.busiestDate) ?? dataset.days[0];
+  const positive = dataset.days.reduce((s,d) => s+d.positive,0);
+  const zero = dataset.days.reduce((s,d) => s+d.zero,0);
+  const missing = dataset.days.reduce((s,d) => s+d.missing,0);
+  return <section className="evidence-workspace" aria-labelledby="continuity-title">
+    <header className="ew-heading"><div><span className="ew-kicker">Daily evidence · secretariat grain</span><h2 id="continuity-title">Activity and <em>reporting coverage</em></h2><p>Separate positive activity, reported zero and missing observations.</p></div><span className="ew-vintage">Retained {dataset.retrievedAt.slice(0,10)}</span></header>
+    <div className="ew-controls"><label>Dataset<select value={dataset.tableKey} onChange={e=>{setKey(e.target.value);setDate(null);}}>{data.datasets.map(d=><option value={d.tableKey} key={d.tableKey}>{d.label}</option>)}</select></label></div>
+    <div className="ew-reading">
+      <div className="ew-primary"><span>{day.date} · positive activity</span><strong>{number(day.positive)}</strong><small>of {number(day.rows)} unique secretariat records</small><hr/><div className="ew-secondary"><b>{percent(day.positiveRatio)}</b><small>of records for this day</small></div></div>
+      <div className="ew-chart-panel"><h3>Choose a reported day</h3><p className="ew-caption">Positive activity as a share of that day&rsquo;s retained records</p><div className="ew-day-grid reporting-heatmap">{dataset.days.map(d=><button type="button" className="ew-day" key={d.date} style={{'--day-intensity':`${12+(d.positiveRatio??0)*68}%`} as CSSProperties} data-missing={d.positiveRatio===null} aria-label={`${d.date}: ${percent(d.positiveRatio)} positive activity`} aria-pressed={d.date===day.date} onClick={()=>setDate(d.date)}><span>{d.date.slice(5)}</span><b>{percent(d.positiveRatio)}</b></button>)}</div><div className="map-scale reporting-scale"><span>0% positive</span><i/><span>100%</span></div><p className="ew-caption">Colour intensity shows the share reporting positive activity. Select a day to see reported zeros and missing measures separately.</p><div aria-live="polite"><div className="ew-state-bar" role="img" aria-label={`${day.positive} positive, ${day.zero} zero, ${day.missing} missing measurements`}><i style={{width:`${day.rows?day.positive/day.rows*100:0}%`}}/><i data-state="zero" style={{width:`${day.rows?day.zero/day.rows*100:0}%`}}/><i data-state="missing" style={{width:`${day.rows?day.missing/day.rows*100:0}%`}}/></div><div className="ew-state-key"><span><b>{number(day.positive)}</b> positive</span><span><b>{number(day.zero)}</b> reported zero</span><span><b>{number(day.missing)}</b> missing measure</span></div></div></div>
     </div>
-
-    <div className="rc-body">
-      <div className={`rc-verdict rc-${dataset.verdict}`}>
-        <span>{dataset.verdict.replace(/-/g, ' ')}</span>
-        <b>{reading.title}</b>
-        <p>{reading.reading}</p>
-      </div>
-
-      <ParticipationChart days={dataset.days} measureLabel={dataset.measureLabel}/>
-      <p className="rc-legend">
-        Share of {dataset.entityGrain?.toLowerCase() ?? 'entity'} rows reporting any
-        {' '}{dataset.measureLabel} that day. Height is participation, not volume — a day
-        where almost nobody reported is drawn hatched so it cannot read as a low figure.
-      </p>
-
-      {dataset.busiestDateShare !== null && dataset.evenShare !== null && <div className="rc-concentration">
-        <div>
-          <strong>{percent(dataset.busiestDateShare)}</strong>
-          <span>of all reported {dataset.measureLabel} falls on <b>{dataset.busiestDate}</b></span>
-          <small>Even reporting across {dataset.days.length} days would put {percent(dataset.evenShare)} on any one of them.</small>
-        </div>
-      </div>}
-
-      {dataset.naiveRatio !== null && dataset.busiestDayRatio !== null && <div className="rc-ratio" role="note">
-        <span className="rc-ratio-tag">The ratio this data invites — and why it is not published</span>
-        <div className="rc-ratio-pair">
-          <div><strong>{percent(dataset.naiveRatio)}</strong><small>across all {format(dataset.rows)} rows</small></div>
-          <i aria-hidden="true">vs</i>
-          <div><strong>{percent(dataset.busiestDayRatio)}</strong><small>on {dataset.busiestDate} alone</small></div>
-        </div>
-        <p>
-          Same source, same column, same arithmetic — a {(dataset.busiestDayRatio / dataset.naiveRatio).toFixed(0)}× swing
-          decided entirely by which rows are included. No coverage figure is published from
-          this export, and none should be quoted from it.
-        </p>
-      </div>}
-    </div>
-
-    <details className="rc-method">
-      <summary>Source &amp; reading boundary</summary>
-      <div>
-        <p>
-          {dataset.tableKey} · {format(dataset.rows)} rows across {dataset.days.length} reported
-          days, retained {dataset.retrievedAt?.slice(0, 10)}. Too large to bundle, so the raw
-          pages stay in data/large-snapshots and only this summary ships.
-          {dataset.measure && <> Measure column <code>{dataset.measure}</code></>}
-          {dataset.denominator && <>, denominator <code>{dataset.denominator}</code></>}.
-        </p>
-        <p>{data.boundary}</p>
-      </div>
-    </details>
+    <div className="ew-meta"><span>{number(dataset.rows)} unique records</span><span>{number(dataset.quality.duplicateRows)} exact repeats collapsed</span><span>{number(dataset.quality.conflictingKeys)} conflicting keys held out</span></div>
+    {dataset.busiestDateShare!==null && dataset.busiestDateShare>=.5 && <div className="ew-notice"><b>{percent(dataset.busiestDateShare)} of reported {dataset.measureLabel}</b> is concentrated on {dataset.busiestDate}. Review the reporting pattern before treating this short window as typical service activity.</div>}
+    <div className="ew-table-section"><header><h3>Coverage across the retained window</h3><span className="ew-caption">{dataset.days[0].date} – {dataset.days.at(-1)?.date}</span></header><div className="ew-table-scroll"><table><thead><tr><th>Observation</th><th>Count</th></tr></thead><tbody><tr><th>Records with positive activity</th><td>{number(positive)}</td></tr><tr><th>Records with a valid zero</th><td>{number(zero)}</td></tr><tr><th>Records missing the measure</th><td>{number(missing)}</td></tr><tr><th>Entities with a valid measure on every observed date</th><td>{number(dataset.entitiesReportingEveryDay)} / {number(dataset.entities)}</td></tr><tr><th>Entity/date combinations absent from this export</th><td>{number(dataset.missingExpectedRecords)}</td></tr></tbody></table></div></div>
+    <div className="ew-evidence"><details><summary>Source, duplicate handling &amp; coverage basis</summary><div><p><code>{dataset.tableKey}</code> · {number(dataset.rawRows)} raw rows → {number(dataset.rows)} unique records. A valid zero remains a reported observation. Missing combinations use the entities and dates observed in this export, not a certified roster.</p><p>{data.boundary}</p></div></details></div>
   </section>;
 }

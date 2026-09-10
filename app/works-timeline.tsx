@@ -1,0 +1,8 @@
+'use client';
+import type {PlanMonth} from '@/lib/delivery-plan';
+import './evidence-expansion.css';
+const n=(v:number|null)=>v===null?'Not reported':v.toLocaleString('en-IN',{maximumFractionDigits:3});
+export function WorksTimeline({months,selected,onSelect,unit}:{months:PlanMonth[];selected:string|undefined;onSelect:(month:string)=>void;unit:string}) {
+  const max=Math.max(1,...months.flatMap(m=>[m.target??0,m.achievement??0]));
+  return <div className="works-series"><div className="works-series-key"><span><i/>Reported achievement</span><span><i/>Target</span><span><i/>Plan only · no achievement reported</span></div><div className="works-series-scroll"><div className="works-series-plot" style={{gridTemplateColumns:`repeat(${months.length},minmax(45px,1fr))`}}>{months.map(m=><button key={m.monthId} type="button" className={`works-period ${m.unreported?'plan-only':''}`} aria-pressed={selected===m.monthId} aria-label={`${m.label} ${m.year}: ${m.unreported?'plan only, achievement not reported':`${n(m.achievement)} achieved`}; target ${n(m.target)} ${unit}`} onClick={()=>onSelect(m.monthId)}><span className="works-bar-area"><i className="works-target" style={{height:`${(m.target??0)/max*100}%`}}/>{m.achievement!==null&&<i className="works-achievement" style={{height:`${m.achievement/max*100}%`}}/>}</span><b>{m.label.slice(0,3)}</b><small>{m.year}</small><span className="works-period-value">{m.unreported?'Plan':n(m.achievement)}</span></button>)}</div></div><p className="ew-caption">Each column is one reported month, with a common scale in {unit}. Select a month to inspect its target, achievement and district coverage. No values are added across months.</p></div>;
+}

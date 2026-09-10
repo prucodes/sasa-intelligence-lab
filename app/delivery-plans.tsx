@@ -1,169 +1,52 @@
 'use client';
+import { WorksTimeline } from './works-timeline';
+import { useEffect, useMemo, useState } from 'react';
+import { getDeliveryPlans } from '@/lib/delivery-plan';
+import {DistrictMap} from './district-map';
+import './analysis-workspace.css';
 
-import { useMemo, useState } from 'react';
-import { getDeliveryPlans, type DeliveryPlan } from '@/lib/delivery-plan';
-import './delivery-plans.css';
+const number=(value:number|null)=>value===null?'Not reported':value.toLocaleString('en-IN',{maximumFractionDigits:3});
 
-const format = (value: number) => value.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-
-/**
- * Plan against delivery over a financial year.
- *
- * The bars are split deliberately: the elapsed window is drawn solid, the months no
- * district has reported yet are drawn as an outline. Reading the outline as shortfall
- * is the mistake this view exists to prevent, so the two never share an encoding.
- */
-function PlanChart({ plan }: { plan: DeliveryPlan }) {
-  const max = Math.max(...plan.months.map((month) => Math.max(month.target ?? 0, month.achievement ?? 0)), 1);
-  return <div className="dp-chart" role="img"
-    aria-label={`${plan.label}: ${plan.elapsed.length} reported months and ${plan.remaining.length} months of plan only. ${plan.elapsed.map((month) => `${month.label} ${month.achievement} of ${month.target}`).join('; ')}.`}>
-    {plan.months.map((month) => <div key={month.monthId} className={month.unreported ? 'dp-col is-planned' : 'dp-col'}>
-      <div className="dp-stack">
-        <i className="dp-target" style={{ height: `${((month.target ?? 0) / max) * 100}%` }}/>
-        {!month.unreported && <i className="dp-actual" style={{ height: `${((month.achievement ?? 0) / max) * 100}%` }}/>}
-      </div>
-      <span>{month.label.slice(0, 3)}</span>
-    </div>)}
-  </div>;
-}
-
-export function DeliveryPlans() {
-  const plans = useMemo(() => getDeliveryPlans(), []);
-  const distinct = plans.filter((plan) => plan.duplicateOf === null);
-  const [selected, setSelected] = useState(distinct[0]?.id ?? '');
-  const plan = distinct.find((item) => item.id === selected) ?? distinct[0];
-  const duplicates = plans.filter((item) => item.duplicateOf !== null);
-  if (!plan) return null;
-
-  return <section className="delivery-plans" aria-labelledby="dp-title">
-    <header className="dp-intro">
-      <div>
-        <span className="dp-kicker">Plan against delivery / financial year 2026-27</span>
-        {plan.periodicity === 'monthly'
-          ? <>
-            <h2 id="dp-title">{plan.months.length} months of plan.<br/><em>{plan.elapsed.length} months of evidence.</em></h2>
-            <p>
-              The works sources are the first retained evidence with a real horizon: a target
-              for every reported month, and achievement filled in as months pass. Everything
-              after the last reported month is plan only, and is never counted as a shortfall.
-            </p>
-          </>
-          : <>
-            <h2 id="dp-title">One target, one figure.<br/><em>No period at all.</em></h2>
-            <p>
-              This source returns a single target and achievement per district and no reporting
-              month. It can be read as a position, never as progress — so no series is drawn and
-              no pace over time is claimed.
-            </p>
-          </>}
-      </div>
-      <dl className="dp-summary">
-        <div><dt>Reported months</dt><dd>{plan.periodicity === 'point-in-time' ? 'None' : plan.elapsed.length}<span>{plan.periodicity === 'point-in-time' ? ' no period column' : ` of ${plan.months.length}`}</span></dd></div>
-        <div><dt>Delivered to date</dt><dd>{format(plan.deliveredToDate)}<span> {plan.unit}</span></dd></div>
-        <div><dt>Pace against elapsed plan</dt><dd>{plan.paceToDate === null ? 'No rate' : `${Math.round(plan.paceToDate * 100)}%`}<span> {format(plan.plannedToDate)} planned</span></dd></div>
-      </dl>
-    </header>
-
-    <div className="dp-tabs" role="tablist" aria-label="Works programme">
-      {distinct.map((item, index) => <button key={item.id} type="button" role="tab"
-        aria-selected={item.id === plan.id} className={item.id === plan.id ? 'is-selected' : ''}
-        aria-label={`${item.label}: ${format(item.deliveredToDate)} of ${format(item.plannedToDate)} ${item.unit}`}
-        onClick={() => setSelected(item.id)}>
-        <span>{String(index + 1).padStart(2, '0')}</span>
-        <b>{item.label}</b>
-        <small>{format(item.deliveredToDate)} / {format(item.plannedToDate)} {item.unit}</small>
-      </button>)}
+export function DeliveryPlans({overview=false}:{overview?:boolean}={}) {
+  const [programme,setProgramme]=useState('compost-pits');
+  const [period,setPeriod]=useState<string|null>(null);
+  const [sort,setSort]=useState('district');
+  const [district,setDistrict]=useState('');
+  const [mapMeasure,setMapMeasure]=useState('rate');
+  const [visual,setVisual]=useState(overview?'map':'timeline');
+  useEffect(()=>{
+    const requested=new URLSearchParams(window.location.search).get('programme');
+    // Hydration-safe deep link to a selected programme.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if(requested) setProgramme(requested);
+  },[]);
+  const plans=useMemo(()=>getDeliveryPlans(period),[period]);
+  const distinct=plans.filter(p=>!p.duplicateOf);
+  const plan=distinct.find(p=>p.id===programme)??distinct[0];
+  if(!plan)return null;
+  const month=plan.selectedMonth;
+  const achievement=plan.periodicity==='monthly'?month?.achievement??null:plan.districts.some(d=>!d.achievementMissing)?plan.deliveredToDate:null;
+  const target=plan.periodicity==='monthly'?month?.target??null:plan.districts.some(d=>!d.targetMissing)?plan.plannedToDate:null;
+  const ratio=plan.paceToDate;
+  const rows=[...plan.districts].filter(d=>!district||d.district===district).sort((a,b)=>sort==='district'?a.district.localeCompare(b.district):sort==='gap'?((b.targetMissing||b.achievementMissing?-Infinity:b.target-b.achievement)-(a.targetMissing||a.achievementMissing?-Infinity:a.target-a.achievement)):(b.achievementMissing?-Infinity:b.achievement)-(a.achievementMissing?-Infinity:a.achievement));
+  const mapScope=plan.districts.filter(d=>!district||d.district===district),mapPaired=mapScope.filter(d=>!d.targetMissing&&!d.achievementMissing);
+  const mapTarget=mapPaired.reduce((sum,d)=>sum+d.target,0),mapAchievement=mapPaired.reduce((sum,d)=>sum+d.achievement,0),mapRate=mapTarget>0?mapAchievement/mapTarget:null;
+  const duplicates=plans.filter(p=>p.duplicateOf);
+  return <section className="evidence-workspace" aria-labelledby="delivery-title">
+    <header className="ew-heading"><div><span className="ew-kicker">Works &amp; programmes · district grain</span><h2 id="delivery-title">Reported progress, <em>in view.</em></h2><p>Read one programme and reporting period, with its target and coverage.</p></div><span className="ew-vintage">Retained {plan.retrievedAt.slice(0,10)}</span></header>
+    <div className="ew-controls"><label>Programme<select aria-label="Works programme" value={plan.id} onChange={e=>{setProgramme(e.target.value);setPeriod(null);setDistrict('');}}>{distinct.map(p=><option value={p.id} key={p.id}>{p.label}</option>)}</select></label>{plan.periodicity==='monthly'&&<label className="ew-period">Reporting period<select value={month?.monthId??''} onChange={e=>{setPeriod(e.target.value);setDistrict('');}}>{plan.months.map(m=><option value={m.monthId} key={m.monthId}>{m.label} {m.year}{m.unreported?' · plan only':''}</option>)}</select></label>}</div>
+    <div className="radar-view-switch" role="group" aria-label="Works visualization"><button aria-pressed={visual==='map'} onClick={()=>setVisual('map')}>District map</button><button aria-pressed={visual==='timeline'} onClick={()=>{setVisual('timeline');setDistrict('');}}>{plan.periodicity==='monthly'?'Monthly series':'Reported position'}</button></div>
+    {visual==='timeline'&&<>
+    <div className="ew-reading" aria-live="polite">
+      <div className="ew-primary" role="group" aria-label="Selected programme position"><span>{month?`${month.label} ${month.year} ${month.unreported?'· plan only':'achievement'}`:'Reported achievement · no period supplied'}</span><strong>{number(achievement)}</strong><small>{plan.unit} · target {number(target)}</small><hr/><div className="ew-secondary"><b>{ratio===null?'No rate':`${(ratio*100).toFixed(1)}%`}</b><small>of target · districts with both measures</small></div></div>
+      <div className="ew-chart-panel"><h3>{plan.label}</h3><p className="ew-caption">{plan.periodicity==='monthly'?'Reported achievement and forward targets · common scale':'One reported position per district'}</p>{plan.periodicity==='monthly'?<WorksTimeline months={plan.months} selected={month?.monthId} onSelect={setPeriod} unit={plan.unit}/>:<><div className="ew-state-bar" role="img" aria-label={`${number(achievement)} achieved against ${number(target)} targeted`}><i style={{width:`${Math.min(100,(ratio??0)*100)}%`}}/></div><p className="ew-caption">No reporting period is supplied. This is a reported position; a monthly trend cannot be inferred.</p></>}</div>
     </div>
-
-    <div className="dp-body">
-      {plan.periodicity === 'monthly' ? <>
-        <PlanChart plan={plan}/>
-        <p className="dp-legend">
-          <i className="dp-key-actual" aria-hidden="true"/>Reported achievement
-          <i className="dp-key-target" aria-hidden="true"/>Monthly target
-          <i className="dp-key-planned" aria-hidden="true"/>Plan only — not yet reported
-        </p>
-      </> : <div className="dp-flat">
-        <div>
-          <span>Delivered</span>
-          <strong>{format(plan.deliveredToDate)}</strong>
-          <small>of {format(plan.plannedToDate)} {plan.unit} targeted across {plan.districts.length} districts</small>
-        </div>
-        <div className="dp-flat-bar" aria-hidden="true">
-          <i style={{ width: `${plan.paceToDate === null ? 0 : Math.min(100, plan.paceToDate * 100)}%` }}/>
-        </div>
-        <p>No chart is drawn: this source reports no period, so there is no series to plot.</p>
-      </div>}
-      <p className="dp-boundary">{plan.boundary}</p>
-      {plan.transposedIdentity && <p className="dp-transposed">
-        <b>Column transposition in this source.</b> Its identifier and name columns hold each
-        other’s values — <code>dstrt_id</code> returns the district name and <code>dstrt_nm</code>
-        returns the numeric id. The district labels below are read from the LGD name column
-        instead. Nothing is silently swapped, and the flag clears itself if the source is fixed.
-      </p>}
-    </div>
-
-    {duplicates.length > 0 && <div className="dp-duplicate" role="note">
-      <span className="dp-duplicate-tag">Endpoint excluded from every total</span>
-      {duplicates.map((item) => <p key={item.id}>
-        <b>{item.tableKey}</b> returns rows identical to <b>{item.duplicateOf}</b>, and its own
-        {' '}<code>work_name</code> column reads &ldquo;{item.reportedWorkName}&rdquo;. It is a
-        second copy of one programme, not a second programme, so it is not counted twice.
-      </p>)}
-    </div>}
-
-    <div className="dp-districts">
-      <header>
-        <span className="dp-kicker">{plan.periodicity === 'point-in-time' ? 'As reported' : 'Elapsed window only'}</span>
-        <h3>{plan.label} by district<span>{plan.periodicity === 'point-in-time' ? `As reported · ${plan.unit}` : `${plan.elapsed.length} reported months · ${plan.unit}`}</span></h3>
-      </header>
-      <div className="dp-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">District</th><th scope="col">Planned</th>
-              <th scope="col">Delivered</th><th scope="col">Pace</th>
-              {plan.periodicity === 'monthly' && <th scope="col">Silent months</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {plan.districts.map((district) => {
-              const pace = district.target > 0 ? district.achievement / district.target : null;
-              return <tr key={district.district}>
-                <th scope="row">{district.district}</th>
-                <td>{format(district.target)}</td>
-                <td>{format(district.achievement)}</td>
-                <td>{pace === null ? <em>No rate</em> : `${Math.round(pace * 100)}%`}</td>
-                {plan.periodicity === 'monthly' && <td>{district.silentMonths || <em>None</em>}</td>}
-              </tr>;
-            })}
-          </tbody>
-        </table>
-      </div>
-      <p className="dp-note">
-        {plan.periodicity === 'monthly'
-          ? <>Planned and delivered cover the {plan.elapsed.length} reported months only, not the full-year plan of {format(plan.plannedTotal)} {plan.unit}. </>
-          : <>Planned and delivered are the single figures the source returns per district. </>}
-        A district with no rate reported no target, which is not a target of zero.
-      </p>
-    </div>
-
-    <details className="dp-method">
-      <summary>Source &amp; reading boundary</summary>
-      <div>
-        <p>
-          {plan.tableKey} · district grain · unit <b>{plan.unit}</b>, read from the source&rsquo;s
-          own <code>units</code> column rather than assumed from the dataset name.
-          {plan.reportedWorkName && <> The source describes these rows as &ldquo;{plan.reportedWorkName}&rdquo;.</>}
-          {' '}{plan.rows} rows retained, {plan.excluded} excluded for a missing period, a
-          missing district, or two different measurements for one district-month.
-        </p>
-        <p>
-          Pace is delivered over planned across the elapsed window. It describes reported
-          progress against a reported plan. It is not a performance score, and no district
-          is ranked by it.
-        </p>
-      </div>
-    </details>
+    </>}
+    <div className="ew-meta"><span>{month?`${month.reportedDistricts} of ${plan.expectedDistricts} districts report achievement`:`${plan.districts.length} district positions`}</span><span>{plan.excluded} raw rows held out</span>{plan.remaining.length>0&&<span>{plan.remaining.length} months carry targets only</span>}</div>
+    {plan.periodicity==='monthly'&&<p className="ew-caption vi-reading-note">Monthly or cumulative basis is unconfirmed. Months are kept separate; future targets do not imply zero achievement.</p>}
+    {plan.transposedIdentity&&<div className="ew-notice">The source&rsquo;s original district name and ID fields are transposed. The table uses the supplied LGD district name.</div>}
+    {visual==='map'&&<section className="vi-geography-section"><div className="ew-controls"><label>Map measure<select aria-label="Works map measure" value={mapMeasure} onChange={e=>setMapMeasure(e.target.value)}><option value="rate">Achievement against target</option><option value="gap">Reported target balance</option></select></label></div><div className="vi-map-review"><div className="ew-primary" role="group" aria-label="Selected programme position"><span>{month?`${month.label} ${month.year}`:'Reported position'}</span><strong>{mapRate===null?'No rate':`${(mapRate*100).toFixed(1)}%`}</strong><p>achievement against target</p><small>{number(mapAchievement)} achieved / {number(mapTarget)} target · {plan.unit}</small><hr/><p>{district||'All returned districts'}</p><small>Figures use districts with both target and achievement in this selection.</small></div><DistrictMap rows={plan.districts.map(d=>({district:d.district,value:d.targetMissing||d.achievementMissing?null:mapMeasure==='gap'?Math.max(0,d.target-d.achievement):d.target>0?d.achievement/d.target*100:null,detail:`${d.achievementMissing?'Not reported':number(d.achievement)} achieved / ${d.targetMissing?'not reported':number(d.target)} target ${plan.unit} · ${month?`${month.label} ${month.year}`:'Reporting period not supplied'}`}))} selected={district} onSelect={setDistrict} title={mapMeasure==='gap'?'Reported balance by district':'Delivery by district'} unit={mapMeasure==='gap'?plan.unit:'%'} maximum={mapMeasure==='rate'?100:undefined}/></div></section>}
+    <details className="vi-disclosure"><summary>Inspect {rows.length} district positions</summary><section className="ew-table-section"><header><div><h3>{plan.label} by district</h3><p className="ew-caption">{month?`${month.label} ${month.year}`:'No reporting period supplied'} · {plan.unit}</p></div><label className="ew-caption">Order<select aria-label="Order programme districts" value={sort} onChange={e=>setSort(e.target.value)}><option value="district">District name</option><option value="gap">Largest reported target gap</option><option value="achievement">Reported achievement</option></select></label></header><div className="ew-table-scroll"><table><thead><tr><th scope="col">District</th><th scope="col">Target</th><th scope="col">Achievement</th><th scope="col">Of target</th></tr></thead><tbody>{rows.map(d=><tr key={d.district}><th scope="row">{d.district}</th><td>{d.targetMissing?<em>Not reported</em>:number(d.target)}</td><td>{d.achievementMissing?<em>Not reported</em>:number(d.achievement)}</td><td>{d.targetMissing||d.achievementMissing||d.target===0?<em>No rate</em>:`${(d.achievement/d.target*100).toFixed(1)}%`}</td></tr>)}</tbody></table></div></section></details>
+    <div className="ew-evidence"><details><summary>Source &amp; reading boundary</summary><div><p><code>{plan.tableKey}</code> · {plan.rows} raw rows · {plan.expectedDistricts} observed districts.</p><p>{plan.boundary}</p></div></details>{duplicates.length>0&&<details><summary>{duplicates.length} duplicate programme route excluded</summary><div>{duplicates.map(p=><p key={p.id}><code>{p.tableKey}</code> returns the same programme records as <code>{p.duplicateOf}</code>. Reported work: {p.reportedWorkName}.</p>)}</div></details>}{plan.remaining.length>0&&<details><summary>Future targets · {plan.remaining.length} unreported months</summary><div>{plan.remaining.map(m=><p key={m.monthId}>{m.label} {m.year}: target {number(m.target)} {plan.unit}; achievement not reported.</p>)}</div></details>}</div>
   </section>;
 }

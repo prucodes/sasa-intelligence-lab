@@ -19,3 +19,19 @@ artifacts/
 
 # Resumable page cache for scripts/retain-snapshot.mjs. Regenerable, never shipped.
 data/.retain-cache/
+
+# Internal working notes: kept locally, never published.
+ASSESSMENT_2026-09-09.md
+CODEX_BRIEF.md
+DESIGN_INTELLIGENCE_2026-09-09.md
+FIFTH_ROUND_2026-09-10.md
+FINAL_DESIGN_DATA_REVIEW_2026-09-10.md
+FOURTH_ROUND_2026-09-09.md
+NOTE_TO_CODEX.md
+NOTE_TO_CODEX_DELTA.md
+PERFORMANCE_RADAR_FEASIBILITY_2026-09-09.md
+SECOND_ROUND_2026-09-09.md
+SUBJECT_RANKINGS_2026-09-09.md
+THIRD_ROUND_2026-09-09.md
+ULB_COMPARISON_2026-09-09.md
+ULB_SERVICE_RADAR_2026-09-09.md

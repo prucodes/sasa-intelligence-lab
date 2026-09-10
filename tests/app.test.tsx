@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LabApp } from '@/app/lab-app';
+import { readinessCatalogueStats } from '@/lib/catalogue';
 
 describe('application shell and screens', () => {
   beforeEach(() => {
@@ -49,8 +50,10 @@ describe('application shell and screens', () => {
     expect(screen.getAllByText(/6,509/).length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { name: /the operational picture/i })).toBeInTheDocument();
     expect(screen.getByLabelText('Operational review issues')).toHaveTextContent(/Vehicle delivery.*Household toilets.*Legacy waste/i);
+    expect(screen.getByLabelText('Four-month rural collection comparison')).toHaveTextContent('85,769');
+    fireEvent.click(screen.getByRole('button', {name:/Household toilets/}));
     expect(screen.getByLabelText('Connected district and ULB review')).toHaveTextContent(/approvals awaiting completion/i);
-    expect(screen.getByLabelText('Evidence scope and decision boundary')).toHaveTextContent(/UNSCORED/i);
+    expect(screen.getByLabelText('Evidence scope and decision boundary')).toHaveTextContent(/OPEN GAP RADAR/i);
     expect(screen.queryByText(/102 ULBs rated/i)).not.toBeInTheDocument();
     expect(screen.queryByText('84%')).not.toBeInTheDocument();
   });
@@ -77,11 +80,12 @@ describe('application shell and screens', () => {
 
   it('updates the evidence inspector when a sample metric is selected', () => {
     render(<LabApp page="diagnostics" initialMode="SAMPLE" initialUlbKey="sample-narsipatnam" />);
+    fireEvent.click(screen.getByRole('button', {name:/^Facilities /}));
     fireEvent.click(screen.getByRole('button', { name: /Processing facility/i }));
     expect(screen.getByText('total_tpd')).toBeInTheDocument();
     expect(screen.getByText('30', { selector: 'b' })).toBeInTheDocument();
     expect(screen.getByText(/unreviewed — excluded from scoring/i, { selector: '.evidence-row b' })).toBeInTheDocument();
-    expect(screen.getByText(/candidate cross-source identity — not yet reviewed/i)).toBeInTheDocument();
+    expect(screen.getByText(/candidate identity awaiting review/i)).toBeInTheDocument();
     expect(screen.getByText('Grain')).toBeInTheDocument();
     expect(screen.getByText('Formula / check')).toBeInTheDocument();
   });
@@ -96,11 +100,13 @@ describe('application shell and screens', () => {
   it('shows and filters all authorized snapshots without implying scoring eligibility', () => {
     render(<LabApp page="data-readiness" initialMode="SAMPLE" />);
     const activationPipeline = screen.getByLabelText(/evidence activation pipeline/i);
-    expect(activationPipeline).toHaveTextContent(/complete retained/i);
-    expect(activationPipeline).toHaveTextContent(/44/);
+    expect(activationPipeline).toHaveTextContent(/current responses retained/i);
+    expect(activationPipeline).toHaveTextContent(new RegExp(String(readinessCatalogueStats.platformAvailable)));
+    // Retained responses grow with every sync; assert the live figure, not a snapshot of it.
+    expect(activationPipeline).toHaveTextContent(new RegExp(String(readinessCatalogueStats.freshResponsesRetained)));
     expect(activationPipeline).toHaveTextContent(/scoring eligible/i);
     expect(activationPipeline).toHaveTextContent(/unscored/i);
-    expect(screen.getAllByText(/complete governed snapshot/i)).toHaveLength(44);
+    expect(screen.getAllByText(/retained historical snapshot/i)).toHaveLength(44);
     
     // Thirteen are documented on paper only (3 PR + 10 CDMA whose keys 404 on live).
     // Nothing is documented-only any more: every granted dataset is retained.
@@ -198,8 +204,8 @@ describe('application shell and screens', () => {
     const {container} = render(<LabApp page="data-readiness" initialMode="SAMPLE" />);
     fireEvent.click(screen.getByRole('tab', {name:'Quality'}));
     const blockedCount = container.querySelector('.inbox-blocked b')?.textContent;
-    // Down from 4: the unavailable-endpoint condition cleared when Gobardhan recovered.
-    expect(blockedCount).toBe('3');
+    // Reconciled retained exports and the rural comparison no longer create blockers.
+    expect(blockedCount).toBe('2');
     fireEvent.click(screen.getAllByRole('button', {name:'Mark reviewed locally'})[0]);
     expect(container.querySelector('.inbox-blocked b')).toHaveTextContent(blockedCount!);
     expect(screen.getByText(/summed open condition counts · may overlap/i)).toBeInTheDocument();
@@ -230,7 +236,7 @@ describe('application shell and screens', () => {
 
   it('explains why authenticated sample entities remain unscored', () => {
     render(<LabApp page="gap-radar" initialMode="SAMPLE" />);
-    expect(screen.getByRole('heading', { name: 'Gap Radar', exact: true })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Gap Radar' })).toBeInTheDocument();
     expect(screen.getByText('0', { selector: '.radar-zero strong' })).toBeInTheDocument();
     expect(screen.getByText(/entities eligible for scoring/i)).toBeInTheDocument();
     expect(screen.getByText(/working crosswalk reviewed locally/i)).toBeInTheDocument();

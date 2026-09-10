@@ -1,0 +1,8 @@
+'use client';
+import {getDistinctDeliveryPlans} from '@/lib/delivery-plan';
+import './analysis-workspace.css';
+import './evidence-expansion.css';
+export function WorksOverview({href=(p:string)=>`${p}?mode=governed`}:{href?:(path:string)=>string}) {
+  const plans=getDistinctDeliveryPlans().filter(p=>['compost-pits','magic-drains','sanitary-complexes'].includes(p.id));
+  return <section className="evidence-workspace" aria-labelledby="works-overview-title"><header className="ew-heading"><div><span className="ew-kicker">Works programmes · district evidence</span><h2 id="works-overview-title">Read the reported position.<br/><em>See the plan ahead.</em></h2><p>Latest month with an achievement measurement in each programme. Future target-only months remain separate.</p></div></header><div className="works-overview-grid">{plans.map(p=><a key={p.id} className="works-overview-card" href={`${href('/operational-analytics')}&tab=delivery&programme=${p.id}`}><span>{p.selectedMonth?.label} {p.selectedMonth?.year}</span><h3>{p.label}</h3><strong>{p.selectedMonth?.achievement?.toLocaleString('en-IN',{maximumFractionDigits:3})??'Not reported'}</strong><p>{p.unit} reported · target {p.selectedMonth?.target?.toLocaleString('en-IN',{maximumFractionDigits:3})??'not reported'}</p><small>{p.selectedMonth?.reportedDistricts} / {p.expectedDistricts} observed districts report achievement<br/>{p.months.length} months in source · {p.remaining.length} target-only months after the last reported achievement</small><span>Inspect monthly series and districts ↗</span></a>)}</div><p className="ew-notice">Monthly additions versus cumulative positions remain unconfirmed. Repeated monthly targets and achievements are not added into a financial-year total.</p></section>;
+}

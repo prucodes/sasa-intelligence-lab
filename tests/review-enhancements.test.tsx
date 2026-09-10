@@ -65,12 +65,14 @@ describe('source-owned diagnostic readings',()=>{
     const onInspect=vi.fn();
     render(<DiagnosticReadings records={diagnostic.evidence} onInspect={onInspect}/>);
     for(const reading of getDiagnosticReadings(diagnostic.evidence).filter(reading=>reading.evidenceIds.length)){
+      const group = reading.family==='delivery'?'Delivery':reading.family==='facility'?'Facilities':'Historical outcomes';
+      fireEvent.click(screen.getByRole('button',{name:new RegExp(`^${group} `)}));
       fireEvent.click(screen.getByRole('button',{name:`Inspect ${reading.title} source`}));
       expect(onInspect).toHaveBeenLastCalledWith(reading.evidenceIds[0]);
       const evidence=diagnostic.evidence.find(row=>row.id===reading.evidenceIds[0]);
       expect(evidence?.period).toBe(reading.period);
     }
-    expect(screen.getByText('Historical outcome context')).toBeInTheDocument();
+    expect(screen.getByText(/Historical source statuses and rank/)).toBeInTheDocument();
   });
 });
 
@@ -92,7 +94,7 @@ describe('executive evidence brief',()=>{
   });
   it('previews, prints and closes; failed downloads report an actionable message',()=>{
     const onClose=vi.fn();const print=vi.spyOn(window,'print').mockImplementation(()=>{});
-    vi.stubGlobal('URL',class extends URL {static createObjectURL(){throw new Error('blocked');}});
+    vi.stubGlobal('URL',class extends URL {static createObjectURL():string{throw new Error('blocked');}});
     render(<ExecutiveBrief mode="SAMPLE" onClose={onClose}/>);
     const dialog=screen.getByRole('dialog',{name:'Executive evidence brief'});
     fireEvent.click(within(dialog).getByRole('button',{name:'Print / Save PDF'}));expect(print).toHaveBeenCalledOnce();

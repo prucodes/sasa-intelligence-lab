@@ -1,3 +1,4 @@
+import { aggregateEvidenceByKey } from './aggregate-evidence';
 import { anchorRegistry, sameDistrict } from '@/lib/crosswalk';
 import type { Coverage } from '@/lib/coverage';
 import { excludeDisputed, findDisputedGroups, type DisputedGroup } from '@/lib/disputes';
@@ -1169,17 +1170,13 @@ export function getSupportingProgrammePortfolio(): SupportingProgrammeItem[] {
   return configs.map((config) => {
     const source = snapshot(config.tableKey);
     const deduplicated = uniqueRecords(currentSnapshotRecords(source)).records;
-    // Resolve the achievement column the retained vintage actually carries. Passing a
-    // candidate that is absent would make every row's value `undefined`, which reads as
-    // unanimous agreement and silently switches dispute exclusion off.
-    const achievementField = config.achievementFields.find((field) => deduplicated.some((record) => record[field] !== undefined))
-      ?? config.achievementFields[0];
-    // Places whose rows disagree on the achievement have no usable figure, so
-    // they leave the aggregate entirely rather than contributing both values.
-    const disputed = excludeDisputed(deduplicated, achievementField);
-    const records = disputed.records;
+    // Resolve each row's supported aliases before comparing BOTH sides of its ratio.
+    // Missing measures remain null; an absent column cannot silently disable exclusion.
     const targetFor = (record: SnapshotRecord) => numberValue(firstValue(record, ...config.targetFields));
     const achievementFor = (record: SnapshotRecord) => numberValue(firstValue(record, ...config.achievementFields));
+    const disputed = excludeDisputed(deduplicated, record=>[targetFor(record),achievementFor(record)]);
+    const records = disputed.records;
+    const pairedRecords = records.filter(record=>targetFor(record)!==null && achievementFor(record)!==null);
     const target = sum(records.map(targetFor));
     const achievement = sum(records.map(achievementFor));
     const percentageConflicts = records.filter((record) => {
@@ -1201,7 +1198,7 @@ export function getSupportingProgrammePortfolio(): SupportingProgrammeItem[] {
       records: records.length,
       target,
       achievement,
-      coverage: safeDivide(achievement, target).value,
+      coverage: safeDivide(sum(pairedRecords.map(achievementFor)), sum(pairedRecords.map(targetFor))).value,
       zeroTargets: records.filter((record) => targetFor(record) === 0).length,
       aboveTargetRows: records.filter((record) => {
         const rowTarget = targetFor(record);
@@ -1586,16 +1583,16 @@ const primaryDatasetUse = new Map<string, string>([
   ['msw_cbg_units_new1_api', 'Supplied LGD crosswalk; configured TPD registry'],
   ['cd_waste_process_plants_revival_new1_api', 'Supplied LGD crosswalk; configured plant capacity'],
   ['sewage_treated_qty_new1_api', 'Supplied LGD crosswalk; plant capacity and progress label'],
-  ['compost_pits_api', 'Twelve-month delivery plan and elapsed-window pace'],
-  ['magic_drains_api', 'Twelve-month delivery plan, measured in kilometres'],
+  ['compost_pits_api', 'Selected-month achievement and target · additivity unconfirmed'],
+  ['magic_drains_api', 'Reported monthly positions, measured in kilometres'],
   ['soak_pits_api', 'Duplicate detection: returns Compost Pits rows, excluded from totals'],
   ['sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026', 'Rural sanitation: mandal operators reported vs counted'],
   // Retained in full but far too large to bundle; each reaches the app only as a
   // reporting-continuity summary, which is the only honest reading they support.
-  ['msw_door_to_door_collection_api', 'Reporting continuity: 94.6% of collection on one day'],
+  ['msw_door_to_door_collection_api', 'Daily collection: distinct records, zero and missing measures'],
   ['identification_of_bulk_waste_generators_api', 'Reporting continuity: steady, from a minority of secretariats'],
-  ['onsite_processing_of_wet_waste_bwg_api', 'Reporting continuity: 3,722 of 4,033 secretariats never report'],
-  ['waste_egregation_api', 'Reporting continuity: 93.2% of segregation on one day'],
+  ['onsite_processing_of_wet_waste_bwg_api', 'Daily processing: positive activity and valid zero observations'],
+  ['waste_egregation_api', 'Daily segregation: concentration and measurement coverage'],
   // Rural, retained in full and reaching the app as aggregates rather than bundled rows.
   ['sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026', 'Rural sanitation: SWPC coverage and condition across 12,874 gram panchayats'],
   ['sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026', 'Rural cohort: collection activity against the SWPC register'],
@@ -1625,6 +1622,7 @@ const supportingDatasetUse = new Map<string, string>([
 export function getDatasetUsageAudit(): DatasetUsageAudit {
   const rows = readinessCatalogue.map<DatasetUsageRow>((dataset) => {
     const source = governedSnapshotByKey.get(dataset.tableKey);
+    const aggregate = aggregateEvidenceByKey.get(dataset.tableKey);
     const state: DatasetUsageState = dataset.sourceState === 'DOCUMENTED — INGESTION PENDING'
       ? 'pending'
       : primaryDatasetUse.has(dataset.tableKey)
@@ -1646,9 +1644,9 @@ export function getDatasetUsageAudit(): DatasetUsageAudit {
       programme: dataset.programme,
       state,
       usage,
-      records: source?.records.length ?? 0,
+      records: source?.records.length ?? aggregate?.rows ?? 0,
       period: source ? snapshotPeriod(source)
-        : state === 'pending' ? 'Ingestion pending'
+        : aggregate ? `${aggregate.period} · ${aggregate.quality}` : state === 'pending' ? 'Ingestion pending'
           : state === 'awaiting-pull' ? 'Awaiting pull'
             : 'Unavailable',
     };
@@ -1853,8 +1851,9 @@ export function getDataQualityIssues(): DataQualityIssue[] {
   const schemaAliasSnapshots = governedSnapshots.filter((item) => item.records.some((record) =>
     record.dstrt_nm !== undefined || record.ulb_nm !== undefined || record.mnth_nm !== undefined)).length;
   return [
-    { id: 'pagination', title: 'Incomplete pagination', count: incompletePagination, severity: incompletePagination ? 'blocked' : 'info', detail: incompletePagination ? 'Some retrieved snapshots do not reconcile.' : 'All 29 retained snapshots reconcile to source totals.' },
+    { id: 'pagination', title: 'Incomplete pagination', count: incompletePagination, severity: incompletePagination ? 'blocked' : 'info', detail: incompletePagination ? 'Some retrieved snapshots do not reconcile.' : `All ${governedSnapshots.length} bundled retained snapshots reconcile to their response totals.` },
     { id: 'duplicates', title: 'Exact duplicate current-period rows', count: reconciliationById.get('recon-duplicates')?.count ?? collection.duplicateRowsExcluded + ihhl.duplicateRowsExcluded, severity: 'review', detail: 'Duplicates across all latest-period exports are excluded from analytical totals and retained for inspection.' },
+    { id: 'duplicates-all-periods', title: 'Exact repeated rows across retained history', count: governedSnapshots.reduce((sum,source)=>sum+uniqueRecords(source.records).duplicates,0), severity: 'review', detail: 'All retained periods, including future target-only months. Counted per route; separate from repeated endpoint copies.' },
     { id: 'ambiguous-entity-period', title: 'Ambiguous entity-period records', count: reconciliationById.get('recon-ambiguous')?.count ?? 0, severity: 'review', detail: 'More than one distinct row exists for the same source, candidate identity, and period.' },
     { id: 'percentage-reconciliation', title: 'Percentage reconciliation differences', count: reconciliationById.get('recon-percentage')?.count ?? 0, severity: 'review', detail: 'Source-reported percentages differ from achievement divided by target; source semantics require review.' },
     { id: 'denominators', title: 'Zero denominators', count: reconciliationById.get('recon-zero-target')?.count ?? collection.zeroTargets + ihhl.zeroApprovalRows, severity: 'review', detail: 'Ratios are suppressed; zero or missing denominators never display as 0%.' },
@@ -1862,11 +1861,11 @@ export function getDataQualityIssues(): DataQualityIssue[] {
     { id: 'balance-reconciliation', title: 'Legacy-waste balance mismatch', count: reconciliationById.get('recon-balance')?.count ?? 0, severity: 'review', detail: 'Target, achievement, and balance do not reconcile for the flagged source row.' },
     { id: 'period-conflicts', title: 'FSTP month conflicts', count: processing.periodConflicts, severity: 'blocked', detail: 'Source month number 7 conflicts with source month name JUNE; values are not silently corrected.' },
     { id: 'history', title: 'Multi-period full exports', count: multiPeriodExports, severity: 'info', detail: 'History is enumerated from returned records; current analytics select each dataset’s latest governed period.' },
-    { id: 'filtered', title: 'Active source-filtered exports', count: filteredExports, severity: filteredExports ? 'review' : 'info', detail: filteredExports ? 'Some active responses include geographic filters and are not described as statewide.' : 'The 29 active full exports use empty export filters; earlier filtered evidence remains archived separately.' },
+    { id: 'filtered', title: 'Active source-filtered exports', count: filteredExports, severity: filteredExports ? 'review' : 'info', detail: filteredExports ? 'Some active responses include geographic filters and are not described as statewide.' : `The ${governedSnapshots.length} bundled full exports use empty export filters; earlier scoped responses remain archived separately.` },
     { id: 'stale-filter-contracts', title: 'Stale dataset-page filter contracts', count: 13, severity: 'review', detail: 'Some dataset detail pages advertise obsolete filter fields even though governed full exports remain available.' },
-    { id: 'unavailable', title: 'Unavailable authorized endpoints', count: missingAuthorizedSnapshotKeys.length, severity: 'blocked', detail: 'Gobardhan is authorized but no governed response was retained.' },
-    { id: 'documented-pr', title: 'Documented PR integrations pending', count: documentedIntegrationCatalogue.length, severity: 'review', detail: 'Three additional table keys have documented schemas, but no complete authenticated snapshot is retained in the project.' },
-    { id: 'pr-pagination', title: 'PR response pagination incomplete', count: 1, severity: 'blocked', detail: 'The documented door-to-door example returns 100 of 1,241,643 rows with a next-page token; it is excluded from analytics.' },
+    { id: 'unavailable', title: 'Unavailable authorized endpoints', count: missingAuthorizedSnapshotKeys.length, severity: missingAuthorizedSnapshotKeys.length ? 'blocked' : 'info', detail: missingAuthorizedSnapshotKeys.length ? 'Listed historical routes have no retained response.' : 'No missing response in the historical route list. Gobardhan is retained.' },
+    { id: 'documented-pr', title: 'Documented PR integrations pending', count: documentedIntegrationCatalogue.filter(d=>!governedSnapshotByKey.has(d.tableKey)&&!aggregateEvidenceByKey.has(d.tableKey)).length, severity: 'info', detail: 'PR register, collection and operator evidence are retained; active earlier-month pulls extend the available history.' },
+    { id: 'pr-pagination', title: 'PR response pagination incomplete', count: 0, severity: 'info', detail: 'May through August raw-row totals reconcile. Observed GP-day grids remain partially covered; comparison uses the common first-week cohort.' },
     { id: 'pr-semantics', title: 'PR title-to-schema conflicts', count: 2, severity: 'review', detail: 'Two endpoint titles and returned field semantics appear inverted between SWPC and Swachh Ratham concepts; labels require source-owner review.' },
     { id: 'identity', title: 'Snapshots without shared stable ULB IDs', count: snapshotsWithoutStableUlbIds, severity: 'blocked', detail: 'Normalized names remain candidate identities; no fuzzy matching is applied.' },
     { id: 'missing-fields', title: 'Blank retained field values', count: blankSourceValues, severity: blankSourceValues ? 'review' : 'info', detail: 'Blank strings are counted directly from retained rows and are never converted to zero.' },
@@ -1973,7 +1972,7 @@ export function getClearanceRankContrast(): ClearanceRankContrast {
   return {
     points,
     clearancePeriod: legacy.period,
-    rankYear: outcomes.reportingYear,
+    rankYear: Number(outcomes.reportingYear),
     clearanceCandidates: clearanceCandidateKeys.size,
     rankCandidates: rankByCandidate.size,
     excludedNoRank,

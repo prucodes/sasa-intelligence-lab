@@ -1,24 +1,11 @@
-/**
- * Reporting continuity for the secretariat-day CDMA exports.
- *
- *   node scripts/aggregate-continuity.mjs
- *
- * These four datasets are ~64,500 rows each and git-ignored, so the app can only ever
- * see a rollup. The rollup worth having is not their totals — it is whether the rows
- * were actually reported.
- *
- * Each arrives 100% filled on every column, which passes every completeness check this
- * product has. The failure is different and harder to see: a value present but zero,
- * repeated across most entities and most days. `msw_door_to_door_collection_api` puts
- * 94.6% of all reported collection on one day of sixteen; `identification_of_bulk_
- * waste_generators_api` reports steadily but from only ~23% of secretariats. Those need
- * different warnings, so the verdict is measured per dataset rather than assumed.
- *
- * Output: data/aggregates/reporting-continuity.json (small, committed, bundled).
+/** Build daily evidence with exact-repeat collapse, conflicting-key holdout,
+ * and separate positive, zero and missing measurement counts.
+ * Raw-count reconciliation does not certify distinct source completeness.
  */
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { sourceNumber, sourceText, uniqueSourceRecords } from '../lib/record-contract.mjs';
 
 const LARGE = resolve(process.cwd(), 'data/large-snapshots');
 const OUT = resolve(process.cwd(), 'data/aggregates');
@@ -31,7 +18,6 @@ const SPECS = {
   waste_egregation_api: { label: 'Waste segregation', measure: 'garbage_segregation', denominator: 'total_households', entity: 'sachivalayam_code', unit: 'households', measureLabel: 'households segregating waste' },
 };
 
-const num = (value) => { const n = Number(String(value ?? '').replace(/,/g, '')); return Number.isFinite(n) ? n : 0; };
 const first = (record, ...names) => names.find((name) => record[name] !== undefined);
 
 async function loadRows(dir) {
@@ -43,13 +29,21 @@ async function loadRows(dir) {
 }
 
 async function summarise(tableKey) {
-  const dir = resolve(LARGE, tableKey);
+  const current = resolve(LARGE, 'current', tableKey);
+  const dir = existsSync(resolve(current, 'manifest.json')) ? current : resolve(LARGE, tableKey);
   if (!existsSync(resolve(dir, 'manifest.json'))) return null;
   const manifest = JSON.parse(await readFile(resolve(dir, 'manifest.json'), 'utf8'));
   const rows = await loadRows(dir);
   if (!rows.length) return null;
 
-  const spec = SPECS[tableKey] ?? {};
+  return summariseContinuity(rows, SPECS[tableKey], {tableKey, ...manifest});
+}
+
+export function summariseContinuity(rawRows, spec, manifest = {}) {
+  const {tableKey = 'test'} = manifest;
+  const key = (row) => sourceText(row[spec.entity]) && sourceText(row.date1) ? `${row[spec.entity]}|${row.date1}` : null;
+  const {records:rows, quality} = uniqueSourceRecords(rawRows, key);
+  if (!rows.length) return null;
   // Resolve the columns this export actually carries rather than trusting the spec.
   const measure = spec.measure && rows[0][spec.measure] !== undefined ? spec.measure
     : first(rows[0], 'collected_households', 'no_of_bwgs', 'wet_waste_processing_bwgs', 'garbage_segregation');
@@ -60,19 +54,25 @@ async function summarise(tableKey) {
   const perEntity = new Map();
   for (const record of rows) {
     const date = String(record.date1 ?? '').trim();
-    const reported = measure ? num(record[measure]) > 0 : false;
-    const day = perDate.get(date) ?? { date, rows: 0, reporting: 0, value: 0, denominator: 0 };
+    const value = measure ? sourceNumber(record[measure]) : null;
+    const bottom = denominator ? sourceNumber(record[denominator]) : null;
+    const reported = value !== null;
+    const day = perDate.get(date) ?? { date, rows: 0, reporting: 0, positive:0, zero:0, missing:0, value: 0, denominator: 0, pairedValue:0, pairedRows:0 };
     day.rows += 1;
     if (reported) day.reporting += 1;
-    if (measure) day.value += num(record[measure]);
-    if (denominator) day.denominator += num(record[denominator]);
+    if (value === null) day.missing++;
+    else if (value === 0) day.zero++;
+    else day.positive++;
+    day.value += value ?? 0;
+    if (value !== null && bottom !== null) { day.denominator += bottom; day.pairedValue += value; day.pairedRows++; }
     perDate.set(date, day);
 
     if (entity) {
       const key = String(record[entity] ?? '').trim();
-      const item = perEntity.get(key) ?? { days: 0, reporting: 0 };
+      const item = perEntity.get(key) ?? { days: 0, reporting: 0, positive:0 };
       item.days += 1;
       if (reported) item.reporting += 1;
+      if (value !== null && value > 0) item.positive++;
       perEntity.set(key, item);
     }
   }
@@ -89,7 +89,7 @@ async function summarise(tableKey) {
   // reporting at a similar, low rate. They mislead differently and are labelled apart.
   const verdict = topShare === null ? 'no-measure'
     : topShare >= 0.5 ? 'single-day-concentration'
-      : entities.length && entities.filter((e) => e.reporting > 0).length / entities.length < 0.6 ? 'partial-but-steady'
+      : entities.length && entities.filter((e) => e.positive > 0).length / entities.length < 0.6 ? 'partial-but-steady'
         : 'continuous';
 
   return {
@@ -98,17 +98,28 @@ async function summarise(tableKey) {
     unit: spec.unit ?? null,
     measureLabel: spec.measureLabel ?? spec.unit ?? 'value',
     rows: rows.length,
+    rawRows:rawRows.length,
+    quality,
     measure,
     denominator,
     entityGrain: entity ? 'Secretariat' : null,
     entities: perEntity.size,
     entitiesNeverReporting: entities.filter((e) => e.reporting === 0).length,
-    entitiesReportingEveryDay: entities.filter((e) => e.days > 0 && e.reporting === e.days).length,
+    entitiesReportingEveryDay: entities.filter((e) => e.reporting === days.length).length,
+    entitiesWithPositiveActivity:entities.filter(e=>e.positive>0).length,
+    missingExpectedRecords:entities.length * days.length - rows.length,
     days: days.map((day) => ({
       date: day.date,
       rows: day.rows,
       reporting: day.reporting,
       reportingRatio: day.rows ? day.reporting / day.rows : null,
+      positive:day.positive,
+      zero:day.zero,
+      missing:day.missing,
+      positiveRatio:day.rows?day.positive/day.rows:null,
+      denominator:day.denominator,
+      pairedValue:day.pairedValue,
+      pairedRows:day.pairedRows,
       value: day.value,
     })),
     busiestDate: busiest?.date ?? null,
@@ -117,18 +128,18 @@ async function summarise(tableKey) {
     verdict,
     // The ratio the data invites, and the same ratio on the busiest day alone. Recorded
     // so the product can show how far apart they are instead of publishing either.
-    naiveRatio: totalDenominator > 0 ? totalValue / totalDenominator : null,
-    busiestDayRatio: busiest && busiest.denominator > 0 ? busiest.value / busiest.denominator : null,
+    naiveRatio: totalDenominator > 0 ? days.reduce((s,d)=>s+d.pairedValue,0) / totalDenominator : null,
+    busiestDayRatio: busiest && busiest.denominator > 0 ? busiest.pairedValue / busiest.denominator : null,
     totalValue,
     totalDenominator,
-    retrievedAt: manifest.retrievedAt,
+    retrievedAt: manifest.retainedAt ?? manifest.retrievedAt,
     pages: manifest.pages,
-    reportedTotalRecordCount: manifest.reportedTotalRecordCount,
+    reportedTotalRecordCount: manifest.reportedTotalRecordCount ?? manifest.liveRows,
   };
 }
 
 async function main() {
-  const keys = existsSync(LARGE) ? (await readdir(LARGE, { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => e.name) : [];
+  const keys = Object.keys(SPECS);
   const datasets = [];
   for (const key of keys.sort()) {
     const summary = await summarise(key);
@@ -142,20 +153,20 @@ async function main() {
   // identifying facts are the page count, the row count and when the pull ran.
   const generatedFrom = Object.fromEntries(datasets.map((dataset) => [dataset.tableKey, {
     generatedAt: dataset.retrievedAt,
-    rows: dataset.rows,
+    rows: dataset.rawRows,
     pages: dataset.pages,
     reportedTotalRecordCount: dataset.reportedTotalRecordCount,
   }]));
 
   await writeFile(resolve(OUT, 'reporting-continuity.json'), `${JSON.stringify({
-    version: 1,
+    version: 2,
     grain: 'Dataset · reported day',
     sourceGrain: 'Secretariat · day',
     generatedFrom,
     datasets,
-    boundary: 'Every one of these exports is 100% filled on every column. Filled is not reported: a present zero is counted here as a non-report, because that is what it is. No coverage ratio is published from them.',
+    boundary: 'One retained record per secretariat and date. Exact repeats are collapsed and conflicting keys held out. Valid zero, positive activity, missing measurements and missing entity/date records are counted separately. The expected-record comparison uses entities and dates observed in this retained scope; it is not a certified population roster or an outage diagnosis.',
   }, null, 2)}\n`, 'utf8');
   console.log(`\n${datasets.length} dataset(s) → data/aggregates/reporting-continuity.json`);
 }
 
-await main();
+if (import.meta.url === `file://${process.argv[1]}`) await main();

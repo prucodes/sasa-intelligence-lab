@@ -137,7 +137,6 @@ export function isCompleteSnapshot(snapshot: SnapshotEnvelope): boolean {
 }
 
 export const governedSnapshotStats = {
-  authorizedDatasets: 30,
   retrievedDatasets: governedSnapshots.length,
   completeDatasets: governedSnapshots.filter(isCompleteSnapshot).length,
   records: governedSnapshots.reduce((total, snapshot) => total + snapshot.records.length, 0),
@@ -222,16 +221,34 @@ function monthNumber(value: string | undefined): number | null {
   return index >= 0 ? index + 1 : null;
 }
 
+/**
+ * A six-digit YYYYMM token carries its own year, so decode it wherever it appears.
+ *
+ * This used to be decoded for `month_id` alone. `compost_pits_api`, `magic_drains_api`
+ * and `soak_pits_api` carry it as `month` and have no `year` column at all, so every one
+ * of their rows resolved to no period — and `currentSnapshotRecords`, finding no sort
+ * keys, fell back to returning the whole file. Thirteen retained months were being shown
+ * as a single current period, and `snapshotPeriod` reported 'Period not supplied'.
+ */
+function encodedPeriod(value: string | undefined): { year: number; month: number } | null {
+  const trimmed = value?.trim();
+  if (!trimmed || !/^\d{6}$/.test(trimmed)) return null;
+  const year = Number(trimmed.slice(0, 4));
+  const month = Number(trimmed.slice(4));
+  return year > 1900 && month >= 1 && month <= 12 ? { year, month } : null;
+}
+
 export function recordPeriodParts(record: SnapshotRecord): { year: number | null; month: number | null } {
   const monthId = record.month_id?.trim();
-  const encodedYear = monthId && /^\d{6}$/.test(monthId) ? Number(monthId.slice(0, 4)) : null;
-  const encodedMonth = monthId && /^\d{6}$/.test(monthId) ? Number(monthId.slice(4)) : monthNumber(monthId);
-  const year = Number(record.year ?? encodedYear);
   const rawMonth = record.month_number ?? record.mnth_no ?? record.month ?? record.kpi_month
     ?? record.month_name ?? record.mnth_nm;
+  const encoded = encodedPeriod(monthId) ?? encodedPeriod(rawMonth);
+  // `?? NaN` rather than `?? null`: Number(null) is 0, which would pass a `year > 0`
+  // test as a fabricated year zero instead of reporting the period as absent.
+  const year = Number(record.year ?? encoded?.year ?? NaN);
   return {
     year: Number.isFinite(year) && year > 0 ? year : null,
-    month: encodedMonth ?? monthNumber(rawMonth),
+    month: encoded?.month ?? monthNumber(monthId) ?? monthNumber(rawMonth),
   };
 }
 

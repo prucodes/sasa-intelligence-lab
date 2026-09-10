@@ -1,0 +1,1615 @@
+{
+  "version": 1,
+  "checkedAt": "2026-09-10T13:06:21.162Z",
+  "source": "https://datalakes.ailivinglabs.ap.gov.in/api/v1/datasets",
+  "authorizedRoutes": 42,
+  "datasets": [
+    {
+      "key": "serp_kitchen_garden_api",
+      "upstreamTableKey": "serp_kitchen_garden_api",
+      "name": "SERP Kitchen Garden",
+      "description": "District-wise targets and achievements for SHG kitchen garden initiatives.",
+      "filters": [
+        "district_id",
+        "month",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "district_id",
+        "district_name",
+        "kpi_month",
+        "month",
+        "year",
+        "shg_kitchen_garden_target_units",
+        "shg_kitchen_garden_previous_month_achievement",
+        "shg_kitchen_garden_cummulative_achievement_till_current_month"
+      ],
+      "queriedAt": "2026-09-09T09:54:58.934Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:54:58.935Z",
+      "pages": 1,
+      "contentHash": "46662b7ac6094b517fbb639e766be3f088baf5cb5c9b2d8f605013e7cbd8e6c8",
+      "evidencePath": "data/current-snapshots/serp_kitchen_garden_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "serp_swachhata_awareness_api",
+      "upstreamTableKey": "serp_swachhata_awareness_api",
+      "name": "SERP Swachhata Awareness",
+      "description": "District-level sanitation awareness targets and cumulative SHG achievements.",
+      "filters": [
+        "district_id",
+        "month",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "district_id",
+        "district_name",
+        "kpi_month",
+        "month",
+        "year",
+        "shg_swachhata_awareness_target_units",
+        "shg_swachhata_awareness_previous_month_achievement",
+        "shg_swachhata_awareness_cummulative_achievement_till_current_month"
+      ],
+      "queriedAt": "2026-09-09T09:54:59.918Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:54:59.920Z",
+      "pages": 1,
+      "contentHash": "5e1c515ad3bdfd735fd5ae52323b7878739cbdc42ebcbcddb333ce741b508b93",
+      "evidencePath": "data/current-snapshots/serp_swachhata_awareness_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "serp_circular_economy_api",
+      "upstreamTableKey": "serp_circular_economy_api",
+      "name": "SERP Circular Economy",
+      "description": "Entrepreneurship targets and progress for district circular economy programmes.",
+      "filters": [
+        "district_id",
+        "month",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "district_id",
+        "district_name",
+        "kpi_month",
+        "month",
+        "year",
+        "circular_economy_entrepreneurs_target_units",
+        "circular_economy_entrepreneurs_previous_month_achievement",
+        "circular_economy_entrepreneurs_cummulative_achievement_till_current_month"
+      ],
+      "queriedAt": "2026-09-09T09:54:59.410Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:54:59.412Z",
+      "pages": 1,
+      "contentHash": "fcfe064380cff72841fca7479686372b2e1a27a10d0d7b130467e1ad5d6d463f",
+      "evidencePath": "data/current-snapshots/serp_circular_economy_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_door_to_door_e_autos_api",
+      "upstreamTableKey": "d2d_collection_vehicles_api",
+      "name": "SAC Door-to-Door E-Autos",
+      "description": "District-wise targets and achievements for door-to-door electric auto services.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "dstrt_nm",
+        "e_autos_target",
+        "e_autos_achievement",
+        "e_autos_achievement_percentage",
+        "push_carts_target",
+        "push_carts_achievement",
+        "push_carts_achievement_percentage",
+        "tri_cycles_target",
+        "tri_cycles_achievement",
+        "tri_cycles_achievement_percentage",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:01.418Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:01.420Z",
+      "pages": 1,
+      "contentHash": "fc5022514567e3285d0bba59bed22867b1f770770b70d053de334b697f89d456",
+      "evidencePath": "data/current-snapshots/sasa_sac_door_to_door_e_autos_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_door_to_door_push_carts_api",
+      "upstreamTableKey": "d2d_collection_vehicles_api",
+      "name": "SAC Door-to-Door Push Carts",
+      "description": "District-wise targets and achievements for door-to-door push-cart services.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "dstrt_nm",
+        "e_autos_target",
+        "e_autos_achievement",
+        "e_autos_achievement_percentage",
+        "push_carts_target",
+        "push_carts_achievement",
+        "push_carts_achievement_percentage",
+        "tri_cycles_target",
+        "tri_cycles_achievement",
+        "tri_cycles_achievement_percentage",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:02.118Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:02.121Z",
+      "pages": 1,
+      "contentHash": "fc5022514567e3285d0bba59bed22867b1f770770b70d053de334b697f89d456",
+      "evidencePath": "data/current-snapshots/sasa_sac_door_to_door_push_carts_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_door_to_door_tri_cycles_api",
+      "upstreamTableKey": "d2d_collection_vehicles_api",
+      "name": "SAC Door-to-Door Tri-Cycles",
+      "description": "District-wise targets and achievements for door-to-door tri-cycle services.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "dstrt_nm",
+        "e_autos_target",
+        "e_autos_achievement",
+        "e_autos_achievement_percentage",
+        "push_carts_target",
+        "push_carts_achievement",
+        "push_carts_achievement_percentage",
+        "tri_cycles_target",
+        "tri_cycles_achievement",
+        "tri_cycles_achievement_percentage",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:02.497Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:02.499Z",
+      "pages": 1,
+      "contentHash": "fc5022514567e3285d0bba59bed22867b1f770770b70d053de334b697f89d456",
+      "evidencePath": "data/current-snapshots/sasa_sac_door_to_door_tri_cycles_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_establishment_of_gobardhan_units_api",
+      "upstreamTableKey": "gobardhanunits_api",
+      "name": "Establishment of Gobardhan Units",
+      "description": "District progress for establishing Gobardhan waste-to-resource units.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "dstrt_id",
+        "dstrt_nm",
+        "gobardhan_trgt_uniits",
+        "gobardhan_achvmnt",
+        "gobardhan_achvmnt_prcntge",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:03.415Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:55:03.417Z",
+      "pages": 1,
+      "contentHash": "adf1422bcbfccdd44cec5951cad625631d7302cf23bcc29e5bf8f2adb729e248",
+      "evidencePath": "data/current-snapshots/sasa_establishment_of_gobardhan_units_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_declaration_of_odf_plus_model_villages_api",
+      "upstreamTableKey": "odf_declaration_info_api",
+      "name": "Declaration of ODF Plus Model Villages",
+      "description": "District targets and achievements for declaring ODF Plus model villages.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "dstrt_id",
+        "dstrt_nm",
+        "odf_vlges_declaration_target_units",
+        "odf_vlges_declaration_achvmt",
+        "odf_vlges_declaration_achvmt_prcntge",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:03.956Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:55:03.956Z",
+      "pages": 1,
+      "contentHash": "4ea8bacfaa8cf1bcc6ca6d549da299bdeb61216e84338ac247dd862f1f8da076",
+      "evidencePath": "data/current-snapshots/sasa_declaration_of_odf_plus_model_villages_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_machinery_e_autos_service_model_api",
+      "upstreamTableKey": "d2d_collection_vehicles_api",
+      "name": "SAC Machinery E-Autos Service Model",
+      "description": "District-wise E-Auto, push-cart and tri-cycle targets and achievements from the consolidated vehicle feed.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "dstrt_nm",
+        "e_autos_target",
+        "e_autos_achievement",
+        "e_autos_achievement_percentage",
+        "push_carts_target",
+        "push_carts_achievement",
+        "push_carts_achievement_percentage",
+        "tri_cycles_target",
+        "tri_cycles_achievement",
+        "tri_cycles_achievement_percentage",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:04.596Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:04.596Z",
+      "pages": 1,
+      "contentHash": "fc5022514567e3285d0bba59bed22867b1f770770b70d053de334b697f89d456",
+      "evidencePath": "data/current-snapshots/sasa_sac_machinery_e_autos_service_model_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_establishment_of_plastic_waste_management_units_api",
+      "upstreamTableKey": "plastic_wm_units_api",
+      "name": "Establishment of Plastic Waste Management Units",
+      "description": "District targets and achievements for plastic waste management units.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "dstrt_id",
+        "dstrt_nm",
+        "pwm_units_trgt_units",
+        "pwm_units_achvmnt",
+        "pwm_units_achvmnt_prcntge",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:05.629Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:55:05.630Z",
+      "pages": 1,
+      "contentHash": "8afff95882546fed9825c8e12fb67493f59df879e1188c1626fce65ab766f762",
+      "evidencePath": "data/current-snapshots/sasa_establishment_of_plastic_waste_management_units_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_mepma_entrepreneurs_promoted_for_circular_economy_api",
+      "upstreamTableKey": "sasa_mepma_entrepreneurs_promoted_for_circular_economy_api",
+      "name": "MEPMA Entrepreneurs Promoted for Circular Economy",
+      "description": "ULB-wise targets and achievements for MEPMA circular economy entrepreneurs.",
+      "filters": [
+        "month_id"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 615,
+      "columns": [
+        "district_id",
+        "district_name",
+        "ulb_id",
+        "ulb_name",
+        "month_id",
+        "target",
+        "achievement",
+        "achievement_percentage"
+      ],
+      "queriedAt": "2026-09-09T09:55:06.202Z",
+      "filtersApplied": {},
+      "retainedRows": 615,
+      "retainedAt": "2026-09-09T09:55:19.065Z",
+      "pages": 7,
+      "contentHash": "4bfe6a94ab3cfe2b24f26bd65f3729782b2a7d876ce9db91ff027e95d2d06da5",
+      "evidencePath": "data/current-snapshots/sasa_mepma_entrepreneurs_promoted_for_circular_economy_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+      "upstreamTableKey": "sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api",
+      "name": "Households Promoted for Terrace Gardening / Kitchen Gardens",
+      "description": "ULB-wise household targets and achievements for terrace and kitchen gardens.",
+      "filters": [
+        "month_id"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 615,
+      "columns": [
+        "district_id",
+        "district_name",
+        "ulb_id",
+        "ulb_name",
+        "month_id",
+        "target",
+        "achievement",
+        "achievement_percentage"
+      ],
+      "queriedAt": "2026-09-09T09:55:06.841Z",
+      "filtersApplied": {},
+      "retainedRows": 615,
+      "retainedAt": "2026-09-09T09:55:19.534Z",
+      "pages": 7,
+      "contentHash": "116fbfa0bc2a738c43d8dc84e023226baa20ada758ad85b39c1d6865a9bdae9c",
+      "evidencePath": "data/current-snapshots/sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_mepma_households_promoted_for_home_composite_api",
+      "upstreamTableKey": "sasa_mepma_households_promoted_for_home_composite_api",
+      "name": "MEPMA Households Promoted for Home Composting",
+      "description": "ULB-wise household targets and achievements for home composting.",
+      "filters": [
+        "month_id"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 615,
+      "columns": [
+        "district_id",
+        "district_name",
+        "ulb_id",
+        "ulb_name",
+        "month_id",
+        "target",
+        "achievement",
+        "achievement_percentage"
+      ],
+      "queriedAt": "2026-09-09T09:55:09.629Z",
+      "filtersApplied": {},
+      "retainedRows": 615,
+      "retainedAt": "2026-09-09T09:55:22.134Z",
+      "pages": 7,
+      "contentHash": "2f09405b1e21434f7f6cb3f1b7f8e9b89f8a0f376b9a89aa1b643a1966237162",
+      "evidencePath": "data/current-snapshots/sasa_mepma_households_promoted_for_home_composite_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_100_percent_clearance_of_legacy_waste_api",
+      "upstreamTableKey": "sasa_100_percent_clearance_of_legacy_waste_api",
+      "name": "100 Percent Clearance of Legacy Waste",
+      "description": "ULB-wise legacy waste quantities, remediation and completion progress.",
+      "filters": [
+        "month_id",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 246,
+      "columns": [
+        "district_name",
+        "ulb_name",
+        "target",
+        "achievement",
+        "balance",
+        "achievement_percentage",
+        "month_id",
+        "month_name",
+        "year",
+        "financial_year"
+      ],
+      "queriedAt": "2026-09-09T09:55:21.213Z",
+      "filtersApplied": {},
+      "retainedRows": 246,
+      "retainedAt": "2026-09-09T09:55:25.174Z",
+      "pages": 3,
+      "contentHash": "51ddee138c5183022175428dc53963663b8862a26834366eaf8124de4b52bfe8",
+      "evidencePath": "data/current-snapshots/sasa_100_percent_clearance_of_legacy_waste_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_machinery_compactors_api",
+      "upstreamTableKey": "sasa_sac_machinery_compactors_api",
+      "name": "SAC Machinery Compactors",
+      "description": "ULB-wise inventory of supplied waste compactors.",
+      "filters": [
+        "month_number",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 24,
+      "columns": [
+        "district_name",
+        "ulb_name",
+        "no_of_units",
+        "month_number",
+        "month_name",
+        "year",
+        "fin_year"
+      ],
+      "queriedAt": "2026-09-09T09:55:21.405Z",
+      "filtersApplied": {},
+      "retainedRows": 24,
+      "retainedAt": "2026-09-09T09:55:21.406Z",
+      "pages": 1,
+      "contentHash": "e755bb122b8263525797ad57357d76e95e656a3411e7470fc5a519a568d8ce24",
+      "evidencePath": "data/current-snapshots/sasa_sac_machinery_compactors_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_50_percent_greencover_api",
+      "upstreamTableKey": "apgbc_info_new1_api",
+      "name": "50 Percent Green Cover",
+      "description": "ULB-wise green-cover kilometre targets and achievements.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 400,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "green_cover_trgts_in_kms",
+        "green_cover_achvd_in_kms",
+        "achvd_percent_in_kms",
+        "rejuvenation_of_water_bodies_in_nos_targets",
+        "rejuvenation_of_water_bodies_achived",
+        "rejuvenation_of_water_bodies_achived_percent",
+        "green_spaces_target_in_nos",
+        "green_spaces_achieved",
+        "green_spaces_achieved_percent",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:23.945Z",
+      "filtersApplied": {},
+      "retainedRows": 400,
+      "retainedAt": "2026-09-09T09:55:33.101Z",
+      "pages": 4,
+      "contentHash": "eb008ce897e523e79158341eeff7cc449df7ea594dc40d89b5a71d6e627bbfce",
+      "evidencePath": "data/current-snapshots/sasa_50_percent_greencover_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_50_percent_rejuvenation_api",
+      "upstreamTableKey": "apgbc_info_new1_api",
+      "name": "50 Percent Rejuvenation of Water Bodies",
+      "description": "ULB-wise targets and achievements for rejuvenating water bodies.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 400,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "green_cover_trgts_in_kms",
+        "green_cover_achvd_in_kms",
+        "achvd_percent_in_kms",
+        "rejuvenation_of_water_bodies_in_nos_targets",
+        "rejuvenation_of_water_bodies_achived",
+        "rejuvenation_of_water_bodies_achived_percent",
+        "green_spaces_target_in_nos",
+        "green_spaces_achieved",
+        "green_spaces_achieved_percent",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:24.625Z",
+      "filtersApplied": {},
+      "retainedRows": 400,
+      "retainedAt": "2026-09-09T09:55:32.129Z",
+      "pages": 4,
+      "contentHash": "eb008ce897e523e79158341eeff7cc449df7ea594dc40d89b5a71d6e627bbfce",
+      "evidencePath": "data/current-snapshots/sasa_50_percent_rejuvenation_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_50_percent_green_spaces_api",
+      "upstreamTableKey": "apgbc_info_new1_api",
+      "name": "50 Percent Green Spaces",
+      "description": "ULB-wise targets and achievements for green spaces.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 400,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "green_cover_trgts_in_kms",
+        "green_cover_achvd_in_kms",
+        "achvd_percent_in_kms",
+        "rejuvenation_of_water_bodies_in_nos_targets",
+        "rejuvenation_of_water_bodies_achived",
+        "rejuvenation_of_water_bodies_achived_percent",
+        "green_spaces_target_in_nos",
+        "green_spaces_achieved",
+        "green_spaces_achieved_percent",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:27.588Z",
+      "filtersApplied": {},
+      "retainedRows": 400,
+      "retainedAt": "2026-09-09T09:55:37.030Z",
+      "pages": 4,
+      "contentHash": "eb008ce897e523e79158341eeff7cc449df7ea594dc40d89b5a71d6e627bbfce",
+      "evidencePath": "data/current-snapshots/sasa_50_percent_green_spaces_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_msw_processing_facilities_iswm_facilities_api",
+      "upstreamTableKey": "sasa_sac_msw_processing_facilities_iswm_facilities_api",
+      "name": "SAC MSW Processing Facilities — ISWM Facilities",
+      "description": "ULB-wise integrated solid-waste processing capacities and status.",
+      "filters": [
+        "month_number",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 216,
+      "columns": [
+        "district_name",
+        "ulb_name",
+        "total_tpd",
+        "wet_tpd",
+        "dry_tpd",
+        "status_tx",
+        "month_number",
+        "month_name",
+        "year",
+        "financial_year"
+      ],
+      "queriedAt": "2026-09-09T09:55:34.288Z",
+      "filtersApplied": {},
+      "retainedRows": 216,
+      "retainedAt": "2026-09-09T09:55:38.178Z",
+      "pages": 3,
+      "contentHash": "342984ee47ff8bae7229066ed484d815d7f625ff832b540f9c299e57206e8070",
+      "evidencePath": "data/current-snapshots/sasa_sac_msw_processing_facilities_iswm_facilities_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_sac_sweeping_machines_information_api",
+      "upstreamTableKey": "sasa_sac_sweeping_machines_information_api",
+      "name": "SAC Sweeping Machines Information",
+      "description": "ULB-wise count of supplied sweeping machines.",
+      "filters": [
+        "month_number",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 28,
+      "columns": [
+        "district_name",
+        "ulb_name",
+        "no_of_machines_supplied",
+        "month_number",
+        "month_name",
+        "year",
+        "fin_year"
+      ],
+      "queriedAt": "2026-09-09T09:55:34.892Z",
+      "filtersApplied": {},
+      "retainedRows": 28,
+      "retainedAt": "2026-09-09T09:55:34.896Z",
+      "pages": 1,
+      "contentHash": "9949133f3b2922c451aee117e49d4eb2a68c1bef763e594ae3ce1cdaee623535",
+      "evidencePath": "data/current-snapshots/sasa_sac_sweeping_machines_information_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_cdma_ulbs_single_use_plastic_ban_api",
+      "upstreamTableKey": "sasa_cdma_ulbs_single_use_plastic_ban_api",
+      "name": "CDMA ULBs Single-Use Plastic Ban",
+      "description": "District-wise ULB achievement for implementing the single-use plastic ban.",
+      "filters": [
+        "month",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 26,
+      "columns": [
+        "district_id",
+        "district_name",
+        "target",
+        "achievement",
+        "achievement_percentage",
+        "month",
+        "year"
+      ],
+      "queriedAt": "2026-09-09T09:55:36.749Z",
+      "filtersApplied": {},
+      "retainedRows": 26,
+      "retainedAt": "2026-09-09T09:55:36.751Z",
+      "pages": 1,
+      "contentHash": "f80d4119351601adb65e681ca4256d3d14c821259b9e1f182c81cb9b16388903",
+      "evidencePath": "data/current-snapshots/sasa_cdma_ulbs_single_use_plastic_ban_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_cdma_ulbs_ewaste_collection_mechanism_api",
+      "upstreamTableKey": "sasa_cdma_ulbs_ewaste_collection_mechanism_api",
+      "name": "CDMA ULBs E-Waste Collection Mechanism",
+      "description": "District-wise ULB achievement for establishing e-waste collection mechanisms.",
+      "filters": [
+        "month",
+        "year"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 26,
+      "columns": [
+        "district_id",
+        "district_name",
+        "target",
+        "achievement",
+        "achievement_percentage",
+        "month",
+        "year"
+      ],
+      "queriedAt": "2026-09-09T09:55:38.697Z",
+      "filtersApplied": {},
+      "retainedRows": 26,
+      "retainedAt": "2026-09-09T09:55:38.699Z",
+      "pages": 1,
+      "contentHash": "66865bc580faac558cab1e4e7955a95c40e1a97d6f6dd417e62e8f57731ea467",
+      "evidencePath": "data/current-snapshots/sasa_cdma_ulbs_ewaste_collection_mechanism_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "msw_door_to_door_collection_api",
+      "upstreamTableKey": "msw_door_to_door_collection_api",
+      "name": "100% Door to Door Collection of MSW",
+      "description": "ULB and secretariat-level household coverage, collection and garbage-segregation data.",
+      "filters": [
+        "district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "large-pull-pending",
+      "error": "HTTP 403 for /datasets/msw_door_to_door_collection_api/query",
+      "liveRows": 64368,
+      "columns": [
+        "date1",
+        "district_name",
+        "district_code",
+        "ulb_name",
+        "ulb_code",
+        "sachivalayam_name",
+        "sachivalayam_code",
+        "active_indicator",
+        "total_households",
+        "collected_households",
+        "garbage_segregation",
+        "i_ts",
+        "api_lgd_dist_code",
+        "api_district_name",
+        "api_lgd_mandal_code",
+        "api_mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:39.625Z",
+      "filtersApplied": {}
+    },
+    {
+      "key": "identification_of_bulk_waste_generators_api",
+      "upstreamTableKey": "identification_of_bulk_waste_generators_api",
+      "name": "Identification of Bulk Waste Generators as per SWM Rules 2026",
+      "description": "ULB and secretariat-level counts of bulk waste generators identified under the SWM Rules 2026.",
+      "filters": [
+        "district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "large-pull-pending",
+      "error": "HTTP 403 for /datasets/identification_of_bulk_waste_generators_api/query",
+      "liveRows": 64528,
+      "columns": [
+        "date1",
+        "district_name",
+        "district_code",
+        "ulb_name",
+        "ulb_code",
+        "secretariat_name",
+        "secretariat_code",
+        "no_of_bwgs",
+        "i_ts",
+        "api_lgd_dist_code",
+        "api_district_name",
+        "api_lgd_mandal_code",
+        "api_mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:40.402Z",
+      "filtersApplied": {}
+    },
+    {
+      "key": "onsite_processing_of_wet_waste_bwg_api",
+      "upstreamTableKey": "onsite_processing_of_wet_waste_bwg_api",
+      "name": "On-Site Processing of Wet Waste by Bulk Waste Generators",
+      "description": "ULB and secretariat-level counts of bulk waste generators processing wet waste on site.",
+      "filters": [
+        "district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "large-pull-pending",
+      "error": "HTTP 403 for /datasets/onsite_processing_of_wet_waste_bwg_api/query",
+      "liveRows": 64528,
+      "columns": [
+        "date1",
+        "district_name",
+        "district_code",
+        "ulb_name",
+        "ulb_code",
+        "secretariat_name",
+        "secretariat_code",
+        "wet_waste_processing_bwgs",
+        "i_ts",
+        "api_lgd_dist_code",
+        "api_district_name",
+        "api_lgd_mandal_code",
+        "api_mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:41.339Z",
+      "filtersApplied": {}
+    },
+    {
+      "key": "sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026",
+      "upstreamTableKey": "sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026",
+      "name": "PR Swachh Rathams Operationalized for Dry Waste",
+      "description": "Gram Panchayat-level availability and working condition of SWPC Swachh Rathams.",
+      "filters": [
+        "BLOCK_ID",
+        "DISTRICT_ID"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "large-pull-pending",
+      "error": "HTTP 403 for /datasets/sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026/query",
+      "liveRows": 26702,
+      "columns": [
+        "DISTRICT_ID",
+        "DISTRICT_NAME",
+        "BLOCK_ID",
+        "BLOCK_NAME",
+        "GRAM_PANCHAYAT_ID",
+        "GRAM_PANCHAYAT_NAME",
+        "GP_HAVING_SWPC",
+        "WORKING_CONDITION"
+      ],
+      "queriedAt": "2026-09-09T09:55:42.076Z",
+      "filtersApplied": {}
+    },
+    {
+      "key": "sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026",
+      "upstreamTableKey": "sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026",
+      "name": "PR Number of SWPCs Operationalised",
+      "description": "District-level Swachh Ratham mandal operator coverage reported by operational SWPCs.",
+      "filters": [
+        "DISTRICT_ID"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 56,
+      "columns": [
+        "DISTRICT_ID",
+        "DISTRICT_NAME",
+        "SWACHCH_RATHAM_MANDAL_OPERATORS",
+        "SWACHCH_RATHAM_REPORTED_MANDAL_OPERATORS"
+      ],
+      "queriedAt": "2026-09-09T09:55:42.240Z",
+      "filtersApplied": {},
+      "retainedRows": 56,
+      "retainedAt": "2026-09-09T09:55:42.241Z",
+      "pages": 1,
+      "contentHash": "801b84a669f8998df9e84a92589aa7a440c62afebea7ff6491031bce810d5ef6",
+      "evidencePath": "data/current-snapshots/sasa_pr_no_of_swpcs_operationalised_api_27_aug_2026.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026",
+      "upstreamTableKey": "sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026",
+      "name": "PR Door-to-Door Collection Percentage of Garbage",
+      "description": "Household waste collection and segregation activity reported by Gram Panchayat and date.",
+      "filters": [
+        "MONTH_ID",
+        "YEAR"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "large-pull-pending",
+      "error": "HTTP 403 for /datasets/sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026/query",
+      "liveRows": 3965247,
+      "columns": [
+        "DISTRICT_ID",
+        "DISTRICT_NAME",
+        "BLOCK_ID",
+        "BLOCK_NAME",
+        "GRAM_PANCHAYAT_ID",
+        "GRAM_PANCHAYAT_NAME",
+        "COLLECTION_DATE",
+        "MONTH_ID",
+        "MONTH_NAME",
+        "YEAR",
+        "SEGREGATED_WASTE_HOUSEHOLDS",
+        "IS_COLLECTED"
+      ],
+      "queriedAt": "2026-09-09T09:55:43.751Z",
+      "filtersApplied": {}
+    },
+    {
+      "key": "waste_egregation_api",
+      "upstreamTableKey": "waste_egregation_api",
+      "name": "Waste Segregation",
+      "description": "Secretariat-level household coverage and garbage-segregation data.",
+      "filters": [
+        "district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "large-pull-pending",
+      "error": "HTTP 403 for /datasets/waste_egregation_api/query",
+      "liveRows": 64368,
+      "columns": [
+        "date1",
+        "district_name",
+        "district_code",
+        "ulb_name",
+        "ulb_code",
+        "sachivalayam_name",
+        "sachivalayam_code",
+        "active_indicator",
+        "total_households",
+        "garbage_segregation",
+        "i_ts",
+        "api_lgd_dist_code",
+        "api_district_name",
+        "api_lgd_mandal_code",
+        "api_mandal_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:44.308Z",
+      "filtersApplied": {}
+    },
+    {
+      "key": "construction_of_csc_api",
+      "upstreamTableKey": "construction_of_csc_api",
+      "name": "Construction of Community Sanitary Complexes",
+      "description": "District targets and achievements for construction of community sanitary complexes.",
+      "filters": [
+        "district_id"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "s_no",
+        "district_name",
+        "district_id",
+        "csc_target_units",
+        "csc_achievement",
+        "csc_achievement_percentage",
+        "month_no",
+        "month_name",
+        "year",
+        "fin_year",
+        "a_in",
+        "i_ts",
+        "u_ts",
+        "api_lgd_dist_code",
+        "api_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:44.368Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:44.369Z",
+      "pages": 1,
+      "contentHash": "8996d9a71721c937088753699823e5edfab9036820f90f9203eafaf69b66fd97",
+      "evidencePath": "data/current-snapshots/construction_of_csc_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "housing_construction_of_ihhls_new1_api",
+      "upstreamTableKey": "housing_construction_of_ihhls_new1_api",
+      "name": "Housing Construction of Individual Household Latrines",
+      "description": "District targets and achievements for housing-supported IHHL construction.",
+      "filters": [
+        "district_name"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "s_no",
+        "district_name",
+        "construction_of_ihhls_target_units",
+        "construction_of_ihhls_achievement",
+        "construction_of_ihhls_achievement_percentage",
+        "month_no",
+        "month_name",
+        "year",
+        "fin_year",
+        "a_in",
+        "i_ts",
+        "u_ts",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:45.962Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:45.965Z",
+      "pages": 1,
+      "contentHash": "418cc5cfec592f67f9fcc547dbde08c0b2f784f546953bbc65b60c22d7aa06ae",
+      "evidencePath": "data/current-snapshots/housing_construction_of_ihhls_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "sbm_construction_of_ihhls_new1_api",
+      "upstreamTableKey": "sbm_construction_of_ihhls_new1_api",
+      "name": "SBM Construction of Individual Household Latrines",
+      "description": "District targets and achievements for SBM-supported IHHL construction.",
+      "filters": [
+        "district_name"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 84,
+      "columns": [
+        "s_no",
+        "district_id",
+        "district_name",
+        "ihhls_target_units",
+        "ihhls_achievement",
+        "ihhls_achievement_percentage",
+        "month_no",
+        "month_name",
+        "year",
+        "fin_year",
+        "a_in",
+        "i_ts",
+        "u_ts",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-09T09:55:46.524Z",
+      "filtersApplied": {},
+      "retainedRows": 84,
+      "retainedAt": "2026-09-09T09:55:46.525Z",
+      "pages": 1,
+      "contentHash": "97b944c0e4269739ec59df4e02dc6103ec014ec57af326f45347e94f604ff770",
+      "evidencePath": "data/current-snapshots/sbm_construction_of_ihhls_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven"
+    },
+    {
+      "key": "compost_pits_api",
+      "upstreamTableKey": "compost_pits_api",
+      "name": "Compost Pits",
+      "description": "District targets and achievements for compost-pit works.",
+      "filters": [
+        "district_name"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 336,
+      "columns": [
+        "district_id",
+        "district_name",
+        "work_name",
+        "units",
+        "fin_year",
+        "month",
+        "target",
+        "achivement",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:24.901Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 336,
+      "retainedAt": "2026-09-10T13:06:29.717Z",
+      "pages": 4,
+      "contentHash": "09c27c3cad488014e12a762fcc21ee382a5f381357a2d52e784f7b8077589251",
+      "evidencePath": "data/current-snapshots/compost_pits_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "magic_drains_api",
+      "upstreamTableKey": "magic_drains_api",
+      "name": "Magic Drains",
+      "description": "District targets and achievements for magic-drain works.",
+      "filters": [
+        "district_name"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 336,
+      "columns": [
+        "district_id",
+        "district_name",
+        "work_name",
+        "units",
+        "fin_year",
+        "month",
+        "target",
+        "achivement",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:23.956Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 336,
+      "retainedAt": "2026-09-10T13:06:28.970Z",
+      "pages": 4,
+      "contentHash": "170c8c7e4750d623378b002225d02dcb44d32ad816921dddf355c895ce1cf8b0",
+      "evidencePath": "data/current-snapshots/magic_drains_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "soak_pits_api",
+      "upstreamTableKey": "soak_pits_api",
+      "name": "Soak Pits",
+      "description": "District targets and achievements for soak-pit works.",
+      "filters": [
+        "district_name"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 336,
+      "columns": [
+        "district_id",
+        "district_name",
+        "work_name",
+        "units",
+        "fin_year",
+        "month",
+        "target",
+        "achivement",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:24.896Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 336,
+      "retainedAt": "2026-09-10T13:06:29.557Z",
+      "pages": 4,
+      "contentHash": "09c27c3cad488014e12a762fcc21ee382a5f381357a2d52e784f7b8077589251",
+      "evidencePath": "data/current-snapshots/soak_pits_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "msw_cbg_units_new1_api",
+      "upstreamTableKey": "msw_cbg_units_new1_api",
+      "name": "MSW CBG Units — LGD-Enriched Version",
+      "description": "ULB-wise compressed biogas capacity and status enriched with LGD district and mandal mappings.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "versionStatus": "current",
+      "supersedes": [
+        "sasa_sac_msw_processing_facilities_cbg_units_api"
+      ],
+      "status": "retained",
+      "liveRows": 12,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "total_tpd",
+        "status_tx",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:30.522Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 12,
+      "retainedAt": "2026-09-10T13:06:30.523Z",
+      "pages": 1,
+      "contentHash": "79ab5e8dd2bc34aad8eec7c64ccd9d530e790c64a4255e11023be3651394a592",
+      "evidencePath": "data/current-snapshots/msw_cbg_units_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "ihhl_new_identification_new1_api",
+      "upstreamTableKey": "ihhl_new_identification_new1_api",
+      "name": "IHHL New Identification — LGD-Enriched Version",
+      "description": "ULB-wise IHHL identification and construction progress enriched with LGD mappings.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "versionStatus": "current",
+      "supersedes": [
+        "sasa_sac_identification_of_new_ihhls_api"
+      ],
+      "status": "retained",
+      "liveRows": 246,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "ihhls_approved_by_mohua",
+        "no_of_benf_identified",
+        "percentage_of_achievement",
+        "under_construction",
+        "completed",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:31.229Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 246,
+      "retainedAt": "2026-09-10T13:06:34.828Z",
+      "pages": 3,
+      "contentHash": "e0b4406bad9db63c5a784473d8ed7f1d3473c6759d5d54a631cb3d4813e53e09",
+      "evidencePath": "data/current-snapshots/ihhl_new_identification_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "itc_wow_schools_api",
+      "upstreamTableKey": "itc_wow_schools_api",
+      "name": "ITC WOW Schools — LGD-Enriched Version",
+      "description": "District ITC WOW school targets and achievements with canonical LGD district mappings.",
+      "filters": [
+        "lgd_district_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "versionStatus": "current",
+      "supersedes": [
+        "sasa_itc_wow_program_in_schools_api"
+      ],
+      "status": "retained",
+      "liveRows": 24,
+      "columns": [
+        "dstrt_id",
+        "dstrt_nm",
+        "trgt_units",
+        "achvmnt",
+        "prcnt_achvd",
+        "lgd_district_code",
+        "lgd_district_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:31.046Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 24,
+      "retainedAt": "2026-09-10T13:06:31.047Z",
+      "pages": 1,
+      "contentHash": "c98cd85e8e1385ae4982f79abc61e18659551dfbd0e788600e41014e8a94548c",
+      "evidencePath": "data/current-snapshots/itc_wow_schools_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "cd_waste_process_plants_revival_new1_api",
+      "upstreamTableKey": "cd_waste_process_plants_revival_new1_api",
+      "name": "C&D Waste Processing Plants Revival — LGD-Enriched Version",
+      "description": "C&D waste processing plant capacity enriched with LGD district and mandal mappings.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "versionStatus": "current",
+      "supersedes": [
+        "sasa_sac_c_d_waste_processing_api"
+      ],
+      "status": "retained",
+      "liveRows": 6,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "plnt_cpcty_in_tpd",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:31.867Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 6,
+      "retainedAt": "2026-09-10T13:06:31.867Z",
+      "pages": 1,
+      "contentHash": "acc74778b49ece9ae88f503312fdb4128a2eac847ea0a0a2df747bc7b0a67cd2",
+      "evidencePath": "data/current-snapshots/cd_waste_process_plants_revival_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "fstps_stps_cotreatment_new1_api",
+      "upstreamTableKey": "fstps_stps_cotreatment_new1_api",
+      "name": "FSTP/STP Co-Treatment — LGD-Enriched Version",
+      "description": "FSTP and STP co-treatment capacity and progress enriched with LGD mappings.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "versionStatus": "current",
+      "supersedes": [
+        "sasa_sac_establishing_fstps_information_api"
+      ],
+      "status": "retained",
+      "liveRows": 70,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "capacity_in_kld",
+        "overall_progress",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:33.136Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 70,
+      "retainedAt": "2026-09-10T13:06:33.136Z",
+      "pages": 1,
+      "contentHash": "8e49febed476206005e8a8fbd3c88cc4d99d4582bfaf442aeded55fe575ee13a",
+      "evidencePath": "data/current-snapshots/fstps_stps_cotreatment_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "sewage_treated_qty_new1_api",
+      "upstreamTableKey": "sewage_treated_qty_new1_api",
+      "name": "Sewage Treated Quantity",
+      "description": "Sewage treatment plant package, capacity, progress and LGD location information.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "status": "retained",
+      "liveRows": 242,
+      "columns": [
+        "rec_id",
+        "pckg_nm",
+        "dstrt_nm",
+        "ulb_s_no",
+        "plant_s_no",
+        "ulb_nm",
+        "capacity_mld",
+        "crnt_prgrs_tx",
+        "mnth_no",
+        "mnth_nm",
+        "year",
+        "fin_year",
+        "a_in",
+        "i_ts",
+        "u_ts",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:34.514Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 242,
+      "retainedAt": "2026-09-10T13:06:37.758Z",
+      "pages": 3,
+      "contentHash": "0cdd9de2795c5b71c23a3554841a22da2e1e187a35433a39f370a257392574b3",
+      "evidencePath": "data/current-snapshots/sewage_treated_qty_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    },
+    {
+      "key": "swacch_survekshan_info_new1_api",
+      "upstreamTableKey": "swacch_survekshan_info_new1_api",
+      "name": "Swachh Survekshan Information — Combined LGD-Enriched Version",
+      "description": "Combined GFC, ODF and national-rank information enriched with LGD mappings.",
+      "filters": [
+        "lgd_dist_code"
+      ],
+      "formats": [
+        "json",
+        "xlsx"
+      ],
+      "versionStatus": "current",
+      "supersedes": [
+        "sasa_sac_swacch_survekshan_information_gfc_status_api",
+        "sasa_sac_swacch_survekshan_information_odf_status_api",
+        "sasa_sac_swacch_survekshan_information_national_rank_api"
+      ],
+      "status": "retained",
+      "liveRows": 206,
+      "columns": [
+        "dstrt_nm",
+        "ulb_nm",
+        "gfc_status",
+        "odf_status",
+        "national_rank",
+        "year",
+        "lgd_dist_code",
+        "district_name",
+        "lgd_mandal_code",
+        "mandal_name"
+      ],
+      "queriedAt": "2026-09-10T13:06:35.035Z",
+      "filtersApplied": {},
+      "rawCountReconciled": true,
+      "distinctCompleteness": "unproven",
+      "retainedRows": 206,
+      "retainedAt": "2026-09-10T13:06:38.037Z",
+      "pages": 3,
+      "contentHash": "3a3352e2bcbbb3948fd82111c5e4a7a05cd39d8eefb165550a4bc5c0f6eaec77",
+      "evidencePath": "data/current-snapshots/swacch_survekshan_info_new1_api.json",
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+    }
+  ],
+  "completedAt": "2026-09-10T13:06:38.040Z"
+}

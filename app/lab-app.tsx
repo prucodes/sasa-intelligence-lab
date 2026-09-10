@@ -4,13 +4,14 @@ import Image from 'next/image';
 import { OverviewReview } from './overview-review';
 import { EvidenceRecordBrowser } from './evidence-record-browser';
 import { DiagnosticReadings } from './diagnostic-readings';
+import { UlbPeerProfile } from './ulb-peer-profile';
 import { VehiclePairing } from './vehicle-pairing';
 import { ExecutiveBrief } from './executive-brief';
 import { AnchoredSourceBrowser } from './anchored-source-browser';
 import { SourceReconciliationScreen } from './source-reconciliation';
 import { LgdCrosswalkPanel } from './lgd-crosswalk-panel';
 import { SecretariatCohort } from './secretariat-cohort';
-import { RuralCohort } from './rural-cohort';
+import { GapExplorer } from './gap-explorer';
 import { EvidenceIntegrity } from './evidence-integrity';
 import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
@@ -62,6 +63,7 @@ import type { CollectionProcurementSummary, ContrastPoint, DistrictSignalMap, Ih
 import { governedSnapshotByKey, governedSnapshotStats, operationalPeriodOptions } from '@/lib/snapshots';
 import { getIdentityReach, getLgdCrosswalk } from '@/lib/lgd-crosswalk';
 import { readinessCatalogueStats } from '@/lib/catalogue';
+import { getRevisionInventory } from '@/lib/source-revisions';
 import { distributionOf, ordinal, peerContext, type Distribution } from '@/lib/comparison';
 import { datasetVintages, formatPeriodLabel, formatRetrievalDate, vintageSummary } from '@/lib/vintage';
 import {
@@ -443,11 +445,11 @@ function Overview({ mode, colorTheme, metrics, radar }: { mode: DataMode; colorT
   if (mode === 'SAMPLE') return <SampleOverview colorTheme={colorTheme}/>;
   const counts = radar.reduce<Record<GapState, number>>((acc, item) => ({ ...acc, [item.state]: acc[item.state] + 1 }), { DOING_WELL: 0, LEARN_FROM: 0, INFRASTRUCTURE_GAP: 0, INVESTIGATE: 0, UNSCORED: 0 });
   return <>
-    <PageIntro visual="overview" eyebrow="Executive snapshot" title="What SASA data can tell us today" description="Review current operational evidence now, then activate higher-order intelligence only when its evidence gates are met."><span className="catalogue-context"><Icon name="database" size={15}/>{mode === 'SAMPLE' ? `29 complete governed full exports · ${governedSnapshotStats.records.toLocaleString('en-IN')} rows · 30 authorized endpoints` : 'Evidence-gated sanitation intelligence'}</span></PageIntro>
+    <PageIntro visual="overview" eyebrow="Executive snapshot" title="What SASA data can tell us today" description="Review current operational evidence now, then activate higher-order intelligence only when its evidence gates are met."><span className="catalogue-context"><Icon name="database" size={15}/>Evidence-gated sanitation intelligence</span></PageIntro>
     <section className="metric-grid" aria-label="Core KPI categories">{metrics.map((metric, index) => <MetricCard key={metric.label} metric={metric} icon={domainIcons[index]} />)}</section>
     <section className="overview-grid">
       <article className="panel pulse-panel">
-        <PanelTitle icon="chart" title={mode === 'SAMPLE' ? 'Operational Snapshot' : 'Operational Pulse'} subtitle={mode === 'DEMO' ? 'Illustrative fixture trend' : mode === 'SAMPLE' ? 'Current retained evidence · not a trend' : 'Waiting for governed source access'} />
+        <PanelTitle icon="chart" title="Operational Pulse" subtitle={mode === 'DEMO' ? 'Illustrative fixture trend' : 'Waiting for governed source access'} />
         {mode === 'DEMO' ? <PulseChart /> : <EmptyChart mode={mode} />}
       </article>
       <article className="panel gap-summary">
@@ -494,14 +496,14 @@ function EvidenceLabel({ mode = 'SAMPLE' }: { mode?: DataMode }) {
   }
   const disputed = getDisputedValues();
   const rows: Array<{ label: string; value: string; state?: 'ok' | 'warn' | 'stop' }> = [
-    { label: 'Datasets retained', value: `${governedSnapshotStats.completeDatasets} / ${readinessCatalogueStats.platformAvailable} granted`, state: 'warn' },
-    { label: 'Rows retained', value: governedSnapshotStats.records.toLocaleString('en-IN') },
+    { label: 'Bundled historical exports', value: `${governedSnapshotStats.completeDatasets} full exports + 6 aggregate sources`, state: 'warn' },
+    { label: 'Bundled historical rows', value: governedSnapshotStats.records.toLocaleString('en-IN') },
     { label: 'Entities observed', value: `${governedSnapshotStats.baselineUlbCandidates} ULB candidates` },
-    { label: 'Source grain', value: 'Mixed · ULB and district' },
+    { label: 'Source grain', value: 'ULB, district, GP and secretariat' },
     { label: 'Disputed values', value: `${disputed.total} across ${disputed.datasets} datasets`, state: disputed.total ? 'stop' : 'ok' },
     { label: 'Missing measurements', value: 'Held out · never counted as zero', state: 'warn' },
     { label: 'Cross-month comparisons', value: 'Selected same-source pairs only', state: 'warn' },
-    { label: 'Scoring eligible', value: '0 entities · gates unmet', state: 'warn' },
+    { label: 'Formal ratings eligible', value: '0 entities · gates unmet', state: 'warn' },
   ];
   return <section className="evidence-label" aria-label="Evidence label for this screen">
     <header><span className="eyebrow">Evidence label</span><b>What this screen rests on</b></header>
@@ -890,7 +892,7 @@ const analyticsTabs: Array<{ id: AnalyticsTab; label: string; description: strin
   { id: 'processing', label: 'Processing Infrastructure', description: 'Waste & facilities' },
   { id: 'delivery', label: 'Delivery Against Plan', description: 'Works programmes 2026-27' },
   { id: 'rural', label: 'Rural Sanitation', description: 'Gram panchayat grain' },
-  { id: 'continuity', label: 'Reporting Continuity', description: 'Filled is not reported' },
+  { id: 'continuity', label: 'Reporting Continuity', description: 'Positive, zero & missing' },
   { id: 'outcomes', label: 'Swachh Outcomes', description: '2024 context' },
 ];
 
@@ -947,13 +949,21 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
     else url.searchParams.delete('view');
     window.history.replaceState({}, '', url);
   };
+  const selectTab = (next: AnalyticsTab) => {
+    setTab(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', next);
+    if (['outcomes', 'delivery', 'rural', 'continuity'].includes(next)) { setLens('snapshot'); url.searchParams.delete('view'); }
+    window.history.replaceState({}, '', url);
+  };
   const tabArt = tab === 'sanitation' ? '/assets/sasa/hero-ihhl.png' : tab === 'processing' ? '/assets/sasa/hero-iswm.png' : tab === 'outcomes' ? '/assets/sasa/hero-swachh.png' : '/assets/sasa/hero-collection.png';
   return <>
     <PageIntro visual="operational-analytics" art={tabArt} eyebrow={tab === 'outcomes' && mode === 'SAMPLE' ? 'Source year 2024' : 'Available now'} title={tab === 'outcomes' && mode === 'SAMPLE' ? '2024 Swachh Outcomes' : 'Operational Analytics'} description={tab === 'outcomes' && mode === 'SAMPLE' ? 'Descriptive outcome evidence, intentionally separated from 2026 operational snapshots.' : 'Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible.'}><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'SAMPLE' ? 'Authenticated snapshot analytics · scoring remains gated' : mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>
     <section className="analytics-control-deck" aria-label="Analytics controls">
-      <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => { setTab(item.id); if (item.id === 'outcomes') setLens('snapshot'); const url = new URL(window.location.href); url.searchParams.set('tab', item.id); if (item.id === 'outcomes') url.searchParams.delete('view'); window.history.replaceState({}, '', url); }}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
+      <label className="analytics-mobile-domain">Analytics domain<select value={tab} onChange={event=>selectTab(event.target.value as AnalyticsTab)}>{analyticsTabs.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+      <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => selectTab(item.id)}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
       {mode === 'SAMPLE' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <div className="analytics-lens-bar"><div><span>Evidence lens</span><div className="analytics-lens-switch" role="tablist" aria-label="Evidence lens"><button type="button" role="tab" aria-selected={effectiveLens === 'snapshot'} className={effectiveLens === 'snapshot' ? 'active' : ''} onClick={() => selectLens('snapshot')}><Icon name="database" size={14}/>Current snapshot</button><button type="button" role="tab" aria-selected={effectiveLens === 'movement'} className={effectiveLens === 'movement' ? 'active' : ''} onClick={() => selectLens('movement')}><Icon name="chart" size={14}/>Between periods</button></div></div><p>{effectiveLens === 'movement' ? 'Exact ULB matches across the latest two periods in one retained source.' : 'Inspect one reported period with its denominator and evidence boundary.'}</p></div>}
-      {mode === 'SAMPLE' && effectiveLens === 'snapshot' && <PeriodScrubber period={period} onChange={setPeriod}/>}
+      {mode === 'SAMPLE' && effectiveLens === 'snapshot' && !['delivery','rural','continuity','outcomes'].includes(tab) && <PeriodScrubber period={period} onChange={setPeriod}/>}
     </section>
     {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <ReportedPeriods tab={tab}/>}
     {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <AnalyticsInsightBrief tab={tab} period={period}/>}
@@ -1523,7 +1533,9 @@ function useDistrictShapes() {
     let live = true;
     fetch('/ap-districts.geojson')
       .then((response) => response.ok ? response.json() : Promise.reject(new Error('boundaries unavailable')))
-      .then((collection: { features: Array<{ properties: { d: string }; geometry: { type: string; coordinates: number[][][] | number[][][][] } }> }) => {
+      .then((value) => {
+        const collection = value as { features: Array<{ properties: { d: string }; geometry: { type: string; coordinates: number[][][] | number[][][][] } }> };
+        if (!collection || !Array.isArray(collection.features)) throw new Error('Invalid district boundaries');
         if (!live) return;
         const LON0 = 76.761, LON1 = 84.761, LAT0 = 12.624, LAT1 = 19.166;
         const k = Math.cos((LAT0 + LAT1) / 2 * Math.PI / 180);
@@ -1778,20 +1790,22 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
   ];
 
   return <>
-    <PageIntro visual="gap-radar" eyebrow="Evidence-gated assessment" title="Gap Radar" description="Review identity, periods and policy before assigning a performance label."/>
+    <PageIntro visual="gap-radar" eyebrow="Evidence-gated assessment" title="Gap Radar" description="Explore supported changes and reported delivery gaps. Each comparison states its population and evidence limits."/>
+    <GapExplorer/>
+    <details className="panel radar-gates"><summary>Requirements for formal performance classifications</summary>
     <section className="screen-feature sf-radar" aria-label="Scoring activation briefing">
       <div className="sf-dark sf-radar-grid">
-        <div className="sf-radar-lead"><span className="sf-eyebrow">Gap Radar / evidence boundary</span><h2>Review is possible.<br/><em>Scoring must wait.</em></h2><div className="radar-zero"><strong>0</strong><div><b>entities eligible <br/>for scoring</b><span>UNSCORED</span></div></div><p>No performance label is assigned before every required evidence gate passes.</p></div>
+        <div className="sf-radar-lead"><span className="sf-eyebrow">Gap Radar / evidence boundary</span><h2>Evidence reviews are open.<br/><em>Performance labels need more.</em></h2><div className="radar-zero"><strong>0</strong><div><b>entities eligible <br/>for scoring</b><span>UNSCORED</span></div></div><p>No performance label is assigned before every required evidence gate passes.</p></div>
         <div className="sf-gate-sequence"><span className="sf-eyebrow">What is blocking activation?</span>{blockers.map(([icon, title, detail, done], index) => <div key={title} className={done ? 'is-local' : ''}><span className="sf-gate-number">{String(index + 1).padStart(2, '0')}</span><div><b>{title}</b><p>{detail}</p><small>{done ? 'Local review only · formal approval pending' : 'Required before scoring'}</small></div><Icon name={done ? 'check' : icon} size={18}/></div>)}</div>
       </div>
       <div className="sf-next-action"><Icon name="arrow" size={24}/><div><span>Next owner action</span><b>{localIdentityReviewComplete ? 'Formal crosswalk sign-off + aligned current outcomes' : 'Complete identity review + obtain aligned current outcomes'}</b><p>{localIdentityReviewComplete ? 'Local decisions support review; they do not replace formal approval.' : 'Unreviewed names remain outside approved cross-source identity.'} Period, quality and policy conditions still apply.</p></div><a href={withMode('/data-readiness', 'SAMPLE', colorTheme)}>Inspect readiness evidence <Icon name="arrow" size={15}/></a></div>
     </section>
-    <SecretariatCohort/>
-    <RuralCohort/>
-    <LgdCrosswalkPanel/>
+    </details>
+    <details className="panel"><summary>Urban daily collection comparison</summary><SecretariatCohort/></details>
+    <details className="vi-disclosure radar-supporting"><summary>Identity review and historical investigations</summary><LgdCrosswalkPanel/>
     <CrosswalkWorkbench stats={stats} queue={queue} decisions={decisions} approved={approved} reviewed={reviewed} remaining={remaining} onDecide={decide} onClear={clearDecision} onApproveBulk={approveBulk}/>
     <VehiclePairing/>
-    <ClearanceRankContrast/>
+    <ClearanceRankContrast/></details>
     <EvidenceLabel/>
   </>;
 }
@@ -2133,16 +2147,17 @@ function Diagnostics({ mode, colorTheme, cameFrom, diagnostic, allKeys }: { mode
       <span>You opened this from the {cameFrom.toLowerCase()} review table.</span>
     </nav>}
     <PageIntro visual="diagnostics" eyebrow="Source-by-source review" title="ULB Evidence Inspector" description="See what this ULB returned, what is absent, and why each conclusion is—or is not—supported."><EntityPicker diagnostic={diagnostic} allKeys={allKeys} mode={mode} colorTheme={colorTheme}/>{mode === 'SAMPLE' && <EvidencePack diagnostic={diagnostic}/>}</PageIntro>
-    {mode === 'SAMPLE' && <section className="screen-feature sf-diagnostic" aria-label="ULB evidence file summary"><div className="sf-dark sf-diagnostic-grid"><div><span className="sf-eyebrow">Selected ULB / source-by-source evidence</span><h2>{diagnostic.name}</h2><p className="sf-location"><Icon name="building" size={17}/>{diagnostic.district}</p><p className="sf-reporting">{diagnostic.reportingContext}</p><span className="sf-identity"><Icon name="link" size={15}/>Candidate cross-source identity — not yet reviewed</span></div><div className="sf-footprint"><span className="sf-eyebrow">Returned evidence footprint</span><div className="sf-footprint-value"><strong>{sourceFamilies}</strong><span>source families<br/>returned</span></div><div className="sf-family-nodes" aria-label={`${sourceFamilies} returned source families`}>{[...new Map(diagnostic.evidence.map((item) => [item.tableKey, item.dataset])).entries()].map(([key, name]) => <i key={key} title={name}/>)}</div><small>One block per returned family. Breadth is not completeness or performance.</small></div></div><div className="sf-file-facts"><div><b>{diagnostic.evidence.length}</b><span>retained matching rows</span></div><div><b>{returnedPeriods}</b><span>reported period labels</span></div><div><b>UNSCORED</b><span>identity & period gates apply</span></div><p>Choose a record below.<br/>Every reading keeps its source context.</p></div></section>}
+    {mode === 'SAMPLE' && <section className="diagnostic-brief" aria-label="ULB evidence file summary"><div><span>SELECTED ULB</span><h2>{diagnostic.name}</h2><p>{diagnostic.district} · candidate identity awaiting review</p></div><dl><div><dt>Source families</dt><dd>{sourceFamilies}</dd></div><div><dt>Matching rows</dt><dd>{diagnostic.evidence.length}</dd></div><div><dt>Period labels</dt><dd>{returnedPeriods}</dd></div></dl></section>}
+    {mode === 'SAMPLE' && <UlbPeerProfile records={diagnostic.evidence} onInspect={id=>{const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/>}
     <section className="diagnostics-layout">
       <article className="panel diagnostic-main">
-        {mode !== 'SAMPLE' && <div className="diagnostic-heading"><span className="municipal-icon"><Icon name="building" size={28}/></span><div><small className="diagnostic-kicker">Selected ULB evidence file</small><h2>{diagnostic.name}</h2><p>{diagnostic.district} · {diagnostic.reportingContext}</p>{mode === 'SAMPLE' && <span className="candidate-identity-label">Candidate cross-source identity — not yet reviewed</span>}</div><StatusPill state={diagnostic.state}/></div>}
+        {mode !== 'SAMPLE' && <div className="diagnostic-heading"><span className="municipal-icon"><Icon name="building" size={28}/></span><div><small className="diagnostic-kicker">Selected ULB evidence file</small><h2>{diagnostic.name}</h2><p>{diagnostic.district} · {diagnostic.reportingContext}</p></div><StatusPill state={diagnostic.state}/></div>}
         {mode === 'SAMPLE' ? <DiagnosticReadings records={diagnostic.evidence} selectedId={evidence?.id} onInspect={id => {const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/> : <section className="case-section"><header className="case-section-head"><div><span className="eyebrow">What is reported</span><h3>Current matched records</h3></div><small>Select a reading to inspect its retained source</small></header><div className="diagnostic-metrics">{diagnostic.metrics.slice(0, 4).map((metric) => <MetricRowView key={metric.label} metric={metric} selected={evidence?.id === metric.evidenceId} onEvidence={() => { const index = diagnostic.evidence.findIndex((item) => item.id === metric.evidenceId); if (index >= 0) inspectRecord(index); }}/>)}</div></section>}
-        <section className="case-analysis-grid">
+        <details className="diagnostic-supporting" open={mode!=='SAMPLE'}><summary>Interpretation and full source record browser</summary><section className="case-analysis-grid">
           <article className={`case-signal callout-${diagnostic.state.toLowerCase()}`}><span><Icon name={diagnostic.state === 'UNSCORED' ? 'alert' : 'target'} size={22}/></span><div><small>What stands out</small><h3>{diagnostic.title}</h3><b>Why</b><p>{diagnostic.summary}</p></div></article>
           <article className="case-limit"><span><Icon name="shield" size={20}/></span><div><small>What cannot be concluded</small><p>{mode === 'SAMPLE' ? 'These records do not establish utilization, an underlying cause, or current outcome impact. Identity and period review are still required.' : 'Illustrative demo values are not government findings.'}</p></div></article>
         </section>
-        {mode === 'SAMPLE' && <EvidenceRecordBrowser records={diagnostic.evidence} selectedId={evidence?.id} onSelect={inspectRecord}/>}
+        {mode === 'SAMPLE' && <EvidenceRecordBrowser records={diagnostic.evidence} selectedId={evidence?.id} onSelect={inspectRecord}/>}</details>
       </article>
       <aside className="diagnostic-side">
         <article className="panel evidence-panel" tabIndex={-1}><PanelTitle icon="search" title="Evidence Inspector" subtitle={mode === 'SAMPLE' ? `${diagnostic.evidence.length} matching source record${diagnostic.evidence.length === 1 ? '' : 's'} retained` : 'Select a metric row to inspect its source'}/>{diagnostic.evidence.length > 1 && <label className="evidence-select"><span>Source record</span><select aria-label="Evidence record" value={evidenceIndex} onChange={(event) => setEvidenceIndex(Number(event.target.value))}>{diagnostic.evidence.map((item, index) => <option value={index} key={item.id}>{item.dataset} · {item.period}</option>)}</select></label>}{evidence ? <EvidenceView evidence={evidence} scored={diagnostic.state !== 'UNSCORED'}/> : <div className="empty-evidence"><Icon name="database" size={30}/><b>No source record available</b><p>Evidence appears only after a qualified fixture or source record is selected.</p></div>}</article>
@@ -2187,22 +2202,22 @@ function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnT
   return <>
     <PageIntro visual="data-readiness" art={view === 'coverage' ? '/assets/sasa/hero-swachh.png' : undefined} eyebrow="Activation evidence" title={view === 'coverage' ? 'ULB Evidence Coverage Explorer' : 'Data Readiness'} description={view === 'coverage' ? 'See where governed dataset coverage overlaps and where evidence blind spots remain.' : 'Inspect catalogue coverage, returned periods, quality conditions, and the gates for higher-order intelligence.'}><FilterBar mode={mode}/></PageIntro>
     <div className="analytics-tabs readiness-tabs" role="tablist" aria-label="Data readiness views">{(['catalogue', 'coverage', 'periods', 'quality'] as const).map((item) => <button key={item} role="tab" aria-selected={view === item} className={view === item ? 'active' : ''} onClick={() => setView(item)}>{sentenceCase(item)}</button>)}</div>
-    {mode === 'SAMPLE' && (view === 'catalogue' ? <ReadinessCommandCenter readiness={readiness}/> : <div className="sf-readiness-context"><span><b>{governedSnapshotStats.completeDatasets}</b> complete datasets / {readinessCatalogueStats.platformAvailable} granted</span><span>Scoring remains <b>UNSCORED</b></span><button onClick={() => setView('catalogue')}>View activation pipeline <Icon name="arrow" size={15}/></button></div>)}
+    {mode === 'SAMPLE' && (view === 'catalogue' ? <ReadinessCommandCenter readiness={readiness}/> : <div className="sf-readiness-context"><span><b>{governedSnapshotStats.completeDatasets}</b> historical exports · {readinessCatalogueStats.platformAvailable} current routes</span><span>Scoring remains <b>UNSCORED</b></span><button onClick={() => setView('catalogue')}>View activation pipeline <Icon name="arrow" size={15}/></button></div>)}
     {view === 'catalogue' && <><section className="readiness-layout">
       <article className="panel readiness-table-panel">
-        <div className="catalogue-heading"><PanelTitle icon="database" title={mode === 'SAMPLE' ? 'Governed and documented catalogue' : 'Dataset readiness'} subtitle={mode === 'SAMPLE' ? `${readinessCatalogueStats.platformAvailable} datasets granted on the platform (per API docs) · ${readinessCatalogueStats.notProvisioned} further documented keys not yet provisioned` : 'Mode-isolated readiness evidence'}/><span className="catalogue-count">{filteredRows.length} / {readiness.rows.length}</span></div>
+        <div className="catalogue-heading"><PanelTitle icon="database" title={mode === 'SAMPLE' ? 'Governed and documented catalogue' : 'Dataset readiness'} subtitle={mode === 'SAMPLE' ? `${readinessCatalogueStats.platformAvailable} current authorized routes · ${readinessCatalogueStats.notInCurrentCatalogue} historical keys absent from the current catalogue · checked ${readinessCatalogueStats.currentCheckedAt.slice(0,10)}` : 'Mode-isolated readiness evidence'}/><span className="catalogue-count">{filteredRows.length} / {readiness.rows.length}</span></div>
         <div className="catalogue-filters" aria-label="Catalogue filters">
           <label className="catalogue-search"><span className="sr-only">Search catalogue</span><Icon name="search" size={16}/><input aria-label="Search catalogue" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search dataset, key, or field"/></label>
           <label><span className="sr-only">Filter by theme</span><select aria-label="Filter by theme" value={theme} onChange={(event) => setTheme(event.target.value)}><option value="ALL">All themes</option>{themes.map((value) => <option value={value} key={value}>{value}</option>)}</select></label>
           <label><span className="sr-only">Filter by evidence state</span><select aria-label="Filter by evidence state" value={evidence} onChange={(event) => setEvidence(event.target.value)}><option value="ALL">All evidence</option>{evidenceStates.map((value) => <option value={value} key={value}>{sentenceCase(value)}</option>)}</select></label>
           <label><span className="sr-only">Filter by eligibility</span><select aria-label="Filter by eligibility" value={eligibility} onChange={(event) => setEligibility(event.target.value)}><option value="ALL">All eligibility</option>{eligibilityStates.map((value) => <option value={value} key={value}>{sentenceCase(value)}</option>)}</select></label>
         </div>
-        <div className="table-scroll catalogue-table"><table><thead><tr><th>Dataset</th><th>Theme</th><th>Fields</th><th>Schema</th><th>Snapshot</th><th>Join readiness</th><th>Intelligence eligibility</th></tr></thead><tbody>{filteredRows.map((row) => <tr key={row.tableKey} className={row.snapshotComplete ? 'representative-row' : ''}><td><div className="dataset-name"><b>{row.dataset}</b><span>{row.programme} · {row.snapshotComplete ? 'Complete governed snapshot' : row.sourceState.includes('INGESTION PENDING') ? 'Documented · ingestion pending' : typeof row.liveRowCount === 'number' ? `Live · ${row.liveRowCount.toLocaleString('en-IN')} rows · complete pull pending` : 'Retrieval unavailable'}</span></div><code>{row.tableKey}</code></td><td>{row.theme}</td><td><details className="field-details"><summary>{row.fields} fields</summary><div>{row.columns.map((column) => <code key={column}>{column}</code>)}</div></details></td><td><ReadinessBadge value={row.publicSchema}/></td><td><div className="snapshot-cell"><ReadinessBadge value={row.payloadEvidence}/><small>{row.period}</small></div></td><td><ReadinessBadge value={row.joinReadiness}/></td><td><ReadinessBadge value={row.eligibility}/></td></tr>)}</tbody></table>{filteredRows.length === 0 && <div className="no-results">No catalogue entries match the selected filters.</div>}</div>
-        <p className="table-note"><Icon name="info" size={16}/>A complete snapshot means pagination reconciled to the source total for the exported filter period. It does not by itself prove history, cross-dataset identity, or scoring eligibility.</p>
+        <div className="table-scroll catalogue-table"><table><thead><tr><th>Dataset</th><th>Theme</th><th>Fields</th><th>Schema</th><th>Snapshot</th><th>Join readiness</th><th>Intelligence eligibility</th></tr></thead><tbody>{filteredRows.map((row) => <tr key={row.tableKey} className={row.snapshotComplete ? 'representative-row' : ''}><td><div className="dataset-name"><b>{row.dataset}</b><span>{row.programme} · {row.snapshotComplete ? 'Retained historical snapshot' : row.payloadEvidence.startsWith('AGGREGATE RETAINED') ? 'Aggregate evidence retained' : row.sourceState.includes('INGESTION PENDING') ? 'Documented · ingestion pending' : typeof row.liveRowCount === 'number' ? `Live · ${row.liveRowCount.toLocaleString('en-IN')} rows · complete pull pending` : 'Retrieval unavailable'}</span></div><code>{row.tableKey}</code></td><td>{row.theme}</td><td><details className="field-details"><summary>{row.fields} fields</summary><div>{row.columns.map((column) => <code key={column}>{column}</code>)}</div></details></td><td><ReadinessBadge value={row.publicSchema}/></td><td><div className="snapshot-cell"><ReadinessBadge value={row.payloadEvidence}/><small>{row.period}</small></div></td><td><ReadinessBadge value={row.joinReadiness}/></td><td><ReadinessBadge value={row.eligibility}/></td></tr>)}</tbody></table>{filteredRows.length === 0 && <div className="no-results">No catalogue entries match the selected filters.</div>}</div>
+        <p className="table-note"><Icon name="info" size={16}/>A complete snapshot means pagination reconciled to the source total for the exported filter period. It does not prove distinct-key completeness, history, cross-dataset identity, or scoring eligibility.</p>
       </article>
       <aside className="panel gates-panel"><PanelTitle icon="target" title="Activation gates" subtitle="Requirements, not current capabilities"/><div className="gates-list">{readiness.gates.map((gate, index) => <div className={`gate gate-${gate.state}`} key={gate.title}><span className="gate-state"><Icon name={gate.state === 'met' ? 'check' : gate.state === 'blocked' ? 'alert' : 'clock'} size={18}/></span><span className="gate-index">{index + 1}</span><div><b>{gate.title}</b><small>{gate.detail}</small></div></div>)}</div></aside>
     </section>
-    {mode === 'SAMPLE' && <><DatasetUsageRegister/><details className="supporting-portfolio-disclosure"><summary><span><Icon name="chart" size={17}/><span><b>Supporting programme portfolio</b><small>Secondary source-level coverage context · expand for 13 retained sources</small></span></span><Icon name="arrow" size={17}/></summary><SupportingProgrammePortfolio/></details></>}
+    {mode === 'SAMPLE' && <><DatasetUsageRegister/><details id="programme-portfolio" className="supporting-portfolio-disclosure" open><summary><span><Icon name="chart" size={17}/><span><b>Supporting programme portfolio</b><small>Secondary source-level coverage context · expand for 13 retained sources</small></span></span><Icon name="arrow" size={17}/></summary><SupportingProgrammePortfolio/></details></>}
     <section className="quality-strip"><WhyItem icon="database" title="Completeness" text="Pagination reconciled before use"/><WhyItem icon="clock" title="Timeliness" text="Source period, not ingestion date"/><WhyItem icon="shield" title="Schema validity" text="Strings parsed with quality flags"/><WhyItem icon="link" title="Evidence traceability" text="Every value retains provenance"/></section></>}
     {view === 'coverage' && <CoverageView mode={mode}/>} 
     {view === 'periods' && <PeriodsView mode={mode}/>} 
@@ -2226,7 +2241,7 @@ function DatasetUsageRegister() {
   const awaitingDegrees = audit.awaitingPull/audit.total*360;
   const unavailableDegrees = audit.unavailable/audit.total*360;
   return <article className="panel dataset-use-register">
-    <header><PanelTitle icon="database" title="How the 46 catalogue entries are used" subtitle="Every retained source has a visible analytical or supporting role; incomplete and unprovisioned sources remain gated"/><span className="usage-total"><b>{audit.used}</b> used <small>of {audit.total}</small></span></header>
+    <header><PanelTitle icon="database" title={`How the ${readinessCatalogueStats.documentedDatasets} retained and documented entries are used`} subtitle="Every retained source has a visible analytical or supporting role; incomplete and unprovisioned sources remain gated"/><span className="usage-total"><b>{audit.used}</b> used <small>of {audit.total}</small></span></header>
     <div className="usage-register-overview">
       <div className="usage-orbit" style={{ background: `conic-gradient(#12a8a2 0 ${primaryDegrees}deg,#3478ed ${primaryDegrees}deg ${primaryDegrees+supportingDegrees}deg,#6b8ca8 ${primaryDegrees+supportingDegrees}deg ${primaryDegrees+supportingDegrees+awaitingDegrees}deg,#ef8f34 ${primaryDegrees+supportingDegrees+awaitingDegrees}deg ${primaryDegrees+supportingDegrees+awaitingDegrees+unavailableDegrees}deg,#8a65df ${primaryDegrees+supportingDegrees+awaitingDegrees+unavailableDegrees}deg 360deg)` }}><span><b>{audit.total}</b><small>catalogue entries</small></span></div>
       <div className="usage-flow"><span><small>Account-granted</small><b>{readinessCatalogueStats.platformAvailable}</b></span><Icon name="arrow" size={18}/><span><small>Complete retained</small><b>{governedSnapshotStats.completeDatasets}</b></span><Icon name="arrow" size={18}/><span className="used"><small>Visible use</small><b>{audit.used}</b></span><div className="usage-branch"><em>{audit.primary} core</em><em>{audit.supporting} supporting</em></div></div>
@@ -2249,18 +2264,22 @@ function SupportingProgrammePortfolio() {
 function ReadinessCommandCenter({ readiness }: { readiness: ReturnType<ReturnType<typeof createProvider>['getReadiness']> }) {
   const audit = getDatasetUsageAudit();
   const scoringEligible = readiness.rows.filter((row) => row.eligibility !== 'UNSCORED').length;
+  // Derived, not written down: the split rots the moment another route is retained.
+  const revisions = getRevisionInventory();
+  const revisedRoutes = revisions.filter((row) => row.changed).length;
+  const unchangedRoutes = revisions.length - revisedRoutes;
   const stages = [
     { label: 'Catalogue', value: audit.total, detail: 'known entries', state: 'known' },
     { label: 'Account-granted', value: readinessCatalogueStats.platformAvailable, detail: 'accessible endpoints', state: 'granted' },
-    { label: 'Complete retained', value: governedSnapshotStats.completeDatasets, detail: 'pagination reconciled', state: 'retained' },
+    { label: 'Current responses retained', value: readinessCatalogueStats.freshResponsesRetained, detail: `${unchangedRoutes} unchanged · ${revisedRoutes} revised`, state: 'retained' },
     { label: 'Scoring eligible', value: scoringEligible, detail: 'evidence gates unmet', state: 'held' },
   ];
   return <section className="screen-feature sf-readiness" aria-label="Evidence activation pipeline">
     <div className="sf-dark sf-readiness-grid">
       <div className="sf-readiness-lead"><span className="sf-eyebrow">Evidence activation / retained snapshots</span><h2>Descriptive review <br/>is ready. <br/><em>Scoring remains held.</em></h2><p>Access is the beginning. Usable, aligned evidence is what enables a decision.</p><span className="sf-held"><Icon name="shield" size={16}/>UNSCORED</span></div>
-      <div className="sf-activation-flow"><span className="sf-eyebrow">From catalogue to eligibility</span><ol>{stages.map((stage, index) => <li key={stage.label} className={`sf-stage-${stage.state}`}><span>{String(index + 1).padStart(2, '0')}</span><div><b>{stage.label}</b><small>{stage.detail}</small><i aria-hidden="true"><em style={{width: `${audit.total > 0 ? stage.value / audit.total * 100 : 0}%`}}/></i></div><strong>{stage.value.toLocaleString('en-IN')}</strong></li>)}</ol><p>Dataset counts · bar lengths use the {audit.total}-entry catalogue as reference.<br/>Retention is not scoring eligibility.</p></div>
+      <div className="sf-activation-flow"><span className="sf-eyebrow">From catalogue to eligibility</span><ol>{stages.map((stage, index) => <li key={stage.label} className={`sf-stage-${stage.state}`}><span>{String(index + 1).padStart(2, '0')}</span><div><b>{stage.label}</b><small>{stage.detail}</small><i aria-hidden="true"><em style={{width: `${audit.total > 0 ? stage.value / audit.total * 100 : 0}%`}}/></i></div><strong>{stage.value.toLocaleString('en-IN')}</strong></li>)}</ol><p>Dataset counts · bar lengths use the {audit.total}-entry catalogue as reference.<br/>Eight revised measures are available in Source Reconciliation. Historical views retain their source periods and populations.</p></div>
     </div>
-    <div className="sf-readiness-exceptions" aria-label="Why catalogue entries do not reach retained evidence"><div><b>{audit.pending}</b><span>documented<br/>not provisioned</span></div><div><b>{audit.awaitingPull}</b><span>accessible<br/>complete pull pending</span></div><div><b>{audit.unavailable}</b><span>granted<br/>response unavailable</span></div><p>These are different access states.<br/>None is treated as zero operational activity.</p></div>
+    <div className="sf-readiness-exceptions" aria-label="Current source synchronization"><div><b>{readinessCatalogueStats.freshResponsesRetained}</b><span>current route responses<br/>retained for review</span></div><div><b>{readinessCatalogueStats.platformAvailable-readinessCatalogueStats.freshResponsesRetained}</b><span>current routes<br/>not refreshed in this pass</span></div><div><b>{readinessCatalogueStats.notInCurrentCatalogue}</b><span>historical keys<br/>absent from current catalogue</span></div><p>Rural collection is ingested for all four retained months, May to August.<br/>The remaining routes keep their earlier exports; ingestion is not certified complete.<br/><a href="/reconciliation?mode=governed&view=revisions">Inspect the {revisedRoutes} revised routes →</a></p></div>
     <div className="sf-next-action"><Icon name="target" size={24}/><div><span>First required data action</span><b>Approve an authoritative ULB registry and name-to-ID crosswalk</b><p>Trusted joins still need period alignment and quality review. {readiness.gates.filter((gate) => gate.state === 'blocked').length} blocked gates remain.</p></div></div>
   </section>;
 }

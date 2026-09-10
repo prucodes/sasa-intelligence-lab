@@ -33,7 +33,7 @@
  * against 2.74s serial, turning an eight-hour pull into three.
  */
 
-import { mkdir, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { datasets } from './dataset-map.mjs';
 
@@ -145,10 +145,25 @@ async function fetchPage(session, tableKey, filters, pageToken) {
   throw new Error('unreachable');
 }
 
+/** Rows genuinely on disk, so `countsAgree` compares against something independent. */
+async function retainedRowCount(dir) {
+  let rows = 0;
+  try {
+    for (const name of await readdir(dir)) {
+      if (!/^page-\d+\.json$/.test(name)) continue;
+      const payload = JSON.parse(await readFile(resolve(dir, name), 'utf8'));
+      rows += Array.isArray(payload.records) ? payload.records.length : 0;
+    }
+  } catch { return 0; }
+  return rows;
+}
+
 async function completedOffsets(dir) {
   try {
     const files = await readdir(dir);
-    return new Set(files.filter((name) => name.endsWith('.json')).map((name) => Number(name.replace(/\D/g, ''))));
+    // manifest.json lives in this directory too, and stripping its non-digits yields
+    // 0 — which would count it as a completed page 0 on every resume.
+    return new Set(files.filter((name) => /^page-\d+\.json$/.test(name)).map((name) => Number(name.replace(/\D/g, ''))));
   } catch {
     return new Set();
   }
@@ -156,8 +171,23 @@ async function completedOffsets(dir) {
 
 async function main() {
   const argv = process.argv.slice(2);
-  const rest = argv.filter((arg) => arg.startsWith('--') || argv[argv.indexOf(arg) - 1]?.startsWith('--'));
-  const tableKeys = argv.filter((arg) => !rest.includes(arg));
+  // `--fresh` takes no value, so "the token after a flag is that flag's value" silently
+  // swallowed a table key: `ingest.mjs a --fresh b` pulled only `a` and reported success.
+  const VALUELESS = new Set(['--fresh']);
+  const rest = [];
+  const tableKeys = [];
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg.startsWith('--')) {
+      rest.push(arg);
+      if (!VALUELESS.has(arg) && index + 1 < argv.length && !argv[index + 1].startsWith('--')) {
+        rest.push(argv[index + 1]);
+        index += 1;
+      }
+      continue;
+    }
+    tableKeys.push(arg);
+  }
   if (!tableKeys.length) {
     console.error('Usage: node scripts/ingest.mjs <tableKey> [...] [--month <YYYYMM>] [--year <YYYY>] [--filter KEY=VALUE] [--fresh]');
     console.error(`Known keys: ${Object.keys(datasets).join(', ')}`);
@@ -171,6 +201,23 @@ async function main() {
   // `month_id`/`year`, the PR keys take uppercase `MONTH_ID`/`YEAR`. `--filter K=V`
   // passes a name through verbatim rather than guessing which vocabulary applies.
   const filters = {};
+  // `--months 6,5` pulls several months of ONE key inside a single session. The refresh
+  // chain lives in this process and rotates on every use, so two sequential invocations
+  // would need two separately minted tokens — and an unattended overnight run cannot ask
+  // for the second. Sharing the session is what makes a multi-month pull survive alone.
+  // `--districts 743,791` pulls one month district by district instead of paging the whole
+  // month by offset. The result set is ordered by district, and offset cost grows with
+  // depth: the tail of a 1.24M-row month runs at ~1.8s/page where the head runs at ~1.0s.
+  // Filtering to one district keeps every offset under ~85,000, so the rate stays flat —
+  // and it avoids the deep offsets where the API starts returning 504s.
+  const districtsIndex = rest.indexOf('--districts');
+  const districtList = districtsIndex >= 0 && rest[districtsIndex + 1]
+    ? rest[districtsIndex + 1].split(',').map((value) => value.trim()).filter(Boolean)
+    : null;
+  const monthsIndex = rest.indexOf('--months');
+  const monthList = monthsIndex >= 0 && rest[monthsIndex + 1]
+    ? rest[monthsIndex + 1].split(',').map((value) => value.trim()).filter(Boolean)
+    : null;
   const monthIndex = rest.indexOf('--month');
   if (monthIndex >= 0) filters.month_id = rest[monthIndex + 1];
   const yearIndex = rest.indexOf('--year');
@@ -194,6 +241,32 @@ async function main() {
   // convenience — it is the only reliable way to pull more than one dataset per token.
   const session = new Session(refreshToken);
   for (const tableKey of tableKeys) {
+    if (districtList) {
+      for (const district of districtList) {
+        console.log(`\n=== ${tableKey} · DISTRICT_ID=${district}${filters.MONTH_ID ? ` · MONTH_ID=${filters.MONTH_ID}` : ''} ===`);
+        try {
+          await ingestOne(session, tableKey, { ...filters, DISTRICT_ID: district }, fresh);
+        } catch (error) {
+          console.error(`  DISTRICT_ID=${district} stopped: ${error.message}`);
+          console.error('  Retained pages are on disk; rerun to resume this district.');
+        }
+      }
+      continue;
+    }
+    if (monthList) {
+      for (const month of monthList) {
+        console.log(`\n=== ${tableKey} · MONTH_ID=${month} ===`);
+        // One month failing must not abandon the months after it: the session is still
+        // good, and a half-finished run is resumable while an abandoned one is not.
+        try {
+          await ingestOne(session, tableKey, { ...filters, MONTH_ID: month }, fresh);
+        } catch (error) {
+          console.error(`  MONTH_ID=${month} stopped: ${error.message}`);
+          console.error('  Retained pages are on disk; rerun to resume this month.');
+        }
+      }
+      continue;
+    }
     console.log(`\n=== ${tableKey} ===`);
     await ingestOne(session, tableKey, filters, fresh);
   }
@@ -217,7 +290,10 @@ async function ingestOne(session, tableKey, filters, fresh) {
 
   const offsets = [];
   for (let offset = PAGE_SIZE; offset < total; offset += PAGE_SIZE) if (!done.has(offset)) offsets.push(offset);
-  let retained = done.size * PAGE_SIZE;
+  // Count the rows actually on disk rather than assuming PAGE_SIZE per page: the final
+  // page never has a full complement, so multiplying overstates every resume, and a
+  // dataset smaller than one page overstates even a fresh run.
+  let retained = await retainedRowCount(dir);
   let pages = done.size;
   console.log(`  ${total.toLocaleString('en-IN')} rows · ${offsets.length} page(s) to fetch at concurrency ${CONCURRENCY}`);
 
@@ -252,7 +328,8 @@ async function ingestOne(session, tableKey, filters, fresh) {
   if (manifest.countsAgree === false) {
     console.log(`Note: the API reported totalRecordCount ${total?.toLocaleString('en-IN')}, which does not match the ${retained.toLocaleString('en-IN')} rows actually returned. Both values are recorded in manifest.json.`);
   }
-  console.log(`Raw pages: ${dir.replace(process.cwd() + '/', '')}/  ·  next: node scripts/aggregate.mjs ${tableKey}`);
+  const filterArgs = Object.entries(filters).map(([name, value]) => `--filter ${name}=${value}`).join(' ');
+  console.log(`Raw pages: ${dir.replace(process.cwd() + '/', '')}/  ·  next: node scripts/aggregate.mjs ${tableKey}${filterArgs ? ` ${filterArgs}` : ''}`);
 }
 
 await main();
