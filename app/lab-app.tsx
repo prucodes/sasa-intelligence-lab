@@ -618,12 +618,11 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
   return <div className="presenter-aperture">
     <div className="presenter-title-row"><div><h1>One operating picture. Three sharply different realities.</h1><p className="presenter-lede">Each instrument has its own source, period, and denominator. Read the contrast, never combine the dials.</p></div><div className="aperture-status"><span>Current evidence state</span><b>3 source signals</b><small>0 composite scores</small></div></div>
     <section className="aperture-canvas" aria-label="Three source-separated operational instruments">
-      {lanes.map((lane, laneIndex) => {
+      {lanes.map((lane) => {
         const ratio = lane.ratio === null ? null : Math.max(0, Math.min(lane.ratio, 1));
         const lead = lane.gap?.entities[0];
         const stageBase = Math.max(lane.stages[0]?.[1] ?? 0, 1);
         return <article key={lane.id} className={`aperture-lane tone-${lane.tone}`}>
-          <span className="aperture-lane-number">0{laneIndex + 1}</span>
           <header><span>{lane.label}</span><small>{lane.period}</small></header>
           <div className="aperture-dial">
             <svg viewBox="0 0 164 164" role="img" aria-label={`${formatPercent(ratio)} ${lane.ratioLabel}`}>
@@ -636,14 +635,13 @@ function PresenterExecutiveAperture({ findings, collection, ihhl, legacy }: {
           </div>
           <div className="aperture-fraction"><b>{lane.numerator.toLocaleString('en-IN')}</b><span>of</span><b>{lane.denominator.toLocaleString('en-IN')}</b></div>
           <div className="aperture-trajectory" role="img" aria-label={`${lane.label} returned source path: ${lane.stages.map(([label, value]) => `${label} ${value.toLocaleString('en-IN')}`).join(', ')}`}>
-            <small>Returned source path · each rail uses this lane&rsquo;s first figure</small>
             {lane.stages.map(([label, value]) => <span key={label}><b>{label}</b><i><em style={{ width: `${Math.max(1.2, value / stageBase * 100)}%` }}/></i><strong>{compactMetric(value)}</strong></span>)}
           </div>
-          <div className="aperture-pressure"><small>Operational pressure · {lane.pressureBasis}</small><strong>{lane.gap?.headline}</strong>{lead && <span><b>{lead.ulb}</b> is the largest returned item · {lead.display}</span>}</div>
+          <div className="aperture-pressure"><strong title={`Operational pressure · ${lane.pressureBasis}`}>{lane.gap?.headline}</strong>{lead && <span><b>{lead.ulb}</b> is the largest returned item · {lead.display}</span>}</div>
           <footer><span>{lane.gap ? formatCoverage(lane.gap.coverage) : '—'} ULBs returned</span><b>{lane.gap ? notReturned(lane.gap.coverage) : '—'} absent</b></footer>
         </article>;
       })}
-      <div className="aperture-baseline"><span><Icon name="shield" size={14}/> Source-separated instruments</span><span>{governedSnapshotStats.completeDatasets} complete exports</span><span>{governedSnapshotStats.records.toLocaleString('en-IN')} retained rows</span><strong>UNSCORED</strong></div>
+      <div className="aperture-baseline"><span><Icon name="shield" size={14}/> Source-separated instruments</span><span>Each rail uses its own lane&rsquo;s first figure</span><span>{governedSnapshotStats.completeDatasets} complete exports</span><span>{governedSnapshotStats.records.toLocaleString('en-IN')} retained rows</span><strong>UNSCORED</strong></div>
     </section>
   </div>;
 }

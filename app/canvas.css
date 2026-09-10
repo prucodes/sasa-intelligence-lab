@@ -534,9 +534,4 @@
   line-height: 1.25;
 }
 
-.aperture-trajectory > small {
-  overflow: visible;
-  white-space: normal;
-  text-overflow: clip;
-  line-height: 1.45;
-}
+
