@@ -4,7 +4,7 @@
 .sidebar .brand .brand-wordmark b { font-size:30px; font-weight:750; letter-spacing:-.065em; line-height:1; color:var(--ink); }
 .sidebar .brand .brand-wordmark .brand-dot { display:inline; color:var(--teal-dark); }
 .sidebar .brand .brand-wordmark small { display:block; color:var(--teal-dark); font-size:12px; letter-spacing:.025em; }
-.mobile-menu-toggle,.mobile-current-page,.mobile-tools { display:none; }
+.mobile-brand-tools,.sidebar nav a .nav-mobile-label { display:none; }
 .topbar .mode-control select { color:var(--teal-dark); background:var(--surface); border-color:color-mix(in srgb,var(--teal-dark) 25%,var(--line)); box-shadow:none; font-size:13px; }
 .theme-dark .topbar .mode-control select { color:#b5dfd2; background:#163337; border-color:#426963; }
 .topbar::after { background:linear-gradient(90deg,#24878266,transparent); }
@@ -34,29 +34,29 @@
 .footer-brand > img { display:none; }
 
 @media(max-width:760px) {
-  .app-shell .sidebar { position:sticky; top:0; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; padding:10px 16px; min-height:70px; overflow:visible; background:var(--surface); z-index:60; }
+  .app-shell .sidebar { position:sticky; top:0; display:grid; grid-template-columns:1fr auto; align-items:center; gap:4px 12px; padding:6px 10px; height:auto; min-height:0; overflow:visible; background:var(--surface); z-index:60; }
   .sidebar .brand { padding:0; height:auto; min-width:0; border:0; }
-  .sidebar .brand .brand-wordmark b { font-size:27px; }
+  .sidebar .brand .brand-wordmark { flex-direction:row; align-items:baseline; gap:8px; }
+  .sidebar .brand .brand-wordmark b { font-size:24px; }
   .sidebar .brand .brand-wordmark small { font-size:12px; }
-  .mobile-current-page { display:block; color:var(--muted); font-size:12px; max-width:95px; text-align:right; margin-left:auto; line-height:1.3; }
-  .sidebar .mobile-menu-toggle { display:flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:9px; padding:0 10px; min-height:44px; font-size:14px; background:var(--surface); color:var(--ink); }
-  .sidebar .mobile-menu-toggle span { font-size:18px; }
-  .app-shell .sidebar nav { display:none; }
-  .app-shell .sidebar.mobile-menu-open nav { display:grid; grid-template-columns:1fr 1fr; width:100%; padding:10px 0 2px; gap:7px; }
-  .sidebar.mobile-menu-open nav a { justify-content:flex-start; padding:10px; font-size:14px; min-height:48px; gap:10px; }
-  .sidebar.mobile-menu-open nav a span { display:inline; font-size:14px; }
-  .app-shell .topbar { top:auto; min-height:60px; height:auto; padding:8px 16px; position:relative; background:var(--surface); z-index:45; }
+  .mobile-brand-tools { display:flex; gap:4px; }
+  .mobile-brand-tools button { display:grid; place-items:center; width:44px; height:44px; border:0; border-radius:50%; background:transparent; color:var(--muted); }
+  .mobile-brand-tools button:hover { background:color-mix(in srgb,var(--teal) 8%,var(--surface)); }
+  .app-shell .sidebar nav { grid-column:1/-1; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); width:100%; padding:0; gap:3px; }
+  .app-shell .sidebar nav a { display:flex; flex-direction:column; justify-content:center; gap:5px; padding:7px 1px; min-height:54px; min-width:0; border:0; border-radius:9px; box-shadow:none; color:var(--muted); }
+  .sidebar nav a .nav-desktop-label { display:none; }
+  .sidebar nav a .nav-mobile-label { display:block; font-size:12px; font-weight:550; line-height:1.2; letter-spacing:-.02em; }
+  .app-shell .sidebar nav a.active { background:color-mix(in srgb,var(--teal) 11%,var(--surface)); color:var(--teal-dark); box-shadow:inset 0 -2px var(--teal); }
+  .app-shell .sidebar nav a svg { width:20px; height:20px; opacity:1; }
+  .app-shell .topbar { top:auto; min-height:58px; height:auto; padding:6px 12px; position:relative; background:var(--surface); z-index:45; }
   .topbar .header-brand { display:none; }
-  .topbar .header-actions { width:100%; gap:10px; }
+  .topbar .header-actions { width:100%; gap:8px; }
   .topbar .mode-control select { min-height:42px; font-size:14px; border-radius:9px; }
   .topbar .header-actions > .icon-button { display:none; }
-  .topbar .header-actions > .present-button { display:inline-flex; width:auto; min-height:42px; border-radius:9px; padding:0 12px; gap:7px; box-shadow:none; font-size:13px; }
-  .topbar .present-button span { display:inline; }
-  .topbar .mobile-tools { display:block; position:relative; order:5; }
-  .mobile-tools summary { cursor:pointer; display:flex; align-items:center; min-height:44px; padding:0 8px; font-size:14px; color:var(--ink); }
-  .mobile-tools > div { position:absolute; top:100%; right:0; width:230px; padding:8px; border:1px solid var(--line); border-radius:12px; background:var(--surface); box-shadow:0 16px 35px #102f3430; }
-  .mobile-tools button { display:block; width:100%; padding:12px; text-align:left; min-height:44px; font-size:14px; color:var(--ink); background:transparent; border:0; border-radius:7px; }
-  .mobile-tools button:hover { background:color-mix(in srgb,var(--teal) 8%,var(--surface)); }
+  .topbar .header-actions > :is(.present-button,.compare-button,.evidence-pack) { display:inline-flex; justify-content:center; width:44px; height:44px; min-width:44px; min-height:44px; border-radius:50%; padding:0; box-shadow:none; }
+  .topbar :is(.present-button,.compare-button,.evidence-pack) span { display:none; }
+  .app-shell :is(button,a,select):focus-visible { outline:2px solid var(--teal); outline-offset:3px; }
+  .app-shell .content { scroll-margin-top:122px; }
   .overview-review .overview-welcome { padding:6px 4px 18px; }
   .overview-review .overview-welcome .eyebrow { font-size:12px; letter-spacing:.08em; }
   .overview-review .overview-welcome h1 { font-size:27px; max-width:25ch; }
@@ -87,4 +87,40 @@
   .service-radar .usr-controls select { min-height:44px; font-size:16px; }
   .service-radar .usr-rank-link { font-size:13px; }
 }
-@media(max-width:370px) { .mobile-current-page { display:none; }.topbar .header-actions { gap:4px; }.topbar .mode-control select { max-width:145px; }.topbar .header-actions > .present-button { padding-inline:8px; } }
+@media(max-width:370px) { .topbar .header-actions { gap:5px; }.topbar .mode-control select { max-width:143px; padding-left:9px; }.sidebar .brand .brand-wordmark small { font-size:11px; } }
+
+/* ULB picker stacking. The identity bar and the peer profile beneath it are sibling
+   stacking contexts at the same z-index, so the popover's own z-index only counted
+   inside the identity bar and the next card painted straight over the list, at every
+   width. While the picker is open its section is lifted above its siblings. */
+.diagnostic-identity:has(.entity-picker-popover) { z-index: 30; }
+
+@media(max-width:760px) {
+  /* On a phone the dropdown also covered the identity note under the button and left
+     the ULB list below a 354px district column, so choosing a ULB meant scrolling
+     inside a box that was itself half hidden. It becomes a sheet anchored to the
+     bottom of the screen, clear of the sticky navigation, with both lists visible. */
+  .entity-picker-popover {
+    position: fixed;
+    inset: auto 8px 8px 8px;
+    top: auto;
+    width: auto;
+    max-height: min(78vh, 620px);
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 16px;
+    z-index: 90;
+    box-shadow: 0 -2px 0 color-mix(in srgb, var(--teal) 30%, transparent), 0 18px 60px -8px rgba(6, 30, 34, .45);
+  }
+  .entity-picker-popover > label { flex: none; min-height: 46px; }
+  .entity-picker-popover input { font-size: 16px; }
+  .entity-picker-popover kbd { display: none; }
+  .entity-picker-browser { flex: 1; min-height: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .entity-picker-browser > nav { max-height: 132px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .entity-picker-browser > nav button { min-height: 40px; font-size: 14px; }
+  .entity-picker-browser > nav button b, .entity-picker-browser > nav button small { font-size: 13px; }
+  .entity-picker-results { min-height: 0; overflow-y: auto; }
+  .entity-picker-popover [role="listbox"] { max-height: none; }
+  .entity-picker-popover [role="option"] { min-height: 48px; font-size: 14px; }
+}

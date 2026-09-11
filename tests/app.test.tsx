@@ -26,14 +26,12 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /what sasa data can tell us today/i })).toBeInTheDocument();
   });
 
-  it('opens the mobile navigation and returns focus to Menu on Escape', () => {
+  it('keeps every page directly linked with an explicit current-page marker', () => {
     render(<LabApp page="overview" initialMode="SAMPLE"/>);
-    const menu=screen.getByRole('button',{name:'Menu'});
-    fireEvent.click(menu);
-    expect(menu).toHaveAttribute('aria-expanded','true');
-    fireEvent.keyDown(menu,{key:'Escape'});
-    expect(menu).toHaveAttribute('aria-expanded','false');
-    expect(menu).toHaveFocus();
+    const nav=screen.getByRole('complementary',{name:'Primary navigation'});
+    expect(nav.querySelectorAll('nav a')).toHaveLength(6);
+    expect(nav.querySelector('[aria-current="page"]')).toHaveAttribute('aria-label','Overview');
+    expect(screen.queryByRole('button',{name:'Menu'})).not.toBeInTheDocument();
   });
 
   it('switches between light and dark presentation themes', () => {

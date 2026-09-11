@@ -310,7 +310,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
   return (
     <div className={`app-shell theme-${colorTheme}${booted ? '' : ' booting'}`} suppressHydrationWarning>
       <a className="skip-link" href="#main-content">Skip to main content</a>
-      <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} />
+      <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} onThemeToggle={toggleColorTheme} onAbout={()=>setAboutOpen(true)} aboutOpen={aboutOpen}/>
       <div className="app-main">
         <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} onBrief={() => setBriefOpen(true)} />
         <main id="main-content" data-mode={mode} className={`content page-${page}`}>
@@ -335,19 +335,18 @@ function ProductFooter({ mode }: { mode: DataMode }) {
   return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><Image src="/assets/sasa/brand-primary.png" alt="" width={44} height={42}/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'on-demand connector · on the roadmap'}</span></footer>;
 }
 
-function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {
+  const mobileLabels:Record<Page,string>={'overview':'Overview','operational-analytics':'Analytics','gap-radar':'Radar','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
   return (
-    <aside className={`sidebar${menuOpen ? ' mobile-menu-open' : ''}`} aria-label="Primary navigation" onKeyDown={event=>{if(event.key==='Escape'){setMenuOpen(false);event.currentTarget.querySelector<HTMLButtonElement>('.mobile-menu-toggle')?.focus();}}}>
+    <aside className="sidebar" aria-label="Primary navigation">
       <a className="brand" href={withMode('/', mode, colorTheme)} aria-label="SASA Intelligence Lab overview">
         <span className="brand-wordmark"><b>SASA<span className="brand-dot" aria-hidden="true">.</span></b><small>Intelligence Lab</small></span>
       </a>
-      <span className="mobile-current-page">{navItems.find(item=>item.page===page)?.label}</span>
-      <button className="mobile-menu-toggle" aria-controls="primary-pages" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'Close':'Menu'} <span aria-hidden="true">{menuOpen?'×':'☰'}</span></button>
+      <div className="mobile-brand-tools"><button aria-label={colorTheme==='dark'?'Use light appearance':'Use dark appearance'} aria-pressed={colorTheme==='dark'} onClick={onThemeToggle}><Icon name={colorTheme==='dark'?'sun':'moon'} size={18}/></button><button aria-label="About & glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={18}/></button></div>
       <nav id="primary-pages">
         {navItems.map((item) => {
           const href = item.page === 'diagnostics' ? `/diagnostics/${diagnosticKey}` : item.href;
-          return <a key={item.page} className={page === item.page ? 'active' : ''} href={withMode(href, mode, colorTheme)} aria-label={item.label} aria-current={page === item.page ? 'page' : undefined}><Icon name={item.icon}/><span><GlossaryText text={item.label}/></span></a>;
+          return <a key={item.page} className={page === item.page ? 'active' : ''} href={withMode(href, mode, colorTheme)} aria-label={item.label} aria-current={page === item.page ? 'page' : undefined}><Icon name={item.icon}/><span className="nav-desktop-label"><GlossaryText text={item.label}/></span><span className="nav-mobile-label" aria-hidden="true">{mobileLabels[item.page]}</span></a>;
         })}
       </nav>
       <div className="sidebar-art"><Image src="/assets/sasa/hero-collection.png" alt="Illustration of a sanitation collection vehicle" width={353} height={128} /></div>
@@ -363,7 +362,6 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
       <div className="header-brand"><b><GlossaryText text="SASA Intelligence Lab"/></b><span className="lab-tag"><span>◇</span> Decision-intelligence concept</span><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status"><Icon name="shield" size={17}/>{datasets[mode].banner}</span></div>
       <div className="header-actions">
         <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
-        <details className="mobile-tools"><summary>More</summary><div><button onClick={event=>{onPresent();event.currentTarget.closest('details')?.removeAttribute('open');}}>Open briefing</button><button onClick={event=>{onCompare();event.currentTarget.closest('details')?.removeAttribute('open');}}>Compare ULBs{compareIds.length?` · ${compareIds.length}`:''}</button><button onClick={event=>{onBrief();event.currentTarget.closest('details')?.removeAttribute('open');}}>Export evidence brief</button><button onClick={onThemeToggle}>{colorTheme==='dark'?'Light':'Dark'} appearance</button><button onClick={event=>{onAbout();event.currentTarget.closest('details')?.removeAttribute('open');}}>About & glossary</button></div></details>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
         <button className="icon-button present-button" aria-label="Open presenter briefing" title="Open presenter briefing" onClick={onPresent}><Icon name="play" size={15}/><span>Briefing</span></button>
         <button className="icon-button compare-button" aria-label="Open ULB comparison tray" title="Compare selected ULBs" onClick={onCompare}><Icon name="building" size={17}/><span>Compare{compareIds.length ? ` · ${compareIds.length}` : ''}</span></button>
