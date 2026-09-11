@@ -1,4 +1,4 @@
-import {getRuralMovement} from './rural-movement';
+import {getRuralMovement,type RateBasis} from './rural-movement';
 import infrastructure from '@/data/aggregates/infrastructure-series.json';
 import {getDistinctDeliveryPlans} from './delivery-plan';
 import {getUlbComparison} from './ulb-comparison';
@@ -6,8 +6,8 @@ import {serviceSnapshot,serviceExclusions} from './ulb-service';
 import {rankingSubjects} from './subject-rankings';
 
 /** Eligibility belongs to an analysis, rather than one global all-or-nothing gate. */
-export function getGapCapabilities() {
-  const movement=getRuralMovement();
+export function getGapCapabilities(basis:RateBasis='all-days') {
+  const movement=getRuralMovement(basis);
   // Sourced from the four-month series the tab actually renders. The older rural-cohort
   // aggregate is August only, so labelling this tab from it described a narrower
   // window than the screen behind it.

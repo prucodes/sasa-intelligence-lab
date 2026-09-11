@@ -7,7 +7,14 @@ import type {ReviewIssueId} from '@/lib/overview';
 import './ulb-review.css';
 
 export function UlbPeerProfile({records,onInspect}:{records:EvidenceRecord[];onInspect:(id:string)=>void}){
-  const [subject,setSubject]=useState<ReviewIssueId>('sanitation');
+  const [subject,setSubject]=useState<ReviewIssueId>(()=>{
+    return (['sanitation','collection','processing'] as const).find(id=>{
+      const comparison=getUlbComparison(id);
+      const table=id==='sanitation'?'sasa_sac_identification_of_new_ihhls_api':id==='collection'?'sasa_sac_machinery_e_autos_service_model_api':'sasa_100_percent_clearance_of_legacy_waste_api';
+      const record=records.find(r=>r.tableKey===table&&r.period===comparison.period&&r.grain==='ULB');
+      return record&&comparison.points.some(p=>p.key===sourceCandidateKey(record.rawFields));
+    })??'sanitation';
+  });
   useEffect(()=>{const requested=new URLSearchParams(window.location.search).get('programme');if(requested&&['sanitation','collection','processing'].includes(requested)){
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSubject(requested as ReviewIssueId);

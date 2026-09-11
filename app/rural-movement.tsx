@@ -14,8 +14,10 @@ const month=(p:string)=>new Date(`${p}-02T12:00:00Z`).toLocaleDateString('en-GB'
 /** `findingStated` means a lede above already reports the result, so this section
  *  names its method instead of repeating the sentence. It follows `compact` by
  *  default because the Overview lede always states it, and Gap Radar now does too. */
-export function RuralMovement({compact=false,findingStated=compact,href='/gap-radar?mode=governed&view=movement'}:{compact?:boolean;findingStated?:boolean;href?:string}) {
- const [basis,setBasis]=useState<RateBasis>('all-days');
+export function RuralMovement({compact=false,findingStated=compact,href='/gap-radar?mode=governed&view=movement',basis:controlledBasis,onBasisChange}:{compact?:boolean;findingStated?:boolean;href?:string;basis?:RateBasis;onBasisChange?:(basis:RateBasis)=>void}) {
+ const [localBasis,setLocalBasis]=useState<RateBasis>('all-days');
+ const basis=controlledBasis??localBasis;
+ const setBasis=(next:RateBasis)=>{setLocalBasis(next);onBasisChange?.(next);};
  const data=useMemo(()=>getRuralMovement(basis),[basis]),[district,setDistrict]=useState(''),[showAll,setShowAll]=useState(false);
  const droppedRates=data.excludedDays.flatMap(e=>e.days.map(d=>d.collectionRate)).filter((v):v is number=>v!==null);
  const droppedRange=droppedRates.length?`${pct(Math.min(...droppedRates))}\u2013${pct(Math.max(...droppedRates))}`:'near zero';

@@ -15,7 +15,7 @@ import { DeliveryPlans } from './delivery-plans';
 import {ProgrammeExplorer} from './programme-explorer';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
-import { getRuralMovement } from '@/lib/rural-movement';
+import { getRuralMovement, type RateBasis } from '@/lib/rural-movement';
 import { getCorpusEvidenceCounts } from '@/lib/duplicate-sources';
 import { getRuralSanitation } from '@/lib/rural-sanitation';
 import { getReportingContinuity } from '@/lib/reporting-continuity';
@@ -39,6 +39,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   const issues = useMemo(() => getOverviewIssues(), []);
   const movements = useMemo(() => getReportedMovements(), []);
   const [subject, setSubject] = useState('rural-change');
+  const [ruralBasis, setRuralBasis] = useState<RateBasis>('all-days');
   const [selected, setSelected] = useState<ReviewIssueId>('sanitation');
   const [district, setDistrict] = useState('');
   const [showAll, setShowAll] = useState(false);
@@ -75,7 +76,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   const scopeName = district || 'All returned districts';
   const urban = issues.some(issue=>issue.id===subject);
   const corpus = getCorpusEvidenceCounts();
-  const ruralChange = getRuralMovement();
+  const ruralChange = getRuralMovement(ruralBasis);
   // Each of these reads real retained evidence; none is a placeholder. A subject without a
   // figure it can stand on would get no figure rather than a decorative one.
   const centres = getRuralSanitation();
@@ -123,36 +124,37 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   const current = subjects.find(item=>item.id===subject) ?? subjects[0];
 
   return <div className="overview-review" data-issue={selected}>
+    <div className="overview-welcome"><span className="eyebrow">SASA Intelligence Lab / Overview</span><h1>Andhra Pradesh sanitation overview</h1><p>Explore reported progress, compare places and inspect the evidence.</p></div>
+    <nav className="or-subject-strip" aria-label="Operational review subjects" aria-describedby="or-selector-basis">
+      <p id="or-selector-basis">Each subject keeps its own population and period. Totals cover returned districts only.</p>
+      <label className="overview-mobile-subject">Review subject<select value={subject} onChange={event=>chooseSubject(event.target.value)}>{subjects.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select><small>{current.scope}</small></label>
+      <div className="or-subject-buttons">{subjects.map(item=><button key={item.id} aria-pressed={subject===item.id} onClick={()=>chooseSubject(item.id)}><b>{item.title}</b><small>{item.scope}</small></button>)}</div>
+    </nav>
     <header className="or-lede" aria-label="Selected review subject">
       <div className="or-lede-head">
-        <span className="or-lede-kicker">Governed evidence · SASA Intelligence Lab</span>
-        <a className="or-lede-edition" href={href('/data-readiness')}>2026 operational review <Arrow/></a>
+        <span className="or-lede-kicker">{current.title}</span>
+        <span className="or-lede-edition">{current.scope}</span>
       </div>
       <div className="or-lede-body">
         <div className="or-lede-text" aria-live="polite">
-          <h1>{current.lede.finding}</h1>
+          <h2>{current.lede.finding}</h2>
           <p>{current.lede.support}</p>
+          {subject==='rural-change'&&<small className="overview-basis-label">Statewide · first seven days of each month · {ruralBasis==='all-days'?'all seven days counted':'working days only'}</small>}
         </div>
         <div className="or-lede-figure">
           <strong>{current.lede.value}</strong>
           <small>{current.lede.unit}</small>
         </div>
       </div>
-      <dl className="or-lede-ledger">
+      <details className="overview-evidence-summary"><summary>Evidence coverage & scoring limits</summary><dl className="or-lede-ledger">
         <div><dt>{current.scale.label}</dt><dd>{current.scale.value}</dd></div>
-        <div><dt>Complete snapshots</dt><dd>{governedSnapshotStats.completeDatasets}</dd></div>
+        <div><dt>Historical exports</dt><dd>{governedSnapshotStats.completeDatasets}</dd></div>
         <div><dt>Authorized routes</dt><dd>{readinessCatalogueStats.platformAvailable}</dd></div>
-        <div><dt>Scoring eligible</dt><dd>None · gates unmet</dd></div>
-      </dl>
+        <div><dt>Overall scoring</dt><dd>Not assigned</dd></div>
+      </dl><p>Historical exports and authorized routes count different things; these figures do not measure current ingestion completeness. Subject comparisons retain their own evidence rules.</p><a href={href('/data-readiness')}>Inspect source coverage <Arrow/></a></details>
     </header>
-
-    <nav className="or-subject-strip" aria-label="Operational review subjects" aria-describedby="or-selector-basis">
-      <p id="or-selector-basis">Each subject keeps its own population and period. Totals cover returned districts only.</p>
-      <label className="overview-mobile-subject">Review subject<select value={subject} onChange={event=>chooseSubject(event.target.value)}>{subjects.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select><small>{subjects.find(item=>item.id===subject)?.scope}</small></label>
-      <div className="or-subject-buttons">{subjects.map(item=><button key={item.id} aria-pressed={subject===item.id} onClick={()=>chooseSubject(item.id)}><b>{item.title}</b><small>{item.scope}</small></button>)}</div>
-    </nav>
     <div className="overview-selected" aria-live="polite">
-    {subject==='rural-change' && <RuralMovement compact href={`${href('/gap-radar')}&view=movement`}/>}
+    {subject==='rural-change' && <RuralMovement compact basis={ruralBasis} onBasisChange={setRuralBasis} href={`${href('/gap-radar')}&view=movement`}/>}
     {subject==='works' && <DeliveryPlans overview/>}
     {subject==='rural-centres' && <RuralSanitation/>}
     {subject==='reporting' && <ReportingContinuity/>}

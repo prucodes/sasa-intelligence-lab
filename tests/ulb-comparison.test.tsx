@@ -52,6 +52,9 @@ describe('ULB comparison',()=>{
     fireEvent.click(screen.getByRole('button',{name:'Inspect these figures ↗'}));
     expect(onInspect).toHaveBeenCalledWith(expect.any(String));unmount();
     render(<UlbPeerProfile records={createProvider('SAMPLE').getDiagnostic('sample-narsipatnam').evidence} onInspect={vi.fn()}/>);
+    expect(screen.getByRole('combobox',{name:'Diagnostic comparison programme'})).toHaveValue('collection');
+    expect(screen.getByRole('img',{name:/peers lower/})).toBeInTheDocument();
+    fireEvent.change(screen.getByRole('combobox',{name:'Diagnostic comparison programme'}),{target:{value:'sanitation'}});
     expect(screen.getByText('No comparable rate')).toBeVisible();
     expect(screen.queryByRole('img',{name:/peers lower/})).toBeNull();
   });

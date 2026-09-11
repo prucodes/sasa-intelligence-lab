@@ -2,11 +2,37 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { OverviewReview } from '@/app/overview-review';
 import { getOverviewIssues } from '@/lib/overview';
+import { getRuralMovement } from '@/lib/rural-movement';
+import { GapExplorer } from '@/app/gap-explorer';
 
 const href = (path: string) => `${path}?mode=governed`;
 const shapes = [{ d: 'Kurnool', path: 'M0 0L10 0L10 10Z' }, { d: 'No matched district', path: 'M20 20L30 20L30 30Z' }];
 
 describe('connected overview interactions', () => {
+  it('keeps the Gap Radar trend summary on the selected day basis too', () => {
+    render(<GapExplorer/>);
+    fireEvent.click(screen.getByRole('button',{name:'May–August trends'}));
+    fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'working-days'}});
+    const lede=screen.getByLabelText('Selected comparison');
+    expect(lede).toHaveTextContent('-1.57');
+    expect(lede).toHaveTextContent('6 districts that decline');
+    expect(lede).toHaveTextContent('73,380');
+  });
+  it('keeps the statewide headline, figure and cohort aligned with the chart day basis', () => {
+    render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    const lede=screen.getByLabelText('Selected review subject');
+    fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'working-days'}});
+    const expected=getRuralMovement('working-days');
+    const change=(expected.series.at(-1)!.comparable.collectionRate!-expected.series[0].comparable.collectionRate!)*100;
+    expect(lede).toHaveTextContent(`${expected.declining.length} districts that decline`);
+    expect(lede).toHaveTextContent(change.toFixed(2));
+    expect(lede).toHaveTextContent(expected.cohort.pairs.toLocaleString('en-IN'));
+    expect(lede).toHaveTextContent('working days only');
+    fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'all-days'}});
+    expect(lede).toHaveTextContent('5 districts that decline');
+    expect(lede).toHaveTextContent('-1.29');
+    expect(lede).toHaveTextContent('85,769');
+  });
   it('keeps issue, district, map, list and concentration in sync', () => {
     render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
     const buttons = screen.getByRole('navigation', { name: 'Operational review subjects' });

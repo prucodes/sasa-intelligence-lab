@@ -26,6 +26,16 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /what sasa data can tell us today/i })).toBeInTheDocument();
   });
 
+  it('opens the mobile navigation and returns focus to Menu on Escape', () => {
+    render(<LabApp page="overview" initialMode="SAMPLE"/>);
+    const menu=screen.getByRole('button',{name:'Menu'});
+    fireEvent.click(menu);
+    expect(menu).toHaveAttribute('aria-expanded','true');
+    fireEvent.keyDown(menu,{key:'Escape'});
+    expect(menu).toHaveAttribute('aria-expanded','false');
+    expect(menu).toHaveFocus();
+  });
+
   it('switches between light and dark presentation themes', () => {
     const { container } = render(<LabApp page="overview" initialMode="DEMO" />);
     const shell = container.querySelector('.app-shell');
@@ -56,8 +66,8 @@ describe('application shell and screens', () => {
     fireEvent.change(screen.getByRole('combobox', { name: /data mode/i }), { target: { value: 'SAMPLE' } });
     expect(screen.getByText(/authenticated, governed SASA evidence/i)).toBeInTheDocument();
     expect(screen.getAllByText(/6,509/).length).toBeGreaterThan(0);
-    // The landing leads with the selected subject's finding, not a section label.
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/decline at every step/i);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Andhra Pradesh sanitation overview/i);
+    expect(screen.getByRole('heading', { level: 2, name: /decline at every step/i })).toBeInTheDocument();
     expect(screen.getByLabelText('Operational review subjects')).toHaveTextContent(/Vehicle delivery.*Household toilets.*Legacy waste/i);
     expect(screen.getByLabelText('Four-month rural collection comparison')).toHaveTextContent('85,769');
     fireEvent.click(screen.getByRole('button', {name:/Household toilets/}));
@@ -94,7 +104,7 @@ describe('application shell and screens', () => {
     expect(screen.getByText('total_tpd')).toBeInTheDocument();
     expect(screen.getByText('30', { selector: 'b' })).toBeInTheDocument();
     expect(screen.getByText(/unreviewed · excluded from scoring/i, { selector: '.evidence-row b' })).toBeInTheDocument();
-    expect(screen.getByText(/candidate identity awaiting review/i)).toBeInTheDocument();
+    expect(screen.getByText(/Source-name candidate · identity awaiting review/i)).toBeInTheDocument();
     expect(screen.getByText('Grain')).toBeInTheDocument();
     expect(screen.getByText('Formula / check')).toBeInTheDocument();
   });

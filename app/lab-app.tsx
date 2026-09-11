@@ -336,13 +336,15 @@ function ProductFooter({ mode }: { mode: DataMode }) {
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <aside className="sidebar" aria-label="Primary navigation">
+    <aside className={`sidebar${menuOpen ? ' mobile-menu-open' : ''}`} aria-label="Primary navigation" onKeyDown={event=>{if(event.key==='Escape'){setMenuOpen(false);event.currentTarget.querySelector<HTMLButtonElement>('.mobile-menu-toggle')?.focus();}}}>
       <a className="brand" href={withMode('/', mode, colorTheme)} aria-label="SASA Intelligence Lab overview">
-        <Image src="/assets/sasa/brand-primary.png" alt="" width={165} height={160} priority />
-        <span><b>SASA</b><small>Intelligence Lab</small></span>
+        <span className="brand-wordmark"><b>SASA<span className="brand-dot" aria-hidden="true">.</span></b><small>Intelligence Lab</small></span>
       </a>
-      <nav>
+      <span className="mobile-current-page">{navItems.find(item=>item.page===page)?.label}</span>
+      <button className="mobile-menu-toggle" aria-controls="primary-pages" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'Close':'Menu'} <span aria-hidden="true">{menuOpen?'×':'☰'}</span></button>
+      <nav id="primary-pages">
         {navItems.map((item) => {
           const href = item.page === 'diagnostics' ? `/diagnostics/${diagnosticKey}` : item.href;
           return <a key={item.page} className={page === item.page ? 'active' : ''} href={withMode(href, mode, colorTheme)} aria-label={item.label} aria-current={page === item.page ? 'page' : undefined}><Icon name={item.icon}/><span><GlossaryText text={item.label}/></span></a>;
@@ -361,6 +363,7 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
       <div className="header-brand"><b><GlossaryText text="SASA Intelligence Lab"/></b><span className="lab-tag"><span>◇</span> Decision-intelligence concept</span><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status"><Icon name="shield" size={17}/>{datasets[mode].banner}</span></div>
       <div className="header-actions">
         <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
+        <details className="mobile-tools"><summary>More</summary><div><button onClick={event=>{onPresent();event.currentTarget.closest('details')?.removeAttribute('open');}}>Open briefing</button><button onClick={event=>{onCompare();event.currentTarget.closest('details')?.removeAttribute('open');}}>Compare ULBs{compareIds.length?` · ${compareIds.length}`:''}</button><button onClick={event=>{onBrief();event.currentTarget.closest('details')?.removeAttribute('open');}}>Export evidence brief</button><button onClick={onThemeToggle}>{colorTheme==='dark'?'Light':'Dark'} appearance</button><button onClick={event=>{onAbout();event.currentTarget.closest('details')?.removeAttribute('open');}}>About & glossary</button></div></details>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
         <button className="icon-button present-button" aria-label="Open presenter briefing" title="Open presenter briefing" onClick={onPresent}><Icon name="play" size={15}/><span>Briefing</span></button>
         <button className="icon-button compare-button" aria-label="Open ULB comparison tray" title="Compare selected ULBs" onClick={onCompare}><Icon name="building" size={17}/><span>Compare{compareIds.length ? ` · ${compareIds.length}` : ''}</span></button>
@@ -2276,9 +2279,9 @@ function Diagnostics({ mode, colorTheme, cameFrom, diagnostic, allKeys }: { mode
       <a href={`${withMode('/operational-analytics', mode, colorTheme)}&tab=${backTab}`}><Icon name="arrow" size={14}/>Back to {cameFrom}</a>
       <span>You opened this from the {cameFrom.toLowerCase()} review table.</span>
     </nav>}
-    <PageIntro visual="diagnostics" eyebrow="Source-by-source review" title="ULB Evidence Inspector" description="See what this ULB returned, what is absent, and why each conclusion is, or is not, supported."><EntityPicker diagnostic={diagnostic} allKeys={allKeys} mode={mode} colorTheme={colorTheme}/>{mode === 'SAMPLE' && <EvidencePack diagnostic={diagnostic}/>}</PageIntro>
-    {mode === 'SAMPLE' && <section className="diagnostic-brief" aria-label="ULB evidence file summary"><div><span>SELECTED ULB</span><h2>{diagnostic.name}</h2><p>{diagnostic.district} · candidate identity awaiting review</p></div><dl><div><dt>Source families</dt><dd>{sourceFamilies}</dd></div><div><dt>Matching rows</dt><dd>{diagnostic.evidence.length}</dd></div><div><dt>Period labels</dt><dd>{returnedPeriods}</dd></div></dl></section>}
-    {mode === 'SAMPLE' && <UlbPeerProfile records={diagnostic.evidence} onInspect={id=>{const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/>}
+    <PageIntro visual="diagnostics" eyebrow="Source-by-source review" title="ULB Evidence Inspector" description="Explore this ULB’s reported delivery, facilities and historical outcomes."/>
+    <section className="diagnostic-brief diagnostic-identity" aria-label="ULB evidence file summary"><div><EntityPicker diagnostic={diagnostic} allKeys={allKeys} mode={mode} colorTheme={colorTheme}/>{mode==='SAMPLE'&&<p>Source-name candidate · identity awaiting review</p>}</div>{mode==='SAMPLE'&&<><dl><div><dt>Source families</dt><dd>{sourceFamilies}</dd></div><div><dt>Matching rows</dt><dd>{diagnostic.evidence.length}</dd></div><div><dt>Period labels</dt><dd>{returnedPeriods}</dd></div></dl><EvidencePack diagnostic={diagnostic}/></>}</section>
+    {mode === 'SAMPLE' && <UlbPeerProfile key={diagnostic.name+'|'+diagnostic.district} records={diagnostic.evidence} onInspect={id=>{const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/>}
     <section className="diagnostics-layout">
       <article className="panel diagnostic-main">
         {mode !== 'SAMPLE' && <div className="diagnostic-heading"><span className="municipal-icon"><Icon name="building" size={28}/></span><div><small className="diagnostic-kicker">Selected ULB evidence file</small><h2>{diagnostic.name}</h2><p>{diagnostic.district} · {diagnostic.reportingContext}</p></div><StatusPill state={diagnostic.state}/></div>}
