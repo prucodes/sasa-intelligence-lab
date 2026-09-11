@@ -1,9 +1,15 @@
 /* Shared SASA chrome: quiet teal, readable identity and explicit mobile navigation. */
-.sidebar .brand { justify-content:flex-start; }
-.sidebar .brand .brand-wordmark { display:flex; flex-direction:column; gap:3px; }
-.sidebar .brand .brand-wordmark b { font-size:30px; font-weight:750; letter-spacing:-.065em; line-height:1; color:var(--ink); }
-.sidebar .brand .brand-wordmark .brand-dot { display:inline; color:var(--teal-dark); }
-.sidebar .brand .brand-wordmark small { display:block; color:var(--teal-dark); font-size:12px; letter-spacing:.025em; }
+.brand-mark { display:block; flex:none; width:auto; }
+.brand-mark-base { fill:#012b5a; }
+.brand-mark-mid { fill:#0f9097; }
+.brand-mark-top { fill:#66e3b7; }
+.brand-mark-dot { fill:#23b2a3; }
+.theme-dark .brand-mark-base { fill:#eef6f8; }
+.sidebar .brand { justify-content:flex-start; gap:11px; }
+.sidebar .brand .brand-mark { height:46px; }
+.sidebar .brand .brand-wordmark { display:flex; flex-direction:column; gap:4px; }
+.sidebar .brand .brand-wordmark b { font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1; color:var(--ink); }
+.sidebar .brand .brand-wordmark small { display:block; color:var(--teal-dark); font-size:12px; font-weight:600; letter-spacing:.05em; }
 .mobile-brand-tools,.sidebar nav a .nav-mobile-label { display:none; }
 .topbar .mode-control select { color:var(--teal-dark); background:var(--surface); border-color:color-mix(in srgb,var(--teal-dark) 25%,var(--line)); box-shadow:none; font-size:13px; }
 .theme-dark .topbar .mode-control select { color:#b5dfd2; background:#163337; border-color:#426963; }
@@ -31,11 +37,14 @@
 .diagnostic-identity p { font-size:12px; line-height:1.5; }
 .diagnostic-identity dl { flex:1; }
 .diagnostic-identity > button { flex:none; }
-.footer-brand > img { display:none; }
+@media (min-width:901px) and (max-width:1100px) { .sidebar .brand .brand-wordmark { display:none; } .sidebar .brand .brand-mark { height:44px; } }
+.footer-brand .brand-mark { height:36px; }
+.presenter-brand .brand-mark { width:auto; height:30px; padding:0; border-radius:0; background:none; }
 
 @media(max-width:760px) {
   .app-shell .sidebar { position:sticky; top:0; display:grid; grid-template-columns:1fr auto; align-items:center; gap:4px 12px; padding:6px 10px; height:auto; min-height:0; overflow:visible; background:var(--surface); z-index:60; }
-  .sidebar .brand { padding:0; height:auto; min-width:0; border:0; }
+  .sidebar .brand { padding:0; height:auto; min-width:0; border:0; gap:8px; }
+  .sidebar .brand .brand-mark { height:30px; }
   .sidebar .brand .brand-wordmark { flex-direction:row; align-items:baseline; gap:8px; }
   .sidebar .brand .brand-wordmark b { font-size:24px; }
   .sidebar .brand .brand-wordmark small { font-size:12px; }

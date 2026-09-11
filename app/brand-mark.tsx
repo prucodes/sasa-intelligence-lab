@@ -1,0 +1,11 @@
+/** SASA Intelligence Lab mark, drawn from constructed geometry. Fills come from CSS so the base layer can flip on dark surfaces. */
+export function BrandMark({ className, title }: { className?: string; title?: string }) {
+  return (
+    <svg className={['brand-mark', className].filter(Boolean).join(' ')} viewBox="0 0 80.56 100" role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : true} focusable="false">
+      <path className="brand-mark-base" d="M0 56.79A0.66 0.66 0 0 1 0.89 56.17L44.27 72.19A14.74 14.74 0 0 1 53.9 86.02L53.9 99.45A0.55 0.55 0 0 1 53.35 100L17.6 100A17.6 17.6 0 0 1 0 82.4Z"/>
+      <path className="brand-mark-mid" d="M10.23 33.62A0.66 0.66 0 0 1 11.12 33.01L60.47 51.56A12.1 12.1 0 0 1 68.31 62.89L68.31 88.51A9.57 9.57 0 0 1 58.74 98.08L58.74 98.08A0.55 0.55 0 0 1 58.19 97.53L58.19 86.02A19.03 19.03 0 0 0 45.75 68.17L16.27 57.28A9.24 9.24 0 0 1 10.23 48.61Z"/>
+      <path className="brand-mark-top" d="M32.78 16.02A0.66 0.66 0 0 1 33.7 15.41L69.02 30.62A18.48 18.48 0 0 1 80.19 47.6L80.19 81.91A7.04 7.04 0 0 1 73.15 88.95L73.15 88.95A0.55 0.55 0 0 1 72.6 88.4L72.6 62.89A16.39 16.39 0 0 0 61.98 47.55L41.48 39.84A13.42 13.42 0 0 1 32.78 27.28Z"/>
+      <circle className="brand-mark-dot" cx="69.26" cy="11.31" r="11.31"/>
+    </svg>
+  );
+}

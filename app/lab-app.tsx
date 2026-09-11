@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { BrandMark } from './brand-mark';
 import { OverviewReview } from './overview-review';
 import { EvidenceRecordBrowser } from './evidence-record-browser';
 import { DiagnosticReadings } from './diagnostic-readings';
@@ -332,7 +333,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
 }
 
 function ProductFooter({ mode }: { mode: DataMode }) {
-  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><Image src="/assets/sasa/brand-primary.png" alt="" width={44} height={42}/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'on-demand connector · on the roadmap'}</span></footer>;
+  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><BrandMark/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'on-demand connector · on the roadmap'}</span></footer>;
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {
@@ -340,7 +341,7 @@ function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout
   return (
     <aside className="sidebar" aria-label="Primary navigation">
       <a className="brand" href={withMode('/', mode, colorTheme)} aria-label="SASA Intelligence Lab overview">
-        <span className="brand-wordmark"><b>SASA<span className="brand-dot" aria-hidden="true">.</span></b><small>Intelligence Lab</small></span>
+        <BrandMark/><span className="brand-wordmark"><b>SASA</b><small>Intelligence Lab</small></span>
       </a>
       <div className="mobile-brand-tools"><button aria-label={colorTheme==='dark'?'Use light appearance':'Use dark appearance'} aria-pressed={colorTheme==='dark'} onClick={onThemeToggle}><Icon name={colorTheme==='dark'?'sun':'moon'} size={18}/></button><button aria-label="About & glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={18}/></button></div>
       <nav id="primary-pages">
@@ -552,7 +553,7 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
 
   return <div className={`presenter theme-${colorTheme}`} role="dialog" aria-modal="true" aria-label="Presenter briefing">
     <div className="presenter-top">
-      <span className="presenter-brand"><Icon name="shield" size={17}/><span><b>SASA Intelligence Lab</b><small>Governed evidence briefing</small></span></span>
+      <span className="presenter-brand"><BrandMark/><span><b>SASA Intelligence Lab</b><small>Governed evidence briefing</small></span></span>
       <div className="presenter-progress" role="tablist" aria-label="Briefing beats">
         {beatTitles.map((title, index) => <button key={title} role="tab" aria-selected={index === beat}
           className={index === beat ? 'active' : ''} onClick={() => setBeat(index)}><b>{String(index + 1).padStart(2, '0')}</b><span>{title}</span></button>)}
