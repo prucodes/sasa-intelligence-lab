@@ -156,3 +156,11 @@
   .source-reconciliation :is(polyline,circle,td,div,button) { transition: none; }
 }
 .sr-small-multiples button.sr-source-bar{width:100%;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--ink);padding:9px 7px;margin-top:3px;text-align:left;cursor:pointer;min-height:40px}.sr-small-multiples button.sr-source-bar[aria-pressed=true]{background:color-mix(in srgb,#71998c 12%,var(--surface));border-color:var(--line)}.sr-small-multiples button.sr-source-bar:focus-visible{outline:2px solid #427f76;outline-offset:2px}.sr-small-multiples button.sr-source-bar:hover{border-color:#71998c}
+
+/* The small-multiples panels sit on a light surface but their department name was
+   inheriting the light-on-dark colour from the stage above, landing at 1.01:1 on
+   Housing and 1.07:1 on Swachh Bharat Mission. Both names were invisible while the
+   "Scale:" text beside them read at 6:1, which is why it looked like a missing
+   label rather than a colour fault. Taken from the tokens so it holds in both themes. */
+.sr-small-multiples header b { color: var(--ink); font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
+.sr-small-multiples header small { color: var(--muted); }

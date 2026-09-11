@@ -170,6 +170,9 @@
 
 .sr-focus-context :is(h2, h3, b, dd, strong) { color: #e8f4ed; }
 .sr-focus-context :is(p, small, span, summary) { color: #acc9c0; }
+.sr-focus-context .sr-basis-facts b span,
+.sr-focus-context .sr-basis-facts small { color: #acc9c0; }
+.sr-focus-context .sr-basis-facts > div { border-left-color: #ffffff2e; }
 .sr-focus-context .sr-kicker { color: #97c9b7; }
 .sr-focus-context h2 em { color: #edf8c9; }
 
