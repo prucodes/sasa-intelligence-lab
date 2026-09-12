@@ -5,6 +5,7 @@ import {validateAggregate} from '../scripts/aggregate-contract.mjs';
 import {serviceSnapshot as data,serviceCategory,serviceRates,serviceExclusions,serviceCoordinates} from '@/lib/ulb-service';
 import {UlbServiceRadar} from '@/app/ulb-service-radar';
 import {GapExplorer} from '@/app/gap-explorer';
+import {RadarNames} from '@/app/radar-names';
 
 const row={date1:'2026-08-12',district_code:'1',district_name:'District',ulb_code:'10',ulb_name:'ULB',sachivalayam_code:'100',api_lgd_dist_code:'1',api_lgd_mandal_code:'10',total_households:'100',collected_households:'80',garbage_segregation:'64'};
 describe('ULB service evidence',()=>{
@@ -48,6 +49,20 @@ describe('ULB service evidence',()=>{
     copy.points[0][3]=99999999;
     expect(validateAggregate('ulb-service-snapshot.json',copy).join(' ')).toMatch(/mappingReviewSecretariats/);
     expect(validateAggregate('ulb-service-snapshot.json',copy).join(' ')).toMatch(/containment breach/);
+  });
+});
+describe('ULB service matrix reading aids',()=>{
+  it('explains how to read the matrix and what both means, beside the chart and not collapsed',()=>{
+    render(<UlbServiceRadar/>);
+    const note=screen.getByRole('note',{name:'How to read this chart'});
+    expect(note).toBeVisible();
+    expect(note).toHaveTextContent('Each dot is one ULB on 12 August.');
+    expect(note).toHaveTextContent(/Collection and segregation\. Top right meets both guides, bottom left is below both\./);
+    expect(note).toHaveTextContent('Draft guides at 80% collection and 80% segregation, not official targets.');
+  });
+  it('moves an example name off a name that is already drawn',()=>{
+    const {container}=render(<svg><RadarNames reserved={[{x:300,y:185,width:80}]} points={[{key:'a',name:'VIZIANAGARAM',x:290,y:200}]}/></svg>);
+    expect(Number(container.querySelector('text')!.getAttribute('y'))).not.toBe(185);
   });
 });
 describe('ULB service matrix interactions',()=>{
