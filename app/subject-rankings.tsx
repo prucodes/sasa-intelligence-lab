@@ -6,6 +6,7 @@ import {RadarNames} from './radar-names';
 import {getOverallReadiness} from '@/lib/overall-readiness';
 import './overall-readiness.css';
 import {observedMedian} from '@/lib/visual-evidence';
+import {ChartGuide,periodPhrase} from './chart-guide';
 
 const n=(v:number)=>v.toLocaleString('en-IN',{maximumFractionDigits:2});
 type FieldState='higher-wide'|'higher-compact'|'lower-wide'|'lower-compact';
@@ -15,6 +16,14 @@ const fieldStates:[FieldState,string,string,string][]=[
   ['lower-wide','Lower rate · larger workload','Investigate delivery at scale','Lower reported completion with more work reported.'],
   ['lower-compact','Lower rate · smaller workload','Review delivery','Lower reported completion with a smaller denominator.'],
 ];
+/** What right and up mean in plain words, for the subject on screen. */
+const readingWords:Record<RankingSubject,{right:string;up:string}>={
+  reach:{right:'More households to collect from.',up:'A bigger share of those households had waste collected.'},
+  segregation:{right:'More households had waste collected.',up:'A bigger share of those households segregated their waste.'},
+  toilets:{right:'More toilets approved, so a bigger job.',up:'A bigger share of approved toilets completed.'},
+  vehicles:{right:'More vehicles on work orders, so a bigger job.',up:'A bigger share of those vehicles supplied.'},
+  legacy:{right:'More tonnes of legacy waste to clear, so a bigger job.',up:'A bigger share of the target tonnes cleared.'},
+};
 const fieldState=(rate:number,workload:number,rateMedian:number,workloadMedian:number):FieldState=>(rateMedian===0?rate>0:rate>=rateMedian)?(workload>=workloadMedian?'higher-wide':'higher-compact'):(workload>=workloadMedian?'lower-wide':'lower-compact');
 function SubjectFieldRadar({definition,rows,allRows,selected,onSelect,query}:{definition:ReturnType<typeof getRankingDefinition>;rows:ReturnType<typeof rankSubject>['rows'];allRows:ReturnType<typeof rankSubject>['rows'];selected:string;onSelect:(key:string)=>void;query:string}){
   const rateMedian=observedMedian(allRows.map(r=>r.rate))??50,workloadMedian=observedMedian(allRows.map(r=>r.bottom!))??1,maxWorkload=Math.max(1,...allRows.map(r=>r.bottom!));
@@ -26,6 +35,7 @@ function SubjectFieldRadar({definition,rows,allRows,selected,onSelect,query}:{de
   const xMedian=x(workloadMedian),yMedian=y(rateMedian);
   return <section className="rk-field" aria-label={`${definition.label} ranking graph`}>
     <header><div><span className="rk-kicker">ULB performance field · subject view</span><h3>{definition.label} · ULB comparison</h3></div><span>{query.trim()?`${rows.length} matches`:`${rows.length} eligible ULBs`} · {definition.period}</span></header>
+    <ChartGuide intro={`Each dot is one ULB ${periodPhrase(definition.period)}.`} items={[{term:'Further right',text:readingWords[definition.id].right},{term:'Higher up',text:readingWords[definition.id].up},{term:'Dashed lines',text:`The middle ULB for this subject: a rate of ${n(rateMedian)}% and ${n(workloadMedian)} ${definition.bottomLabel.toLowerCase()}. Not a target.${rateMedian===0?' At least half of ULBs report zero, so only ULBs above zero sit above the line.':''}`},{term:'Right is not worse',text:'A bigger workload is not a worse result. Compare dots at a similar width.'}]}/>
     <div className="rk-field-stage"><div className="rk-field-plot"><div className="rk-field-scroll"><svg viewBox="0 0 840 555" role="group" aria-label={`${definition.label} ULB workload versus reported completion rate`}>
       <rect x={left} y={top} width={xMedian-left} height={yMedian-top} className="rk-field-zone rk-field-higher-compact"/><rect x={xMedian} y={top} width={left+width-xMedian} height={yMedian-top} className="rk-field-zone rk-field-higher-wide"/><rect x={left} y={yMedian} width={xMedian-left} height={top+height-yMedian} className="rk-field-zone rk-field-lower-compact"/><rect x={xMedian} y={yMedian} width={left+width-xMedian} height={top+height-yMedian} className="rk-field-zone rk-field-lower-wide"/>
       {[0,25,50,75,100].map(t=><g key={t}><line x1={left} x2={left+width} y1={y(t)} y2={y(t)} className="rk-field-grid"/><line x1={x(t===0?0:ceiling*t/100)} x2={x(t===0?0:ceiling*t/100)} y1={top} y2={top+height} className="rk-field-grid"/><text x={left-11} y={y(t)+4} textAnchor="end" className="rk-field-tick">{t}%</text><text x={x(ceiling*t/100)} y={top+height+22} textAnchor="middle" className="rk-field-tick">{n(ceiling*t/100)}</text></g>)}

@@ -41,6 +41,15 @@ describe('ULB comparison',()=>{
     expect(screen.getByRole('combobox',{name:'Select comparison ULB'})).toHaveValue('');
     expect(screen.queryByRole('link',{name:'Inspect peer ↗'})).toBeNull();
   });
+  it('words the reading guide for the programme on screen',()=>{
+    render(<UlbRadar/>);
+    const note=()=>screen.getByRole('note',{name:'How to read this chart'});
+    expect(note()).toHaveTextContent('Each dot is one ULB in July 2026.');
+    expect(note()).toHaveTextContent('More toilets approved, so a bigger job.');
+    fireEvent.change(screen.getByRole('combobox',{name:'ULB comparison programme'}),{target:{value:'processing'}});
+    expect(note()).toHaveTextContent('More tonnes of legacy waste to clear, so a bigger job.');
+    expect(note()).toHaveTextContent(/Vertical: the middle ULB's workload \([\d,.]+\)\. Horizontal: half completed\. Reading guides, not targets\./);
+  });
   it('excludes the selected ULB from its own peer distribution and keeps zero approvals unscored',()=>{
     const data=getUlbComparison();const point=data.points[0];
     const diagnostic=createProvider('SAMPLE').getDiagnostic(diagnosticsKeyFor(point.ulb,point.district));

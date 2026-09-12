@@ -69,6 +69,17 @@ describe('ranking interaction',()=>{
     fireEvent.change(screen.getByLabelText('Ranking population'),{target:{value:getRankingDefinition('vehicles').inputs[0].district}});
     expect(screen.getByLabelText('Search ranked ULBs')).toHaveValue('');
   });
+  it('words the reading guide for the subject on screen',()=>{
+    render(<SubjectRankings/>);
+    const note=()=>screen.getByRole('note',{name:'How to read this chart'});
+    expect(note()).toHaveTextContent('Each dot is one ULB on 12 August 2026.');
+    expect(note()).toHaveTextContent('More households to collect from.');
+    fireEvent.change(screen.getByLabelText('Ranking subject'),{target:{value:'toilets'}});
+    expect(note()).toHaveTextContent('Each dot is one ULB in July 2026.');
+    expect(note()).toHaveTextContent('A bigger share of approved toilets completed.');
+    expect(note()).toHaveTextContent(/approved toilets\. Not a target\./);
+    expect(note()).toHaveTextContent('A bigger workload is not a worse result.');
+  });
   it('renders a subject graph for every selectable field and keeps search scoped to the graph',()=>{
     render(<SubjectRankings/>);
     for(const subject of rankingSubjects){
