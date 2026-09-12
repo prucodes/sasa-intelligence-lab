@@ -21,30 +21,17 @@
  * Output: data/aggregates/ulb-service-series.json. The single-day snapshot it complements
  * is left byte-identical, so the existing screen is unaffected.
  */
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { createHash } from 'node:crypto';
 import { buildUlbServiceSnapshot, serviceSources } from './aggregate-ulb-service.mjs';
+import { loadUrbanSource } from './urban-sources.mjs';
 
 /** Draft analytical references, matching the existing screen. Not departmental targets. */
 const REFERENCE = { collection: 0.8, segregation: 0.8 };
 const round = (value) => (value === null ? null : Math.round(value * 10000) / 10000);
 const rate = (part, whole) => (whole > 0 ? round(part / whole) : null);
 
-const sources = [];
-for (const key of serviceSources) {
-  const dir = resolve('data/large-snapshots', key);
-  const manifest = JSON.parse(await readFile(resolve(dir, 'manifest.json'), 'utf8'));
-  const files = (await readdir(dir)).filter((f) => /^page-.*\.json$/.test(f)).sort();
-  const rows = [];
-  const hash = createHash('sha256');
-  for (const file of files) {
-    const text = await readFile(resolve(dir, file), 'utf8');
-    hash.update(file).update(text);
-    rows.push(...JSON.parse(text).records);
-  }
-  sources.push({ key, rows, provenance: { generatedAt: manifest.retrievedAt, rows: rows.length, pages: files.length, sha256: hash.digest('hex') } });
-}
+const sources = await Promise.all(serviceSources.map(loadUrbanSource));
 
 const days = [...new Set(sources[0].rows.map((row) => row.date1).filter(Boolean))].sort();
 console.log(`  ${days.length} retained day(s): ${days[0]} .. ${days[days.length - 1]}`);

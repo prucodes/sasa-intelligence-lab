@@ -6,7 +6,7 @@ import aggregate from '@/data/aggregates/secretariat-cohort.json';
  * Every earlier attempt at a cross-source reading in this product failed the same way:
  * two departments spell a ULB differently, matching them is an inference, and an
  * inference is not evidence. This cohort does not have that problem. Collection and
- * segregation both key on a numeric `sachivalayam_code`, both report the same 3,024
+ * segregation both key on a numeric `sachivalayam_code`, both report all 4,023
  * codes on 2026-08-12, and they agree on the household denominator for every one.
  *
  * So three of the five scoring gates open. The other two do not, and this module is

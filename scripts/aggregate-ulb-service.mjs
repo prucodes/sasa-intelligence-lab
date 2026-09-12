@@ -1,9 +1,9 @@
 /** Read-only derivation from the two completed urban pulls; never changes raw exports. */
-import {readdir, readFile, writeFile} from 'node:fs/promises';
+import {writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {createHash} from 'node:crypto';
 import {sourceNumber, sourceText, uniqueSourceRecords} from '../lib/record-contract.mjs';
+import {loadUrbanSource} from './urban-sources.mjs';
 
 export const serviceSources = ['msw_door_to_door_collection_api', 'waste_egregation_api'];
 const identityFields = ['district_code','district_name','ulb_code','ulb_name'];
@@ -45,13 +45,7 @@ export function buildUlbServiceSnapshot(collection, segregation, day = '2026-08-
 }
 
 async function main() {
-  const sources = await Promise.all(serviceSources.map(async key => {
-    const dir = resolve('data/large-snapshots',key), manifest = JSON.parse(await readFile(resolve(dir,'manifest.json'),'utf8'));
-    const files = (await readdir(dir)).filter(f => /^page-.*\.json$/.test(f)).sort(), rows = [], hash = createHash('sha256');
-    for (const file of files) { const text = await readFile(resolve(dir,file),'utf8'); hash.update(file).update(text); rows.push(...JSON.parse(text).records); }
-    assert(files.length === manifest.pages && rows.length === manifest.retainedRows && manifest.countsAgree === true, `${key} retention manifest does not reconcile`);
-    return {key,rows,provenance:{generatedAt:manifest.retrievedAt,rows:rows.length,pages:files.length,sha256:hash.digest('hex')}};
-  }));
+  const sources = await Promise.all(serviceSources.map(loadUrbanSource));
   const data = buildUlbServiceSnapshot(sources[0].rows,sources[1].rows);
   data.generatedFrom = Object.fromEntries(sources.map(s => [s.key,s.provenance]));
   await writeFile(resolve('data/aggregates/ulb-service-snapshot.json'),JSON.stringify(data)+'\n');

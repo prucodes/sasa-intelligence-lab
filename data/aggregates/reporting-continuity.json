@@ -11,9 +11,39 @@
     },
     "msw_door_to_door_collection_api": {
       "generatedAt": "2026-09-08T20:46:27.112Z",
-      "rows": 64368,
+      "rows": 63542,
       "pages": 644,
-      "reportedTotalRecordCount": 64368
+      "reportedTotalRecordCount": 64368,
+      "referenceDay": {
+        "day": "2026-08-12",
+        "generatedAt": "2026-09-11T15:02:32.060761+00:00",
+        "rows": 4023,
+        "secretariats": 4023,
+        "sources": [
+          {
+            "name": "8 September paged pull",
+            "method": "paging",
+            "generatedAt": "2026-09-08T20:46:27.112Z",
+            "rowsForDay": 4849,
+            "secretariatsForDay": 3024
+          },
+          {
+            "name": "Export by district, 26 calls, 2026-09-11 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-11T14:45:46.768126+00:00",
+            "rowsForDay": 19004,
+            "secretariatsForDay": 4023
+          },
+          {
+            "name": "Export by district, 6 calls, 2026-09-11 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-11T15:02:32.060761+00:00",
+            "rowsForDay": 7432,
+            "secretariatsForDay": 1564
+          }
+        ],
+        "sha256": "2614e85cc9cdd85bf714b54d2850778a683314d0d5df3edfeb6168410eb0de8a"
+      }
     },
     "onsite_processing_of_wet_waste_bwg_api": {
       "generatedAt": "2026-09-08T21:40:02.698Z",
@@ -23,9 +53,39 @@
     },
     "waste_egregation_api": {
       "generatedAt": "2026-09-08T22:07:28.667Z",
-      "rows": 64368,
+      "rows": 63542,
       "pages": 644,
-      "reportedTotalRecordCount": 64368
+      "reportedTotalRecordCount": 64368,
+      "referenceDay": {
+        "day": "2026-08-12",
+        "generatedAt": "2026-09-12T03:42:01.025335+00:00",
+        "rows": 4023,
+        "secretariats": 4023,
+        "sources": [
+          {
+            "name": "8 September paged pull",
+            "method": "paging",
+            "generatedAt": "2026-09-08T22:07:28.667Z",
+            "rowsForDay": 4849,
+            "secretariatsForDay": 3024
+          },
+          {
+            "name": "Export by district, 6 calls, 2026-09-11 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-11T15:02:48.814617+00:00",
+            "rowsForDay": 7432,
+            "secretariatsForDay": 1564
+          },
+          {
+            "name": "Export by district, 20 calls, 2026-09-12 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-12T03:42:01.025335+00:00",
+            "rowsForDay": 11572,
+            "secretariatsForDay": 2459
+          }
+        ],
+        "sha256": "8e5f35474847365103728a4eb3b94edafa41cfb15a51830cab250ac3e82c43eb"
+      }
     }
   },
   "datasets": [
@@ -294,12 +354,12 @@
       "label": "MSW door-to-door collection",
       "unit": "households",
       "measureLabel": "collected households",
-      "rows": 40636,
-      "rawRows": 64368,
+      "rows": 41635,
+      "rawRows": 63542,
       "quality": {
-        "rawRows": 64368,
-        "uniqueRows": 40636,
-        "duplicateRows": 23732,
+        "rawRows": 63542,
+        "uniqueRows": 41635,
+        "duplicateRows": 21907,
         "conflictingKeys": 0,
         "conflictingRows": 0,
         "missingKeyRows": 0
@@ -309,23 +369,23 @@
       "entityGrain": "Secretariat",
       "entities": 4023,
       "entitiesNeverReporting": 0,
-      "entitiesReportingEveryDay": 137,
-      "entitiesWithPositiveActivity": 1784,
-      "missingExpectedRecords": 23732,
+      "entitiesReportingEveryDay": 138,
+      "entitiesWithPositiveActivity": 2331,
+      "missingExpectedRecords": 22733,
       "days": [
         {
           "date": "2026-08-12",
-          "rows": 3024,
-          "reporting": 3024,
+          "rows": 4023,
+          "reporting": 4023,
           "reportingRatio": 1,
-          "positive": 1764,
-          "zero": 1260,
+          "positive": 2321,
+          "zero": 1702,
           "missing": 0,
-          "positiveRatio": 0.5833333333333334,
-          "denominator": 3545272,
-          "pairedValue": 2015689,
-          "pairedRows": 3024,
-          "value": 2015689
+          "positiveRatio": 0.5769326373353219,
+          "denominator": 4709868,
+          "pairedValue": 2640792,
+          "pairedRows": 4023,
+          "value": 2640792
         },
         {
           "date": "2026-08-13",
@@ -539,16 +599,46 @@
         }
       ],
       "busiestDate": "2026-08-12",
-      "busiestDateShare": 0.9428196434226078,
+      "busiestDateShare": 0.9557559789217673,
       "evenShare": 0.0625,
       "verdict": "single-day-concentration",
-      "naiveRatio": 0.04490268232963745,
-      "busiestDayRatio": 0.5685569400598882,
-      "totalValue": 2137937,
-      "totalDenominator": 47612679,
+      "naiveRatio": 0.05664605085052414,
+      "busiestDayRatio": 0.560693420707332,
+      "totalValue": 2763040,
+      "totalDenominator": 48777275,
       "retrievedAt": "2026-09-08T20:46:27.112Z",
       "pages": 644,
-      "reportedTotalRecordCount": 64368
+      "reportedTotalRecordCount": 64368,
+      "referenceDay": {
+        "day": "2026-08-12",
+        "generatedAt": "2026-09-11T15:02:32.060761+00:00",
+        "rows": 4023,
+        "secretariats": 4023,
+        "sources": [
+          {
+            "name": "8 September paged pull",
+            "method": "paging",
+            "generatedAt": "2026-09-08T20:46:27.112Z",
+            "rowsForDay": 4849,
+            "secretariatsForDay": 3024
+          },
+          {
+            "name": "Export by district, 26 calls, 2026-09-11 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-11T14:45:46.768126+00:00",
+            "rowsForDay": 19004,
+            "secretariatsForDay": 4023
+          },
+          {
+            "name": "Export by district, 6 calls, 2026-09-11 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-11T15:02:32.060761+00:00",
+            "rowsForDay": 7432,
+            "secretariatsForDay": 1564
+          }
+        ],
+        "sha256": "2614e85cc9cdd85bf714b54d2850778a683314d0d5df3edfeb6168410eb0de8a"
+      }
     },
     {
       "tableKey": "onsite_processing_of_wet_waste_bwg_api",
@@ -815,12 +905,12 @@
       "label": "Waste segregation",
       "unit": "households",
       "measureLabel": "households segregating waste",
-      "rows": 40636,
-      "rawRows": 64368,
+      "rows": 41635,
+      "rawRows": 63542,
       "quality": {
-        "rawRows": 64368,
-        "uniqueRows": 40636,
-        "duplicateRows": 23732,
+        "rawRows": 63542,
+        "uniqueRows": 41635,
+        "duplicateRows": 21907,
         "conflictingKeys": 0,
         "conflictingRows": 0,
         "missingKeyRows": 0
@@ -830,23 +920,23 @@
       "entityGrain": "Secretariat",
       "entities": 4023,
       "entitiesNeverReporting": 0,
-      "entitiesReportingEveryDay": 137,
-      "entitiesWithPositiveActivity": 1779,
-      "missingExpectedRecords": 23732,
+      "entitiesReportingEveryDay": 138,
+      "entitiesWithPositiveActivity": 2326,
+      "missingExpectedRecords": 22733,
       "days": [
         {
           "date": "2026-08-12",
-          "rows": 3024,
-          "reporting": 3024,
+          "rows": 4023,
+          "reporting": 4023,
           "reportingRatio": 1,
-          "positive": 1759,
-          "zero": 1265,
+          "positive": 2316,
+          "zero": 1707,
           "missing": 0,
-          "positiveRatio": 0.5816798941798942,
-          "denominator": 3545272,
-          "pairedValue": 1462167,
-          "pairedRows": 3024,
-          "value": 1462167
+          "positiveRatio": 0.575689783743475,
+          "denominator": 4709868,
+          "pairedValue": 1915723,
+          "pairedRows": 4023,
+          "value": 1915723
         },
         {
           "date": "2026-08-13",
@@ -1060,16 +1150,46 @@
         }
       ],
       "busiestDate": "2026-08-12",
-      "busiestDateShare": 0.932304090256112,
+      "busiestDateShare": 0.9474898028728523,
       "evenShare": 0.0625,
       "verdict": "single-day-concentration",
-      "naiveRatio": 0.03293948235931022,
-      "busiestDayRatio": 0.41242731164209684,
-      "totalValue": 1568337,
-      "totalDenominator": 47612679,
+      "naiveRatio": 0.04145153660182944,
+      "busiestDayRatio": 0.40674664343034667,
+      "totalValue": 2021893,
+      "totalDenominator": 48777275,
       "retrievedAt": "2026-09-08T22:07:28.667Z",
       "pages": 644,
-      "reportedTotalRecordCount": 64368
+      "reportedTotalRecordCount": 64368,
+      "referenceDay": {
+        "day": "2026-08-12",
+        "generatedAt": "2026-09-12T03:42:01.025335+00:00",
+        "rows": 4023,
+        "secretariats": 4023,
+        "sources": [
+          {
+            "name": "8 September paged pull",
+            "method": "paging",
+            "generatedAt": "2026-09-08T22:07:28.667Z",
+            "rowsForDay": 4849,
+            "secretariatsForDay": 3024
+          },
+          {
+            "name": "Export by district, 6 calls, 2026-09-11 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-11T15:02:48.814617+00:00",
+            "rowsForDay": 7432,
+            "secretariatsForDay": 1564
+          },
+          {
+            "name": "Export by district, 20 calls, 2026-09-12 UTC",
+            "method": "export by district_code",
+            "generatedAt": "2026-09-12T03:42:01.025335+00:00",
+            "rowsForDay": 11572,
+            "secretariatsForDay": 2459
+          }
+        ],
+        "sha256": "8e5f35474847365103728a4eb3b94edafa41cfb15a51830cab250ac3e82c43eb"
+      }
     }
   ],
   "boundary": "One retained record per secretariat and date. Exact repeats are collapsed and conflicting keys held out. Valid zero, positive activity, missing measurements and missing entity/date records are counted separately. The expected-record comparison uses entities and dates observed in this retained scope; it is not a certified population roster or an outage diagnosis."

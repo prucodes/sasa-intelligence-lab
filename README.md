@@ -110,6 +110,15 @@ Missing is never folded into zero. Every measure carries separate `reported`, `z
 daily grain that distinction decides whether a coverage figure means anything, and the source
 convention for zero versus not-reported is still unconfirmed.
 
+A reconciled row count does not mean every row arrived. For the two CDMA daily files, paging
+and export both return the reported total, but part of that total is repeats standing in for
+rows that never come back, and the two routes miss different rows. The urban screens use one
+reference day, 2026-08-12, so that day is retained separately under
+`data/large-snapshots/reference-day/<key>`: the union of every retrieval of that day, kept
+only when every secretariat is present and no two retrievals disagree on any field.
+`scripts/urban-sources.mjs` swaps those rows in for that date; every other date is still the
+paged pull, and each aggregate's `generatedFrom.referenceDay` records the sources used.
+
 `scripts/dataset-map.mjs` holds the per-dataset column mapping. Each field lists candidate
 column names tried in order, so the expected rename to LGD master columns is a one-line edit
 rather than a pipeline change. Raw pages and the detail aggregate are git-ignored.

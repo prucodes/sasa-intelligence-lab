@@ -5,7 +5,7 @@
  *
  * `msw_door_to_door_collection_api` and `waste_egregation_api` both report every
  * secretariat on 2026-08-12, keyed by a numeric `sachivalayam_code` rather than a name.
- * On that day the two agree exactly: 3,024 codes in both, none in only one, and the
+ * On that day the two agree exactly: 4,023 codes in both, none in only one, and the
  * household denominator matches on every single one. Nothing here is name-matched, so
  * nothing here rests on an inference.
  *
@@ -17,11 +17,10 @@
  *
  * Output: data/aggregates/secretariat-cohort.json (committed, bundled).
  */
-import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { writeFile, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { loadUrbanSource } from './urban-sources.mjs';
 
-const LARGE = resolve(process.cwd(), 'data/large-snapshots');
 const OUT = resolve(process.cwd(), 'data/aggregates');
 const DAY = '2026-08-12';
 const COLLECTION = 'msw_door_to_door_collection_api';
@@ -29,16 +28,6 @@ const SEGREGATION = 'waste_egregation_api';
 
 const num = (value) => { const n = Number(String(value ?? '').replace(/,/g, '')); return Number.isFinite(n) && n >= 0 ? n : null; };
 const round = (value) => value === null ? null : Math.round(value * 10000) / 10000;
-
-async function load(tableKey) {
-  const dir = resolve(LARGE, tableKey);
-  if (!existsSync(resolve(dir, 'manifest.json'))) return null;
-  const rows = [];
-  for (const file of (await readdir(dir)).filter((f) => f.startsWith('page-'))) {
-    rows.push(...(JSON.parse(await readFile(resolve(dir, file), 'utf8')).records ?? []));
-  }
-  return { rows, manifest: JSON.parse(await readFile(resolve(dir, 'manifest.json'), 'utf8')) };
-}
 
 /** One row per secretariat. Identical repeats collapse; disagreeing repeats are held out. */
 function byCode(rows, fields) {
@@ -60,9 +49,8 @@ function byCode(rows, fields) {
 }
 
 async function main() {
-  const collection = await load(COLLECTION);
-  const segregation = await load(SEGREGATION);
-  if (!collection || !segregation) { console.log('Both secretariat-day exports must be retained first.'); return; }
+  const collection = await loadUrbanSource(COLLECTION);
+  const segregation = await loadUrbanSource(SEGREGATION);
 
   const collectionDay = collection.rows.filter((row) => row.date1 === DAY);
   const segregationDay = segregation.rows.filter((row) => row.date1 === DAY);
@@ -110,8 +98,8 @@ async function main() {
     day: DAY,
     grain: 'Secretariat',
     generatedFrom: {
-      [COLLECTION]: { generatedAt: collection.manifest.retrievedAt, rows: collection.manifest.retainedRows, pages: collection.manifest.pages },
-      [SEGREGATION]: { generatedAt: segregation.manifest.retrievedAt, rows: segregation.manifest.retainedRows, pages: segregation.manifest.pages },
+      [COLLECTION]: collection.provenance,
+      [SEGREGATION]: segregation.provenance,
     },
     identity: {
       key: 'sachivalayam_code',
@@ -135,8 +123,8 @@ async function main() {
     points,
   };
 
-  // 3,020 objects with repeated keys and repeated district/ULB strings is ~486KB, which
-  // is a quarter of the whole client bundle. The same data as string tables plus tuple
+  // One object per secretariat, with repeated keys and repeated district/ULB strings, was
+  // ~486KB at 3,020 secretariats, a quarter of the whole client bundle. The same data as string tables plus tuple
   // rows is a fifth of that, and the ratios are trivially recomputed on read.
   const districts = [...new Set(points.map((point) => point.district))].sort();
   const ulbs = [...new Set(points.map((point) => point.ulb))].sort();

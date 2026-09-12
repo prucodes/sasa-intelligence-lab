@@ -20,5 +20,7 @@ The portal query/playground surfaces were also used to verify endpoint names, sc
 
 No published endpoint visible to the signed-in account at the time of the audit was intentionally omitted. However, this is not a claim that every historical partition or every possible filter combination exists in the retained files. New authorizations, revised APIs, newly exposed periods, filter-dependent records, and tomorrow's announced datasets can add evidence.
 
+Retrieval itself can miss rows. For the two CDMA daily files, paging and export both reconcile to the reported total while part of it is repeats, so a matching count is not proof of completeness. The urban reference day, 2026-08-12, is therefore retained from every retrieval of that day combined, and only when each file holds every secretariat with no disagreement between retrievals (see `scripts/urban-sources.mjs`). The other fifteen days remain the 8 September paged pull and are not complete.
+
 For each incoming release, repeat the inventory, schema, filter, period, pagination, JSON/Excel parity, glossary, and selector-coverage checks before exposing values in SAMPLE mode.
 

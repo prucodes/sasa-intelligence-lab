@@ -6,6 +6,8 @@ import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { sourceNumber, sourceText, uniqueSourceRecords } from '../lib/record-contract.mjs';
+import { loadUrbanSource } from './urban-sources.mjs';
+import { serviceSources } from './aggregate-ulb-service.mjs';
 
 const LARGE = resolve(process.cwd(), 'data/large-snapshots');
 const OUT = resolve(process.cwd(), 'data/aggregates');
@@ -29,6 +31,11 @@ async function loadRows(dir) {
 }
 
 async function summarise(tableKey) {
+  if (serviceSources.includes(tableKey)) {
+    const { rows, provenance } = await loadUrbanSource(tableKey);
+    const summary = summariseContinuity(rows, SPECS[tableKey], { tableKey, retrievedAt: provenance.generatedAt, pages: provenance.pages, reportedTotalRecordCount: provenance.reportedTotalRecordCount });
+    return summary && provenance.referenceDay ? { ...summary, referenceDay: provenance.referenceDay } : summary;
+  }
   const current = resolve(LARGE, 'current', tableKey);
   const dir = existsSync(resolve(current, 'manifest.json')) ? current : resolve(LARGE, tableKey);
   if (!existsSync(resolve(dir, 'manifest.json'))) return null;
@@ -156,6 +163,7 @@ async function main() {
     rows: dataset.rawRows,
     pages: dataset.pages,
     reportedTotalRecordCount: dataset.reportedTotalRecordCount,
+    referenceDay: dataset.referenceDay,
   }]));
 
   await writeFile(resolve(OUT, 'reporting-continuity.json'), `${JSON.stringify({

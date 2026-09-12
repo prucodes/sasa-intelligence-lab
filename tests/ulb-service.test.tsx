@@ -33,13 +33,13 @@ describe('ULB service evidence',()=>{
     const zero={...result.ulbs[0],mappingReviewSecretariats:0,collected:0,segregated:0};
     expect(serviceRates(zero)).toEqual({collection:0,segregation:null});expect(serviceCategory(zero)).toBeNull();
   });
-  it('places the real examples in all four categories and partitions all 118 ULBs',()=>{
+  it('places the real examples in all four categories and partitions all 123 ULBs',()=>{
     const expected={TADIPATRI:'both',KUPPAM:'both',NARSIPATNAM:'segregation',GUNTAKAL:'collection',ANANTAPUR:'review'};
     for(const [name,category] of Object.entries(expected)) expect(serviceCategory(data.ulbs.find(u=>u.name===name)!)).toBe(category);
     const eligible=data.ulbs.filter(u=>!serviceExclusions(u).length);
-    expect(eligible).toHaveLength(103);expect(data.ulbs.length-eligible.length).toBe(15);
-    expect(serviceCoordinates(eligible).reduce((n,g)=>n+g.ulbs.length,0)).toBe(103);
-    expect(data.totals).toEqual({households:3545272,collected:2015689,segregated:1462167});
+    expect(eligible).toHaveLength(108);expect(data.ulbs.length-eligible.length).toBe(15);
+    expect(serviceCoordinates(eligible).reduce((n,g)=>n+g.ulbs.length,0)).toBe(108);
+    expect(data.totals).toEqual({households:4709868,collected:2640792,segregated:1915723});
     const exact={...eligible[0],households:100,collected:80,segregated:64};
     expect(serviceCategory(exact)).toBe('both');expect(serviceCategory(exact,90,90)).toBe('review');
   });
@@ -64,10 +64,10 @@ describe('ULB service matrix interactions',()=>{
     fireEvent.change(screen.getByLabelText('Compare service peer'),{target:{value:kuppam.code}});
     const detail=screen.getByRole('region',{name:'Selected service ULB'});
     expect(within(detail).getByText(/versus/)).toBeVisible();
-    expect(within(detail).getAllByText(/selected minus peer/,{selector:'small'}).map(e=>e.textContent)).toEqual(['-0.3 pp · selected minus peer','-13.7 pp · selected minus peer']);
+    expect(within(detail).getAllByText(/selected minus peer/,{selector:'small'}).map(e=>e.textContent)).toEqual(['-0.8 pp · selected minus peer','-13.3 pp · selected minus peer']);
     fireEvent.change(screen.getByLabelText('Segregation reference'),{target:{value:'60'}});
     expect(within(detail).getByText('Doing well on both',{selector:'.usr-position'})).toBeVisible();
-    expect(within(detail).getByText('68.7%',{selector:'.usr-metrics strong'})).toBeVisible();
+    expect(within(detail).getByText('69.5%',{selector:'.usr-metrics strong'})).toBeVisible();
     fireEvent.change(screen.getByLabelText('Find service ULB'),{target:{value:data.ulbs.find(u=>u.name==='ICHAPURAM')!.code}});
     expect(screen.getByLabelText('Compare service peer')).toHaveValue('');
     expect(within(detail).queryByText(/versus/)).toBeNull();
