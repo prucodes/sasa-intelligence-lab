@@ -69,6 +69,18 @@ describe('ranking interaction',()=>{
     fireEvent.change(screen.getByLabelText('Ranking population'),{target:{value:getRankingDefinition('vehicles').inputs[0].district}});
     expect(screen.getByLabelText('Search ranked ULBs')).toHaveValue('');
   });
+  it('offers a learning peer only at half done or more, and says "some completion" when most report zero',()=>{
+    render(<SubjectRankings/>);
+    fireEvent.change(screen.getByLabelText('Ranking subject'),{target:{value:'toilets'}});
+    let graph=screen.getByRole('region',{name:/Household toilet delivery ranking graph/i});
+    expect(within(graph).queryByText(/Potential learning peer/)).toBeNull();
+    expect(within(graph).getAllByText('Some completion at scale').length).toBeGreaterThan(0);
+    expect(within(graph).queryByText('Doing well at scale')).toBeNull();
+    fireEvent.change(screen.getByLabelText('Ranking subject'),{target:{value:'reach'}});
+    graph=screen.getByRole('region',{name:/Waste collection reach ranking graph/i});
+    expect(within(graph).getAllByText(/Potential learning peer/).length).toBeGreaterThan(0);
+    expect(within(graph).getAllByText('Doing well at scale').length).toBeGreaterThan(0);
+  });
   it('words the reading guide for the subject on screen',()=>{
     render(<SubjectRankings/>);
     const note=()=>screen.getByRole('note',{name:'How to read this chart'});
