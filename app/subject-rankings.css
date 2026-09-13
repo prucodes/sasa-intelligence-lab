@@ -29,3 +29,9 @@
 @media(max-width:1000px){.rk-field-stage{grid-template-columns:1fr}.rk-field-categories{grid-template-columns:repeat(2,minmax(0,1fr))}.rk-field-categories>.rk-kicker,.rk-field-categories>p{grid-column:1/-1}}
 @media(max-width:760px){.rk-field{padding:15px}.rk-field>header{display:block}.rk-field>header>span{display:block;text-align:left;margin-top:7px}.rk-field-categories{grid-template-columns:1fr}.rk-field-categories>.rk-kicker,.rk-field-categories>p{grid-column:auto}.rk-field-scroll svg{min-width:650px}}
 .rk-field-card{border-radius:18px;padding:20px;background:linear-gradient(135deg,color-mix(in srgb,currentColor 4%,var(--surface,#fff)),var(--surface,#fff));box-shadow:0 6px 20px #15355205}.rk-field-card>span>b{font-size:15px;line-height:1.4}.rk-field-card>span>strong{font-weight:500}.rk-field-zone-label{font-size:11px;paint-order:stroke;stroke:var(--surface,#fff);stroke-width:7;stroke-linejoin:round}
+@media(max-width:1000px){
+ .subject-rankings .rk-field{padding:10px 0;border:0;background:none}
+ .rk-field-scroll svg.compact-field{min-width:0;width:100%}
+ .compact-field .rk-field-tick,.compact-field .rk-field-axis{font-size:19px}
+ .rk-field-plot{padding:8px 0}
+}
