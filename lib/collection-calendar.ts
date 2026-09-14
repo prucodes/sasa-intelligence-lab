@@ -3,9 +3,9 @@
  *
  * From 1 May to 7 August 2026 every one of the fourteen retained Sundays reports 1.8-3.0%
  * statewide and each month's second Saturday reports 11-13%, against 82-94% on most working
- * days. Those are the scheduled non-collection days of the Andhra Pradesh
- * calendar, not reporting failures, so a rate that averages them in sits about
- * twelve percentage points below the rate on days collection was scheduled.
+ * days. They look like days off in the Andhra Pradesh calendar rather than reporting
+ * failures, though no departmental schedule in the data confirms it, so a rate that
+ * averages them in sits about twelve percentage points below the rate on the other days.
  *
  * This module states that classification in one place, from the calendar rather than
  * from the measurements, so a screen can show either basis and say which it is showing.

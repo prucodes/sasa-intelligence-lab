@@ -3,7 +3,7 @@ import { classifyDay, dateFromPeriodDay, NON_COLLECTION_LABEL, rateOverWorkingDa
 
 /**
  * Reported collection is not flat across the week. Every retained Sunday reports near
- * zero, so a first-week rate blends six scheduled days with one that was never scheduled
+ * zero, so a first-week rate blends six working days with one that reads as a day off
  * and lands about twelve points below the working-day figure. Both readings are true of
  * different questions, so the screen offers both rather than picking one silently.
  */
