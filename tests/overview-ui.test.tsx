@@ -77,6 +77,17 @@ describe('connected overview interactions', () => {
     expect(screen.queryByRole('button', { name: /No matched district/ })).not.toBeInTheDocument();
   });
 
+  it('shows a validated cross-subject signal without inventing an overall score', () => {
+    render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    const signal = screen.getByRole('region', { name: 'Validated cross-subject signals' });
+    expect(signal).toHaveTextContent('18');
+    expect(signal).toHaveTextContent('100%');
+    expect(signal).toHaveTextContent('17 candidates report zero in toilets and vehicles');
+    expect(signal).toHaveTextContent('Overall rank gated');
+    expect(signal).toHaveTextContent('no cross-subject trend is summed');
+    expect(within(signal).getByRole('link', { name: /Inspect subject comparisons/ })).toHaveAttribute('href', '/gap-radar?mode=governed&view=rankings');
+  });
+
   it('supports keyboard map selection and a usable fallback without boundaries', () => {
     const { rerender } = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
     fireEvent.click(screen.getByRole('button', { name: /Household toilets/ }));

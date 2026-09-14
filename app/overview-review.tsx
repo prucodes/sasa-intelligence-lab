@@ -22,6 +22,7 @@ import { getRuralSanitation } from '@/lib/rural-sanitation';
 import { getReportingContinuity } from '@/lib/reporting-continuity';
 import { getDistinctDeliveryPlans } from '@/lib/delivery-plan';
 import { geographicProgrammes } from '@/lib/programme-geography';
+import { getOverallReadiness } from '@/lib/overall-readiness';
 
 
 const format = (value: number) => value.toLocaleString('en-IN', { maximumFractionDigits: 1 });
@@ -83,6 +84,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   const centres = getRuralSanitation();
   const continuity = getReportingContinuity();
   const plans = getDistinctDeliveryPlans();
+  const overallReadiness = useMemo(() => getOverallReadiness(), []);
   const ruralOpen = (ruralChange.series[0].comparable.collectionRate ?? 0) * 100;
   const ruralClose = (ruralChange.series.at(-1)!.comparable.collectionRate ?? 0) * 100;
   const ruralShift = ruralClose - ruralOpen;
@@ -229,6 +231,20 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
 
     </>}
     </div>
+    <section className="overview-cross-signal" aria-label="Validated cross-subject signals">
+      <header>
+        <div><span className="or-kicker">Cross-subject signal</span><h2>Aligned evidence, <em>no invented overall score.</em></h2><p>Three July delivery measures share an exact source-name and district overlap. The evidence is strong enough to inspect together, but not to rank as one performance score.</p></div>
+        <span className="overview-cross-status">Overall rank gated</span>
+      </header>
+      <div className="overview-cross-grid">
+        <article><strong>{overallReadiness.exactCandidateOverlap}</strong><span>exact ULB + district overlap</span><small>Household toilets, vehicles and legacy waste</small></article>
+        <article><strong>{overallReadiness.validCoveragePercent.toFixed(0)}%</strong><span>valid across all three measures</span><small>{overallReadiness.validThreeSubjectCandidates} of {overallReadiness.exactCandidateOverlap} candidates</small></article>
+        <article><strong>{overallReadiness.nonDegenerateCandidates}</strong><span>non-degenerate comparisons</span><small>{overallReadiness.zeroToiletAndVehicle} candidates report zero in toilets and vehicles</small></article>
+        <article className="overview-cross-confidence"><strong>Gated</strong><span>confidence boundary</span><small>Canonical identity and approved weights are still required.</small></article>
+      </div>
+      <div className="overview-cross-movement"><span>Separate June → July movements</span>{movements.map(item=><span key={item.id}><b>{item.metricLabel}</b><small>{item.decreased} lower · {item.increased} higher · {item.unchanged} unchanged</small></span>)}</div>
+      <footer><span>Movement is shown by source and measure; no cross-subject trend is summed.</span><a href={`${href('/gap-radar')}&view=rankings`}>Inspect subject comparisons <Arrow/></a></footer>
+    </section>
     <section className="or-readiness" aria-label="Evidence scope and decision boundary"><div><span className="or-kicker">Ready for descriptive review</span><p><b>{governedSnapshotStats.completeDatasets}</b> historical exports <span> · {readinessCatalogueStats.platformAvailable} current catalogue routes</span> · {format(corpus.rawRows)} raw retained rows</p><small>{anchorRegistry.length} observed ULB-name candidates provide a working reference. {format(corpus.rowsExcludingAliases)} bundled rows after excluding repeated endpoint copies; internal row duplicates are a separate check.</small></div><a href={href('/gap-radar')}><span>Evidence investigations</span><b>OPEN GAP RADAR</b><small>Inspect changes, cohorts & works →</small></a></section>
     {integrity&&<details className="vi-disclosure"><summary>Source quality findings and revision checks</summary>{integrity}</details>}
     <div className="or-context-links"><a href={`${href('/operational-analytics')}&tab=processing`}><span>Supporting evidence</span><b>Processing facilities & source statuses</b><Arrow/></a><a href={`${href('/operational-analytics')}&tab=outcomes`}><span>Historical context / 2024</span><b>Swachh outcomes & reported ranks</b><Arrow/></a></div>

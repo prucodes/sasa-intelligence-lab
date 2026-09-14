@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './mobile-refinement.css';
+import './interaction-polish.css';
 
 export const metadata: Metadata = {
   title: 'SASA Intelligence Lab',

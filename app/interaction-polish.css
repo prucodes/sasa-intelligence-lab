@@ -1,0 +1,46 @@
+/* Quiet feedback for evidence that can be inspected. Selection stays legible
+   without turning a data surface into an animated dashboard. */
+.overview-review .or-map path[role="button"],
+.district-map-stage path[role="button"],
+.radar-point,
+.ur-dot,
+.rk-field-dot,
+.usr-dot {
+  transition: filter .18s ease, opacity .18s ease;
+}
+.overview-review .or-map path[role="button"]:is(:hover, :focus-visible, .is-selected),
+.district-map-stage path[role="button"]:is(:hover, :focus-visible, .is-selected),
+.radar-point:is(:hover, :focus-visible, .is-selected),
+.ur-dot:is(:hover, :focus-visible, .is-selected),
+.rk-field-dot:is(:hover, :focus-visible, .is-selected),
+.usr-dot:is(:hover, :focus-visible, .is-selected) {
+  filter: drop-shadow(0 3px 5px color-mix(in srgb, var(--ink) 24%, transparent));
+}
+.overview-review .or-map path[role="button"]:focus-visible,
+.district-map-stage path[role="button"]:focus-visible,
+.radar-point:focus-visible,
+.ur-dot:focus-visible,
+.rk-field-dot:focus-visible,
+.usr-dot:focus-visible {
+  outline: none;
+}
+.overview-review .or-ranked li:has(a:hover),
+.overview-review .or-ranked li:has(a:focus-visible) {
+  background: color-mix(in srgb, var(--review-accent) 4%, transparent);
+}
+.radar-selected .radar-clear:hover,
+.ur-reading a:hover,
+.up-peers a:hover,
+.rk-selected a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overview-review .or-map path[role="button"],
+  .district-map-stage path[role="button"],
+  .radar-point,
+  .ur-dot,
+  .rk-field-dot,
+  .usr-dot { transition: none; }
+}

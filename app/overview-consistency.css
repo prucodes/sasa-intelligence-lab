@@ -89,3 +89,52 @@
   .overview-selected > .or-workspace .or-source-line { padding-inline: 8px; }
   .overview-selected :is(.vi-map-review, .movement-geography-layout, .ew-reading) { min-height: 0; }
 }
+
+/* A compact cross-subject read: validated overlap and confidence are useful
+   intelligence, while the gate makes it impossible to mistake them for an
+   overall score. Subject movements stay separate because their denominators
+   and meanings differ. */
+.overview-cross-signal {
+  margin: 24px 0;
+  padding: 28px;
+  border: 1px solid var(--line, #dce6ec);
+  border-radius: var(--overview-radius, 22px);
+  background: var(--surface, #fff);
+  box-shadow: 0 12px 35px #15355204;
+}
+.overview-cross-signal > header { display:flex; align-items:start; justify-content:space-between; gap:24px; }
+.overview-cross-signal h2 { margin:10px 0 0; font-size:clamp(24px,2.7vw,36px); font-weight:500; letter-spacing:-.04em; line-height:1.15; }
+.overview-cross-signal h2 em { font:inherit; font-family:Georgia,serif; color:var(--review-accent,#087f83); }
+.overview-cross-signal > header p { max-width:700px; margin-top:10px; color:var(--muted); font-size:12px; line-height:1.7; }
+.overview-cross-status { flex:none; padding:9px 13px; border:1px solid color-mix(in srgb,#b78054 32%,var(--line)); border-radius:999px; color:#8b633f; background:color-mix(in srgb,#b78054 7%,var(--surface)); font-size:11px; font-weight:650; white-space:nowrap; }
+.overview-cross-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:24px; }
+.overview-cross-grid article { min-width:0; padding:18px; border:1px solid var(--line); border-radius:14px; background:color-mix(in srgb,var(--review-accent,#087f83) 3%,var(--surface)); }
+.overview-cross-grid article strong { display:block; color:var(--ink); font-size:30px; font-weight:500; letter-spacing:-.045em; line-height:1; }
+.overview-cross-grid article span { display:block; margin-top:9px; color:var(--ink); font-size:12px; font-weight:600; line-height:1.45; }
+.overview-cross-grid article small { display:block; margin-top:7px; color:var(--muted); font-size:11px; line-height:1.55; }
+.overview-cross-grid .overview-cross-confidence { background:color-mix(in srgb,#b78054 7%,var(--surface)); border-color:color-mix(in srgb,#b78054 24%,var(--line)); }
+.overview-cross-grid .overview-cross-confidence strong { color:#8b633f; font-size:25px; }
+.overview-cross-movement { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 22px; padding:17px 0 14px; margin-top:18px; border-block:1px solid var(--line); color:var(--muted); font-size:11px; }
+.overview-cross-movement > span:first-child { color:var(--ink); font-weight:650; }
+.overview-cross-movement > span:not(:first-child) { display:inline-flex; align-items:baseline; gap:7px; }
+.overview-cross-movement b { color:var(--ink); font-weight:550; }
+.overview-cross-movement small { font-size:11px; }
+.overview-cross-signal > footer { display:flex; align-items:center; justify-content:space-between; gap:18px; padding-top:16px; color:var(--muted); font-size:11px; line-height:1.6; }
+.overview-cross-signal > footer a { display:inline-flex; align-items:center; gap:8px; flex:none; color:var(--review-accent,#087f83); font-weight:650; }
+.theme-dark .overview-cross-status { color:#d4af82; background:#352d25; border-color:#715c43; }
+.theme-dark .overview-cross-grid .overview-cross-confidence strong { color:#d4af82; }
+
+@media (max-width: 760px) {
+  .overview-cross-signal { padding:20px; border-radius:18px; }
+  .overview-cross-signal > header { display:block; }
+  .overview-cross-status { display:inline-flex; margin-top:16px; }
+  .overview-cross-grid { grid-template-columns:1fr 1fr; gap:9px; margin-top:19px; }
+  .overview-cross-grid article { padding:14px; }
+  .overview-cross-grid article strong { font-size:25px; }
+  .overview-cross-signal > footer { display:block; }
+  .overview-cross-signal > footer a { margin-top:11px; }
+}
+
+@media (max-width: 420px) {
+  .overview-cross-grid { grid-template-columns:1fr; }
+}
