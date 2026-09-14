@@ -30,7 +30,9 @@ export function buildUlbServiceSnapshot(collection, segregation, day = '2026-08-
     // N5: Markapuram reached the CDMA feeds with the text NULL as its native district code, while every one of its rows
     // carries the platform's own LGD district code. The code is taken from that row, never inferred from a name, and counted.
     const districtCode = r => sourceText(r.district_code) ?? sourceText(r.api_lgd_dist_code);
-    const mappingReview = [row,peer].some(r => !districtCode(r) || !sourceText(r.api_lgd_dist_code) || !sourceText(r.api_lgd_mandal_code) || districtCode(r) !== sourceText(r.api_lgd_dist_code) || sourceText(r.ulb_code) !== sourceText(r.api_lgd_mandal_code));
+    // The two files must also agree with each other: a fallback compared only with its own row would accept a pair whose LGD codes disagree.
+    const mappingReview = [row,peer].some(r => !districtCode(r) || !sourceText(r.api_lgd_dist_code) || !sourceText(r.api_lgd_mandal_code) || districtCode(r) !== sourceText(r.api_lgd_dist_code) || sourceText(r.ulb_code) !== sourceText(r.api_lgd_mandal_code))
+      || districtCode(row) !== districtCode(peer) || sourceText(row.api_lgd_mandal_code) !== sourceText(peer.api_lgd_mandal_code);
     if (!groups.has(ulbCode)) groups.set(ulbCode,{code:ulbCode,name,district,nativeDistrictCode:districtCode(row),households:0,collected:0,segregated:0,secretariats:0,positiveHouseholdSecretariats:0,mappingReviewSecretariats:0,districtCodeFromLgdSecretariats:0});
     const group = groups.get(ulbCode);
     assert(group.name === name && group.district === district && group.nativeDistrictCode === districtCode(row), `ULB code ${ulbCode} has conflicting labels`);

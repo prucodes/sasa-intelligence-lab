@@ -34,6 +34,11 @@ describe('ULB service evidence',()=>{
     const zero={...result.ulbs[0],mappingReviewSecretariats:0,collected:0,segregated:0};
     expect(serviceRates(zero)).toEqual({collection:0,segregation:null});expect(serviceCategory(zero)).toBeNull();
   });
+  it('holds out a pair whose files disagree on the LGD district code, even when the native code is NULL',()=>{
+    const nullRow={...row,district_code:'NULL'};
+    expect(buildUlbServiceSnapshot([{...nullRow,api_lgd_dist_code:'790'}],[{...nullRow,api_lgd_dist_code:'517'}]).ulbs[0].mappingReviewSecretariats).toBe(1);
+    expect(buildUlbServiceSnapshot([{...nullRow,api_lgd_dist_code:'790'}],[{...nullRow,api_lgd_dist_code:'790'}]).ulbs[0].mappingReviewSecretariats).toBe(0);
+  });
   it('places the real examples in all four categories and partitions all 123 ULBs',()=>{
     const expected={TADIPATRI:'both',KUPPAM:'both',NARSIPATNAM:'segregation',GUNTAKAL:'collection',ANANTAPUR:'review'};
     for(const [name,category] of Object.entries(expected)) expect(serviceCategory(data.ulbs.find(u=>u.name===name)!)).toBe(category);

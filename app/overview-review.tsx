@@ -235,7 +235,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
     </div>
     <section className="overview-cross-signal" aria-label="Validated cross-subject signals">
       <header>
-        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap to compare, <em>so no overall score.</em></h2><p>Only {overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, and {overallReadiness.zeroToiletAndVehicle} of them report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with anything to compare, so the measures stay side by side and are never ranked as one score.</p></div>
+        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap to compare, <em>so no overall score.</em></h2><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with anything to compare, so the measures stay side by side and are never ranked as one score.</p></div>
         <span className="overview-cross-status">Overall rank gated</span>
       </header>
       <div className="overview-cross-grid">

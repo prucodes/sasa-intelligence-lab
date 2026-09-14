@@ -80,12 +80,14 @@ describe('connected overview interactions', () => {
   it('shows a validated cross-subject signal without inventing an overall score', () => {
     render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
     const signal = screen.getByRole('region', { name: 'Validated cross-subject signals' });
-    expect(signal).toHaveTextContent('19');
-    expect(signal).toHaveTextContent('100%');
+    // 49 ULBs share a name and district across the three sources, but only 19 can be rated in all three.
+    expect(signal).toHaveTextContent('49 ULBs carry the same name and district in all three July delivery measures, but only 19 can be rated in all three');
+    expect(signal).toHaveTextContent('39%');
+    expect(signal).toHaveTextContent('19 of 49 candidates');
     expect(signal).toHaveTextContent('18 candidates report zero in toilets and vehicles');
     expect(signal).toHaveTextContent('Overall rank gated');
     expect(signal).toHaveTextContent('no cross-subject trend is summed');
-    // Nineteen overlapping ULBs, eighteen of them zero, is too thin to call aligned evidence.
+    // Nineteen ratable ULBs, eighteen of them zero, is too thin to call aligned evidence.
     expect(signal).toHaveTextContent('Too little overlap to compare');
     expect(signal).not.toHaveTextContent('strong enough');
     // A month identical to the one before in every field reads as possibly carried forward, not as steady ULBs.

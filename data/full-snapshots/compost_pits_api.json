@@ -3718,7 +3718,7 @@
   "retentionRepair": {
     "repairedAt": "2026-09-14",
     "reason": "The saved response matched the reported total but held 333 distinct rows: rows after a 100-row page boundary had been replaced by repeats of the page before.",
-    "method": "The missing rows were retrieved with filtered queries small enough to fit one page, then merged. Exact repeats were removed. Every other row is unchanged.",
+    "method": "The missing rows were retrieved with queries filtered to one district or one month, then merged. Exact repeats were removed. Every other row is unchanged.",
     "removedRepeats": 3,
     "recoveredRows": 3,
     "evidence": [

@@ -17,9 +17,12 @@ export interface OverallReadiness {
 /** Tests the aligned July delivery sources without manufacturing a composite score. */
 export function getOverallReadiness():OverallReadiness {
   const definitions=subjects.map(id=>getRankingDefinition(id));
+  // Identity overlap: the same source name and district returned by all three July sources, whether or not it can be rated.
+  const returned=definitions.map(def=>new Set(def.inputs.map(input=>input.candidate).filter((key):key is string=>Boolean(key))));
+  const exact=[...returned[0]].filter(key=>returned.every(set=>set.has(key)));
+  // Eligible overlap: rated in all three, which needs a usable denominator in each.
   const maps=definitions.map(def=>new Map(rankSubject(def.inputs).rows.filter(row=>row.candidate).map(row=>[row.candidate!,row])));
-  const exact=[...maps[0].keys()].filter(key=>maps.every(map=>map.has(key)));
-  const valid=exact.map(key=>maps.map(map=>map.get(key)!));
+  const valid=exact.filter(key=>maps.every(map=>map.has(key))).map(key=>maps.map(map=>map.get(key)!));
   const degenerate=valid.filter(rows=>rows[0].rate===0&&rows[1].rate===0).length;
   const scores=valid.map(rows=>rows.reduce((sum,row)=>sum+row.rate,0)/rows.length);
   return {alignedSubjects:definitions.map(def=>def.label),periods:[...new Set(definitions.map(def=>def.period))],exactCandidateOverlap:exact.length,
