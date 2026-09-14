@@ -215,6 +215,27 @@ export interface ReportedMovement {
   rows: ReportedMovementRow[];
   basis: string;
   boundary: string;
+  /** Whether the current period is the previous one carried forward, compared field by field. */
+  repeat: CarriedForward;
+}
+
+/**
+ * Whether a source's latest period repeats the period before it.
+ *
+ * Every field except the period and housekeeping columns is compared, entity by entity.
+ * When nearly every entity present in both periods is identical, the latest period reads
+ * as the previous report carried forward rather than a new one. The source never says
+ * which, so this is a flag for the reader, not a correction to the data.
+ */
+export interface CarriedForward {
+  tableKey: string;
+  previousPeriod: string;
+  currentPeriod: string;
+  /** Entities present in both periods. */
+  compared: number;
+  /** Of those, entities whose rows are identical in every compared field. */
+  identical: number;
+  carriedForward: boolean;
 }
 
 export type StageCohortTone = 'blocked' | 'review' | 'progress' | 'met';
@@ -548,6 +569,43 @@ type MovementConfig = {
   valid?: (record: SnapshotRecord) => boolean;
 };
 
+const PERIOD_FIELDS = new Set(['year', 'month_id', 'month_number', 'month_name', 'mnth_no', 'mnth_nm', 'month', 'fin_year', 'financial_year']);
+const HOUSEKEEPING_FIELDS = new Set(['i_ts', 'u_ts', 'a_in', 's_no', 'rec_id']);
+/** Nearly every entity has to repeat before a period reads as carried forward, not merely steady. */
+const CARRIED_FORWARD_SHARE = 0.95;
+
+export function getCarriedForward(tableKey: string): CarriedForward {
+  const source = snapshot(tableKey);
+  const [currentOrder, previousOrder] = [...new Set(source.records.map(periodOrder))].filter((order) => order > 0).sort((left, right) => right - left);
+  const content = (record: SnapshotRecord) => JSON.stringify(Object.entries(record)
+    .filter(([field]) => !PERIOD_FIELDS.has(field) && !HOUSEKEEPING_FIELDS.has(field))
+    .sort(([left], [right]) => left.localeCompare(right)));
+  const byEntity = (order: number | undefined) => {
+    const entities = new Map<string, Set<string>>();
+    if (order === undefined) return entities;
+    source.records.filter((record) => periodOrder(record) === order).forEach((record) => {
+      const key = sourceCandidateKey(record);
+      if (!key) return;
+      if (!entities.has(key)) entities.set(key, new Set());
+      entities.get(key)!.add(content(record));
+    });
+    return entities;
+  };
+  const current = byEntity(currentOrder), previous = byEntity(previousOrder);
+  let compared = 0, identical = 0;
+  current.forEach((rows, key) => {
+    const before = previous.get(key);
+    if (!before) return;
+    compared += 1;
+    if (rows.size === before.size && [...rows].every((row) => before.has(row))) identical += 1;
+  });
+  const label = (order: number | undefined) => {
+    const record = order === undefined ? undefined : source.records.find((item) => periodOrder(item) === order);
+    return record ? recordPeriodLabel(record) : 'Not returned';
+  };
+  return { tableKey, previousPeriod: label(previousOrder), currentPeriod: label(currentOrder), compared, identical, carriedForward: compared >= 3 && identical / compared >= CARRIED_FORWARD_SHARE };
+}
+
 function buildReportedMovement(config: MovementConfig): ReportedMovement {
   const source = snapshot(config.tableKey);
   const orders = [...new Set(source.records.map(periodOrder))].filter((order) => order > 0).sort((left, right) => right - left);
@@ -622,6 +680,7 @@ function buildReportedMovement(config: MovementConfig): ReportedMovement {
     rows,
     basis: `Exact source identity · ${config.metricLabel} · ULB grain · same retained source`,
     boundary: config.boundary,
+    repeat: getCarriedForward(config.tableKey),
   };
 }
 

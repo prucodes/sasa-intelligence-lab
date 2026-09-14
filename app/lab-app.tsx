@@ -12,6 +12,7 @@ import { AnchoredSourceBrowser } from './anchored-source-browser';
 import { SourceReconciliationScreen } from './source-reconciliation';
 import { LgdCrosswalkPanel } from './lgd-crosswalk-panel';
 import { SecretariatCohort } from './secretariat-cohort';
+import { CarriedForwardNote } from './carried-forward-note';
 import { GapExplorer } from './gap-explorer';
 import { EvidenceIntegrity } from './evidence-integrity';
 import { DeliveryPlans } from './delivery-plans';
@@ -1166,6 +1167,7 @@ function ReportedMovementExplorer({ movement }: { movement: ReportedMovement }) 
       <div><span className="eyebrow">Exact-match period comparison</span><h2>{headline}</h2><p>{movement.metricLabel} · {movement.grain} grain · one retained source</p></div>
       <div className="movement-period"><span>{movement.previousPeriod}</span><Icon name="arrow" size={17}/><b>{movement.currentPeriod}</b></div>
     </header>
+    <CarriedForwardNote repeat={movement.repeat}/>
     <section className="movement-kpis" aria-label="Movement classification">
       <div className="is-matched"><small>Comparable</small><strong>{movement.matched}</strong><span>exact ULB pairs</span></div>
       <div className="is-higher"><small>Higher current</small><strong>{movement.increased}</strong><span>reported values</span></div>

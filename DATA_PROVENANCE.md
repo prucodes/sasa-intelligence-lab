@@ -22,6 +22,12 @@ No published endpoint visible to the signed-in account at the time of the audit 
 
 Retrieval itself can miss distinct rows. The six large route totals reconcile to the source totals, but part of each total is repeats, so a matching count is not proof of completeness. The urban reference day, 2026-08-12, is therefore retained from every retrieval of that day combined, and only when each file holds every secretariat with no disagreement between retrievals (see `scripts/urban-sources.mjs`). The other fifteen urban days remain the 8 September paged pull and are incomplete.
 
-Small tables are affected too. Rows just after a 100-row page boundary can be replaced by repeats from the page before, so compost pits, soak pits, magic drains, legacy waste clearance, IHHL identification, sewage and the green programme table each miss between two and six rows while their totals still match. The same positions repeat in the 2026-08-28 and 2026-09-10 copies. Repeats are collapsed, so the missing rows show as absent, never as zero.
+Small tables are affected too. Rows just after a 100-row page boundary can be replaced by repeats from the page before, so a response matches its total while missing a few distinct rows. The same positions repeat in the 2026-08-28 and 2026-09-10 copies, and the export route returns the same gaps.
+
+On 2026-09-14 the missing rows were recovered with filtered queries small enough to fit one page, and merged into both retained copies of six tables: legacy waste clearance (3 rows), compost pits (3), soak pits (3), magic drains (2), IHHL new identification (2) and sewage (6). Every other row is unchanged, each file records the repair under `retentionRepair`, and the raw filtered responses are kept in `data/retention-repairs/2026-09-14/`.
+
+Three retained copies could not be repaired, because the live key now serves a different table: the 2026-08-28 `sasa_sac_identification_of_new_ihhls_api` (6 July rows missing, used by household toilets), the ULB-grain `sasa_sac_machinery_e_autos_service_model_api` (1 June row, used by vehicles) and the 244-row green programme vintage (3 June rows). Repeats are collapsed, so those rows show as absent, never as zero.
+
+A later period can also repeat the one before. Where nearly every ULB is identical in every field, the app flags the period as possibly carried forward (`getCarriedForward` in `lib/analytics.ts`), because the source does not say whether it was reported again.
 
 For each incoming release, repeat the inventory, schema, filter, period, pagination, JSON/Excel parity, glossary, and selector-coverage checks before exposing values in SAMPLE mode.

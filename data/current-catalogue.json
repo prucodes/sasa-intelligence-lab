@@ -526,11 +526,16 @@
       "retainedRows": 246,
       "retainedAt": "2026-09-09T09:55:25.174Z",
       "pages": 3,
-      "contentHash": "51ddee138c5183022175428dc53963663b8862a26834366eaf8124de4b52bfe8",
+      "contentHash": "53a9b08501524296f7552e29fdbc17c930066fac79e16cf0f2ff335453f8280e",
       "evidencePath": "data/current-snapshots/sasa_100_percent_clearance_of_legacy_waste_api.json",
       "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
       "rawCountReconciled": true,
-      "distinctCompleteness": "unproven"
+      "distinctCompleteness": "unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 3,
+        "recoveredRows": 3
+      }
     },
     {
       "key": "sasa_sac_machinery_compactors_api",
@@ -1290,9 +1295,14 @@
       "retainedRows": 336,
       "retainedAt": "2026-09-10T13:06:29.717Z",
       "pages": 4,
-      "contentHash": "09c27c3cad488014e12a762fcc21ee382a5f381357a2d52e784f7b8077589251",
+      "contentHash": "781abe2eef5ef10d54f0b13eee55df9fbfb71cfe2a55a83eba754abd17a99d82",
       "evidencePath": "data/current-snapshots/compost_pits_api.json",
-      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 3,
+        "recoveredRows": 3
+      }
     },
     {
       "key": "magic_drains_api",
@@ -1326,9 +1336,14 @@
       "retainedRows": 336,
       "retainedAt": "2026-09-10T13:06:28.970Z",
       "pages": 4,
-      "contentHash": "170c8c7e4750d623378b002225d02dcb44d32ad816921dddf355c895ce1cf8b0",
+      "contentHash": "192ee443e560ba008c363382b236c17b2e53bfa13f13d4aed357903a53acca79",
       "evidencePath": "data/current-snapshots/magic_drains_api.json",
-      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 2,
+        "recoveredRows": 2
+      }
     },
     {
       "key": "soak_pits_api",
@@ -1362,9 +1377,14 @@
       "retainedRows": 336,
       "retainedAt": "2026-09-10T13:06:29.557Z",
       "pages": 4,
-      "contentHash": "09c27c3cad488014e12a762fcc21ee382a5f381357a2d52e784f7b8077589251",
+      "contentHash": "781abe2eef5ef10d54f0b13eee55df9fbfb71cfe2a55a83eba754abd17a99d82",
       "evidencePath": "data/current-snapshots/soak_pits_api.json",
-      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 3,
+        "recoveredRows": 3
+      }
     },
     {
       "key": "msw_cbg_units_new1_api",
@@ -1451,9 +1471,14 @@
       "retainedRows": 246,
       "retainedAt": "2026-09-10T13:06:34.828Z",
       "pages": 3,
-      "contentHash": "e0b4406bad9db63c5a784473d8ed7f1d3473c6759d5d54a631cb3d4813e53e09",
+      "contentHash": "6be76d9f96b9f117f4bebb9ec1678110ac622bbae4338062c6c720d4a9a6fdfa",
       "evidencePath": "data/current-snapshots/ihhl_new_identification_new1_api.json",
-      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 2,
+        "recoveredRows": 2
+      }
     },
     {
       "key": "itc_wow_schools_api",
@@ -1620,9 +1645,14 @@
       "retainedRows": 242,
       "retainedAt": "2026-09-10T13:06:37.758Z",
       "pages": 3,
-      "contentHash": "0cdd9de2795c5b71c23a3554841a22da2e1e187a35433a39f370a257392574b3",
+      "contentHash": "f9ab103681a9ae636b7d9d729c7d22e27e747c361498154cf707ab1a4c3a625b",
       "evidencePath": "data/current-snapshots/sewage_treated_qty_new1_api.json",
-      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven"
+      "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 6,
+        "recoveredRows": 6
+      }
     },
     {
       "key": "swacch_survekshan_info_new1_api",

@@ -23,12 +23,12 @@
       "tableKey": "compost_pits_api",
       "retrievedAt": "2026-09-08T15:42:53.064347+00:00",
       "rows": 336,
-      "content": "09c27c3cad488014",
+      "content": "781abe2eef5ef10d",
       "periods": {
         "2026-04": {
-          "rows": 27,
-          "content": "c39ffa2733dfcaf6",
-          "entities": "a1260838c0baa316"
+          "rows": 28,
+          "content": "fefb9a620cbcc5b0",
+          "entities": "27602db4b92b7878"
         },
         "2026-05": {
           "rows": 28,
@@ -36,18 +36,18 @@
           "entities": "27602db4b92b7878"
         },
         "2026-06": {
-          "rows": 27,
-          "content": "29c2e0aef09ac470",
-          "entities": "a1260838c0baa316"
+          "rows": 28,
+          "content": "138f6b59b08ba52f",
+          "entities": "27602db4b92b7878"
         },
         "2026-07": {
-          "rows": 27,
-          "content": "44f424d756e2d549",
-          "entities": "a1260838c0baa316"
+          "rows": 28,
+          "content": "fc5192940fef5d79",
+          "entities": "27602db4b92b7878"
         },
         "2026-08": {
-          "rows": 29,
-          "content": "7a17962cf406b0fe",
+          "rows": 28,
+          "content": "e0fdb8170f060441",
           "entities": "27602db4b92b7878"
         },
         "2026-09": {
@@ -56,13 +56,13 @@
           "entities": "27602db4b92b7878"
         },
         "2026-10": {
-          "rows": 29,
-          "content": "6e108d93ff8df68c",
+          "rows": 28,
+          "content": "4deac10515739b9f",
           "entities": "27602db4b92b7878"
         },
         "2026-11": {
-          "rows": 29,
-          "content": "7dd536b2bf9fb039",
+          "rows": 28,
+          "content": "494732687c7395b7",
           "entities": "27602db4b92b7878"
         },
         "2026-12": {
@@ -155,17 +155,17 @@
       "tableKey": "ihhl_new_identification_new1_api",
       "retrievedAt": "2026-09-08T15:42:29.632551+00:00",
       "rows": 246,
-      "content": "e0b4406bad9db63c",
+      "content": "6be76d9f96b9f117",
       "periods": {
         "2026-06": {
-          "rows": 125,
-          "content": "f19a6345bf39954e",
+          "rows": 123,
+          "content": "883d2da643bdd061",
           "entities": "253728e87e94f6e0"
         },
         "2026-07": {
-          "rows": 121,
-          "content": "8b727e6efaf051b8",
-          "entities": "4b771e558c30e2d0"
+          "rows": 123,
+          "content": "6e2e78bb5247b14c",
+          "entities": "253728e87e94f6e0"
         }
       }
     },
@@ -186,7 +186,7 @@
       "tableKey": "magic_drains_api",
       "retrievedAt": "2026-09-08T15:43:02.972576+00:00",
       "rows": 336,
-      "content": "170c8c7e4750d623",
+      "content": "192ee443e560ba00",
       "periods": {
         "2026-04": {
           "rows": 28,
@@ -219,23 +219,23 @@
           "entities": "27602db4b92b7878"
         },
         "2026-10": {
-          "rows": 27,
-          "content": "3de2f76ddd3a897c",
-          "entities": "27ed23778ab12cff"
+          "rows": 28,
+          "content": "8a0a3336b4831d88",
+          "entities": "27602db4b92b7878"
         },
         "2026-11": {
-          "rows": 29,
-          "content": "08bd29e34e576b90",
+          "rows": 28,
+          "content": "c1ae0254c8adee6b",
           "entities": "27602db4b92b7878"
         },
         "2026-12": {
-          "rows": 27,
-          "content": "fdbdfcafd20ab61a",
-          "entities": "27ed23778ab12cff"
+          "rows": 28,
+          "content": "4aa3e7612539a01e",
+          "entities": "27602db4b92b7878"
         },
         "2027-01": {
-          "rows": 29,
-          "content": "f2dc032d365f5dab",
+          "rows": 28,
+          "content": "0fe6530d08aadc3d",
           "entities": "27602db4b92b7878"
         },
         "2027-02": {
@@ -272,17 +272,17 @@
       "tableKey": "sasa_100_percent_clearance_of_legacy_waste_api",
       "retrievedAt": "2026-08-28T15:24:52.235490+00:00",
       "rows": 246,
-      "content": "51ddee138c518302",
+      "content": "53a9b08501524296",
       "periods": {
         "2026-06": {
-          "rows": 126,
-          "content": "284fa16cc7fb547d",
+          "rows": 123,
+          "content": "abf074797c743222",
           "entities": "4e58d2229b2bf7cc"
         },
         "2026-07": {
-          "rows": 120,
-          "content": "edb918c7434a6fdb",
-          "entities": "eab21a19e4320a00"
+          "rows": 123,
+          "content": "32b1d759e5bc984c",
+          "entities": "4e58d2229b2bf7cc"
         }
       }
     },
@@ -853,16 +853,16 @@
       "tableKey": "sewage_treated_qty_new1_api",
       "retrievedAt": "2026-09-08T15:43:24.720851+00:00",
       "rows": 242,
-      "content": "0cdd9de2795c5b71",
+      "content": "f9ab103681a9ae63",
       "periods": {
         "2026-06": {
-          "rows": 122,
-          "content": "a0485ed7407976bb",
-          "entities": "8d505fd5a8d417c3"
+          "rows": 121,
+          "content": "99ddbc86f1ce2d2b",
+          "entities": "95439bbf7a01a979"
         },
         "2026-07": {
-          "rows": 120,
-          "content": "886d94ca19b681db",
+          "rows": 121,
+          "content": "2f91eb14cc859d25",
           "entities": "95439bbf7a01a979"
         }
       }
@@ -871,12 +871,12 @@
       "tableKey": "soak_pits_api",
       "retrievedAt": "2026-09-08T15:43:12.560992+00:00",
       "rows": 336,
-      "content": "09c27c3cad488014",
+      "content": "781abe2eef5ef10d",
       "periods": {
         "2026-04": {
-          "rows": 27,
-          "content": "c39ffa2733dfcaf6",
-          "entities": "a1260838c0baa316"
+          "rows": 28,
+          "content": "fefb9a620cbcc5b0",
+          "entities": "27602db4b92b7878"
         },
         "2026-05": {
           "rows": 28,
@@ -884,18 +884,18 @@
           "entities": "27602db4b92b7878"
         },
         "2026-06": {
-          "rows": 27,
-          "content": "29c2e0aef09ac470",
-          "entities": "a1260838c0baa316"
+          "rows": 28,
+          "content": "138f6b59b08ba52f",
+          "entities": "27602db4b92b7878"
         },
         "2026-07": {
-          "rows": 27,
-          "content": "44f424d756e2d549",
-          "entities": "a1260838c0baa316"
+          "rows": 28,
+          "content": "fc5192940fef5d79",
+          "entities": "27602db4b92b7878"
         },
         "2026-08": {
-          "rows": 29,
-          "content": "7a17962cf406b0fe",
+          "rows": 28,
+          "content": "e0fdb8170f060441",
           "entities": "27602db4b92b7878"
         },
         "2026-09": {
@@ -904,13 +904,13 @@
           "entities": "27602db4b92b7878"
         },
         "2026-10": {
-          "rows": 29,
-          "content": "6e108d93ff8df68c",
+          "rows": 28,
+          "content": "4deac10515739b9f",
           "entities": "27602db4b92b7878"
         },
         "2026-11": {
-          "rows": 29,
-          "content": "7dd536b2bf9fb039",
+          "rows": 28,
+          "content": "494732687c7395b7",
           "entities": "27602db4b92b7878"
         },
         "2026-12": {

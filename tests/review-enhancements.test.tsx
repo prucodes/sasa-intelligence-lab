@@ -79,13 +79,13 @@ describe('source-owned diagnostic readings',()=>{
 describe('executive evidence brief',()=>{
   it('uses the checked overview cohorts, latest periods and explicit scope',()=>{
     const brief=getExecutiveBrief('SAMPLE');
-    expect(brief.issues.map(issue=>issue.total)).toEqual([1019,8479,1353366]);
+    expect(brief.issues.map(issue=>issue.total)).toEqual([1019,8479,1485769]);
     expect(brief.scope).toContain('Screen filters, selected ULBs and local crosswalk decisions are not applied');
     expect(brief.sources).toHaveLength(6);
     const text=executiveBriefText(brief,'2026-09-07T00:00:00Z');
     expect(text).toContain('not a source update time');expect(text).toContain('UNSCORED');
     for(const source of brief.sources){expect(text).toContain(source.responseId);expect(text).toContain(source.generatedAt);expect(text).toContain(source.period);}
-    expect(text).toContain('119 eligible candidates / 123');
+    expect(text).toContain('122 eligible candidates / 123');
     expect(text).toContain('1 rows or candidate groups excluded');
   });
   it.each(['DEMO','LIVE'] as const)('keeps governed figures out of %s exports',mode=>{

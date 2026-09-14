@@ -72,9 +72,11 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
     if (window.innerWidth <= 760) listRef.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
   const changed = movement.increased + movement.decreased;
-  const movementText = changed > 0
-    ? `${movement.decreased} lower · ${movement.increased} higher · ${movement.unchanged} unchanged`
-    : `All ${movement.matched} matched ULBs repeated the same reported value.`;
+  const movementText = movement.repeat.carriedForward
+    ? `${movement.currentPeriod} is identical to ${movement.previousPeriod} in every field for ${movement.repeat.identical} of ${movement.repeat.compared} ULBs, so it may be a repeated report.`
+    : changed > 0
+      ? `${movement.decreased} lower · ${movement.increased} higher · ${movement.unchanged} unchanged`
+      : `All ${movement.matched} matched ULBs repeated the same reported value.`;
   const scopeName = district || 'All returned districts';
   const urban = issues.some(issue=>issue.id===subject);
   const corpus = getCorpusEvidenceCounts();
@@ -225,7 +227,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
     </section>
 
     <section className="or-interpretation" aria-label="Movement and interpretation">
-      <a className="or-movement" href={`${href('/operational-analytics')}&tab=${selected}&view=movement`}><div><span className="or-kicker">Across this source / {movement.metricLabel}</span><h3>{changed ? `${changed} matched ULB values changed` : 'The reported values repeated'}</h3><p>{movementText}</p><small>{movement.previousPeriod} → {movement.currentPeriod} · {movement.matched} comparable pairs · {movement.excluded} held out</small></div><Arrow/></a>
+      <a className="or-movement" href={`${href('/operational-analytics')}&tab=${selected}&view=movement`}><div><span className="or-kicker">Across this source / {movement.metricLabel}</span><h3>{movement.repeat.carriedForward ? 'This month may be carried forward' : changed ? `${changed} matched ULB values changed` : 'The reported values repeated'}</h3><p>{movementText}</p><small>{movement.previousPeriod} → {movement.currentPeriod} · {movement.matched} comparable pairs · {movement.excluded} held out</small></div><Arrow/></a>
       <div className="or-reading"><span className="or-kicker">Read this correctly</span><p>{active.boundary}</p><small>Unchanged reports do not prove inactivity. Two periods do not establish a persistent trend.</small></div>
     </section>
 
@@ -242,7 +244,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
         <article><strong>{overallReadiness.nonDegenerateCandidates}</strong><span>with anything to compare</span><small>{overallReadiness.zeroToiletAndVehicle} candidates report zero in toilets and vehicles</small></article>
         <article className="overview-cross-confidence"><strong>Gated</strong><span>confidence boundary</span><small>Canonical identity and approved weights are still required.</small></article>
       </div>
-      <div className="overview-cross-movement"><span>Separate June → July movements</span>{movements.map(item=><span key={item.id}><b>{item.metricLabel}</b><small>{item.increased+item.decreased>0?`${item.decreased} lower · ${item.increased} higher · ${item.unchanged} unchanged`:`All ${item.matched} ULBs report the same value in ${item.currentPeriod} as in ${item.previousPeriod}`}</small></span>)}</div>
+      <div className="overview-cross-movement"><span>Separate June → July movements</span>{movements.map(item=><span key={item.id}><b>{item.metricLabel}</b><small>{item.repeat.carriedForward?`${item.currentPeriod} is identical to ${item.previousPeriod} in every field for ${item.repeat.identical} of ${item.repeat.compared} ULBs`:item.increased+item.decreased>0?`${item.decreased} lower · ${item.increased} higher · ${item.unchanged} unchanged`:`All ${item.matched} ULBs report the same value in ${item.currentPeriod} as in ${item.previousPeriod}`}</small></span>)}</div>
       <footer><span>Movement is shown by source and measure; no cross-subject trend is summed. An unchanged value can be a repeated report rather than no progress, and the source does not say which.</span><a href={`${href('/gap-radar')}&view=rankings`}>Inspect subject comparisons <Arrow/></a></footer>
     </section>
     <section className="or-readiness" aria-label="Evidence scope and decision boundary"><div><span className="or-kicker">Ready for descriptive review</span><p><b>{governedSnapshotStats.completeDatasets}</b> historical exports <span> · {readinessCatalogueStats.platformAvailable} current catalogue routes</span> · {format(corpus.rawRows)} raw retained rows</p><small>{anchorRegistry.length} observed ULB-name candidates provide a working reference. {format(corpus.rowsExcludingAliases)} bundled rows after excluding repeated endpoint copies; internal row duplicates are a separate check.</small></div><a href={href('/gap-radar')}><span>Evidence investigations</span><b>OPEN GAP RADAR</b><small>Inspect changes, cohorts & works →</small></a></section>

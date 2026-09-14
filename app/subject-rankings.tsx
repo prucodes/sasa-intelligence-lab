@@ -9,6 +9,8 @@ import './overall-readiness.css';
 import {observedMedian} from '@/lib/visual-evidence';
 import {ChartGuide,periodPhrase} from './chart-guide';
 import {rateText} from '@/lib/format-rate';
+import {getReportedMovements} from '@/lib/analytics';
+import {CarriedForwardNote} from './carried-forward-note';
 
 const n=(v:number)=>v.toLocaleString('en-IN',{maximumFractionDigits:2});
 type FieldState='higher-wide'|'higher-compact'|'lower-wide'|'lower-compact';
@@ -56,6 +58,7 @@ function SubjectFieldRadar({definition,rows,allRows,selected,onSelect,query}:{de
 }
 export function SubjectRankings(){
   const definitions=useMemo(()=>rankingSubjects.map(s=>getRankingDefinition(s.id)),[]);
+  const repeats=useMemo(()=>Object.fromEntries(getReportedMovements().map(m=>[m.id,m.repeat])),[]);
   const overallReadiness=useMemo(()=>getOverallReadiness(),[]);
   const [subject,setSubject]=useState<RankingSubject>('reach'),[district,setDistrict]=useState(''),[query,setQuery]=useState(''),[selected,setSelected]=useState('urban:1136');
   useEffect(()=>{const p=new URLSearchParams(window.location.search),id=p.get('subject');if(rankingSubjects.some(s=>s.id===id)){
@@ -83,6 +86,7 @@ export function SubjectRankings(){
     <header className="rk-intro"><div><span className="rk-kicker">Reported performance · one subject at a time</span><h2>ULB subject rankings</h2><p>Rank eligible ULBs on a defined rate, then inspect their evidence profile. Each subject keeps its own reporting period.</p></div><span className="rk-badge">5 measures · no overall score</span></header>
     <div className="rk-controls"><label>Subject<select aria-label="Ranking subject" value={subject} onChange={e=>changeSubject(e.target.value as RankingSubject)}>{rankingSubjects.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}</select></label><label>Comparison population<select aria-label="Ranking population" value={district} onChange={e=>{setDistrict(e.target.value);setSelected('');setQuery('');}}><option value="">All returned districts</option>{districts.map(d=><option key={d}>{d}</option>)}</select></label><label>Find a ULB<input type="search" aria-label="Search ranked ULBs" placeholder="Search name or district" value={query} onChange={e=>setQuery(e.target.value)}/></label></div>
     <div className="rk-basis"><div><span>Ranking basis · higher rate first</span><strong>{definition.topLabel} ÷ {definition.bottomLabel} × 100</strong><small>{definition.period} · {district||'All returned districts'}</small></div><div><strong>{data.rows.length}<small>eligible</small></strong><span>of {data.population} returned candidates</span></div><div><strong>{data.excluded.length}<small>not ranked</small></strong><span>Reasons remain visible below</span></div></div>
+    {definition.programme&&repeats[definition.programme]&&<CarriedForwardNote repeat={repeats[definition.programme]}/>}
     <p className="rk-caption">Ranks compare this subject only. Equal rates share a rank (1, 1, 3); measured to six decimal places, displayed to two. District selection recalculates ranks; search only finds rows. There is no draft target in this ordering.</p>
     <details className="rk-overall-audit" id="overall-readiness"><summary><b>Overall delivery signal audit</b><span>Gated · {overallReadiness.validThreeSubjectCandidates} of {overallReadiness.exactCandidateOverlap} exact-name candidates have three valid July measures</span></summary><div className="rk-audit-grid"><div><strong>{overallReadiness.exactCandidateOverlap}</strong><span>exact name + district overlap</span></div><div><strong>{overallReadiness.validThreeSubjectCandidates}</strong><span>valid in all 3 delivery subjects</span></div><div><strong>{overallReadiness.zeroToiletAndVehicle}</strong><span>with zero toilet and vehicle rates</span></div><div><strong>{n(overallReadiness.validCoveragePercent)}%</strong><span>of exact overlap retained</span></div></div><p>We tested a July composite across household toilets, vehicle supply and legacy-waste clearance. Its valid cohort is only {overallReadiness.validThreeSubjectCandidates}; {overallReadiness.zeroToiletAndVehicle} of those rows have zero in the first two measures, so a blended score would mostly reflect two zero reports rather than comparable ULB delivery. No shared canonical ULB code is carried by all three source families; the overlap is exact source name + district only. An overall rank stays gated until the source families carry a reviewed common identity, the zero patterns are explained, and subject weights are approved.</p></details>
     <SubjectFieldRadar definition={definition} rows={graphRows} allRows={data.rows} selected={selected} onSelect={inspect} query={query}/>

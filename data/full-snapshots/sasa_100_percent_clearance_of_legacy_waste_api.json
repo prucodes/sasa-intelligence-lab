@@ -2420,42 +2420,6 @@
     },
     {
       "district_name": "Tirupati",
-      "ulb_name": "Tirupati",
-      "target": "\"7,42,324\"",
-      "achievement": "\"6,01,977\"",
-      "balance": "\"1,40,347\"",
-      "achievement_percentage": "81%",
-      "month_id": "6",
-      "month_name": "JUNE",
-      "year": "2026",
-      "financial_year": "2026-2027"
-    },
-    {
-      "district_name": "Tirupati",
-      "ulb_name": "Puttur",
-      "target": "\"53,308\"",
-      "achievement": "\"53,308\"",
-      "balance": "0",
-      "achievement_percentage": "100%",
-      "month_id": "6",
-      "month_name": "JUNE",
-      "year": "2026",
-      "financial_year": "2026-2027"
-    },
-    {
-      "district_name": "Tirupati",
-      "ulb_name": "Naidupet",
-      "target": "\"4,186\"",
-      "achievement": "\"4,186\"",
-      "balance": "0",
-      "achievement_percentage": "100%",
-      "month_id": "6",
-      "month_name": "JUNE",
-      "year": "2026",
-      "financial_year": "2026-2027"
-    },
-    {
-      "district_name": "Tirupati",
       "ulb_name": "Srikalahasti",
       "target": "\"2,03,231\"",
       "achievement": "\"1,84,766\"",
@@ -2969,6 +2933,73 @@
       "month_name": "JULY",
       "year": "2026",
       "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Tirupati",
+      "target": "\"7,42,324\"",
+      "achievement": "\"6,10,921\"",
+      "balance": "\"1,31,403\"",
+      "achievement_percentage": "82%",
+      "month_id": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Sullurpet",
+      "target": "\"64,930\"",
+      "achievement": "\"63,930\"",
+      "balance": "\"1,000\"",
+      "achievement_percentage": "98%",
+      "month_id": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
+    },
+    {
+      "district_name": "Tirupati",
+      "ulb_name": "Venkatagiri ",
+      "target": "\"20,846\"",
+      "achievement": "\"20,846\"",
+      "balance": "0",
+      "achievement_percentage": "100%",
+      "month_id": "7",
+      "month_name": "JULY",
+      "year": "2026",
+      "financial_year": "2026-2027"
     }
-  ]
+  ],
+  "retentionRepair": {
+    "repairedAt": "2026-09-14",
+    "reason": "The saved response matched the reported total but held 243 distinct rows: rows after a 100-row page boundary had been replaced by repeats of the page before.",
+    "method": "The missing rows were retrieved with filtered queries small enough to fit one page, then merged. Exact repeats were removed. Every other row is unchanged.",
+    "removedRepeats": 3,
+    "recoveredRows": 3,
+    "evidence": [
+      {
+        "file": "data/retention-repairs/2026-09-14/sasa_100_percent_clearance_of_legacy_waste_api__month_id-6_year-2026.json",
+        "filters": {
+          "month_id": "6",
+          "year": "2026"
+        },
+        "pages": 2,
+        "responseId": "resp-7934cfec-d92d-483c-9b18-2a7f1ba417ac",
+        "generatedAt": "2026-09-14T18:11:50.949240+00:00",
+        "rows": 123
+      },
+      {
+        "file": "data/retention-repairs/2026-09-14/sasa_100_percent_clearance_of_legacy_waste_api__month_id-7_year-2026.json",
+        "filters": {
+          "month_id": "7",
+          "year": "2026"
+        },
+        "pages": 2,
+        "responseId": "resp-e3b31ccc-dbf5-415b-9466-c7d56c772752",
+        "generatedAt": "2026-09-14T18:11:47.432053+00:00",
+        "rows": 123
+      }
+    ]
+  }
 }

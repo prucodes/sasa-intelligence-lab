@@ -155,8 +155,8 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('heading', { name: /pipeline drop-off/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: /processing infrastructure/i }));
     expect(screen.getByRole('heading', { name: /legacy-waste balance and facility-status exceptions are ready for review/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /reported clearance, with 1.35 million remaining/i })).toBeInTheDocument();
-    expect(screen.getByText('13,53,366')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /reported clearance, with 1.49 million remaining/i })).toBeInTheDocument();
+    expect(screen.getByText('14,85,769')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /facility registry/i }));
     expect(screen.getByRole('heading', { name: /configured capacity by facility type/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /facility registry/i })).toBeInTheDocument();
@@ -178,7 +178,7 @@ describe('application shell and screens', () => {
     fireEvent.click(screen.getByRole('tab', { name: /processing infrastructure/i }));
     expect(screen.getByRole('heading', { name: /where reported legacy-waste balance changed/i })).toBeInTheDocument();
     expect(screen.getByText(/largest absolute reported changes/i)).toBeInTheDocument();
-    expect(screen.getByText('25', { selector: '.movement-kpis .is-lower strong' })).toBeInTheDocument();
+    expect(screen.getByText('27', { selector: '.movement-kpis .is-lower strong' })).toBeInTheDocument();
   });
 
   it('does not turn an absent operational source-period into a zero-performance headline', () => {

@@ -1124,28 +1124,6 @@
       "work_name": "Magic Drains",
       "units": "KMs",
       "fin_year": "2026-2027",
-      "month": "202701",
-      "target": "1.47",
-      "achivement": "",
-      "lgd_district_name": null
-    },
-    {
-      "district_id": "07",
-      "district_name": "Guntur",
-      "work_name": "Magic Drains",
-      "units": "KMs",
-      "fin_year": "2026-2027",
-      "month": "202611",
-      "target": "1.47",
-      "achivement": "",
-      "lgd_district_name": null
-    },
-    {
-      "district_id": "07",
-      "district_name": "Guntur",
-      "work_name": "Magic Drains",
-      "units": "KMs",
-      "fin_year": "2026-2027",
       "month": "202609",
       "target": "1.47",
       "achivement": "",
@@ -3711,8 +3689,49 @@
       "fin_year": "2026-2027",
       "month": "202703",
       "target": "0.5",
+      "achivement": "",
+      "lgd_district_name": null
+    },
+    {
+      "district_id": "07",
+      "district_name": "Guntur",
+      "work_name": "Magic Drains",
+      "units": "KMs",
+      "fin_year": "2026-2027",
+      "month": "202610",
+      "target": "1.47",
+      "achivement": "",
+      "lgd_district_name": null
+    },
+    {
+      "district_id": "07",
+      "district_name": "Guntur",
+      "work_name": "Magic Drains",
+      "units": "KMs",
+      "fin_year": "2026-2027",
+      "month": "202612",
+      "target": "1.47",
       "achivement": "",
       "lgd_district_name": null
     }
-  ]
+  ],
+  "retentionRepair": {
+    "repairedAt": "2026-09-14",
+    "reason": "The saved response matched the reported total but held 334 distinct rows: rows after a 100-row page boundary had been replaced by repeats of the page before.",
+    "method": "The missing rows were retrieved with filtered queries small enough to fit one page, then merged. Exact repeats were removed. Every other row is unchanged.",
+    "removedRepeats": 2,
+    "recoveredRows": 2,
+    "evidence": [
+      {
+        "file": "data/retention-repairs/2026-09-14/magic_drains_api__district_name-Guntur.json",
+        "filters": {
+          "district_name": "Guntur"
+        },
+        "pages": 1,
+        "responseId": "resp-343dde43-06f8-4089-b6f8-d34acdbe4239",
+        "generatedAt": "2026-09-14T18:11:43.731226+00:00",
+        "rows": 12
+      }
+    ]
+  }
 }

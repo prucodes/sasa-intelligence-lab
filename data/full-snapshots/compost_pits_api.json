@@ -2224,39 +2224,6 @@
       "work_name": "Compost Pits",
       "units": "Nos",
       "fin_year": "2026-2027",
-      "month": "202610",
-      "target": "25363",
-      "achivement": "",
-      "lgd_district_name": null
-    },
-    {
-      "district_id": "09",
-      "district_name": "Nellore",
-      "work_name": "Compost Pits",
-      "units": "Nos",
-      "fin_year": "2026-2027",
-      "month": "202611",
-      "target": "25363",
-      "achivement": "",
-      "lgd_district_name": null
-    },
-    {
-      "district_id": "09",
-      "district_name": "Nellore",
-      "work_name": "Compost Pits",
-      "units": "Nos",
-      "fin_year": "2026-2027",
-      "month": "202608",
-      "target": "25363",
-      "achivement": "15429",
-      "lgd_district_name": null
-    },
-    {
-      "district_id": "09",
-      "district_name": "Nellore",
-      "work_name": "Compost Pits",
-      "units": "Nos",
-      "fin_year": "2026-2027",
       "month": "202605",
       "target": "25363",
       "achivement": "15429",
@@ -3713,6 +3680,58 @@
       "target": "22564",
       "achivement": "",
       "lgd_district_name": null
+    },
+    {
+      "district_id": "09",
+      "district_name": "Nellore",
+      "work_name": "Compost Pits",
+      "units": "Nos",
+      "fin_year": "2026-2027",
+      "month": "202604",
+      "target": "25363",
+      "achivement": "15429",
+      "lgd_district_name": null
+    },
+    {
+      "district_id": "09",
+      "district_name": "Nellore",
+      "work_name": "Compost Pits",
+      "units": "Nos",
+      "fin_year": "2026-2027",
+      "month": "202607",
+      "target": "25363",
+      "achivement": "15429",
+      "lgd_district_name": null
+    },
+    {
+      "district_id": "09",
+      "district_name": "Nellore",
+      "work_name": "Compost Pits",
+      "units": "Nos",
+      "fin_year": "2026-2027",
+      "month": "202606",
+      "target": "25363",
+      "achivement": "15429",
+      "lgd_district_name": null
     }
-  ]
+  ],
+  "retentionRepair": {
+    "repairedAt": "2026-09-14",
+    "reason": "The saved response matched the reported total but held 333 distinct rows: rows after a 100-row page boundary had been replaced by repeats of the page before.",
+    "method": "The missing rows were retrieved with filtered queries small enough to fit one page, then merged. Exact repeats were removed. Every other row is unchanged.",
+    "removedRepeats": 3,
+    "recoveredRows": 3,
+    "evidence": [
+      {
+        "file": "data/retention-repairs/2026-09-14/compost_pits_api__district_name-Nellore.json",
+        "filters": {
+          "district_name": "Nellore"
+        },
+        "pages": 1,
+        "responseId": "resp-18c2fcde-791a-410e-841e-65cb945b6392",
+        "generatedAt": "2026-09-14T18:11:40.129883+00:00",
+        "rows": 12
+      }
+    ]
+  }
 }

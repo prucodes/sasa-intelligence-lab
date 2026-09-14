@@ -1,0 +1,4 @@
+.carried-forward{--carried-accent:#9a6a1f;margin:12px 0;padding:10px 14px;border:1px solid color-mix(in srgb,var(--carried-accent) 35%,var(--line));border-left:3px solid var(--carried-accent);border-radius:10px;background:color-mix(in srgb,var(--carried-accent) 6%,var(--surface));font-size:12px;line-height:1.6;color:var(--ink)}
+.theme-dark .carried-forward{--carried-accent:#e0b46a}
+.carried-forward b{color:var(--carried-accent);font-weight:600}
+.carried-forward.is-compact{margin:6px 0 0;padding:6px 10px;font-size:11px}

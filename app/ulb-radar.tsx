@@ -1,12 +1,14 @@
 'use client';
 import {useCompactChart} from './use-compact-chart';
-import {useState,useEffect} from 'react';
+import {useState,useEffect,useMemo} from 'react';
 import {getUlbComparison,deliveryPosition} from '@/lib/ulb-comparison';
 import {comparisonDiagnosticKey} from '@/lib/ulb-diagnostics-link';
 import type {ReviewIssueId} from '@/lib/overview';
 import './ulb-review.css';
 import {ChartGuide,periodPhrase} from './chart-guide';
 import {rateText} from '@/lib/format-rate';
+import {getReportedMovements} from '@/lib/analytics';
+import {CarriedForwardNote} from './carried-forward-note';
 
 const n=(v:number)=>v.toLocaleString('en-IN',{maximumFractionDigits:1});
 /** What right and up mean in plain words, for the programme on screen. */
@@ -33,6 +35,7 @@ export function UlbRadar(){
     /* eslint-enable react-hooks/set-state-in-effect */
   },[]);
   const data=getUlbComparison(subject);
+  const repeats=useMemo(()=>Object.fromEntries(getReportedMovements().map(m=>[m.id,m.repeat])),[]);
   const rows=data.points.filter(row=>!district||row.district===district);
   const chosen=data.points.find(row=>row.key===selected);
   const other=data.points.find(row=>row.key===comparison);
@@ -47,6 +50,7 @@ export function UlbRadar(){
     <header className="ur-intro"><div><span className="ur-kicker">ULB comparison · {data.period}</span><h2>Which places are further along?</h2><p>Compare reported completion and the size of the delivery workload, within one programme.</p></div><span className="ur-badge">{data.points.length} comparable ULB candidates</span></header>
     <div className="ur-controls"><label>Programme<select aria-label="ULB comparison programme" value={subject} onChange={e=>{setSubject(e.target.value as ReviewIssueId);setSelected('');setComparison('');setDistrict('');}}><option value="sanitation">Household toilets</option><option value="collection">Vehicle delivery</option><option value="processing">Legacy waste clearance</option></select></label><label>District<select aria-label="ULB comparison district" value={district} onChange={e=>{setDistrict(e.target.value);setSelected('');setComparison('');}}><option value="">All returned districts</option>{districts.map(d=><option key={d}>{d}</option>)}</select></label><label>Find a ULB<select aria-label="Select comparison ULB" value={selected} onChange={e=>setSelected(e.target.value)}><option value="">Choose a ULB</option>{allNames.filter(row=>!district||row.district===district).map(row=><option key={row.key} value={row.key}>{row.ulb} · {row.district}</option>)}</select></label></div>
     <ChartGuide intro={`Each dot is one ULB ${periodPhrase(data.period)}.`} items={[{term:'Further right',text:(readingWords[subject as keyof typeof readingWords]??{right:`More ${data.basisLabel.toLowerCase()}, so a bigger job.`}).right},{term:'Higher up',text:(readingWords[subject as keyof typeof readingWords]??{up:`A bigger share of ${data.basisLabel.toLowerCase()} completed.`}).up},{term:'Lines',text:`Vertical: the middle ULB's workload (${n(data.median??0)}). Horizontal: half completed. Reading guides, not targets.`},{term:'Right is not worse',text:'A bigger workload is not a worse result. Compare dots at a similar width.'}]}/>
+    {repeats[subject]&&<CarriedForwardNote repeat={repeats[subject]}/>}
     <div className="ur-stage"><div className="ur-chart"><svg className={narrow?'compact-delivery':undefined} viewBox={narrow?'0 0 400 480':'0 0 740 510'} role="group" aria-label="ULB workload versus reported completion">
       <rect x={left} y={top} width={right-left} height={(bottom-top)/2} className="ur-zone-upper"/><rect x={left} y={y(50)} width={right-left} height={(bottom-top)/2} className="ur-zone-lower"/>
       {(narrow?[0,.5,1]:[0,.25,.5,.75,1]).map(t=><g key={t}><line x1={left} x2={right} y1={y(t*100)} y2={y(t*100)} className="ur-grid"/><text x={left-10} y={y(t*100)+4} textAnchor="end" className="ur-tick">{t*100}%</text><text x={x(ceiling*t)} y={bottom+25} textAnchor="middle" className="ur-tick">{narrow?Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(ceiling*t):n(ceiling*t)}</text></g>)}

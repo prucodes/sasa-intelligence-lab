@@ -56,14 +56,16 @@ describe('operational analytics selectors', () => {
 
   it('builds a traceable legacy-waste clearance and balance review', () => {
     const summary = getLegacyWasteSummary();
-    expect(summary.target).toBe(14933110);
-    expect(summary.achievement).toBe(13569745);
-    expect(summary.balance).toBe(1353366);
-    expect(summary.clearanceRatio).toBeCloseTo(0.9087018712);
-    expect(summary.positiveBalanceCandidates).toBe(47);
-    expect(summary.zeroBalanceCandidates).toBe(73);
-    expect(summary.increasedSincePreviousPeriod).toBe(25);
-    expect(summary.unchangedSincePreviousPeriod).toBe(95);
+    // Includes the three July rows recovered on 2026-09-14 (Sullurpet, Tirupati, Venkatagiri),
+    // which a 100-row page boundary had replaced with repeats of June rows.
+    expect(summary.target).toBe(15761210);
+    expect(summary.achievement).toBe(14265442);
+    expect(summary.balance).toBe(1485769);
+    expect(summary.clearanceRatio).toBeCloseTo(0.9050981492);
+    expect(summary.positiveBalanceCandidates).toBe(49);
+    expect(summary.zeroBalanceCandidates).toBe(74);
+    expect(summary.increasedSincePreviousPeriod).toBe(27);
+    expect(summary.unchangedSincePreviousPeriod).toBe(96);
     expect(summary.balanceConflicts).toBe(1);
     expect(summary.rows.every((row) => row.tableKey && row.responseId && row.raw)).toBe(true);
   });
@@ -93,10 +95,10 @@ describe('operational analytics selectors', () => {
     expect(ihhl.classified).toBe(117);
     expect(ihhl.coverage).toMatchObject({ reported: 117, expected: 123 });
 
-    expect(counts(legacy)).toMatchObject({ none: 1, partial: 46, met: 72, above: 0 });
-    expect(legacy.classified).toBe(119);
+    expect(counts(legacy)).toMatchObject({ none: 1, partial: 48, met: 73, above: 0 });
+    expect(legacy.classified).toBe(122);
     expect(legacy.excluded).toBe(1);
-    expect(legacy.coverage).toMatchObject({ reported: 119, expected: 123 });
+    expect(legacy.coverage).toMatchObject({ reported: 122, expected: 123 });
   });
 
   it('builds source-separated district signal maps without merging domains', () => {
@@ -105,7 +107,7 @@ describe('operational analytics selectors', () => {
     expect(maps.map((map) => map.id)).toEqual(['collection', 'ihhl', 'legacy']);
     expect(total('collection')).toBe(1019);
     expect(total('ihhl')).toBe(8479);
-    expect(total('legacy')).toBe(1353366);
+    expect(total('legacy')).toBe(1485769);
     expect(maps.every((map) => map.rule.length > 20 && map.coverage.expected === 123)).toBe(true);
   });
 
@@ -171,12 +173,12 @@ describe('operational analytics selectors', () => {
 
   it('keeps absent ranks distinct from source-returned zeroes in the cross-period contrast', () => {
     const contrast = getClearanceRankContrast();
-    expect(contrast.clearanceCandidates).toBe(120);
+    expect(contrast.clearanceCandidates).toBe(123);
     expect(contrast.rankCandidates).toBe(74);
-    expect(contrast.points).toHaveLength(64);
-    expect(contrast.atCeiling).toBe(29);
-    expect(contrast.excludedNoRank).toBe(56);
-    expect(contrast.excludedNoClearance).toBe(10);
+    expect(contrast.points).toHaveLength(65);
+    expect(contrast.atCeiling).toBe(30);
+    expect(contrast.excludedNoRank).toBe(58);
+    expect(contrast.excludedNoClearance).toBe(9);
     expect(contrast.excludedZeroRank).toBe(0);
   });
 
@@ -212,7 +214,9 @@ describe('operational analytics selectors', () => {
     // therefore scanning twelve months for those three sources. Their eight genuine
     // duplicate rows sit in October, November, January and August, not in the latest
     // period, so they correctly fall outside this metric now.
-    expect(count('recon-duplicates')).toBe(38);
+    // 34, not 38, since 2026-09-14: sewage's July copy held four page-boundary repeats,
+    // which were removed when the missing rows were recovered.
+    expect(count('recon-duplicates')).toBe(34);
     // 159, not 243. The same period fix removes exactly 84 false flags, 28 districts in
     // each of the three works sources. Grouping on entity + period label had collapsed all
     // twelve of a district's monthly rows into one "period not supplied" bucket, and twelve
@@ -296,7 +300,7 @@ describe('operational analytics selectors', () => {
 
   it('surfaces evidence issues as operational quality states', () => {
     const issues = getDataQualityIssues();
-    expect(issues.find((item) => item.id === 'duplicates')?.count).toBe(38);
+    expect(issues.find((item) => item.id === 'duplicates')?.count).toBe(34);
     expect(issues.find((item) => item.id === 'period-conflicts')?.count).toBe(35);
     // Gobardhan recovered on 2026-09-08; no authorized endpoint is unavailable now.
     expect(issues.find((item) => item.id === 'unavailable')?.count).toBe(0);

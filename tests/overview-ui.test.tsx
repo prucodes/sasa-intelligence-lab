@@ -88,8 +88,8 @@ describe('connected overview interactions', () => {
     // Eighteen overlapping ULBs, seventeen of them zero, is too thin to call aligned evidence.
     expect(signal).toHaveTextContent('Too little overlap to compare');
     expect(signal).not.toHaveTextContent('strong enough');
-    // A measure where nothing moved is a repeated value, not a count of steady ULBs.
-    expect(signal).toHaveTextContent(/All 117 ULBs report the same value in .+ as in /);
+    // A month identical to the one before in every field reads as possibly carried forward, not as steady ULBs.
+    expect(signal).toHaveTextContent('July 2026 is identical to June 2026 in every field for 117 of 117 ULBs');
     expect(signal).toHaveTextContent('can be a repeated report rather than no progress');
     expect(within(signal).getByRole('link', { name: /Inspect subject comparisons/ })).toHaveAttribute('href', '/gap-radar?mode=governed&view=rankings');
   });
