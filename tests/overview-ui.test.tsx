@@ -85,6 +85,12 @@ describe('connected overview interactions', () => {
     expect(signal).toHaveTextContent('17 candidates report zero in toilets and vehicles');
     expect(signal).toHaveTextContent('Overall rank gated');
     expect(signal).toHaveTextContent('no cross-subject trend is summed');
+    // Eighteen overlapping ULBs, seventeen of them zero, is too thin to call aligned evidence.
+    expect(signal).toHaveTextContent('Too little overlap to compare');
+    expect(signal).not.toHaveTextContent('strong enough');
+    // A measure where nothing moved is a repeated value, not a count of steady ULBs.
+    expect(signal).toHaveTextContent(/All 117 ULBs report the same value in .+ as in /);
+    expect(signal).toHaveTextContent('can be a repeated report rather than no progress');
     expect(within(signal).getByRole('link', { name: /Inspect subject comparisons/ })).toHaveAttribute('href', '/gap-radar?mode=governed&view=rankings');
   });
 
