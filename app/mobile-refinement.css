@@ -133,3 +133,57 @@
   .entity-picker-popover [role="listbox"] { max-height: none; }
   .entity-picker-popover [role="option"] { min-height: 48px; font-size: 14px; }
 }
+
+/* Final chrome polish: the shell should read as one calm instrument. The
+   governed mode uses the same teal evidence language as the Overview rather
+   than the unrelated violet control treatment, and the mark sits in a quiet
+   badge so it has a deliberate edge on light and dark surfaces. */
+.topbar .mode-control select {
+  color: #17635d;
+  background: linear-gradient(180deg, #fbfffd, #eef8f4);
+  border-color: #b9d9d0;
+  box-shadow: 0 4px 12px rgba(23, 99, 93, .07);
+  letter-spacing: .01em;
+}
+.topbar .mode-disclosure.mode-sample {
+  color: #245d59;
+  background: linear-gradient(90deg, #eaf8f3, rgba(244, 251, 248, .72));
+  box-shadow: inset 0 0 0 1px rgba(81, 166, 143, .24);
+}
+.sidebar .brand .brand-mark {
+  width: 42px;
+  height: 48px;
+  padding: 5px 6px;
+  border: 1px solid #d5ebe5;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #f8fffc, #e9f6f1);
+}
+.sidebar .brand .brand-wordmark b { letter-spacing: -.035em; }
+.sidebar .brand .brand-wordmark small { color: #087f78; letter-spacing: .07em; }
+.theme-dark .topbar .mode-control select {
+  color: #c9ece0;
+  background: linear-gradient(180deg, #173b3a, #12302f);
+  border-color: #4b7b70;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .16);
+}
+.theme-dark .topbar .mode-disclosure.mode-sample {
+  color: #c9ece0;
+  background: linear-gradient(90deg, rgba(17, 62, 58, .95), rgba(19, 49, 48, .72));
+  box-shadow: inset 0 0 0 1px rgba(104, 202, 172, .24);
+}
+.theme-dark .sidebar .brand .brand-mark {
+  border-color: #41665f;
+  background: linear-gradient(145deg, #173d3b, #102e31);
+}
+
+@media (max-width: 760px) {
+  .app-shell .sidebar { isolation: isolate; }
+  .app-shell .sidebar nav { overflow-x: auto; scrollbar-width: none; }
+  .app-shell .sidebar nav::-webkit-scrollbar { display: none; }
+  .app-shell .sidebar nav a { min-height: 56px; }
+  .app-shell .sidebar nav a .nav-mobile-label { font-size: 11px; }
+  .sidebar .brand .brand-mark { width: 32px; height: 34px; padding: 3px 4px; border-radius: 10px; }
+  .topbar .mode-control { flex: 1 1 auto; min-width: 0; }
+  .topbar .mode-control select { width: 100%; max-width: none; }
+  .topbar .header-actions > :is(.present-button,.compare-button,.evidence-pack) { width: 42px; min-width: 42px; height: 42px; min-height: 42px; }
+}
