@@ -3,9 +3,9 @@
 ## Evidence boundary
 
 - Current schemas are documented from the public AI Living Labs catalogue and authenticated dataset responses.
-- The signed-in account exposes 30 authorized endpoints: 27 SASA and three SERP.
-- Three additional SASA PR table keys are documented separately. They are integration candidates, not yet authenticated retained snapshots, and do not change the 30-endpoint authorized counter.
-- SAMPLE mode retains 29 complete, paginated full JSON exports containing 4,359 rows. Gobardhan is authorized but currently fails to export.
+- The signed-in account exposes 42 current authorized endpoints across SASA, SERP, SASA PR and SASA CDMA routes.
+- SAMPLE mode retains 44 complete historical exports plus six large authenticated routes reconciled from 42,502 pages. Large raw pages remain outside the browser bundle and are represented by validated rollups.
+- Eight older route keys are historical vintages absent from the current catalogue; they are not counted as current routes or silently merged into replacements.
 - Every retained snapshot reconciles `returnedRecordCount`, `totalRecordCount`, local row count, `hasNextPage=false`, and `nextPageToken=null`.
 - Active full exports use empty export filters. Earlier source-filtered snapshots remain archived separately and must not be substituted for the full exports without disclosing their scope.
 - The expanded IHHL export contains 246 rows across June and July and 123 observed normalized district-and-ULB name candidates. This is not an official statewide ULB count.

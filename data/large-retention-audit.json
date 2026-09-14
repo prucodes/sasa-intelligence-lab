@@ -1,0 +1,62 @@
+{
+  "auditedAt": "2026-09-14T05:02:10.418Z",
+  "routes": [
+    {
+      "tableKey": "msw_door_to_door_collection_api",
+      "rows": 64368,
+      "pages": 644,
+      "generatedAt": "2026-09-08T20:46:26.758895+00:00",
+      "evidencePaths": [
+        "data/large-snapshots/msw_door_to_door_collection_api"
+      ]
+    },
+    {
+      "tableKey": "identification_of_bulk_waste_generators_api",
+      "rows": 64528,
+      "pages": 646,
+      "generatedAt": "2026-09-08T21:13:37.085307+00:00",
+      "evidencePaths": [
+        "data/large-snapshots/identification_of_bulk_waste_generators_api"
+      ]
+    },
+    {
+      "tableKey": "onsite_processing_of_wet_waste_bwg_api",
+      "rows": 64528,
+      "pages": 646,
+      "generatedAt": "2026-09-08T21:40:02.636844+00:00",
+      "evidencePaths": [
+        "data/large-snapshots/onsite_processing_of_wet_waste_bwg_api"
+      ]
+    },
+    {
+      "tableKey": "waste_egregation_api",
+      "rows": 64368,
+      "pages": 644,
+      "generatedAt": "2026-09-08T22:07:28.250999+00:00",
+      "evidencePaths": [
+        "data/large-snapshots/waste_egregation_api"
+      ]
+    },
+    {
+      "tableKey": "sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026",
+      "rows": 3965247,
+      "pages": 39654,
+      "generatedAt": "2026-09-10T00:42:52.043767+00:00",
+      "evidencePaths": [
+        "data/large-snapshots/sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026__MONTH_ID-5_YEAR-2026",
+        "data/large-snapshots/sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026__MONTH_ID-6_YEAR-2026",
+        "data/large-snapshots/sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026__MONTH_ID-7_YEAR-2026",
+        "data/large-snapshots/sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026__MONTH_ID-8_YEAR-2026"
+      ]
+    },
+    {
+      "tableKey": "sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026",
+      "rows": 26702,
+      "pages": 268,
+      "generatedAt": "2026-09-08T16:14:51.926213+00:00",
+      "evidencePaths": [
+        "data/large-snapshots/sasa_pr_no_of_swachh_rathamsoperationalized_for_dry_waste_api_27_aug_2026.json"
+      ]
+    }
+  ]
+}

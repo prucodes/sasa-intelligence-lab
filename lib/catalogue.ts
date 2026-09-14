@@ -566,7 +566,10 @@ export const readinessCatalogueStats = {
   platformAvailable: currentCatalogue.authorizedRoutes,
   currentCheckedAt: currentCatalogue.checkedAt,
   notInCurrentCatalogue: readinessCatalogue.filter(dataset=>!currentCatalogue.datasets.some(current=>current.key===dataset.tableKey)).length,
-  freshResponsesRetained: currentCatalogue.datasets.filter(dataset=>dataset.status==='retained').length,
+  /** Current response files staged into the browser bundle. */
+  freshResponsesRetained: currentCatalogue.datasets.filter(dataset=>dataset.status==='retained' && dataset.evidencePath?.startsWith('data/current-snapshots/')).length,
+  /** Current routes with either a staged response or a validated large export. */
+  retainedCurrentRoutes: currentCatalogue.datasets.filter(dataset=>dataset.status==='retained').length,
   /**
    * Keys documented in a source doc but not readable by this account. The 3 SASA PR
    * gram-panchayat keys return 404; the 10 further CDMA concepts currently resolve to
@@ -580,6 +583,10 @@ export const readinessCatalogueStats = {
   liveNotIngestedDatasets: liveNotIngested.length,
   /** Rows sitting behind those endpoints, waiting on a complete paginated pull. */
   liveNotIngestedRows: liveNotIngested.reduce((total, dataset) => total + (dataset.liveRowCount ?? 0), 0),
+  /** Large exports are retained outside the browser bundle and summarized by the app. */
+  largeRetentionRoutes: currentCatalogue.largeRetention?.routes ?? 0,
+  largeRetentionRows: currentCatalogue.largeRetention?.rows ?? 0,
+  largeRetentionPages: currentCatalogue.largeRetention?.pages ?? 0,
 };
 
 export const catalogueSource = {
