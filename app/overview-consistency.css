@@ -45,3 +45,47 @@
 .overview-selected .district-evidence-map { --map-base: #0c2529; }
 .overview-selected .district-map-stage path { stroke: #ffffff38; stroke-width: .75; }
 .overview-selected .district-map-stage path:is(:hover,:focus,.is-selected) { stroke: #f0f6c9; stroke-width: 2.4; }
+
+/* Shared Overview frame.
+   Each subject keeps its own visual grammar (trend, plan, register or ULB
+   concentration), while the reader sees one consistent product around it. */
+.overview-selected > .or-workspace {
+  margin-block: 24px;
+  padding: 12px;
+  border: 1px solid var(--line, #dce6ec);
+  border-radius: var(--overview-radius, 22px);
+  background: var(--surface, #fff);
+  box-shadow: 0 12px 35px #15355204;
+}
+.overview-selected > .or-workspace .or-stage {
+  min-height: 480px;
+  border: 1px solid #ffffff15;
+  border-radius: 22px;
+  overflow: hidden;
+}
+.overview-selected > .or-workspace .or-detail-layout {
+  padding: 34px 24px 28px;
+}
+.overview-selected > .or-workspace .or-source-line {
+  padding-inline: 12px;
+}
+.overview-selected > .or-workspace + .or-interpretation {
+  margin-top: 12px;
+}
+
+/* The map/chart stages share one visual footprint. Their data and reading
+   order remain subject-specific. */
+.overview-selected :is(.or-stage, .vi-map-review, .movement-geography-layout, .ew-reading) {
+  --overview-stage-radius: 22px;
+}
+.overview-selected :is(.vi-map-review, .movement-geography-layout, .ew-reading) {
+  min-height: 480px;
+}
+
+@media (max-width: 760px) {
+  .overview-selected > .or-workspace { padding: 8px; }
+  .overview-selected > .or-workspace .or-stage { min-height: 0; border-radius: 18px; }
+  .overview-selected > .or-workspace .or-detail-layout { padding: 28px 16px 22px; }
+  .overview-selected > .or-workspace .or-source-line { padding-inline: 8px; }
+  .overview-selected :is(.vi-map-review, .movement-geography-layout, .ew-reading) { min-height: 0; }
+}
