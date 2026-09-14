@@ -28,7 +28,7 @@ export function classifyDay(date: string): DayClass | null {
   const value = parts(date);
   if (!value) return null;
   if (value.weekday === 0) return 'sunday';
-  // The second Saturday is a state government holiday: days 8-14 hold exactly one.
+  // Days 8-14 of a month hold exactly one Saturday, its second.
   if (value.weekday === 6 && value.dayOfMonth >= 8 && value.dayOfMonth <= 14) return 'second-saturday';
   return 'working';
 }

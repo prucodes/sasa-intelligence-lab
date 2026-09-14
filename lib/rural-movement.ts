@@ -9,6 +9,15 @@ import { classifyDay, dateFromPeriodDay, NON_COLLECTION_LABEL, rateOverWorkingDa
  */
 export type RateBasis = 'all-days' | 'working-days';
 
+/**
+ * GP-day observations read each month. With every day counted the four months share one cohort;
+ * without Sundays and second Saturdays each month drops its own first-week Sunday, so the count differs by month.
+ */
+export interface Observations { min: number; max: number; sameEachMonth: boolean }
+const observationsOf = (pairs: number[]): Observations => ({ min: Math.min(...pairs), max: Math.max(...pairs), sameEachMonth: Math.min(...pairs) === Math.max(...pairs) });
+/** "85,769", or "73,380 to 73,739" when the months differ. */
+export const observationText = (o: Observations) => o.sameEachMonth ? o.min.toLocaleString('en-IN') : `${o.min.toLocaleString('en-IN')} to ${o.max.toLocaleString('en-IN')}`;
+
 const rateOn = (basis: RateBasis, period: string, days: readonly DayCount[], allDays: number | null) =>
   basis === 'working-days' ? rateOverWorkingDays(period, days).rate : allDays;
 
@@ -42,6 +51,9 @@ export function getRuralMovement(basis: RateBasis = 'all-days') {
       pairs: basis === 'working-days'
         ? rateOverWorkingDays(district.points[0].period, district.points[0].byDay).pairs
         : district.pairs,
+      observations: observationsOf(basis === 'working-days'
+        ? district.points.map((point) => rateOverWorkingDays(point.period, point.byDay).pairs)
+        : [district.pairs]),
       changePercentagePoints: open === null || close === null ? null : (close - open) * 100,
       direction: trend(points),
     };
@@ -59,7 +71,9 @@ export function getRuralMovement(basis: RateBasis = 'all-days') {
     }),
   }));
 
-  const cohortPairs = series[0]?.comparable.pairs ?? aggregate.cohort.pairs;
+  // The smallest monthly count, so pairs never overstates; observations carries the range.
+  const observations = observationsOf(series.map((entry) => entry.comparable.pairs));
+  const cohortPairs = observations.min;
 
   return {
     ...aggregate,
@@ -67,7 +81,7 @@ export function getRuralMovement(basis: RateBasis = 'all-days') {
     series,
     districts,
     excludedDays,
-    cohort: { ...aggregate.cohort, pairs: cohortPairs },
+    cohort: { ...aggregate.cohort, pairs: cohortPairs, observations },
     declining: districts.filter((d) => d.direction === 'decreasing'),
     rising: districts.filter((d) => d.direction === 'increasing'),
   };

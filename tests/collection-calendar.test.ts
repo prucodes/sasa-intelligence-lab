@@ -53,6 +53,7 @@ describe('rural movement on both day bases', () => {
       expect(entry.comparable.collectionRate).toBe(aggregate.series[index].comparable.collectionRate);
     });
     expect(all.cohort.pairs).toBe(aggregate.cohort.pairs);
+    expect(all.cohort.observations).toEqual({ min: aggregate.cohort.pairs, max: aggregate.cohort.pairs, sameEachMonth: true });
   });
 
   it('lifts the level without inventing a different trend', () => {
@@ -69,6 +70,8 @@ describe('rural movement on both day bases', () => {
     expect(Math.sign(change(working))).toBe(Math.sign(change(all)));
     expect(Math.abs(change(working) - change(all))).toBeLessThan(1);
     expect(working.cohort.pairs).toBeLessThan(all.cohort.pairs);
+    // Each month drops its own first-week Sunday, so the months read different subsets of the cohort.
+    expect(working.cohort.observations).toEqual({ min: 73380, max: 73739, sameEachMonth: false });
   });
 
   it('excludes exactly one Sunday from each first-week window', () => {

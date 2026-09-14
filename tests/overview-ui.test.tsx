@@ -39,7 +39,7 @@ describe('connected overview interactions', () => {
     const lede=screen.getByRole('region',{name:'Four-month rural collection comparison'});
     expect(lede).toHaveTextContent('-1.57');
     expect(lede).toHaveTextContent('6 districts decline');
-    expect(lede).toHaveTextContent('73,380');
+    expect(lede).toHaveTextContent('73,380 to 73,739 GP-day observations, a different subset each month');
   });
   it('keeps the statewide headline, figure and cohort aligned with the chart day basis', () => {
     render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
@@ -50,6 +50,7 @@ describe('connected overview interactions', () => {
     expect(lede).toHaveTextContent(`${expected.declining.length} districts that decline`);
     expect(lede).toHaveTextContent(change.toFixed(2));
     expect(lede).toHaveTextContent(expected.cohort.pairs.toLocaleString('en-IN'));
+    expect(lede).toHaveTextContent('73,380 to 73,739 panchayat-days a month');
     expect(lede).toHaveTextContent('without Sundays and second Saturdays');
     fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'all-days'}});
     expect(lede).toHaveTextContent('5 districts that decline');
@@ -88,7 +89,7 @@ describe('connected overview interactions', () => {
     expect(signal).toHaveTextContent('Overall rank gated');
     expect(signal).toHaveTextContent('no cross-subject trend is summed');
     // Nineteen ratable ULBs, eighteen of them zero, is too thin to call aligned evidence.
-    expect(signal).toHaveTextContent('Too little overlap to compare');
+    expect(signal).toHaveTextContent('Too little overlap for an overall score');
     expect(signal).not.toHaveTextContent('strong enough');
     // A month identical to the one before in every field reads as possibly carried forward, not as steady ULBs.
     expect(signal).toHaveTextContent('July 2026 is identical to June 2026 in every field for 123 of 123 ULBs');

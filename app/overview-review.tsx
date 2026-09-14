@@ -16,7 +16,7 @@ import { DeliveryPlans } from './delivery-plans';
 import {ProgrammeExplorer} from './programme-explorer';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
-import { getRuralMovement, type RateBasis } from '@/lib/rural-movement';
+import { getRuralMovement, observationText, type RateBasis } from '@/lib/rural-movement';
 import { getCorpusEvidenceCounts } from '@/lib/duplicate-sources';
 import { getRuralSanitation } from '@/lib/rural-sanitation';
 import { getReportingContinuity } from '@/lib/reporting-continuity';
@@ -93,11 +93,11 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   // Distinct, not raw: the four-month pull holds three copies of every panchayat-day.
   const ruralDistinct = Object.values(ruralChange.recordQuality).reduce((n,quality)=>n+quality.uniqueRows,0);
   const subjects = [
-    {id:'rural-change',title:'Rural collection change',scope:'Common GP-day cohort · May → August',detail:`${ruralOpen.toFixed(2)}% → ${ruralClose.toFixed(2)}% · ${ruralChange.cohort.pairs.toLocaleString('en-IN')} pairs`,basis:'Matched GP-day cohort · May–August 2026',
+    {id:'rural-change',title:'Rural collection change',scope:'Common GP-day cohort · May → August',detail:`${ruralOpen.toFixed(2)}% → ${ruralClose.toFixed(2)}% · ${observationText(ruralChange.cohort.observations)} pairs`,basis:'Matched GP-day cohort · May–August 2026',
       scale:{label:'Panchayat-days read',value:ruralDistinct.toLocaleString('en-IN')},
       lede:{value:`${ruralShift>0?'+':''}${ruralShift.toFixed(2)}`,unit:`percentage points, from ${ruralOpen.toFixed(2)}% in May to ${ruralClose.toFixed(2)}% in August`,
         finding:<>A modest statewide shift, and <em>{ruralChange.declining.length} districts that decline at every step.</em></>,
-        support:`${ruralChange.cohort.pairs.toLocaleString('en-IN')} panchayat-days carrying a valid measurement in every one of the four retained months.`}},
+        support:ruralChange.cohort.observations.sameEachMonth?`${observationText(ruralChange.cohort.observations)} panchayat-days carrying a valid measurement in every one of the four retained months.`:`${observationText(ruralChange.cohort.observations)} panchayat-days a month: the cohort with a valid measurement in all four months, less each month's first-week Sunday.`}},
     {id:'works',title:'Works delivery & plans',scope:'District · 2026–27',detail:'Reported months + forward targets',basis:'District target and achievement · 2026–27',
       scale:{label:'District rows read',value:plans.reduce((n,plan)=>n+plan.districts.length,0).toLocaleString('en-IN')},
       lede:{value:String(plans.length),unit:'distinct monthly programmes',
@@ -235,7 +235,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
     </div>
     <section className="overview-cross-signal" aria-label="Validated cross-subject signals">
       <header>
-        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap to compare, <em>so no overall score.</em></h2><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with a nonzero toilet or vehicle rate, so the measures stay side by side and are never ranked as one score.</p></div>
+        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap <em>for an overall score.</em></h2><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with a nonzero toilet or vehicle rate, so the measures stay side by side and are never ranked as one score.</p></div>
         <span className="overview-cross-status">Overall rank gated</span>
       </header>
       <div className="overview-cross-grid">
