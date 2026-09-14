@@ -50,7 +50,7 @@ describe('connected overview interactions', () => {
     expect(lede).toHaveTextContent(`${expected.declining.length} districts that decline`);
     expect(lede).toHaveTextContent(change.toFixed(2));
     expect(lede).toHaveTextContent(expected.cohort.pairs.toLocaleString('en-IN'));
-    expect(lede).toHaveTextContent('working days only');
+    expect(lede).toHaveTextContent('without Sundays and second Saturdays');
     fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'all-days'}});
     expect(lede).toHaveTextContent('5 districts that decline');
     expect(lede).toHaveTextContent('-1.29');

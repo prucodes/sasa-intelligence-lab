@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { classifyDay, dateFromPeriodDay, isScheduledNonCollectionDay, rateOverWorkingDays, weekdayName } from '@/lib/collection-calendar';
+import { classifyDay, dateFromPeriodDay, isSundayOrSecondSaturday, rateOverWorkingDays, weekdayName } from '@/lib/collection-calendar';
 import { getRuralMovement } from '@/lib/rural-movement';
 import aggregate from '@/data/aggregates/month-series.json';
 
-describe('scheduled non-collection days', () => {
+describe('Sundays and second Saturdays', () => {
   it('classifies Sundays and second Saturdays from the calendar', () => {
     expect(classifyDay('2026-05-03')).toBe('sunday');
     expect(classifyDay('2026-08-02')).toBe('sunday');
@@ -20,14 +20,14 @@ describe('scheduled non-collection days', () => {
   it('reads dates as calendar dates rather than local instants', () => {
     expect(weekdayName('2026-05-03')).toBe('Sunday');
     expect(weekdayName('2026-05-04')).toBe('Monday');
-    expect(isScheduledNonCollectionDay('2026-05-03')).toBe(true);
-    expect(isScheduledNonCollectionDay('2026-05-04')).toBe(false);
+    expect(isSundayOrSecondSaturday('2026-05-03')).toBe(true);
+    expect(isSundayOrSecondSaturday('2026-05-04')).toBe(false);
     expect(dateFromPeriodDay('2026-05', 3)).toBe('2026-05-03');
     expect(dateFromPeriodDay('2026-05', 0)).toBeNull();
     expect(dateFromPeriodDay('bad', 3)).toBeNull();
   });
 
-  it('drops only the non-working days and reports which it dropped', () => {
+  it('drops only Sundays and second Saturdays and reports which it dropped', () => {
     // Day 3 of May 2026 is a Sunday; days 1, 2 and 4 are not.
     const result = rateOverWorkingDays('2026-05', [
       { day: 1, pairs: 100, collected: 90 },
@@ -71,7 +71,7 @@ describe('rural movement on both day bases', () => {
     expect(working.cohort.pairs).toBeLessThan(all.cohort.pairs);
   });
 
-  it('excludes exactly one scheduled day from each first-week window', () => {
+  it('excludes exactly one Sunday from each first-week window', () => {
     const working = getRuralMovement('working-days');
     expect(working.excludedDays).toHaveLength(aggregate.periods.length);
     for (const period of working.excludedDays) {

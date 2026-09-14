@@ -143,9 +143,9 @@ for (const pair of cohortKeys) districtOf.set(pair, first.window.get(pair).distr
 const districts = [...new Set(districtOf.values())].sort();
 
 // The cohort indexed by day-of-month. Reported collection has a weekly shape - every
-// retained Sunday reports near zero - so a screen has to be able to separate the days
-// collection was scheduled from the days it was not. Publishing the days rather than a
-// holiday flag keeps that judgement in the open, where it can be labelled and argued with.
+// retained Sunday reports near zero - so a screen has to be able to separate Sundays and
+// second Saturdays from the other days. Nothing in the data says why they are low, so
+// publishing the days rather than a holiday flag keeps that open, where it can be labelled and argued with.
 const cohortByDay = new Map();
 for (const pair of cohortKeys) {
   const day = first.window.get(pair).day;
@@ -224,7 +224,7 @@ const out = {
   recordQuality: Object.fromEntries(loaded.map((entry) => [label(entry), entry.quality])),
   series,
   byDistrict,
-  boundary: `Days 1-${windowDays} of ${loaded.map(label).join(', ')}, one cohort of ${cohortKeys.length.toLocaleString('en-IN')} panchayat-days present with a valid measurement in every month. Months of different lengths are never compared on their own denominators — those appear as context only. Every seven-day window holds exactly one Sunday, so the periods stay comparable, but the blended rate sits below the rate on days collection was scheduled; comparableByDay carries each day separately. No month is completely covered, and a change here is a change in what was reported rather than an established programme effect.`,
+  boundary: `Days 1-${windowDays} of ${loaded.map(label).join(', ')}, one cohort of ${cohortKeys.length.toLocaleString('en-IN')} panchayat-days present with a valid measurement in every month. Months of different lengths are never compared on their own denominators — those appear as context only. Every seven-day window holds exactly one Sunday, so the periods stay comparable, but the blended rate sits below the rate on the other six days; comparableByDay carries each day separately. No month is completely covered, and a change here is a change in what was reported rather than an established programme effect.`,
 };
 
 await mkdir(OUT, { recursive: true });

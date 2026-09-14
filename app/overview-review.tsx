@@ -144,7 +144,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
         <div className="or-lede-text" aria-live="polite">
           <h2>{current.lede.finding}</h2>
           <p>{current.lede.support}</p>
-          <small className="overview-basis-label">{subject==='rural-change' ? `${current.basis} · ${ruralBasis==='all-days'?'all seven days counted':'working days only'}` : current.basis}</small>
+          <small className="overview-basis-label">{subject==='rural-change' ? `${current.basis} · ${ruralBasis==='all-days'?'all seven days counted':'without Sundays and second Saturdays'}` : current.basis}</small>
         </div>
         <div className="or-lede-figure">
           <strong>{current.lede.value}</strong>
@@ -235,13 +235,13 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
     </div>
     <section className="overview-cross-signal" aria-label="Validated cross-subject signals">
       <header>
-        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap to compare, <em>so no overall score.</em></h2><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with anything to compare, so the measures stay side by side and are never ranked as one score.</p></div>
+        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap to compare, <em>so no overall score.</em></h2><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with a nonzero toilet or vehicle rate, so the measures stay side by side and are never ranked as one score.</p></div>
         <span className="overview-cross-status">Overall rank gated</span>
       </header>
       <div className="overview-cross-grid">
         <article><strong>{overallReadiness.exactCandidateOverlap}</strong><span>exact ULB + district overlap</span><small>Household toilets, vehicles and legacy waste</small></article>
         <article><strong>{overallReadiness.validCoveragePercent.toFixed(0)}%</strong><span>valid across all three measures</span><small>{overallReadiness.validThreeSubjectCandidates} of {overallReadiness.exactCandidateOverlap} candidates</small></article>
-        <article><strong>{overallReadiness.nonDegenerateCandidates}</strong><span>with anything to compare</span><small>{overallReadiness.zeroToiletAndVehicle} candidates report zero in toilets and vehicles</small></article>
+        <article><strong>{overallReadiness.nonDegenerateCandidates}</strong><span>with a nonzero toilet or vehicle rate</span><small>{overallReadiness.zeroToiletAndVehicle} candidates report zero in toilets and vehicles</small></article>
         <article className="overview-cross-confidence"><strong>Gated</strong><span>confidence boundary</span><small>Canonical identity and approved weights are still required.</small></article>
       </div>
       <div className="overview-cross-movement"><span>Separate June → July movements</span>{movements.map(item=><span key={item.id}><b>{item.metricLabel}</b><small>{item.repeat.carriedForward?`${item.currentPeriod} is identical to ${item.previousPeriod} in every field for ${item.repeat.identical} of ${item.repeat.compared} ULBs`:item.increased+item.decreased>0?`${item.decreased} lower · ${item.increased} higher · ${item.unchanged} unchanged`:`All ${item.matched} ULBs report the same value in ${item.currentPeriod} as in ${item.previousPeriod}`}</small></span>)}</div>

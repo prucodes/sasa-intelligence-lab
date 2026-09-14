@@ -714,7 +714,7 @@ function PresenterRuralTrajectory({ rural, workingDays }: {
           </g>)}
         </svg>
         <p className="presenter-rural-basis">
-          Every seven-day window holds one Sunday, which reports almost no collection. Counting only the other days, the same cohort reads{' '}
+          Every seven-day window holds one Sunday, which reports almost no collection. Leaving that Sunday out, the rest of the cohort reads{' '}
           <b>{pct(workingOpen)} to {pct(workingClose)}</b> and moves {signed(workingShift)} points: the level rises, the direction does not change.
         </p>
       </div>
