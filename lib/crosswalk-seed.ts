@@ -2,13 +2,17 @@
  * Seed crosswalk decisions, the reviewer working copy baked into the build.
  *
  * Crosswalk decisions live in localStorage, which a static host starts empty, so the
- * finished review (78 approvals recovering the previously-unreachable observations)
+ * finished review (77 approvals recovering the previously-unreachable observations)
  * would otherwise be invisible to every visitor. This is that review, loaded whenever
  * localStorage holds nothing; a reviewer who edits still overrides it in their browser.
  *
  * The three East Godavari Rajamahendravaram spellings, deferred during review, are
  * resolved here to ulb_id 28 (Rajahmundry / Rajamahendravaram, East Godavari), the same
  * city renamed. Rajam (105) and Rajampet (49) are different towns and are left alone.
+ *
+ * B.Kothakota (Annamayya) was approved as MADANAPALLE (16) in review and is rejected here
+ * since 14 September 2026: the CDMA daily file lists B KOTHAKOTA (1189) and MADANAPALLE
+ * (1009) as separate ULBs, and the Swachh Survekshan table codes B KOTHAKOTA 1189 or 5391.
  *
  * Generated from the reviewer artifact; edit the workbench and re-export to change it.
  */
@@ -497,9 +501,9 @@ export const seedDecisions: Record<string, Decision> = {
   },
   "annamayya|bkothakota": {
     "itemId": "annamayya|bkothakota",
-    "state": "approved",
-    "ulbId": "16",
-    "decidedAt": "2026-09-02T21:23:31.119Z"
+    "state": "rejected",
+    "ulbId": null,
+    "decidedAt": "2026-09-14T22:30:00.000Z"
   },
   "ntr|vijayawada": {
     "itemId": "ntr|vijayawada",

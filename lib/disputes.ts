@@ -20,8 +20,8 @@ import { sourcePeriod } from './record-contract.mjs';
 
 import type { SnapshotRecord } from '@/lib/snapshots';
 
-/** Fields that identify or timestamp a row rather than measure anything. */
-const NON_MEASURE = /^(district|dstrt|ulb|secretariat|sachivalayam|month|mnth|year|fin_year|financial_year|load_date|inserted_date|i_ts|u_ts|s_no|a_in|active_indicator|api_|lgd_|.*_code|.*_id|.*_nm|.*_name)/i;
+/** Fields that identify or timestamp a row rather than measure anything. Serial numbers such as plant_s_no identify a plant. */
+const NON_MEASURE = /^(district|dstrt|ulb|secretariat|sachivalayam|month|mnth|year|fin_year|financial_year|load_date|inserted_date|i_ts|u_ts|s_no|a_in|active_indicator|api_|lgd_|.*_code|.*_id|.*_nm|.*_name|.*_s_no|.*_sno)/i;
 
 export interface DisputedField {
   field: string;
@@ -45,9 +45,12 @@ function text(value: unknown): string {
 }
 
 function identity(record: SnapshotRecord) {
+  const place = text(record.ulb_name ?? record.ulb_nm ?? record.village_name ?? record.secretariat_name);
+  // Sewage rows are one per plant: several plants in one ULB and month are separate places, not two answers.
+  const plant = text(record.plant_s_no);
   return {
     district: text(record.district_name ?? record.dstrt_nm ?? record.api_district_name),
-    entity: text(record.ulb_name ?? record.ulb_nm ?? record.village_name ?? record.secretariat_name),
+    entity: plant ? `${place} · ${text(record.pckg_nm).replace(/^"|"$/g, '')} plant ${plant}` : place,
     period: sourcePeriod(record) ?? text(record.month_number ?? record.month_no ?? record.mnth_no ?? record.month_id ?? record.month ?? record.month_name ?? record.mnth_nm),
   };
 }

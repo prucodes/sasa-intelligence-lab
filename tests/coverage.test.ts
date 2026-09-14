@@ -129,10 +129,19 @@ describe('analytics summaries carry entity coverage', () => {
 describe('disputed values leave the aggregate', () => {
   it('finds every disagreement across the retained snapshots', () => {
     const disputed = getDisputedValues();
-    // Rose from 12 across 2 datasets when the September 2026 vintage was retained:
-    // the LGD-enriched exports disagree with themselves as well as with each other.
-    expect(disputed.total).toBe(76);
-    expect(disputed.datasets).toBe(3);
+    // 10 ODF Plus May pairs, and Nellore's sweeping machines in June and July. The sewage table
+    // has one row per plant, so several plants in one ULB and month are separate places. Reading
+    // them as one place once reported 64 false disputes here, a total of 76 across 3 datasets.
+    expect(disputed.total).toBe(12);
+    expect(disputed.datasets).toBe(2);
+  });
+
+  it('treats plants in the same ULB and month as separate places, not two answers', () => {
+    const rows = [
+      { district_name: 'D', ulb_nm: 'U', mnth_no: '7', pckg_nm: '"STPs Package-I"', plant_s_no: '1', capacity_mld: '10' },
+      { district_name: 'D', ulb_nm: 'U', mnth_no: '7', pckg_nm: '"STPs Package-I"', plant_s_no: '2', capacity_mld: '4' },
+    ];
+    expect(excludeDisputed(rows, 'capacity_mld').excludedEntities).toBe(0);
   });
 
   it('drops both rows of a disputed place rather than summing them', () => {

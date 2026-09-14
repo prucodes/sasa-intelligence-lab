@@ -84,7 +84,8 @@ describe('application shell and screens', () => {
   it('turns a completed local crosswalk into a compact governed summary', () => {
     render(<LabApp page="gap-radar" initialMode="SAMPLE" />);
     expect(screen.getByRole('heading', { name: /82 of 82 residual names carry a decision/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/crosswalk effect and remaining scoring gates/i)).toHaveTextContent(/235 observations/i);
+    // 234 since B.Kothakota stopped being counted as Madanapalle: its ODF status row no longer fills a Madanapalle cell.
+    expect(screen.getByLabelText(/crosswalk effect and remaining scoring gates/i)).toHaveTextContent(/234 observations/i);
     expect(screen.getByText(/open decision audit and transfer tools/i)).toBeInTheDocument();
     expect(screen.queryByText(/approve the obvious ones in bulk/i)).not.toBeInTheDocument();
   });
