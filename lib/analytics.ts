@@ -15,6 +15,8 @@ import {
   snapshotAvailablePeriods,
   snapshotPeriod,
   sourceCandidateKey,
+  sourceLabel,
+  IHHL_SOURCE_KEY,
   type SnapshotEnvelope,
   type SnapshotRecord,
 } from '@/lib/snapshots';
@@ -489,7 +491,7 @@ const keys = {
   compactors: 'sasa_sac_machinery_compactors_api',
   sweeping: 'sasa_sac_sweeping_machines_information_api',
   legacyWaste: 'sasa_100_percent_clearance_of_legacy_waste_api',
-  ihhl: 'sasa_sac_identification_of_new_ihhls_api',
+  ihhl: IHHL_SOURCE_KEY,
   mepmaCircular: 'sasa_mepma_entrepreneurs_promoted_for_circular_economy_api',
   terraceGardens: 'sasa_households_promoted_for_terrace_gardening_kitchen_gardens_api',
   homeComposting: 'sasa_mepma_households_promoted_for_home_composite_api',
@@ -511,8 +513,8 @@ function numberValue(value: string | null | undefined): number | null {
 
 function candidateDisplay(record: SnapshotRecord): { district: string; ulb: string } {
   return {
-    district: firstValue(record, 'district_name', 'dstrt_nm') ?? 'District not supplied',
-    ulb: firstValue(record, 'ulb_name', 'ulb_nm')?.trim() ?? 'ULB name not supplied',
+    district: sourceLabel(record, 'dstrt_nm', 'district_name') ?? 'District not supplied',
+    ulb: sourceLabel(record, 'ulb_nm', 'ulb_name') ?? 'ULB name not supplied',
   };
 }
 
@@ -920,8 +922,8 @@ export function getIHHLFunnel(periodId?: string | null): IhhlFunnel {
     const openApprovals = approved === null || completed === null ? null : Math.max(approved - completed, 0);
     return {
       ...trace(source, record, 'ULB'),
-      district: record.district_name,
-      ulb: record.ulb_name,
+      district: sourceLabel(record, 'dstrt_nm', 'district_name') ?? record.district_name,
+      ulb: sourceLabel(record, 'ulb_nm', 'ulb_name') ?? record.ulb_name,
       identified,
       approved,
       underConstruction,
@@ -1431,8 +1433,8 @@ export function getEntityCoverageMatrix(): CoverageMatrix {
     ])) as CoverageRow['states'];
     return {
       candidateKey,
-      district: record.district_name,
-      ulb: record.ulb_name,
+      district: sourceLabel(record, 'dstrt_nm', 'district_name') ?? record.district_name,
+      ulb: sourceLabel(record, 'ulb_nm', 'ulb_name') ?? record.ulb_name,
       states,
       returnedCount: Object.values(states).filter((state) => state !== 'not-returned').length,
     };
@@ -1623,7 +1625,7 @@ const primaryDatasetUse = new Map<string, string>([
   [keys.pushCarts, 'District collection source-contrast view'],
   [keys.triCycles, 'District collection source-contrast view'],
   [keys.fstp, 'Configured KLD registry and period-conflict quarantine'],
-  [keys.ihhl, 'Sanitation delivery funnel and candidate review queue'],
+  [keys.ihhl, 'Sanitation delivery funnel and candidate review queue; supplied LGD crosswalk and identity-reach evidence'],
   [keys.compactors, 'Collection inventory summary'],
   [keys.collection, 'ULB procurement funnel and delivery-gap review'],
   [keys.cbg, 'Processing registry and configured TPD inventory'],
@@ -1636,7 +1638,8 @@ const primaryDatasetUse = new Map<string, string>([
   // The September 2026 LGD vintage. These six supply the entity mapping the identity
   // gate is assessed against, so each one is read for its crosswalk as well as its
   // measures, including where its mapping contradicts itself.
-  ['ihhl_new_identification_new1_api', 'Supplied LGD crosswalk and identity-reach evidence'],
+  // Household toilets now read the LGD reissue above; the 2026-08-28 vintage stays as corroboration.
+  ['sasa_sac_identification_of_new_ihhls_api', 'Historical IHHL vintage: corroborates the LGD reissue used for household toilets'],
   ['swacch_survekshan_info_new1_api', 'Supplied LGD crosswalk; retained 2024 outcome year'],
   ['fstps_stps_cotreatment_new1_api', 'Supplied LGD crosswalk; configured KLD registry'],
   ['msw_cbg_units_new1_api', 'Supplied LGD crosswalk; configured TPD registry'],

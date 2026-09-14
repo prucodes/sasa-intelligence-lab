@@ -6,8 +6,8 @@ describe('connected overview evidence', () => {
   it('keeps the three source quantities separate and reconciles every total', () => {
     const issues = getOverviewIssues();
     expect(issues.map((issue) => issue.id)).toEqual(['collection', 'sanitation', 'processing']);
-    expect(issues.map((issue) => issue.total)).toEqual([1019, 8479, 1485769]);
-    expect(issues.map((issue) => issue.rows.length)).toEqual([83, 117, 122]);
+    expect(issues.map((issue) => issue.total)).toEqual([1019, 8593, 1485769]);
+    expect(issues.map((issue) => issue.rows.length)).toEqual([83, 123, 122]);
     expect(issues[2].excluded).toBe(1);
     for (const issue of issues) {
       expect(issue.total).toBe(issue.rows.reduce((sum, row) => sum + row.value, 0));

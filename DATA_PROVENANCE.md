@@ -26,7 +26,9 @@ Small tables are affected too. Rows just after a 100-row page boundary can be re
 
 On 2026-09-14 the missing rows were recovered with filtered queries small enough to fit one page, and merged into both retained copies of six tables: legacy waste clearance (3 rows), compost pits (3), soak pits (3), magic drains (2), IHHL new identification (2) and sewage (6). Every other row is unchanged, each file records the repair under `retentionRepair`, and the raw filtered responses are kept in `data/retention-repairs/2026-09-14/`.
 
-Three retained copies could not be repaired, because the live key now serves a different table: the 2026-08-28 `sasa_sac_identification_of_new_ihhls_api` (6 July rows missing, used by household toilets), the ULB-grain `sasa_sac_machinery_e_autos_service_model_api` (1 June row, used by vehicles) and the 244-row green programme vintage (3 June rows). Repeats are collapsed, so those rows show as absent, never as zero.
+Household toilets now read `ihhl_new_identification_new1_api`, the platform's named LGD-enriched replacement, which is complete for all 123 ULBs after the repair. On every ULB-month both tables carry, all four measures are identical. The 2026-08-28 `sasa_sac_identification_of_new_ihhls_api` copy, which lost 6 July rows at a page boundary and cannot be repaired because its key now serves the reissue, stays retained as historical corroboration.
+
+Two retained copies could not be repaired, because the live key now serves a different table: the ULB-grain `sasa_sac_machinery_e_autos_service_model_api` (1 June row, used by vehicles) and the 244-row green programme vintage (3 June rows). Repeats are collapsed, so those rows show as absent, never as zero.
 
 A later period can also repeat the one before. Where nearly every ULB is identical in every field, the app flags the period as possibly carried forward (`getCarriedForward` in `lib/analytics.ts`), because the source does not say whether it was reported again.
 

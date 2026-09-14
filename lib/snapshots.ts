@@ -136,13 +136,37 @@ export function isCompleteSnapshot(snapshot: SnapshotEnvelope): boolean {
     && snapshot.responseMetadata.returnedRecordCount === snapshot.records.length;
 }
 
+/**
+ * The household toilet source. `ihhl_new_identification_new1_api` is the platform's named
+ * LGD-enriched replacement for `sasa_sac_identification_of_new_ihhls_api`: on every
+ * ULB-month both carry, the four measures are identical, and the reissue is complete for
+ * all 123 ULBs where the 2026-08-28 copy lost six July rows at a page boundary. The older
+ * copy stays retained as historical corroboration.
+ */
+export const IHHL_SOURCE_KEY = 'ihhl_new_identification_new1_api';
+
+/**
+ * A source's own label for display. LGD-enriched rows keep the department's spelling in
+ * `dstrt_nm` / `ulb_nm`, sometimes wrapped in quote marks or padded, and put the LGD name in
+ * `district_name`; pass the fields in order of preference.
+ */
+export function sourceLabel(record: SnapshotRecord, ...fields: string[]): string | undefined {
+  for (const field of fields) {
+    const value = record[field];
+    if (typeof value !== 'string') continue;
+    const cleaned = value.trim().replace(/^"+|"+$/g, '').trim();
+    if (cleaned) return cleaned;
+  }
+  return undefined;
+}
+
 export const governedSnapshotStats = {
   retrievedDatasets: governedSnapshots.length,
   completeDatasets: governedSnapshots.filter(isCompleteSnapshot).length,
   records: governedSnapshots.reduce((total, snapshot) => total + snapshot.records.length, 0),
-  baselineUlbRows: currentSnapshotRecords(governedSnapshotByKey.get('sasa_sac_identification_of_new_ihhls_api')).length,
+  baselineUlbRows: currentSnapshotRecords(governedSnapshotByKey.get(IHHL_SOURCE_KEY)).length,
   baselineUlbCandidates: new Set(
-    (governedSnapshotByKey.get('sasa_sac_identification_of_new_ihhls_api')?.records ?? [])
+    (governedSnapshotByKey.get(IHHL_SOURCE_KEY)?.records ?? [])
       .map(sourceCandidateKey)
       .filter(Boolean),
   ).size,

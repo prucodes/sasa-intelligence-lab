@@ -97,7 +97,7 @@ describe('evidence-safe calculations', () => {
     // and the platform's LGD standardisation pass.
     expect(governedSnapshotStats.completeDatasets).toBe(44);
     expect(governedSnapshotStats.records).toBe(6509);
-    expect(governedSnapshotStats.baselineUlbRows).toBe(119);
+    expect(governedSnapshotStats.baselineUlbRows).toBe(123);
     expect(governedSnapshotStats.baselineUlbCandidates).toBe(123);
     expect(governedSnapshots.every(isCompleteSnapshot)).toBe(true);
     expect(datasets.SAMPLE.diagnostics).toHaveLength(123);

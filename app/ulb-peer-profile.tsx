@@ -1,7 +1,7 @@
 'use client';
 import {useState,useEffect} from 'react';
 import {getUlbComparison,deliveryPosition} from '@/lib/ulb-comparison';
-import {sourceCandidateKey} from '@/lib/snapshots';
+import {sourceCandidateKey,IHHL_SOURCE_KEY} from '@/lib/snapshots';
 import type {EvidenceRecord} from '@/lib/domain';
 import type {ReviewIssueId} from '@/lib/overview';
 import './ulb-review.css';
@@ -10,7 +10,7 @@ export function UlbPeerProfile({records,onInspect}:{records:EvidenceRecord[];onI
   const [subject,setSubject]=useState<ReviewIssueId>(()=>{
     return (['sanitation','collection','processing'] as const).find(id=>{
       const comparison=getUlbComparison(id);
-      const table=id==='sanitation'?'sasa_sac_identification_of_new_ihhls_api':id==='collection'?'sasa_sac_machinery_e_autos_service_model_api':'sasa_100_percent_clearance_of_legacy_waste_api';
+      const table=id==='sanitation'?IHHL_SOURCE_KEY:id==='collection'?'sasa_sac_machinery_e_autos_service_model_api':'sasa_100_percent_clearance_of_legacy_waste_api';
       const record=records.find(r=>r.tableKey===table&&r.period===comparison.period&&r.grain==='ULB');
       return record&&comparison.points.some(p=>p.key===sourceCandidateKey(record.rawFields));
     })??'sanitation';
@@ -20,7 +20,7 @@ export function UlbPeerProfile({records,onInspect}:{records:EvidenceRecord[];onI
     setSubject(requested as ReviewIssueId);
   }},[]);
   const data=getUlbComparison(subject);
-  const key=subject==='sanitation'?'sasa_sac_identification_of_new_ihhls_api':subject==='collection'?'sasa_sac_machinery_e_autos_service_model_api':'sasa_100_percent_clearance_of_legacy_waste_api';
+  const key=subject==='sanitation'?IHHL_SOURCE_KEY:subject==='collection'?'sasa_sac_machinery_e_autos_service_model_api':'sasa_100_percent_clearance_of_legacy_waste_api';
   const evidence=records.find(record=>record.tableKey===key&&record.period===data.period&&record.grain==='ULB');
   const candidate=evidence?sourceCandidateKey(evidence.rawFields):null;
   const point=data.points.find(row=>row.key===candidate);

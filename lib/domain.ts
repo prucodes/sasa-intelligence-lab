@@ -15,6 +15,7 @@ import {
   type SnapshotEnvelope,
   type SnapshotRecord,
 } from '@/lib/snapshots';
+import { IHHL_SOURCE_KEY, sourceLabel } from '@/lib/snapshots';
 
 export type DataMode = 'DEMO' | 'SAMPLE' | 'LIVE';
 
@@ -237,7 +238,7 @@ const demoDiagnostics: Diagnostic[] = demoRadar.map((item, index) => ({
 }));
 
 const datasetNameByKey = new Map(authorizedCatalogue.map((dataset) => [dataset.tableKey, dataset.catalogueName]));
-const ihhlTableKey = 'sasa_sac_identification_of_new_ihhls_api';
+const ihhlTableKey = IHHL_SOURCE_KEY;
 const eAutoTableKey = 'sasa_sac_machinery_e_autos_service_model_api';
 const iswmTableKey = 'sasa_sac_msw_processing_facilities_iswm_facilities_api';
 const fstpTableKey = 'sasa_sac_establishing_fstps_information_api';
@@ -342,8 +343,8 @@ const uniqueIhhlRecords = [...new Map((ihhlSnapshot?.records ?? []).map((record)
   .filter((record): record is SnapshotRecord => Boolean(record));
 const sampleDiagnostics: Diagnostic[] = uniqueIhhlRecords.map((ihhlRecord) => {
   const candidate = sourceCandidateKey(ihhlRecord)!;
-  const name = ihhlRecord.ulb_name;
-  const district = ihhlRecord.district_name;
+  const name = sourceLabel(ihhlRecord, 'ulb_nm', 'ulb_name') ?? 'ULB name not supplied';
+  const district = sourceLabel(ihhlRecord, 'dstrt_nm', 'district_name') ?? 'District not supplied';
   const eAutoRecord = sourceRecord(eAutoTableKey, candidate);
   const iswmRecord = sourceRecord(iswmTableKey, candidate);
   const fstpRecord = sourceRecord(fstpTableKey, candidate);

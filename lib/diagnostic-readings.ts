@@ -1,5 +1,5 @@
 import type { EvidenceRecord } from './domain';
-import { governedSnapshotByKey, snapshotPeriod } from './snapshots';
+import { governedSnapshotByKey, snapshotPeriod, IHHL_SOURCE_KEY } from './snapshots';
 import { authorizedCatalogue } from './catalogue';
 
 export interface DiagnosticReading {
@@ -21,7 +21,7 @@ export interface DiagnosticReading {
 }
 
 const specs = [
-  {id:'toilets',title:'Household toilets',family:'delivery',key:'sasa_sac_identification_of_new_ihhls_api',fields:[['Identified','no_of_benf_identified'],['Approved','ihhls_approved_by_mohua'],['Under construction','under_construction'],['Completed','completed']]},
+  {id:'toilets',title:'Household toilets',family:'delivery',key:IHHL_SOURCE_KEY,fields:[['Identified','no_of_benf_identified'],['Approved','ihhls_approved_by_mohua'],['Under construction','under_construction'],['Completed','completed']]},
   {id:'vehicles',title:'Vehicle delivery',family:'delivery',key:'sasa_sac_machinery_e_autos_service_model_api',fields:[['Target','target'],['Work orders','actual_work_order_issued','actual_wrk_order_issued'],['Supplied','achievement','no_of_vehicles_supplied_in_nos']]},
   {id:'solid-waste',title:'Processing facility',family:'facility',key:'sasa_sac_msw_processing_facilities_iswm_facilities_api',fields:[['Configured capacity','total_tpd']]},
   {id:'fstp',title:'Faecal sludge treatment',family:'facility',key:'sasa_sac_establishing_fstps_information_api',fields:[['Configured capacity','capacity_in_kld']]},

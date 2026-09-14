@@ -1,11 +1,11 @@
 import type { DataMode } from './domain';
 import { getOverviewIssues } from './overview';
 import { authorizedCatalogue } from './catalogue';
-import { governedSnapshotByKey, governedSnapshotStats, snapshotPeriod, currentSnapshotRecords } from './snapshots';
+import { governedSnapshotByKey, governedSnapshotStats, snapshotPeriod, currentSnapshotRecords, IHHL_SOURCE_KEY } from './snapshots';
 
 const sourceKeys = {
   collection:'sasa_sac_machinery_e_autos_service_model_api',
-  sanitation:'sasa_sac_identification_of_new_ihhls_api',
+  sanitation:IHHL_SOURCE_KEY,
   processing:'sasa_100_percent_clearance_of_legacy_waste_api',
 };
 const outcomeKeys = ['sasa_sac_swacch_survekshan_information_odf_status_api','sasa_sac_swacch_survekshan_information_gfc_status_api','sasa_sac_swacch_survekshan_information_national_rank_api'];

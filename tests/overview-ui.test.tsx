@@ -80,16 +80,16 @@ describe('connected overview interactions', () => {
   it('shows a validated cross-subject signal without inventing an overall score', () => {
     render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
     const signal = screen.getByRole('region', { name: 'Validated cross-subject signals' });
-    expect(signal).toHaveTextContent('18');
+    expect(signal).toHaveTextContent('19');
     expect(signal).toHaveTextContent('100%');
-    expect(signal).toHaveTextContent('17 candidates report zero in toilets and vehicles');
+    expect(signal).toHaveTextContent('18 candidates report zero in toilets and vehicles');
     expect(signal).toHaveTextContent('Overall rank gated');
     expect(signal).toHaveTextContent('no cross-subject trend is summed');
-    // Eighteen overlapping ULBs, seventeen of them zero, is too thin to call aligned evidence.
+    // Nineteen overlapping ULBs, eighteen of them zero, is too thin to call aligned evidence.
     expect(signal).toHaveTextContent('Too little overlap to compare');
     expect(signal).not.toHaveTextContent('strong enough');
     // A month identical to the one before in every field reads as possibly carried forward, not as steady ULBs.
-    expect(signal).toHaveTextContent('July 2026 is identical to June 2026 in every field for 117 of 117 ULBs');
+    expect(signal).toHaveTextContent('July 2026 is identical to June 2026 in every field for 123 of 123 ULBs');
     expect(signal).toHaveTextContent('can be a repeated report rather than no progress');
     expect(within(signal).getByRole('link', { name: /Inspect subject comparisons/ })).toHaveAttribute('href', '/gap-radar?mode=governed&view=rankings');
   });

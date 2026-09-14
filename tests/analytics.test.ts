@@ -72,12 +72,13 @@ describe('operational analytics selectors', () => {
 
   it('suppresses zero-approval ratios and excludes exact duplicates from IHHL totals', () => {
     const funnel = getIHHLFunnel();
-    expect(funnel.rows).toHaveLength(117);
-    expect(funnel.duplicateRowsExcluded).toBe(2);
-    expect(funnel.zeroApprovalRows).toBe(58);
+    // The LGD reissue holds one row per ULB-month for all 123 ULBs, so no repeats remain to exclude.
+    expect(funnel.rows).toHaveLength(123);
+    expect(funnel.duplicateRowsExcluded).toBe(0);
+    expect(funnel.zeroApprovalRows).toBe(63);
     expect(funnel.rows.filter((row) => row.approved === 0).every((row) => row.completionRatio === null)).toBe(true);
-    expect(funnel.identified).toBe(8499);
-    expect(funnel.approved).toBe(8499);
+    expect(funnel.identified).toBe(8613);
+    expect(funnel.approved).toBe(8613);
     expect(funnel.completed).toBe(20);
   });
 
@@ -91,9 +92,10 @@ describe('operational analytics selectors', () => {
     expect(collection.classified).toBe(83);
     expect(collection.coverage).toMatchObject({ reported: 83, expected: 123 });
 
-    expect(counts(ihhl)).toMatchObject({ 'no-approvals': 58, 'approved-none': 58, 'underway-none': 0, completion: 1, met: 0 });
-    expect(ihhl.classified).toBe(117);
-    expect(ihhl.coverage).toMatchObject({ reported: 117, expected: 123 });
+    // Household toilets read the complete LGD reissue, so all 123 ULBs are classified.
+    expect(counts(ihhl)).toMatchObject({ 'no-approvals': 63, 'approved-none': 59, 'underway-none': 0, completion: 1, met: 0 });
+    expect(ihhl.classified).toBe(123);
+    expect(ihhl.coverage).toMatchObject({ reported: 123, expected: 123 });
 
     expect(counts(legacy)).toMatchObject({ none: 1, partial: 48, met: 73, above: 0 });
     expect(legacy.classified).toBe(122);
@@ -106,7 +108,7 @@ describe('operational analytics selectors', () => {
     const total = (id: typeof maps[number]['id']) => maps.find((map) => map.id === id)!.districts.reduce((sum, district) => sum + district.value, 0);
     expect(maps.map((map) => map.id)).toEqual(['collection', 'ihhl', 'legacy']);
     expect(total('collection')).toBe(1019);
-    expect(total('ihhl')).toBe(8479);
+    expect(total('ihhl')).toBe(8593);
     expect(total('legacy')).toBe(1485769);
     expect(maps.every((map) => map.rule.length > 20 && map.coverage.expected === 123)).toBe(true);
   });

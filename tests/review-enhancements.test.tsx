@@ -10,7 +10,8 @@ import { executiveBriefText, getExecutiveBrief } from '@/lib/executive-brief';
 import { governedSnapshotStats, governedSnapshotByKey, snapshotPeriod } from '@/lib/snapshots';
 
 const vehicle = {district_name:'Example district',ulb_name:'Example ULB',actual_work_order_issued:'10',achievement:'0',month_number:'7',year:'2026'};
-const key = 'sasa_sac_identification_of_new_ihhls_api';
+// The household toilet source: the complete LGD reissue (IHHL_SOURCE_KEY).
+const key = 'ihhl_new_identification_new1_api';
 const record:EvidenceRecord = {id:'test-ihhl',dataset:'IHHL source',tableKey:key,period:snapshotPeriod(governedSnapshotByKey.get(key)!),rawFields:{no_of_benf_identified:'10',ihhls_approved_by_mohua:'0',under_construction:'0',completed:'0'},grain:'ULB',joinMethod:'source',matchStatus:'EXACT',freshness:'retained',provenance:'test',normalizedCandidate:'example',formula:'completed / approved'};
 
 describe('same-source procurement comparison',()=>{
@@ -79,7 +80,7 @@ describe('source-owned diagnostic readings',()=>{
 describe('executive evidence brief',()=>{
   it('uses the checked overview cohorts, latest periods and explicit scope',()=>{
     const brief=getExecutiveBrief('SAMPLE');
-    expect(brief.issues.map(issue=>issue.total)).toEqual([1019,8479,1485769]);
+    expect(brief.issues.map(issue=>issue.total)).toEqual([1019,8593,1485769]);
     expect(brief.scope).toContain('Screen filters, selected ULBs and local crosswalk decisions are not applied');
     expect(brief.sources).toHaveLength(6);
     const text=executiveBriefText(brief,'2026-09-07T00:00:00Z');
