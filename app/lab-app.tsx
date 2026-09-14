@@ -360,7 +360,7 @@ function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutO
   const [compareIds] = useCompareSelection();
   return (
     <header className="topbar">
-      <div className="header-brand"><b><GlossaryText text="SASA Intelligence Lab"/></b><span className="lab-tag"><span>◇</span> Decision-intelligence concept</span><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status"><Icon name="shield" size={17}/>{datasets[mode].banner}</span></div>
+      <div className="header-brand"><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status" title={datasets[mode].banner}><Icon name="shield" size={17}/>{mode==='SAMPLE'?'Retained source evidence':datasets[mode].banner}</span></div>
       <div className="header-actions">
         <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>

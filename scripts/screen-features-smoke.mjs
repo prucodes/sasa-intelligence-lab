@@ -34,11 +34,9 @@ try {
         if (clippedTabs) failures.push(`Readiness tabs clipped at ${width}px`);
       }
       if (name === 'diagnostics') {
-        const metric = page.getByRole('button', { name: /Processing facility/ });
-        const colour = await metric.locator('strong').evaluate((node) => getComputedStyle(node).color);
-        await metric.hover();
-        if (colour !== await metric.locator('strong').evaluate((node) => getComputedStyle(node).color)) failures.push('Diagnostic hover changes metric text colour');
-        await metric.click();
+        const metric = page.getByRole('combobox', { name: 'Evidence record', exact: true });
+        await metric.selectOption({ label: 'MSW Processing · ISWM Facilities · July 2026' });
+        await page.waitForTimeout(350);
         await page.getByText('Evidence details and raw fields', { exact: true }).click();
         await page.getByText('total_tpd', { exact: true }).waitFor();
       }

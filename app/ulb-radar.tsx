@@ -27,6 +27,8 @@ export function UlbRadar(){
     const candidate=params.get('ulb');
     /* eslint-disable react-hooks/set-state-in-effect */
     setSubject(id);
+    const requestedDistrict=params.get('district');
+    if(requestedDistrict&&getUlbComparison(id).points.some(point=>point.district===requestedDistrict))setDistrict(requestedDistrict);
     if(candidate&&getUlbComparison(id).points.some(point=>point.key===candidate))setSelected(candidate);
     /* eslint-enable react-hooks/set-state-in-effect */
   },[]);

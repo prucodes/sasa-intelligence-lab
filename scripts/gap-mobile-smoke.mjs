@@ -20,7 +20,10 @@ try{
   await page.setViewportSize({width,height:900});
   await page.goto(`${base}/gap-radar?mode=governed`);
   for(const [name,selector] of views){
-   await page.getByRole('button',{name,exact:true}).click();
+   const group=['May–August trends','Infrastructure & activity'].includes(name)?'Rural trends':name==='Reported programme gaps'?'Programme delivery':'Compare ULBs';
+   await page.getByRole('button',{name:group,exact:true}).click();
+   if(width<=600)await page.getByRole('combobox',{name:'Comparison view'}).selectOption({label:name});
+   else await page.getByRole('button',{name,exact:true}).click();
    const chart=page.locator(selector);
    await expect(chart).toBeVisible();
    if(width<=768){

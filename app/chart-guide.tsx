@@ -13,5 +13,6 @@ export function periodPhrase(period:string){
 
 /** A visible reading key placed directly above a chart, worded for the subject on screen. */
 export function ChartGuide({intro,items}:{intro:string;items:ChartGuideItem[]}){
-  return <div className="chart-guide" role="note" aria-label="How to read this chart"><strong>How to read this chart</strong><p>{intro}</p><dl>{items.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.text}</dd></div>)}</dl></div>;
+  const guides=items.filter(item=>/line|both/i.test(item.term)),explanation=items.filter(item=>!guides.includes(item));
+  return <div className="chart-guide" role="note" aria-label="How to read this chart"><strong>{intro}</strong><dl>{guides.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.text}</dd></div>)}</dl><details><summary>How to read the axes and positions</summary><dl>{explanation.map(item=><div key={item.term}><dt>{item.term}</dt><dd>{item.text}</dd></div>)}</dl></details></div>;
 }

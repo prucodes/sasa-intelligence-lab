@@ -11,6 +11,7 @@ import './overview-review.css';
 import './overview-consistency.css';
 import './evidence-expansion.css';
 import { RuralMovement } from './rural-movement';
+import './review-clarity.css';
 import { DeliveryPlans } from './delivery-plans';
 import {ProgrammeExplorer} from './programme-explorer';
 import { RuralSanitation } from './rural-sanitation';
@@ -146,6 +147,8 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
           <small>{current.lede.unit}</small>
         </div>
       </div>
+      {!urban&&<div className="review-next"><a href="#overview-selected-evidence">{subject==='rural-change'?'Explore the district changes':'Inspect this subject'} ↓</a></div>}
+      {urban&&<div className="review-next"><a href={`${href('/gap-radar')}&programme=${selected}${district?`&district=${encodeURIComponent(district)}`:''}`}>Compare {district||'returned'} ULBs on {active.title.toLowerCase()} <Arrow/></a><a href={`${href('/operational-analytics')}&tab=${selected}`}>Inspect programme evidence <Arrow/></a></div>}
       <details className="overview-evidence-summary"><summary>Evidence coverage & scoring limits</summary><dl className="or-lede-ledger">
         <div><dt>{current.scale.label}</dt><dd>{current.scale.value}</dd></div>
         <div><dt>Historical exports</dt><dd>{governedSnapshotStats.completeDatasets}</dd></div>
@@ -153,7 +156,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
         <div><dt>Overall scoring</dt><dd>Not assigned</dd></div>
       </dl><p>Historical exports and authorized routes count different things; these figures do not measure current ingestion completeness. Subject comparisons retain their own evidence rules.</p><a href={href('/data-readiness')}>Inspect source coverage <Arrow/></a></details>
     </header>
-    <div className="overview-selected" aria-live="polite">
+    <div id="overview-selected-evidence" className="overview-selected" aria-live="polite">
     {subject==='rural-change' && <RuralMovement compact basis={ruralBasis} onBasisChange={setRuralBasis} href={`${href('/gap-radar')}&view=movement`}/>}
     {subject==='works' && <DeliveryPlans overview/>}
     {subject==='rural-centres' && <RuralSanitation/>}

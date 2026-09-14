@@ -14,7 +14,7 @@ describe('application shell and screens', () => {
     // illustrative numbers to someone who did not know to add a query parameter.
     render(<LabApp page="overview" />);
     expect(screen.getByRole('combobox', { name: /data mode/i })).toHaveValue('SAMPLE');
-    expect(screen.getByText(/authenticated, governed SASA evidence/i)).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Retained source evidence');
   });
 
   it('renders accessible primary navigation and mode control', () => {
@@ -62,7 +62,7 @@ describe('application shell and screens', () => {
   it('switches modes without mixing synthetic and sample values', () => {
     render(<LabApp page="overview" initialMode="DEMO" />);
     fireEvent.change(screen.getByRole('combobox', { name: /data mode/i }), { target: { value: 'SAMPLE' } });
-    expect(screen.getByText(/authenticated, governed SASA evidence/i)).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Retained source evidence');
     expect(screen.getAllByText(/6,509/).length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Andhra Pradesh sanitation overview/i);
     expect(screen.getByRole('heading', { level: 2, name: /decline at every step/i })).toBeInTheDocument();
@@ -248,7 +248,7 @@ describe('application shell and screens', () => {
     expect(screen.getByRole('button', { name: /open executive evidence brief/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /open executive evidence brief/i }));
     expect(screen.getByRole('dialog', {name:'Executive evidence brief'})).toBeInTheDocument();
-    expect(screen.getByText(/authenticated, governed sasa evidence/i)).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Retained source evidence');
   });
 
   it('explains why authenticated sample entities remain unscored', () => {

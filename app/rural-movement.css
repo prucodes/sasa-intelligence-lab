@@ -5,3 +5,4 @@
 .movement-series-halo { fill: var(--mv-line, #168d92); opacity: .13; }
 .movement-series .movement-series-line { stroke-linecap: round; stroke-linejoin: round; }
 .overview-selected .movement-geography-layout { --mv-line: #97c9b7; }
+.movement-series>details.ew-caption{margin:8px 0 18px}.movement-series>details.ew-caption summary{cursor:pointer;padding:8px 0}.movement-series>details.ew-caption p{margin:8px 0;line-height:1.7}

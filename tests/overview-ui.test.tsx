@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { OverviewReview } from '@/app/overview-review';
 import { getOverviewIssues } from '@/lib/overview';
 import { getRuralMovement } from '@/lib/rural-movement';
@@ -9,13 +9,36 @@ const href = (path: string) => `${path}?mode=governed`;
 const shapes = [{ d: 'Kurnool', path: 'M0 0L10 0L10 10Z' }, { d: 'No matched district', path: 'M20 20L30 20L30 30Z' }];
 
 describe('connected overview interactions', () => {
+  beforeEach(()=>window.history.replaceState({},'', '/?mode=governed'));
+  it('carries the rural district and day basis into a directly opened Radar comparison',()=>{
+    const overview=render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'working-days'}});
+    fireEvent.change(screen.getByRole('combobox',{name:'Map district'}),{target:{value:'Annamayya'}});
+    const link=screen.getByRole('link',{name:'Inspect Annamayya in Gap Radar ↗'}).getAttribute('href')!;
+    expect(link).toContain('basis=working-days&district=Annamayya');
+    overview.unmount();window.history.replaceState({},'',link);render(<GapExplorer/>);
+    expect(screen.getByRole('button',{name:'Rural trends'})).toHaveAttribute('aria-pressed','true');
+    expect(screen.getByRole('combobox',{name:'Map district'})).toHaveValue('Annamayya');
+    expect(screen.getByRole('combobox',{name:'Rural collection day basis'})).toHaveValue('working-days');
+    fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'all-days'}});
+    expect(new URLSearchParams(window.location.search).get('basis')).toBe('all-days');
+  });
+  it('carries programme and district from Overview into ULB delivery comparison',()=>{
+    const overview=render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    fireEvent.click(screen.getByRole('button',{name:/Vehicle delivery ULB/}));
+    fireEvent.change(screen.getByRole('combobox',{name:'Review district'}),{target:{value:'Kurnool'}});
+    const link=screen.getByRole('link',{name:/Compare Kurnool ULBs/}).getAttribute('href')!;
+    overview.unmount();window.history.replaceState({},'',link);render(<GapExplorer/>);
+    expect(screen.getByRole('combobox',{name:'ULB comparison programme'})).toHaveValue('collection');
+    expect(screen.getByRole('combobox',{name:'ULB comparison district'})).toHaveValue('Kurnool');
+  });
   it('keeps the Gap Radar trend summary on the selected day basis too', () => {
     render(<GapExplorer/>);
-    fireEvent.click(screen.getByRole('button',{name:'May–August trends'}));
+    fireEvent.click(screen.getByRole('button',{name:'Rural trends'}));
     fireEvent.change(screen.getByRole('combobox',{name:'Rural collection day basis'}),{target:{value:'working-days'}});
-    const lede=screen.getByLabelText('Selected comparison');
+    const lede=screen.getByRole('region',{name:'Four-month rural collection comparison'});
     expect(lede).toHaveTextContent('-1.57');
-    expect(lede).toHaveTextContent('6 districts that decline');
+    expect(lede).toHaveTextContent('6 districts decline');
     expect(lede).toHaveTextContent('73,380');
   });
   it('keeps the statewide headline, figure and cohort aligned with the chart day basis', () => {

@@ -10,7 +10,7 @@ page.on('request', (request) => {
 });
 
 await page.goto(`${baseUrl}/?mode=governed`, { waitUntil: 'domcontentloaded' });
-await page.getByRole('status').filter({ hasText: 'Authenticated, governed SASA evidence' }).waitFor();
+await page.getByRole('status').filter({ hasText: 'Retained source evidence' }).waitFor();
 await page.getByRole('link', { name: 'Operational Analytics', exact: true }).click();
 await page.waitForURL(/\/operational-analytics\/?\?mode=governed/);
 await page.waitForTimeout(500);
@@ -20,7 +20,9 @@ await page.getByRole('link', { name: 'Gap Radar', exact: true }).click();
 await page.waitForURL(/\/gap-radar\/?\?mode=governed/);
 await page.getByRole('link', { name: 'ULB Diagnostics', exact: true }).click();
 await page.waitForURL(/\/diagnostics\/sample-narsipatnam\/?\?mode=governed/);
-await page.getByRole('button', { name: /Processing facility/ }).click();
+await page.waitForLoadState('networkidle');
+await page.getByRole('combobox', { name: 'Evidence record', exact: true }).selectOption({label:'MSW Processing · ISWM Facilities · July 2026'});
+await page.waitForTimeout(350);
 await page.getByText('Evidence details and raw fields', { exact: true }).click();
 await page.getByText('total_tpd', { exact: true }).waitFor();
 await page.goto(`${baseUrl}/data-readiness?mode=governed`, { waitUntil: 'domcontentloaded' });
@@ -34,8 +36,10 @@ await page.getByRole('status').filter({ hasText: 'Live connector · on the roadm
 // smoke check intentionally semantic: it verifies the controls are reachable without
 // asserting a pixel layout that would be brittle across browsers.
 await page.goto(`${baseUrl}/operational-analytics?mode=governed`, { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(500);
 await page.getByRole('button', { name: /open ulb comparison tray/i }).click();
-await page.getByRole('dialog', { name: /ulb comparison tray/i }).waitFor();
+await page.waitForTimeout(250);
+await page.getByRole('article', { name: 'Same-source ULB comparison' }).waitFor();
 const districtPicker = page.getByRole('combobox', { name: /browse a district to add/i });
 const firstDistrict = await districtPicker.locator('option').nth(1).getAttribute('value');
 if (firstDistrict) await districtPicker.selectOption(firstDistrict);
