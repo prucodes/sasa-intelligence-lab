@@ -612,11 +612,16 @@
       "retainedRows": 400,
       "retainedAt": "2026-09-09T09:55:33.101Z",
       "pages": 4,
-      "contentHash": "eb008ce897e523e79158341eeff7cc449df7ea594dc40d89b5a71d6e627bbfce",
+      "contentHash": "49b60ee06f4a9292f4fd0cc86f65e82410d7cf9bb05e00a82b56dc7a52153b09",
       "evidencePath": "data/current-snapshots/sasa_50_percent_greencover_api.json",
       "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
       "rawCountReconciled": true,
-      "distinctCompleteness": "unproven"
+      "distinctCompleteness": "unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 5,
+        "recoveredRows": 5
+      }
     },
     {
       "key": "sasa_50_percent_rejuvenation_api",
@@ -658,11 +663,16 @@
       "retainedRows": 400,
       "retainedAt": "2026-09-09T09:55:32.129Z",
       "pages": 4,
-      "contentHash": "eb008ce897e523e79158341eeff7cc449df7ea594dc40d89b5a71d6e627bbfce",
+      "contentHash": "49b60ee06f4a9292f4fd0cc86f65e82410d7cf9bb05e00a82b56dc7a52153b09",
       "evidencePath": "data/current-snapshots/sasa_50_percent_rejuvenation_api.json",
       "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
       "rawCountReconciled": true,
-      "distinctCompleteness": "unproven"
+      "distinctCompleteness": "unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 5,
+        "recoveredRows": 5
+      }
     },
     {
       "key": "sasa_50_percent_green_spaces_api",
@@ -704,11 +714,16 @@
       "retainedRows": 400,
       "retainedAt": "2026-09-09T09:55:37.030Z",
       "pages": 4,
-      "contentHash": "eb008ce897e523e79158341eeff7cc449df7ea594dc40d89b5a71d6e627bbfce",
+      "contentHash": "49b60ee06f4a9292f4fd0cc86f65e82410d7cf9bb05e00a82b56dc7a52153b09",
       "evidencePath": "data/current-snapshots/sasa_50_percent_green_spaces_api.json",
       "scope": "Returned raw count reconciled · no filters · distinct completeness unproven",
       "rawCountReconciled": true,
-      "distinctCompleteness": "unproven"
+      "distinctCompleteness": "unproven",
+      "retentionRepair": {
+        "repairedAt": "2026-09-14",
+        "removedRepeats": 5,
+        "recoveredRows": 5
+      }
     },
     {
       "key": "sasa_sac_msw_processing_facilities_iswm_facilities_api",

@@ -38,8 +38,10 @@ describe('ULB service evidence',()=>{
     const expected={TADIPATRI:'both',KUPPAM:'both',NARSIPATNAM:'segregation',GUNTAKAL:'collection',ANANTAPUR:'review'};
     for(const [name,category] of Object.entries(expected)) expect(serviceCategory(data.ulbs.find(u=>u.name===name)!)).toBe(category);
     const eligible=data.ulbs.filter(u=>!serviceExclusions(u).length);
-    expect(eligible).toHaveLength(108);expect(data.ulbs.length-eligible.length).toBe(15);
-    expect(serviceCoordinates(eligible).reduce((n,g)=>n+g.ulbs.length,0)).toBe(108);
+    // Markapuram's four ULBs are placed: their native district code is NULL, so each row's own LGD code is used.
+    expect(eligible).toHaveLength(112);expect(data.ulbs.length-eligible.length).toBe(11);
+    expect(serviceCoordinates(eligible).reduce((n,g)=>n+g.ulbs.length,0)).toBe(112);
+    expect(data.ulbs.filter(u=>u.district==='Markapuram').every(u=>u.nativeDistrictCode==='790'&&u.districtCodeFromLgdSecretariats===u.secretariats&&!serviceExclusions(u).length)).toBe(true);
     expect(data.totals).toEqual({households:4709868,collected:2640792,segregated:1915723});
     const exact={...eligible[0],households:100,collected:80,segregated:64};
     expect(serviceCategory(exact)).toBe('both');expect(serviceCategory(exact,90,90)).toBe('review');

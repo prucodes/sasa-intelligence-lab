@@ -27,10 +27,14 @@ export function buildUlbServiceSnapshot(collection, segregation, day = '2026-08-
     const households = sourceNumber(row.total_households), collected = sourceNumber(row.collected_households), segregated = sourceNumber(peer.garbage_segregation);
     assert(households !== null && collected !== null && segregated !== null && households === sourceNumber(peer.total_households), `missing or conflicting measures ${code}`);
     assert(segregated <= collected && collected <= households, `measure containment breach ${code}`);
-    const mappingReview = [row,peer].some(r => !sourceText(r.district_code) || !sourceText(r.api_lgd_dist_code) || !sourceText(r.api_lgd_mandal_code) || sourceText(r.district_code) !== sourceText(r.api_lgd_dist_code) || sourceText(r.ulb_code) !== sourceText(r.api_lgd_mandal_code));
-    if (!groups.has(ulbCode)) groups.set(ulbCode,{code:ulbCode,name,district,nativeDistrictCode:sourceText(row.district_code),households:0,collected:0,segregated:0,secretariats:0,positiveHouseholdSecretariats:0,mappingReviewSecretariats:0});
+    // N5: Markapuram reached the CDMA feeds with the text NULL as its native district code, while every one of its rows
+    // carries the platform's own LGD district code. The code is taken from that row, never inferred from a name, and counted.
+    const districtCode = r => sourceText(r.district_code) ?? sourceText(r.api_lgd_dist_code);
+    const mappingReview = [row,peer].some(r => !districtCode(r) || !sourceText(r.api_lgd_dist_code) || !sourceText(r.api_lgd_mandal_code) || districtCode(r) !== sourceText(r.api_lgd_dist_code) || sourceText(r.ulb_code) !== sourceText(r.api_lgd_mandal_code));
+    if (!groups.has(ulbCode)) groups.set(ulbCode,{code:ulbCode,name,district,nativeDistrictCode:districtCode(row),households:0,collected:0,segregated:0,secretariats:0,positiveHouseholdSecretariats:0,mappingReviewSecretariats:0,districtCodeFromLgdSecretariats:0});
     const group = groups.get(ulbCode);
-    assert(group.name === name && group.district === district && group.nativeDistrictCode === sourceText(row.district_code), `ULB code ${ulbCode} has conflicting labels`);
+    assert(group.name === name && group.district === district && group.nativeDistrictCode === districtCode(row), `ULB code ${ulbCode} has conflicting labels`);
+    group.districtCodeFromLgdSecretariats += Number(!sourceText(row.district_code) && Boolean(sourceText(row.api_lgd_dist_code)));
     group.households += households; group.collected += collected; group.segregated += segregated;
     group.secretariats++; group.positiveHouseholdSecretariats += Number(households > 0); group.mappingReviewSecretariats += Number(mappingReview);
     points.push([code,ulbCode,households,collected,segregated,Number(mappingReview)]);
@@ -41,7 +45,7 @@ export function buildUlbServiceSnapshot(collection, segregation, day = '2026-08-
     recordQuality:{collection:left.quality,segregation:right.quality},totals,
     pointFields:['secretariatCode','ulbCode','households','collected','segregated','mappingReview'],
     points:points.sort((a,b) => a[0].localeCompare(b[0])),ulbs,
-    boundary:'One source-reported day, not a sustained or overall performance rating. Whole ULBs with native/enriched code differences are held out; matching codes are not external master certification. Benchmarks are draft analytical references, not departmental targets.'};
+    boundary:'One source-reported day, not a sustained or overall performance rating. Whole ULBs with native/enriched code differences are held out; matching codes are not external master certification. Where the native district code is blank or the text NULL (Markapuram), the same row\'s LGD district code is used and counted in districtCodeFromLgdSecretariats. Benchmarks are draft analytical references, not departmental targets.'};
 }
 
 async function main() {

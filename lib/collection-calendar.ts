@@ -1,9 +1,9 @@
 /**
  * Reported collection has a weekly shape, and averaging across it hides the shape.
  *
- * Across May-August 2026 every one of the fifteen retained Sundays reports 1.8-3.0%
- * statewide against 82-94% on working days, and each month's second Saturday reports
- * about 11%. Those are the scheduled non-collection days of the Andhra Pradesh
+ * From 1 May to 7 August 2026 every one of the fourteen retained Sundays reports 1.8-3.0%
+ * statewide and each month's second Saturday reports 11-13%, against 82-94% on most working
+ * days. Those are the scheduled non-collection days of the Andhra Pradesh
  * calendar, not reporting failures, so a rate that averages them in sits about
  * twelve percentage points below the rate on days collection was scheduled.
  *

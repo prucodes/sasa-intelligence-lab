@@ -17,8 +17,8 @@ describe('subject rankings',()=>{
   });
   it('ranks collection zeroes separately from undefined segregation ratios',()=>{
     const reach=rankSubject(getRankingDefinition('reach').inputs),seg=rankSubject(getRankingDefinition('segregation').inputs);
-    expect(reach.rows).toHaveLength(112);expect(reach.excluded).toHaveLength(11);
-    expect(seg.rows).toHaveLength(108);expect(seg.excluded).toHaveLength(15);
+    expect(reach.rows).toHaveLength(116);expect(reach.excluded).toHaveLength(7);
+    expect(seg.rows).toHaveLength(112);expect(seg.excluded).toHaveLength(11);
     expect(reach.rows.find(r=>r.name==='ICHAPURAM')?.rate).toBe(0);
     expect(seg.excluded.find(r=>r.name==='ICHAPURAM')?.reasons).toContain('Zero denominator; rate undefined');
   });

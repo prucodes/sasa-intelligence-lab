@@ -93,7 +93,7 @@ describe('current schema revisions',()=>{
     const assets=getRevisionAnalysis('e-autos');
     expect(assets.identicalRoutes).toHaveLength(4);expect(assets.rows).toHaveLength(28);expect(assets.target).toBe(200);expect(assets.achievement).toBe(200);
     const green=getRevisionAnalysis('green-spaces');
-    expect(green.identicalRoutes).toHaveLength(3);expect(green.rows).toHaveLength(123);expect(green.quality.duplicateRows).toBe(82);expect(green.target).toBe(100);expect(green.achievement).toBe(78);
+    expect(green.identicalRoutes).toHaveLength(3);expect(green.rows).toHaveLength(123);expect(green.quality.duplicateRows).toBe(79);expect(green.target).toBe(100);expect(green.achievement).toBe(78);
     expect(getRevisionAnalysis('green-cover').achievement).toBeCloseTo(303.01,2);
     expect(getRevisionAnalysis('plastic-units')).toMatchObject({selectedPeriod:null,target:210,achievement:88});
     expect(getRevisionAnalysis('odf-villages')).toMatchObject({selectedPeriod:null,target:15995,achievement:15955});
