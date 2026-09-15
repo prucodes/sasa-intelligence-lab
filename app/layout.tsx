@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { VISIT_COUNTER_SCRIPT } from '@/lib/visit-counter';
 import './globals.css';
 import './mobile-refinement.css';
 import './interaction-polish.css';
@@ -12,7 +13,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <script dangerouslySetInnerHTML={{ __html: VISIT_COUNTER_SCRIPT }} />
+      </body>
     </html>
   );
 }
