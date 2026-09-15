@@ -1,10 +1,22 @@
-/** Actual browser recording; presentation overlays never change application data. */
+/**
+ * Actual browser recording; presentation overlays never change application data.
+ *
+ *   PREVIEW_URL=<app base> node scripts/record-current-walkthrough.mjs --out <folder> [--rehearse]
+ *
+ * The folder is required, so a take or a rehearsal never writes over an earlier one by default.
+ */
 import { chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
-const out = resolve('artifacts/walkthrough-2026-09-14');
+const outIndex = process.argv.findIndex(arg => arg === '--out' || arg.startsWith('--out='));
+const outArg = outIndex < 0 ? '' : process.argv[outIndex].startsWith('--out=') ? process.argv[outIndex].slice('--out='.length) : process.argv[outIndex + 1] ?? '';
+if (!outArg || outArg.startsWith('--')) {
+  console.error('Missing --out <folder>: name a new folder for this take, for example --out artifacts/walkthrough-2026-09-20');
+  process.exit(2);
+}
+const out = resolve(outArg);
 const dry = process.argv.includes('--rehearse');
 const base = process.env.PREVIEW_URL || 'http://localhost:3002';
 await mkdir(out, { recursive: true });

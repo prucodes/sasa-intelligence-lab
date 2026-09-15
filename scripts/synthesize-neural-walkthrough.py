@@ -1,11 +1,24 @@
-"""Generate the approved Indian English voice for the existing recording captions."""
+"""Generate the approved Indian English voice for the existing recording captions.
+
+    python scripts/synthesize-neural-walkthrough.py --out <folder>
+
+<folder> is a take recorded by record-current-walkthrough.mjs; its timeline.json is read and narration-neural/ is written there.
+"""
+import argparse
 import asyncio
 import json
 import subprocess
+import sys
 from pathlib import Path
+
+parser = argparse.ArgumentParser(description='Generate the Indian English neural voice for a recorded walkthrough.')
+parser.add_argument('--out', required=True, help='folder holding the recorded take (its timeline.json); narration-neural/ is written inside it')
+ROOT = Path(parser.parse_args().out).resolve()
+if not (ROOT / 'timeline.json').exists():
+    sys.exit(f'No timeline.json in {ROOT}. Record the take there first with record-current-walkthrough.mjs --out.')
+# Imported after the argument check, so --help and argument errors work where edge-tts isn't installed.
 import edge_tts
 
-ROOT = Path(__file__).resolve().parent.parent / 'artifacts/walkthrough-2026-09-14'
 OUT = ROOT / 'narration-neural'
 VOICE = 'en-IN-NeerjaExpressiveNeural'
 
