@@ -18,6 +18,7 @@ import { EvidenceIntegrity } from './evidence-integrity';
 import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
+import { EnvironmentLedger } from './environment-ledger';
 import './screen-features.css';
 import './canvas.css';
 import './evidence-content.css';
@@ -90,7 +91,7 @@ import {
 } from '@/lib/crosswalk';
 import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
 
-type Page = 'overview' | 'operational-analytics' | 'gap-radar' | 'reconciliation' | 'diagnostics' | 'data-readiness';
+type Page = 'overview' | 'operational-analytics' | 'environment' | 'gap-radar' | 'reconciliation' | 'diagnostics' | 'data-readiness';
 type ColorTheme = 'light' | 'dark';
 type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'delivery' | 'rural' | 'continuity' | 'outcomes';
 type AnalyticsLens = 'snapshot' | 'movement';
@@ -98,6 +99,7 @@ type AnalyticsLens = 'snapshot' | 'movement';
 const navItems: { page: Page; label: string; href: string; icon: IconName }[] = [
   { page: 'overview', label: 'Overview', href: '/', icon: 'home' },
   { page: 'operational-analytics', label: 'Operational Analytics', href: '/operational-analytics', icon: 'chart' },
+  { page: 'environment', label: 'Environment & Carbon', href: '/environment', icon: 'leaf' },
   { page: 'gap-radar', label: 'Gap Radar', href: '/gap-radar', icon: 'target' },
   { page: 'reconciliation', label: 'Source Reconciliation', href: '/reconciliation', icon: 'link' },
   { page: 'diagnostics', label: 'ULB Diagnostics', href: '/diagnostics/demo-delta', icon: 'building' },
@@ -120,7 +122,7 @@ function GlossaryText({ text }: { text: string }) {
   })}</>;
 }
 
-type IconName = 'home' | 'chart' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
+type IconName = 'home' | 'chart' | 'leaf' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
 
 function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
@@ -128,6 +130,7 @@ function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...common}>
       {name === 'home' && <><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></>}
       {name === 'chart' && <><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18"/></>}
+      {name === 'leaf' && <><path d="M12 21c0-6.5 3-11 9-12 .6 5.9-2.4 11-9 12Z"/><path d="M12 21C9 21 3 18.5 3 12c0-4 2.5-7 6-8 2 1.6 3 4 3 6.5"/><path d="M12 21v-6"/></>}
       {name === 'target' && <><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 12 21 3M16 3h5v5"/></>}
       {name === 'building' && <><path d="M4 21h16M6 21V8l6-4 6 4v13"/><path d="M9 11h1m4 0h1m-6 4h1m4 0h1m-4 6v-3h2v3"/></>}
       {name === 'database' && <><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></>}
@@ -318,6 +321,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
         <main id="main-content" data-mode={mode} className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
+          {page === 'environment' && <Environment mode={mode} />}
           {page === 'gap-radar' && <GapRadar mode={mode} colorTheme={colorTheme} radar={provider.getGapAssessments()} />}
           {page === 'reconciliation' && <SourceReconciliationScreen mode={mode} href={(path) => withMode(path, mode, colorTheme)} />}
           {page === 'diagnostics' && <Diagnostics mode={mode} colorTheme={colorTheme} cameFrom={cameFrom} diagnostic={provider.getDiagnostic(currentUlbKey)} allKeys={datasets[mode].diagnostics.map((d) => ({ key: d.ulbKey, name: mode === 'SAMPLE' ? `${d.name} · ${d.district}` : d.name }))} />}
@@ -338,7 +342,7 @@ function ProductFooter({ mode }: { mode: DataMode }) {
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {
-  const mobileLabels:Record<Page,string>={'overview':'Overview','operational-analytics':'Analytics','gap-radar':'Radar','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
+  const mobileLabels:Record<Page,string>={'overview':'Overview','operational-analytics':'Analytics','environment':'Carbon','gap-radar':'Radar','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
   return (
     <aside className="sidebar" aria-label="Primary navigation">
       <a className="brand" href={withMode('/', mode, colorTheme)} aria-label="SASA Intelligence Lab overview">
@@ -2179,6 +2183,21 @@ function CrosswalkWorkbench({ stats, queue, decisions, approved, reviewed, remai
 
 function ModeKey({ mode }: { mode: DataMode }) {
   return <div className="mode-key"><span className={mode === 'DEMO' ? 'active' : ''}><b>DEMO</b> shows future capability</span><span className={mode === 'SAMPLE' ? 'active' : ''}><b>SAMPLE</b> shows what today&rsquo;s evidence supports</span></div>;
+}
+
+/**
+ * Environment and carbon: the same retained evidence read as an emissions account.
+ *
+ * It is a route of its own rather than a fifth Operational Analytics tab because that
+ * screen's contract is retained evidence only, and this one deliberately carries a derived
+ * estimate layer beside the retained quantities. Mixing the two under a tab would put an
+ * estimate behind a heading that promises a reading.
+ */
+function Environment({ mode }: { mode: DataMode }) {
+  return <>
+    <PageIntro visual="environment" eyebrow="Environment and carbon" title="Environment & Carbon Ledger" description="Read the retained waste, sewage and green cover evidence as the physical account under a carbon claim, with every conversion, assumption and missing measurement stated."><FilterBar mode={mode}/></PageIntro>
+    <EnvironmentLedger mode={mode}/>
+  </>;
 }
 
 function FilterBar({ mode }: { mode: DataMode }) {

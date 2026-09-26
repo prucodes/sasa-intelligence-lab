@@ -1,0 +1,892 @@
+/*
+ * Environment and carbon ledger.
+ *
+ * Three colour roles carry meaning rather than decoration, and nothing else on the screen
+ * is allowed to borrow them: --el-measured for a quantity a source reported, --el-estimate
+ * for arithmetic on that quantity, and --el-missing for a conversion withheld. The estimate
+ * and missing roles also carry a texture, because colour alone does not survive a printed
+ * page or a projector, and on this screen mistaking an estimate for a measurement is the
+ * one error that matters.
+ */
+
+.env-ledger {
+  --el-measured: #2f6d5b;
+  --el-measured-soft: #e7f0ea;
+  --el-estimate: #8b6015;
+  --el-estimate-soft: #f7efdd;
+  --el-missing: #5c6b80;
+  --el-dark: #163a3c;
+  --el-light: #f4f8f2;
+  --el-hatch: repeating-linear-gradient(135deg, transparent 0 4px, color-mix(in srgb, var(--el-estimate) 16%, transparent) 4px 6px);
+  color: var(--ink);
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.theme-dark .env-ledger {
+  --el-measured: #8fc6b2;
+  --el-measured-soft: #1d3c3a;
+  --el-estimate: #dcaf5c;
+  --el-estimate-soft: #3a2f16;
+  --el-missing: #9fb1c4;
+  --el-dark: #0d2c33;
+  --el-light: #eef6ec;
+}
+
+.env-ledger :is(h2, h3, h4, p, ol, ul, dl) {
+  margin: 0;
+}
+.env-ledger ol,
+.env-ledger ul {
+  padding: 0;
+  list-style: none;
+}
+.env-ledger :is(button, summary):focus-visible {
+  outline: 3px solid var(--el-measured);
+  outline-offset: 3px;
+}
+
+.el-kicker {
+  display: block;
+  color: var(--el-measured);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+
+/* Tabs ------------------------------------------------------------------ */
+
+.el-tabs.analytics-tabs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-height: 66px;
+  margin: 0;
+}
+.el-tabs.analytics-tabs button {
+  min-height: 66px;
+  padding: 0 18px;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 1px 10px;
+  text-align: left;
+}
+.el-tabs button > span {
+  grid-row: 1 / 3;
+  align-self: center;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.el-tabs button > b {
+  color: var(--ink);
+  font-size: 12px;
+}
+.el-tabs button > small {
+  font-size: 11px;
+  font-weight: 530;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.el-tabs button.active > b,
+.el-tabs button.active > span {
+  color: var(--el-measured);
+}
+
+/* Thesis band ---------------------------------------------------------- */
+
+.el-thesis {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(250px, 0.85fr);
+  gap: 30px;
+  padding: 26px 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.el-thesis h2 {
+  font-size: clamp(21px, 2.1vw, 30px);
+  font-weight: 550;
+  line-height: 1.22;
+  letter-spacing: -0.035em;
+  margin-bottom: 14px;
+  text-wrap: balance;
+}
+.el-thesis h2 em {
+  font: inherit;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--el-measured);
+}
+.el-thesis p {
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 68ch;
+}
+.el-thesis p + p {
+  margin-top: 12px;
+}
+.el-thesis-figures {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  overflow: hidden;
+}
+.el-thesis-figures > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 17px;
+  background: var(--surface);
+}
+.el-thesis-figures dt {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.el-thesis-figures dd {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.el-thesis-figures dd span {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: normal;
+}
+
+/* Household flow ------------------------------------------------------- */
+
+.el-household {
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.el-household h3,
+.el-section header h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.el-household-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 16px;
+}
+.el-household-flow > div {
+  padding: 17px 19px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--el-measured) 4%, var(--surface));
+}
+.el-household-flow > div.is-lever {
+  border-color: color-mix(in srgb, var(--el-measured) 45%, var(--line));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--el-measured) 22%, transparent);
+}
+.el-household-flow b {
+  display: block;
+  font-size: clamp(22px, 2.2vw, 29px);
+  font-weight: 550;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.el-household-flow span {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.el-household-flow small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Sections and lines --------------------------------------------------- */
+
+.el-section > header {
+  margin: 10px 0 14px;
+}
+.el-section > header p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 82ch;
+  margin-top: 7px;
+}
+.el-lines {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 14px;
+}
+.el-line {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  min-width: 0;
+}
+.el-line > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.el-line-name h4 {
+  font-size: 14px;
+  font-weight: 620;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+.el-line-name p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.el-line-figure {
+  text-align: right;
+  white-space: nowrap;
+}
+.el-line-figure strong {
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 550;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--el-measured);
+}
+.el-line-figure span {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 5px;
+}
+.el-line-figure small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/*
+ * The track carries the house absence hatch rather than empty space, so a short bar reads
+ * as a measured shortfall instead of a drawing that did not finish.
+ */
+.el-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 46px;
+  align-items: center;
+  gap: 10px;
+}
+.el-bar > i {
+  display: block;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--absence-hatch), color-mix(in srgb, var(--el-measured) 6%, var(--surface));
+  box-shadow: inset 0 0 0 1px var(--line);
+  position: relative;
+}
+.el-bar > i::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--el-filled, 0%);
+  border-radius: 2px;
+  background: var(--el-measured);
+}
+.el-bar > b {
+  font-size: 11.5px;
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/*
+ * A shortfall line is drawn in the caution role, because on that line a long bar is bad
+ * news and the green progress colour would read as the opposite of what the number means.
+ */
+.el-line.is-shortfall .el-line-figure strong,
+.el-line.is-shortfall .el-concentration > p b {
+  color: var(--el-estimate);
+}
+.el-line.is-shortfall .el-bar > i::after {
+  background: var(--el-estimate);
+}
+.el-line.is-shortfall .el-concentration {
+  background: color-mix(in srgb, var(--el-estimate) 6%, var(--surface));
+  border-color: color-mix(in srgb, var(--el-estimate) 22%, var(--line));
+}
+.el-polarity-note {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: -4px;
+}
+
+.el-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.el-chips li {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--el-measured) 3%, var(--surface));
+}
+.el-chips b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.el-chips li.is-silent {
+  border-color: color-mix(in srgb, var(--el-estimate) 40%, var(--line));
+  background: var(--el-estimate-soft);
+}
+.el-chips li.is-silent b {
+  color: var(--el-estimate);
+}
+
+.el-concentration {
+  padding: 13px 15px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--el-measured) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--el-measured) 18%, var(--line));
+}
+.el-concentration > p {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+.el-concentration > p b {
+  color: var(--el-measured);
+  font-weight: 650;
+}
+.el-concentration ol {
+  display: grid;
+  gap: 5px;
+}
+.el-concentration li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 11.5px;
+}
+.el-concentration li b {
+  font-variant-numeric: tabular-nums;
+  font-weight: 620;
+}
+.el-concentration li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.el-boundary {
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 88ch;
+}
+.el-caution {
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  padding: 12px 15px;
+  border-radius: 10px;
+  border-left: 3px solid var(--el-estimate);
+  background: var(--el-estimate-soft);
+}
+.el-caution b {
+  font-weight: 650;
+}
+.el-source {
+  border-top: 1px solid var(--line);
+  padding-top: 11px;
+  margin-top: auto;
+}
+.el-source summary {
+  font-size: 11.5px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.el-source p {
+  font-size: 11px;
+  line-height: 1.75;
+  color: var(--muted);
+  padding-top: 9px;
+}
+.el-source code {
+  overflow-wrap: anywhere;
+}
+
+/* Estimate layer ------------------------------------------------------- */
+
+.el-estimate-banner {
+  font-size: 12px;
+  line-height: 1.75;
+  padding: 15px 19px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--el-estimate) 40%, var(--line));
+  background: var(--el-estimate-soft);
+  background-image: var(--el-hatch);
+  color: var(--ink);
+}
+.el-estimate-banner b {
+  font-weight: 700;
+  color: var(--el-estimate);
+}
+
+.el-bound,
+.el-factor,
+.el-assumptions,
+.el-gaps-intro {
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.el-bound h3,
+.el-factor h3,
+.el-assumptions h3,
+.el-gaps-intro h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.el-bound-steps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 14px;
+  margin: 18px 0 15px;
+}
+.el-bound-steps > div {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.el-bound-steps small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.el-bound-steps b {
+  display: block;
+  font-size: clamp(21px, 2.1vw, 28px);
+  font-weight: 550;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.el-bound-steps > div > span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.el-bound-vs {
+  display: grid;
+  place-items: center;
+  border: 0;
+  padding: 0;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.el-bound-steps > div.is-limit {
+  border-color: color-mix(in srgb, var(--el-estimate) 45%, var(--line));
+  background: var(--el-estimate-soft);
+}
+.el-bound-steps > div.is-limit b {
+  color: var(--el-estimate);
+}
+.el-bound-result {
+  background: var(--el-dark) !important;
+  border-color: var(--el-dark) !important;
+  color: var(--el-light);
+}
+.el-bound-result small,
+.el-bound-result > span {
+  color: color-mix(in srgb, var(--el-light) 78%, transparent) !important;
+}
+
+.el-factor-steps {
+  display: grid;
+  gap: 2px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 16px 0 14px;
+}
+.el-factor-steps li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 13px 17px;
+  background: var(--surface);
+  font-size: 12px;
+}
+.el-factor-steps li span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+.el-factor-steps li b {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 620;
+}
+.el-factor-steps li.is-total {
+  background: color-mix(in srgb, var(--el-measured) 8%, var(--surface));
+}
+.el-factor-steps li.is-total b {
+  color: var(--el-measured);
+}
+
+.el-estimates {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+.el-estimate {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 20px 22px;
+  border: 1px solid color-mix(in srgb, var(--el-estimate) 32%, var(--line));
+  border-radius: 14px;
+  background: var(--surface);
+  background-image: var(--el-hatch);
+  min-width: 0;
+}
+.el-estimate > header h4 {
+  font-size: 13.5px;
+  font-weight: 620;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+.el-estimate-value {
+  margin-top: 10px;
+}
+.el-estimate-value strong {
+  font-size: clamp(25px, 2.5vw, 34px);
+  font-weight: 550;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  color: var(--el-estimate);
+}
+.el-estimate-value span {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.el-range {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+/* The track spans low to high; the mark sits where the central estimate falls inside it. */
+.el-range i {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--el-estimate) 20%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--el-estimate) 30%, transparent);
+  position: relative;
+  min-width: 40px;
+}
+.el-range em {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: var(--el-central, 50%);
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--el-estimate);
+}
+.el-estimate-basis {
+  display: grid;
+  gap: 10px;
+}
+.el-estimate-basis dt {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.el-estimate-basis dd {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+}
+.el-estimate-basis code {
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+.el-assumption-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+.el-assumption-chips li {
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  border: 1px dashed color-mix(in srgb, var(--el-estimate) 50%, var(--line));
+  color: var(--el-estimate);
+  cursor: help;
+}
+
+.el-assumptions > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.el-assumptions > header p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 76ch;
+  margin-top: 7px;
+}
+.el-toggle {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 620;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.el-table-scroll {
+  overflow-x: auto;
+}
+.env-ledger table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+.env-ledger thead th {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.env-ledger tbody th {
+  text-align: left;
+  font-weight: 600;
+}
+.env-ledger tbody :is(th, td) {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.65;
+}
+.env-ledger tbody tr[data-undeclared='true'] {
+  background: var(--el-estimate-soft);
+}
+.env-ledger tbody tr[data-undeclared='true'] td:nth-child(3) {
+  color: var(--el-estimate);
+  font-weight: 620;
+}
+.el-assumption-note {
+  color: var(--muted);
+  min-width: 260px;
+}
+
+/* Gaps ----------------------------------------------------------------- */
+
+.el-gaps-intro p {
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 84ch;
+  margin-top: 9px;
+}
+.el-gaps {
+  display: grid;
+  gap: 12px;
+}
+.el-gaps > li {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.75fr) minmax(0, 1.6fr);
+  gap: 20px;
+  padding: 18px 22px;
+  border: 1px dashed color-mix(in srgb, var(--el-missing) 45%, var(--line));
+  border-radius: 13px;
+  background: var(--surface);
+}
+.el-gap-have span,
+.el-gap-need span {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.el-gap-have b {
+  display: block;
+  font-size: 13px;
+  font-weight: 620;
+  line-height: 1.4;
+}
+.el-gap-have small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.6;
+}
+.el-gap-need p {
+  font-size: 12px;
+  line-height: 1.75;
+}
+.el-gaps-close {
+  padding: 15px 19px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--el-missing) 7%, var(--surface));
+  border: 1px solid var(--line);
+  max-width: none;
+}
+
+/* Unavailable ---------------------------------------------------------- */
+
+.el-unavailable {
+  padding: 40px 34px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  max-width: 78ch;
+}
+.el-unavailable h1 {
+  font-size: clamp(22px, 2.3vw, 31px);
+  font-weight: 550;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+.el-unavailable p {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 0;
+}
+.el-unavailable-action {
+  margin-top: 14px !important;
+  color: var(--el-measured) !important;
+  font-weight: 620;
+}
+
+/* Narrow ---------------------------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .el-thesis,
+  .el-gaps > li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .el-bound-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .el-bound-vs {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  /* The one-line note under each tab label can only truncate at this width, and a
+     truncated explanation explains nothing. The numbered label carries the tab alone. */
+  .el-tabs button > small {
+    display: none;
+  }
+  .el-tabs.analytics-tabs button {
+    padding: 0 10px;
+    grid-template-columns: 20px 1fr;
+  }
+  .el-household-flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .el-thesis,
+  .el-household,
+  .el-bound,
+  .el-factor,
+  .el-assumptions,
+  .el-gaps-intro {
+    padding: 20px 18px;
+  }
+  .el-line {
+    padding: 18px 16px;
+  }
+  .el-line > header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .el-line-figure {
+    text-align: left;
+  }
+  .el-factor-steps li {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .el-gaps > li {
+    padding: 16px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .env-ledger * {
+    transition: none !important;
+  }
+}

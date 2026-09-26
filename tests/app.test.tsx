@@ -21,7 +21,7 @@ describe('application shell and screens', () => {
     render(<LabApp page="overview" initialMode="DEMO" />);
     const navigation = screen.getByRole('complementary', { name: /primary navigation/i });
     expect(navigation).toBeInTheDocument();
-    expect(navigation.querySelectorAll('nav a')).toHaveLength(6);
+    expect(navigation.querySelectorAll('nav a')).toHaveLength(7);
     expect(screen.getByRole('combobox', { name: /data mode/i })).toHaveValue('DEMO');
     expect(screen.getByRole('heading', { name: /what sasa data can tell us today/i })).toBeInTheDocument();
   });
@@ -29,7 +29,7 @@ describe('application shell and screens', () => {
   it('keeps every page directly linked with an explicit current-page marker', () => {
     render(<LabApp page="overview" initialMode="SAMPLE"/>);
     const nav=screen.getByRole('complementary',{name:'Primary navigation'});
-    expect(nav.querySelectorAll('nav a')).toHaveLength(6);
+    expect(nav.querySelectorAll('nav a')).toHaveLength(7);
     expect(nav.querySelector('[aria-current="page"]')).toHaveAttribute('aria-label','Overview');
     expect(screen.queryByRole('button',{name:'Menu'})).not.toBeInTheDocument();
   });
