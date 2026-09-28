@@ -128,8 +128,9 @@ describe('estimate layer', () => {
     expect(factors.landfillLow).toBeCloseTo(0.56, 4);
     expect(factors.landfillHigh).toBeCloseTo(1.4, 4);
     // Composting is not emission free, so the avoided figure is below the landfill factor.
-    expect(factors.compostProcess).toBeCloseTo(0.1915, 4);
-    expect(factors.avoidedCentral).toBeCloseTo(0.9285, 3);
+    // IPCC Table 4.1 uses 0.24 g N2O/kg on a wet-weight basis, not 0.30.
+    expect(factors.compostProcess).toBeCloseTo(0.1756, 4);
+    expect(factors.avoidedCentral).toBeCloseTo(0.9444, 3);
     expect(factors.avoidedCentral).toBeLessThan(factors.landfillCentral);
   });
 
@@ -154,6 +155,8 @@ describe('estimate layer', () => {
       expect(assumption.note.length).toBeGreaterThan(20);
     }
     expect(estimateAssumptions.find((item) => item.id === 'legacy-unit')!.source).toMatch(/Not declared/);
+    expect(estimateAssumptions.find((item) => item.id === 'compost-n2o')!.value).toBe('0.24 g N2O per kg of waste treated');
+    expect(estimateAssumptions.find((item) => item.id === 'doc')!.label).not.toMatch(/mixed municipal waste/i);
   });
 
   it('states what each unconverted line would need', () => {
@@ -167,8 +170,9 @@ describe('estimate layer', () => {
   });
 
   it('refuses the word inventory for what it produces', () => {
-    expect(getCarbonEstimates().boundary).toMatch(/[Nn]one of it is a certified inventory/);
+    expect(getCarbonEstimates().boundary).toMatch(/not .*certified inventory/);
     expect(getCarbonEstimates().boundary).toMatch(/published default factor/);
+    expect(getCarbonEstimates().boundary).toMatch(/not measured reductions/);
   });
 });
 

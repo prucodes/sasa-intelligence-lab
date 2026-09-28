@@ -1,11 +1,9 @@
 /**
  * Environment and carbon ledger.
  *
- * Nothing new was ingested for this screen. Seventeen of the retained routes already
- * describe the three municipal levers that decide an urban carbon position: waste kept
- * out of the landfill pathway, sewage and faecal sludge treated instead of discharged,
- * and green cover held as a sink. They were catalogued as sanitation programmes, which is
- * why nobody read them as an environment account.
+ * Nothing new was ingested for this screen. Sixteen retained routes describe the waste,
+ * wastewater and green-asset side of a municipal carbon position. They were catalogued as
+ * sanitation programmes, which is why nobody read them together as environment evidence.
  *
  * The screen keeps two things apart, and the separation is the whole design:
  *
@@ -360,7 +358,7 @@ export function getEnvironmentSections(): LedgerSection[] {
     {
       id: 'diversion',
       title: 'Keeping waste out of the landfill pathway',
-      lede: 'Unsegregated wet waste on an unmanaged site is the largest methane source a municipality controls. These are the quantities the state reports against it.',
+      lede: 'Organic waste can generate methane when it decomposes anaerobically. These retained routes describe the reported balance, capacity and diversion conditions around that pathway.',
       lines: [
         legacyWasteBalance(),
         processingRegistry(),
@@ -448,7 +446,7 @@ export function getEnvironmentSections(): LedgerSection[] {
     {
       id: 'treatment',
       title: 'Treating sewage and faecal sludge instead of discharging it',
-      lede: 'Untreated sewage in a stagnant channel is a methane source as well as a water pollutant. These are the plants the state reports, and the stage each has reached.',
+      lede: 'Untreated wastewater can generate methane under anaerobic conditions and damage water quality. These retained routes describe planned capacity and construction stage, not treatment delivered.',
       lines: [
         buildLine({
           id: 'sewage',
@@ -479,8 +477,8 @@ export function getEnvironmentSections(): LedgerSection[] {
     },
     {
       id: 'sinks',
-      title: 'Holding green cover and water bodies as a sink',
-      lede: 'The green programme is the only part of this evidence that removes carbon rather than avoiding it. It is also the part with the widest gap between target and report.',
+      title: 'Building green assets and restoring water bodies',
+      lede: 'Green cover can store carbon, while green spaces and restored water bodies carry wider environmental benefits. The retained routes count activity, but do not measure canopy, biomass, area or water quality.',
       lines: [
         buildLine({
           id: 'green-cover',
@@ -541,18 +539,18 @@ export interface EstimateAssumption {
  * them: an auditor should be able to substitute a local value and see the number move.
  */
 export const estimateAssumptions: EstimateAssumption[] = [
-  { id: 'gwp-ch4', label: 'Methane global warming potential', value: '28 tCO2e per tonne CH4', source: 'IPCC Fifth Assessment Report, 100 year horizon', note: 'National inventory reporting uses the 100 year value. A 20 year horizon would raise every methane figure here by roughly a factor of three.' },
+  { id: 'gwp-ch4', label: 'Methane global warming potential', value: '28 tCO2e per tonne CH4', source: 'IPCC Fifth Assessment Report, 100 year horizon', note: 'AR5 value without climate-carbon feedbacks. It is a reporting convention, not a property measured in Andhra Pradesh.' },
   { id: 'gwp-n2o', label: 'Nitrous oxide global warming potential', value: '265 tCO2e per tonne N2O', source: 'IPCC Fifth Assessment Report, 100 year horizon', note: 'Applies only to the composting process emission below.' },
-  { id: 'doc', label: 'Degradable organic carbon in mixed municipal waste', value: '0.15 tonnes C per tonne of wet waste', source: 'IPCC 2006 Guidelines, Volume 5, default for mixed MSW on a wet weight basis', note: 'The single most influential parameter. A waste characterisation study for Andhra Pradesh would replace it.' },
+  { id: 'doc', label: 'Degradable organic carbon in compostable material', value: '0.15 tonnes C per tonne of wet food waste', source: 'IPCC 2006 Guidelines, Volume 5, Chapter 2, Table 2.4', note: 'This is the food-waste default, not a measured composition for Andhra Pradesh. A local composition study would replace it.' },
   { id: 'docf', label: 'Fraction of that carbon which decomposes', value: '0.5', source: 'IPCC 2006 Guidelines, Volume 5 default', note: 'Carbon locked in lignin does not convert to landfill gas.' },
   { id: 'mcf', label: 'Methane correction factor for the site type', value: '0.8 central, 0.4 to 1.0 range', source: 'IPCC 2006 Guidelines, Volume 5, unmanaged deep site over five metres', note: 'The range drives the low and high estimate. A shallow site sits near 0.4; a managed anaerobic site sits at 1.0.' },
   { id: 'f', label: 'Methane fraction of generated landfill gas', value: '0.5', source: 'IPCC 2006 Guidelines, Volume 5 default', note: 'The remainder is carbon dioxide of biogenic origin, which inventories do not count.' },
   { id: 'compost-ch4', label: 'Methane released by composting itself', value: '4 g CH4 per kg of waste treated', source: 'IPCC 2006 Guidelines, Volume 5, Chapter 4, wet weight default', note: 'Composting is not emission free. This is subtracted from the avoided figure.' },
-  { id: 'compost-n2o', label: 'Nitrous oxide released by composting itself', value: '0.3 g N2O per kg of waste treated', source: 'IPCC 2006 Guidelines, Volume 5, Chapter 4, wet weight default', note: 'Small in mass, large in warming potential. Also subtracted.' },
+  { id: 'compost-n2o', label: 'Nitrous oxide released by composting itself', value: '0.24 g N2O per kg of waste treated', source: 'IPCC 2006 Guidelines, Volume 5, Chapter 4, Table 4.1 wet-weight default', note: 'Small in mass, large in warming potential. Also subtracted.' },
   { id: 'legacy-unit', label: 'Unit of the legacy waste quantity', value: 'assumed metric tonnes', source: 'Not declared by the source', note: 'The response labels no unit. If the figure is cubic metres, the tonnage is lower by whatever the density of the deposited mass turns out to be, and every legacy estimate moves with it.' },
-  { id: 'per-capita', label: 'Municipal solid waste generated per person per day', value: '0.45 kg', source: 'Central Pollution Control Board range for Indian urban areas', note: 'Used only to turn a count of households into a tonnage, because the household sources count households, not weight.' },
-  { id: 'household-size', label: 'Persons per urban household in Andhra Pradesh', value: '3.8', source: 'Census of India 2011, urban average for the state', note: 'Fifteen years old. A current figure would change the implied tonnage directly.' },
-  { id: 'wet-fraction', label: 'Wet share of household waste', value: '0.52', source: 'Typical Indian urban waste characterisation', note: 'Only the wet fraction carries the methane pathway that composting avoids.' },
+  { id: 'per-capita', label: 'Municipal solid waste generated per person per day', value: '0.45 kg', source: 'Planning Commission Task Force on Waste to Energy, 2014, citing CPCB 2013', note: 'A national urban average used only for screening. The Government of India manual says ULBs should determine local quantity and composition for system design.' },
+  { id: 'household-size', label: 'Persons per household in Andhra Pradesh', value: '3.5', source: 'National Family Health Survey 5, Andhra Pradesh, 2019–21', note: 'A survey average, not the household size of the reporting ULBs. A current ULB-level denominator would change the implied tonnage directly.' },
+  { id: 'wet-fraction', label: 'Wet share of municipal solid waste', value: '0.52', source: 'NITI Aayog waste-sector scenario, 2020 composition (52.4% wet waste)', note: 'A national composition assumption, not a sample from the reporting ULBs. Local weighbridge and composition data should replace it.' },
 ];
 
 /** Source precision, not float noise: a decimal is kept only where the source carried one. */
@@ -567,9 +565,9 @@ const MCF_LOW = 0.4;
 const MCF_HIGH = 1.0;
 const F = 0.5;
 const COMPOST_CH4_G_PER_KG = 4;
-const COMPOST_N2O_G_PER_KG = 0.3;
+const COMPOST_N2O_G_PER_KG = 0.24;
 const PER_CAPITA_KG = 0.45;
-const HOUSEHOLD_SIZE = 3.8;
+const HOUSEHOLD_SIZE = 3.5;
 const WET_FRACTION = 0.52;
 const DAYS = 365;
 
@@ -591,7 +589,7 @@ export interface Estimate {
   low: number;
   central: number;
   high: number;
-  unit: 'tCO2e' | 'tCO2e per year';
+  unit: 'tCO2e potential' | 'tCO2e potential from one year of input';
   assumptions: string[];
   boundary: string;
 }
@@ -636,39 +634,39 @@ export function getCarbonEstimates(): CarbonEstimates {
   const estimates: Estimate[] = [
     {
       id: 'legacy-liability',
-      label: 'Methane potential of the legacy waste still in place',
+      label: 'Legacy-waste methane potential, if the undeclared unit is tonnes',
       physical: `${legacyBalance.toLocaleString('en-IN')} reported units still carried by ${legacy?.reporting ?? 0} ULBs, ${legacy?.period ?? 'period not established'}`,
       derivation: `${legacyBalance.toLocaleString('en-IN')} t x (0.15 x 0.5 x 0.8 x 0.5 x 16/12) t CH4/t x 28 = ${Math.round(legacyBalance * landfillPerTonne(MCF_CENTRAL)).toLocaleString('en-IN')} tCO2e`,
       low: legacyBalance * landfillPerTonne(MCF_LOW),
       central: legacyBalance * landfillPerTonne(MCF_CENTRAL),
       high: legacyBalance * landfillPerTonne(MCF_HIGH),
-      unit: 'tCO2e',
+      unit: 'tCO2e potential',
       assumptions: ['legacy-unit', 'doc', 'docf', 'mcf', 'f', 'gwp-ch4'],
       boundary: 'This is the gross generation potential of the mass in place, released over decades of decay. It is not an annual emission, and a dump that has sat for years has already released part of it. Read it as the size of the standing liability, not as this year\'s number.',
     },
     {
       id: 'segregation-implied',
-      label: 'What reported doorstep segregation would avoid, if every tonne were composted',
+      label: 'Demand-side scenario if the reported households segregated every day',
       physical: `${segregation.segregated.toLocaleString('en-IN')} households reported segregating on ${segregation.day}, the one complete urban day in retention`,
-      derivation: `${segregation.segregated.toLocaleString('en-IN')} households x 0.45 kg x 3.8 persons x 0.52 wet = ${Math.round(impliedWetTonnesPerDay).toLocaleString('en-IN')} t/day x 365 x ${avoidedPerTonne(MCF_CENTRAL).toFixed(2)} tCO2e/t`,
+      derivation: `${segregation.segregated.toLocaleString('en-IN')} households x 0.45 kg x 3.5 persons x 0.52 wet = ${Math.round(impliedWetTonnesPerDay).toLocaleString('en-IN')} t/day x 365 x ${avoidedPerTonne(MCF_CENTRAL).toFixed(2)} tCO2e/t`,
       low: impliedWetTonnesPerDay * DAYS * avoidedPerTonne(MCF_LOW),
       central: impliedWetTonnesPerDay * DAYS * avoidedPerTonne(MCF_CENTRAL),
       high: impliedWetTonnesPerDay * DAYS * avoidedPerTonne(MCF_HIGH),
-      unit: 'tCO2e per year',
+      unit: 'tCO2e potential from one year of input',
       assumptions: ['per-capita', 'household-size', 'wet-fraction', 'doc', 'docf', 'mcf', 'f', 'gwp-ch4', 'compost-ch4', 'compost-n2o'],
       boundary: 'Two things make this an upper bound rather than a result. One day is annualised, and this product has already shown that daily reporting is not steady enough to support that. Separating waste at the doorstep also does not establish that it was composted; the next line is what the processing evidence will carry.',
     },
     {
       id: 'capacity-bound',
-      label: 'What completed wet processing capacity can actually carry',
+      label: 'Full-load scenario for capacity at facilities marked completed',
       physical: `${amount(capacity.completedWetTpd)} TPD of wet capacity at the ${capacity.completedFacilities} facilities reported completed, ${capacity.period ?? 'period not established'}`,
       derivation: `${amount(capacity.completedWetTpd)} t/day x 365 x ${avoidedPerTonne(MCF_CENTRAL).toFixed(2)} tCO2e/t`,
       low: capacity.completedWetTpd * DAYS * avoidedPerTonne(MCF_LOW),
       central: capacity.completedWetTpd * DAYS * avoidedPerTonne(MCF_CENTRAL),
       high: capacity.completedWetTpd * DAYS * avoidedPerTonne(MCF_HIGH),
-      unit: 'tCO2e per year',
+      unit: 'tCO2e potential from one year of input',
       assumptions: ['doc', 'docf', 'mcf', 'f', 'gwp-ch4', 'compost-ch4', 'compost-n2o'],
-      boundary: `This is the defensible ceiling of the three, and it still assumes every completed facility runs at its configured wet capacity every day of the year, which no source in this catalogue reports. ${capacity.largest ? `${capacity.largest} alone holds the largest share of that capacity, so the figure depends heavily on one site.` : ''}`,
+      boundary: `This is a full-load capacity scenario, not a reported reduction. It assumes every facility marked completed operates at configured wet capacity every day of the year; the retained route reports neither operation nor throughput. ${capacity.largest ? `${capacity.largest} holds the largest share of that nominal capacity, so the scenario depends heavily on one site.` : ''}`,
     },
   ];
 
@@ -728,6 +726,6 @@ export function getCarbonEstimates(): CarbonEstimates {
       coveredShare: impliedWetTonnesPerDay > 0 ? cappedWetTonnesPerDay / impliedWetTonnesPerDay : null,
       largestCompletedSite: capacity.largest,
     },
-    boundary: 'Every figure here is a published default factor applied to a retained physical quantity, and each one names the assumptions it rests on. None of it is a certified inventory, none of it has been verified against a weighbridge, and none of it should be quoted without the assumption it depends on.',
+    boundary: 'These are screening scenarios: published default factors applied to retained quantities and explicit assumptions. They are not measured reductions, annual emissions, carbon credits or a certified inventory. None has been verified against a weighbridge or operating record.',
   };
 }

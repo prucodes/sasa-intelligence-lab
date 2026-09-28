@@ -11,12 +11,13 @@ import {
 import { rateText } from '@/lib/format-rate';
 import './environment-ledger.css';
 
-type View = 'ledger' | 'estimates' | 'gaps';
+type View = 'ledger' | 'estimates' | 'gaps' | 'actions';
 
 const VIEWS: { id: View; label: string; note: string }[] = [
   { id: 'ledger', label: 'Physical ledger', note: 'Quantities a source reported' },
-  { id: 'estimates', label: 'Carbon estimates', note: 'Published factors, shown as estimates' },
-  { id: 'gaps', label: 'What is missing', note: 'Conversions we will not make yet' },
+  { id: 'estimates', label: 'Carbon scenarios', note: 'Screening arithmetic, not reductions' },
+  { id: 'gaps', label: 'Inventory gaps', note: 'Measurements still needed' },
+  { id: 'actions', label: 'Action pathway', note: 'Priorities the evidence supports' },
 ];
 
 /** A quantity keeps one decimal only where the source carried one. */
@@ -32,7 +33,7 @@ export function EnvironmentLedger({ mode }: { mode: 'DEMO' | 'SAMPLE' | 'LIVE' }
       <span className="el-kicker">SASA Intelligence Lab / Environment and carbon</span>
       <h1>This ledger only exists in governed evidence.</h1>
       <p>
-        Every quantity on this screen is read from a retained governed snapshot, and the carbon estimates are arithmetic on
+        Every quantity on this screen is read from a retained governed snapshot, and the carbon scenarios are arithmetic on
         those quantities. {mode === 'DEMO' ? 'The Demo fixture is a synthetic capability story with no waste, sewage or green cover measurements in it, so there is nothing here to convert.' : 'The Live connector is on the roadmap; until a response is retained there is no quantity to convert.'}{' '}
         A fabricated carbon figure would be worse than none, so the screen stays empty rather than filling with a stand-in.
       </p>
@@ -46,6 +47,10 @@ function EnvironmentWorkspace() {
   const carbon = useMemo(() => getCarbonEstimates(), []);
   const day = useMemo(() => segregationAtSource(), []);
   const [view, setView] = useState<View>('ledger');
+  const routeCount = useMemo(
+    () => new Set(sections.flatMap((section) => section.lines.map((line) => line.tableKey))).size + 2,
+    [sections],
+  );
 
   return (
     <div className="env-ledger">
@@ -65,48 +70,57 @@ function EnvironmentWorkspace() {
         ))}
       </div>
 
-      <section className="el-thesis" aria-label="Why this screen exists">
-        <div>
+      <section className="el-thesis" aria-label="How to read the environment ledger">
+        <div className="el-thesis-copy">
           <span className="el-kicker">The reason this screen is separate</span>
           <h2>
-            A carbon claim gets <em>audited</em>. A dashboard number does not.
+            Start with what is reported. <em>Stop where measurement ends.</em>
           </h2>
           <p>
-            Seventeen retained routes already describe the three levers that decide an urban carbon position: waste kept out
-            of the landfill pathway, sewage treated instead of discharged, and green cover held as a sink. They were
-            catalogued as sanitation programmes, which is why nobody read them as an environment account. Nothing new was
-            ingested for this screen.
+            {routeCount} retained routes describe the waste, wastewater and green-asset side of a municipal carbon position. They
+            were catalogued as sanitation programmes; this screen reads them together as environment evidence. Nothing new
+            was ingested for it.
           </p>
           <p>
-            The physical ledger and the estimate layer are kept apart on purpose. One is what a source reported. The other is
-            arithmetic on it, with every factor named so a reviewer can argue with a parameter instead of the result.
+            Reported quantities, screening arithmetic and missing measurements remain visibly separate. That makes the page
+            useful for review without turning a construction status or a model assumption into an environmental result.
           </p>
+          <ul className="el-status-key" aria-label="Evidence status key">
+            <li className="is-reported"><i />Reported quantity</li>
+            <li className="is-scenario"><i />Screening scenario</li>
+            <li className="is-missing"><i />Measurement gap</li>
+          </ul>
         </div>
-        <dl className="el-thesis-figures">
-          <div>
-            <dt>Retained routes read as environment evidence</dt>
-            <dd>17</dd>
+        <div className="el-system-map">
+          <div className="el-orbit" aria-hidden="true">
+            <span className="el-orbit-ring is-outer" />
+            <span className="el-orbit-ring is-inner" />
+            <span className="el-orbit-node is-waste">Waste</span>
+            <span className="el-orbit-node is-water">Water</span>
+            <span className="el-orbit-node is-green">Green</span>
+            <span className="el-orbit-core"><b>CO₂e</b><small>screening</small></span>
           </div>
-          <div>
-            <dt>Quantities converted to tonnes CO2 equivalent</dt>
-            <dd>
-              {carbon.estimates.length}
-              <span>each with its assumptions listed</span>
-            </dd>
-          </div>
-          <div>
-            <dt>Conversions withheld for want of a measurement</dt>
-            <dd>
-              {carbon.unconverted.length}
-              <span>named in What is missing</span>
-            </dd>
-          </div>
-        </dl>
+          <dl className="el-thesis-figures">
+            <div>
+              <dt>Retained source routes</dt>
+              <dd>{routeCount}<span>14 snapshots + 2 household feeds</span></dd>
+            </div>
+            <div>
+              <dt>Screening scenarios</dt>
+              <dd>{carbon.estimates.length}<span>assumptions shown beside results</span></dd>
+            </div>
+            <div>
+              <dt>Conversions withheld</dt>
+              <dd>{carbon.unconverted.length}<span>turned into a measurement request</span></dd>
+            </div>
+          </dl>
+        </div>
       </section>
 
       {view === 'ledger' && <LedgerView sections={sections} day={day} />}
       {view === 'estimates' && <EstimatesView carbon={carbon} day={day} />}
       {view === 'gaps' && <GapsView carbon={carbon} />}
+      {view === 'actions' && <ActionsView carbon={carbon} sections={sections} day={day} />}
     </div>
   );
 }
@@ -117,12 +131,12 @@ function LedgerView({ sections, day }: { sections: ReturnType<typeof getEnvironm
       <section className="el-household" aria-labelledby="el-household-title">
         <header>
           <span className="el-kicker">Household grain · one complete day</span>
-          <h3 id="el-household-title">Separating waste at the door is the lever, and it is already measured house by house</h3>
+          <h3 id="el-household-title">Doorstep segregation is reported at ward-secretariat grain for one retained day</h3>
         </header>
         <div className="el-household-flow">
           <div>
             <b>{whole(day.households)}</b>
-            <span>households on the register</span>
+            <span>households in the retained denominator</span>
             <small>
               {whole(day.secretariats)} ward secretariats across {day.ulbs} ULBs
             </small>
@@ -145,15 +159,18 @@ function LedgerView({ sections, day }: { sections: ReturnType<typeof getEnvironm
         </p>
       </section>
 
-      {sections.map((section) => (
-        <section className="el-section" key={section.id} aria-labelledby={`el-${section.id}`}>
+      {sections.map((section, index) => (
+        <section className="el-section" data-section={section.id} key={section.id} aria-labelledby={`el-${section.id}`}>
           <header>
-            <h3 id={`el-${section.id}`}>{section.title}</h3>
-            <p>{section.lede}</p>
+            <span className="el-section-index">0{index + 1}</span>
+            <div>
+              <h3 id={`el-${section.id}`}>{section.title}</h3>
+              <p>{section.lede}</p>
+            </div>
           </header>
           <div className="el-lines">
             {section.lines.map((line) => (
-              <LineCard line={line} key={line.id} />
+              <LineCard line={line} section={section.id} key={line.id} />
             ))}
           </div>
         </section>
@@ -162,17 +179,18 @@ function LedgerView({ sections, day }: { sections: ReturnType<typeof getEnvironm
   );
 }
 
-function LineCard({ line }: { line: LedgerLine }) {
+function LineCard({ line, section }: { line: LedgerLine; section: 'diversion' | 'treatment' | 'sinks' }) {
   const filled = line.ratio === null ? null : Math.min(line.ratio, 1) * 100;
   const grainWord = line.grain === 'Facility' ? 'facilities' : line.grain === 'District' ? 'districts' : 'ULBs';
   const shortfall = line.polarity === 'shortfall';
   return (
-    <article className={`el-line${shortfall ? ' is-shortfall' : ''}`}>
+    <article className={`el-line tone-${section}${shortfall ? ' is-shortfall' : ''}`}>
       <header>
         <div className="el-line-name">
+          <span className="el-line-type">Reported · {line.grain}</span>
           <h4>{line.label}</h4>
           <p>
-            {line.grain} grain · {line.period ?? 'no reporting date in this response'} · retained {line.retainedAt}
+            {line.period ?? 'no reporting date in this response'} · retained {line.retainedAt}
           </p>
         </div>
         <p className="el-line-figure">
@@ -259,12 +277,12 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
   return (
     <>
       <p className="el-estimate-banner" role="note">
-        <b>Estimates, not measurements.</b> {carbon.boundary}
+        <b>Screening scenarios, not measured reductions.</b> {carbon.boundary}
       </p>
 
       <section className="el-bound" aria-labelledby="el-bound-title">
         <header>
-          <span className="el-kicker">The check that caps every figure below</span>
+          <span className="el-kicker">The physical constraint</span>
           <h3 id="el-bound-title">Reported segregation implies more wet waste than any completed plant can take</h3>
         </header>
         <div className="el-bound-steps">
@@ -282,7 +300,7 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
             <span>TPD</span>
           </div>
           <div className="el-bound-result">
-            <small>Share with a completed plant to receive it</small>
+            <small>Nominal completed-status capacity / modelled wet waste</small>
             <b>{share(bound.coveredShare)}</b>
             <span>
               {bound.largestCompletedSite ? `${bound.largestCompletedSite} holds most of that capacity` : 'one period, one registry'}
@@ -290,10 +308,9 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
           </div>
         </div>
         <p className="el-boundary">
-          Configured wet capacity across the whole registry is {qty(bound.configuredWetTpd)} TPD, which would cover the implied
-          tonnage. Only the completed share can carry an avoided-emissions claim today, so the ceiling is set by the plants
-          that exist and not by the collection reports. This is why the third estimate below, and not the second, is the one to
-          quote.
+          Configured wet capacity across the whole registry is {qty(bound.configuredWetTpd)} TPD, numerically larger than the
+          modelled tonnage. The source reports construction status and configured capacity, but no operation or throughput.
+          The comparison therefore reveals a capacity constraint; it does not establish current diversion or avoided emissions.
         </p>
       </section>
 
@@ -301,7 +318,7 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
         <h3 id="el-factor-title">The factor, written out</h3>
         <ol className="el-factor-steps">
           <li>
-            <span>Methane a tonne of mixed waste can generate on an unmanaged site</span>
+            <span>Methane potential for one tonne of wet compostable material at a deep unmanaged site</span>
             <b>0.15 × 0.5 × 0.8 × 0.5 × 16/12 = 0.04 t CH4</b>
           </li>
           <li>
@@ -313,14 +330,14 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
             <b>−{carbon.factors.compostProcess.toFixed(2)} tCO2e per tonne</b>
           </li>
           <li className="is-total">
-            <span>Avoided by composting a tonne instead of landfilling it</span>
+            <span>Difference between the landfill-potential and compost-process defaults</span>
             <b>{carbon.factors.avoidedCentral.toFixed(2)} tCO2e per tonne</b>
           </li>
         </ol>
         <p className="el-boundary">
-          The low and high columns below come from the site type alone, {carbon.factors.landfillLow.toFixed(2)} to{' '}
-          {carbon.factors.landfillHigh.toFixed(2)} tCO2e per tonne for a shallow versus a managed anaerobic site. Every other
-          parameter is held at its published default.
+          The endpoints below are site-class scenarios, not a statistical confidence interval: {carbon.factors.landfillLow.toFixed(2)}{' '}
+          tCO2e per tonne for a shallow unmanaged site and {carbon.factors.landfillHigh.toFixed(2)} for a managed anaerobic site.
+          The centre uses the deep unmanaged-site default; every other parameter stays fixed.
         </p>
       </section>
 
@@ -328,6 +345,7 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
         {carbon.estimates.map((estimate) => (
           <article className="el-estimate" key={estimate.id}>
             <header>
+              <span className="el-scenario-label">Screening scenario</span>
               <h4>{estimate.label}</h4>
               <p className="el-estimate-value">
                 <strong>{whole(estimate.central)}</strong>
@@ -338,7 +356,7 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
               className="el-range"
               style={{ '--el-central': `${((estimate.central - estimate.low) / (estimate.high - estimate.low)) * 100}%` } as CSSProperties}
               role="img"
-              aria-label={`Between ${whole(estimate.low)} and ${whole(estimate.high)} ${estimate.unit}, central estimate ${whole(estimate.central)}`}
+              aria-label={`Site-class scenarios from ${whole(estimate.low)} to ${whole(estimate.high)} ${estimate.unit}, deep unmanaged-site scenario ${whole(estimate.central)}`}
             >
               <span>{whole(estimate.low)}</span>
               <i>
@@ -352,7 +370,7 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
                 <dd>{estimate.physical}</dd>
               </div>
               <div>
-                <dt>Arithmetic</dt>
+                <dt>Scenario arithmetic</dt>
                 <dd>
                   <code>{estimate.derivation}</code>
                 </dd>
@@ -378,35 +396,30 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
           <div>
             <h3 id="el-assumptions-title">Every assumption, with its source</h3>
             <p>
-              None of these was measured in Andhra Pradesh. They are listed so a reviewer can substitute a local value and
-              watch the number move, which is the difference between an estimate and a claim.
+              None of these parameters was measured in the reporting ULBs. They are listed so a reviewer can replace a
+              screening default with a local value and see exactly which result changes.
             </p>
           </div>
           <button type="button" className="el-toggle" aria-expanded={openAssumptions} onClick={() => setOpenAssumptions((open) => !open)}>
             {openAssumptions ? 'Hide the notes' : 'Show the notes'}
           </button>
         </header>
-        <div className="el-table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Value used</th>
-                <th>Source</th>
-                {openAssumptions && <th>Why it matters</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {estimateAssumptions.map((assumption) => (
-                <tr key={assumption.id} data-undeclared={assumption.source.startsWith('Not declared') ? 'true' : undefined}>
-                  <th scope="row">{assumption.label}</th>
-                  <td>{assumption.value}</td>
-                  <td>{assumption.source}</td>
-                  {openAssumptions && <td className="el-assumption-note">{assumption.note}</td>}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="el-assumption-grid" role="list" aria-label="Scenario assumptions and sources">
+          {estimateAssumptions.map((assumption, index) => (
+            <article
+              role="listitem"
+              key={assumption.id}
+              data-undeclared={assumption.source.startsWith('Not declared') ? 'true' : undefined}
+            >
+              <header>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{assumption.label}</h4>
+              </header>
+              <strong>{assumption.value}</strong>
+              <p className="el-assumption-source"><span>Source</span>{assumption.source}</p>
+              {openAssumptions && <p className="el-assumption-note">{assumption.note}</p>}
+            </article>
+          ))}
         </div>
         <p className="el-boundary">
           The household conversion exists only because the segregation sources count households rather than weight. On{' '}
@@ -425,9 +438,8 @@ function GapsView({ carbon }: { carbon: ReturnType<typeof getCarbonEstimates>; }
         <span className="el-kicker">Conversions withheld</span>
         <h3 id="el-gaps-title">What a certified inventory would need that we do not hold</h3>
         <p>
-          Each line below is a quantity the state already reports and a conversion we are refusing to make, with the exact
-          measurement that would make it possible. A carbon figure published without these would not survive a third party
-          auditor, and this list is therefore the data request rather than a disclaimer.
+          Each line below starts with a retained reported quantity and names the measurement needed for a defensible conversion.
+          The result is a practical data request rather than an invented carbon number.
         </p>
       </section>
       <ol className="el-gaps">
@@ -446,10 +458,134 @@ function GapsView({ carbon }: { carbon: ReturnType<typeof getCarbonEstimates>; }
         ))}
       </ol>
       <p className="el-boundary el-gaps-close">
-        Two of these are measurements someone already takes and does not publish: weighbridge tonnage at the processing
-        facilities, and the organic load behind the sewage volumes. The rest need a field measurement that nobody has been
-        asked for. Neither gap is a reason to delay the physical ledger, which stands on its own.
+        Weighbridge tonnage, facility uptime and wastewater organic load may already exist in operational systems, but they are
+        absent from the retained routes reviewed here. The other conversions require local composition, survival or duty-cycle
+        measurements. The physical ledger remains usable while those requests are resolved.
       </p>
+    </>
+  );
+}
+
+function ActionsView({
+  carbon,
+  sections,
+  day,
+}: {
+  carbon: ReturnType<typeof getCarbonEstimates>;
+  sections: ReturnType<typeof getEnvironmentSections>;
+  day: ReturnType<typeof segregationAtSource>;
+}) {
+  const lines = sections.flatMap((section) => section.lines);
+  const legacy = lines.find((line) => line.id === 'legacy-balance');
+  const sewage = lines.find((line) => line.id === 'sewage');
+  const green = lines.find((line) => line.id === 'green-cover');
+  const bound = carbon.capacityBound;
+  const legacyTopShare = legacy?.concentration?.share ?? null;
+
+  const actions = [
+    {
+      id: 'measure',
+      level: 'Foundation',
+      title: 'Make tonnes and destinations auditable',
+      evidence: `${qty(bound.completedWetTpd)} TPD is attached to facilities marked completed, but the routes return no operating status, uptime, throughput or destination balance.`,
+      action: 'Connect daily weighbridge intake and output, operating hours, process route and reject destination to the facility registry. Reconcile collected tonnes to treated, recovered and disposed tonnes.',
+      proof: 'A daily mass balance by facility with no unexplained tonnes.',
+    },
+    {
+      id: 'methane',
+      level: 'Highest climate leverage',
+      title: 'Keep segregated organics out of unmanaged disposal',
+      evidence: `${whole(day.segregated)} households reported segregation on the retained day. The screening model implies ${whole(bound.impliedWetTonnesPerDay)} TPD of wet waste against ${qty(bound.completedWetTpd)} TPD of completed-status wet capacity.`,
+      action: 'Verify collection continuity, then commission and operate suitable composting or anaerobic-digestion capacity against measured local tonnage. Track contamination and rejected wet waste.',
+      proof: 'Measured organic tonnes processed, contamination rate and verified residual destination.',
+    },
+    {
+      id: 'legacy',
+      level: 'Standing liability',
+      title: 'Resolve the legacy-waste balance before claiming remediation benefit',
+      evidence: `${qty(legacy?.reported ?? null)} source units remain across ${legacy?.reporting ?? 0} ULBs${legacyTopShare === null ? '' : `; the five largest balances hold ${share(legacyTopShare)}`}. The source does not declare the unit.`,
+      action: 'Confirm tonnes versus volume, map dump age and depth, record excavated fractions and destinations, and measure methane, fire and leachate conditions at priority sites.',
+      proof: 'Surveyed mass, site class and destination evidence for every remediated fraction.',
+    },
+    {
+      id: 'water',
+      level: 'Water and methane',
+      title: 'Turn treatment capacity into treatment performance',
+      evidence: `${qty(sewage?.reported ?? null)} MLD appears in the sewage programme, but no retained record reports an operating plant or treated volume.`,
+      action: 'Add plant operation, inflow and outflow, BOD/COD, energy use, bypass events and sludge destination. Use load removed, not planned flow capacity, for climate accounting.',
+      proof: 'Monthly organic load removed and electricity per unit treated.',
+    },
+    {
+      id: 'green',
+      level: 'Removal evidence',
+      title: 'Measure survival and canopy, not planting length alone',
+      evidence: `${qty(green?.reported ?? null)} km of planting is reported. Length does not establish tree count, survival, canopy or stored carbon.`,
+      action: 'Geotag planting segments and record species, count, age, survival and canopy at repeat intervals. Keep water-body area and quality as separate environmental outcomes.',
+      proof: 'Surviving trees and canopy change at a declared date, with a documented biomass method.',
+    },
+  ];
+
+  return (
+    <>
+      <section className="el-action-intro" aria-labelledby="el-action-title">
+        <div>
+          <span className="el-kicker">Evidence to action</span>
+          <h3 id="el-action-title">A credible route to lower emissions starts with measured operations</h3>
+          <p>
+            This pathway ranks what the retained sanitation evidence supports now. It is not a carbon-neutrality claim:
+            municipality-wide neutrality also needs electricity, buildings, transport, procurement, refrigerants and other
+            material emission sources inside a declared boundary.
+          </p>
+        </div>
+        <div className="el-neutrality-mark" aria-label="Carbon neutrality can only be assessed after measured reductions and a complete residual inventory">
+          <span>Measure</span><i />
+          <span>Avoid</span><i />
+          <span>Reduce</span><i />
+          <span>Remove</span><i />
+          <strong>Neutralise verified residuals last</strong>
+        </div>
+      </section>
+
+      <section className="el-action-basis" aria-label="Current evidence constraint">
+        <div><small>Modelled wet-waste screening</small><b>{whole(bound.impliedWetTonnesPerDay)} TPD</b></div>
+        <span aria-hidden="true">→</span>
+        <div><small>Completed-status wet capacity</small><b>{qty(bound.completedWetTpd)} TPD</b></div>
+        <span aria-hidden="true">→</span>
+        <div className="is-gap"><small>Nominal capacity share</small><b>{share(bound.coveredShare)}</b></div>
+        <p>These figures locate a verification and capacity question. They do not report actual tonnes diverted.</p>
+      </section>
+
+      <ol className="el-actions">
+        {actions.map((action, index) => (
+          <li key={action.id} data-action={action.id}>
+            <div className="el-action-number"><span>{String(index + 1).padStart(2, '0')}</span><small>{action.level}</small></div>
+            <div className="el-action-copy">
+              <h4>{action.title}</h4>
+              <p>{action.evidence}</p>
+            </div>
+            <div className="el-action-do">
+              <span>Recommended next move</span>
+              <p>{action.action}</p>
+            </div>
+            <div className="el-action-proof">
+              <span>Evidence of progress</span>
+              <p>{action.proof}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <section className="el-neutrality-boundary" aria-labelledby="el-neutrality-boundary-title">
+        <div>
+          <span className="el-kicker">What this product can support</span>
+          <h3 id="el-neutrality-boundary-title">Sanitation-sector decisions with a visible evidence trail</h3>
+          <p>Waste diversion, treatment, wastewater and green-asset measurements can become a verified sector account once the named gaps are filled.</p>
+        </div>
+        <div>
+          <span className="el-kicker">What “carbon neutral” still requires</span>
+          <p>A declared geography and base year; complete Scope 1 and 2 sources; material Scope 3 sources; reduction targets and delivery; independent verification; and transparent treatment of only the residual emissions that remain.</p>
+        </div>
+      </section>
     </>
   );
 }

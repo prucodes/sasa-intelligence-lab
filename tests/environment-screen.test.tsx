@@ -14,11 +14,12 @@ describe('environment and carbon screen', () => {
   it('opens on the physical ledger, not on the estimates', () => {
     render(<EnvironmentLedger mode="SAMPLE" />);
     const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(3);
+    expect(tabs).toHaveLength(4);
     expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText(/Legacy waste still on the ground/)).toBeInTheDocument();
     // The estimate figures must not be on screen until a reader asks for them.
     expect(screen.queryAllByText(/Estimates, not measurements/)).toHaveLength(0);
+    expect(screen.getByText(/14 snapshots \+ 2 household feeds/)).toBeInTheDocument();
   });
 
   it('shows the household grain and says it is one day', () => {
@@ -35,28 +36,39 @@ describe('environment and carbon screen', () => {
 
   it('labels the estimate layer as an estimate and shows the capacity ceiling', () => {
     render(<EnvironmentLedger mode="SAMPLE" />);
-    fireEvent.click(screen.getByRole('tab', { name: /Carbon estimates/ }));
-    expect(screen.getAllByText(/Estimates, not measurements/).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('tab', { name: /Carbon scenarios/ }));
+    expect(screen.getAllByText(/Screening scenarios, not measured reductions/).length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { name: /implies more wet waste than any completed plant can take/ })).toBeInTheDocument();
     // The derivation is on screen, so a reviewer can argue with a parameter.
     expect(screen.getByText('0.15 × 0.5 × 0.8 × 0.5 × 16/12 = 0.04 t CH4')).toBeInTheDocument();
     expect(screen.getByText('1.12 tCO2e per tonne')).toBeInTheDocument();
+    expect(screen.getByText(/does not establish current diversion or avoided emissions/)).toBeInTheDocument();
   });
 
-  it('marks the undeclared legacy waste unit as an assumption in the table', () => {
+  it('marks the undeclared legacy waste unit as an assumption card', () => {
     const { container } = render(<EnvironmentLedger mode="SAMPLE" />);
-    fireEvent.click(screen.getByRole('tab', { name: /Carbon estimates/ }));
-    const flagged = container.querySelectorAll('tr[data-undeclared="true"]');
+    fireEvent.click(screen.getByRole('tab', { name: /Carbon scenarios/ }));
+    const flagged = container.querySelectorAll('[data-undeclared="true"]');
     expect(flagged).toHaveLength(1);
     expect(flagged[0].textContent).toMatch(/assumed metric tonnes/);
   });
 
   it('names the missing measurement for every withheld conversion', () => {
     render(<EnvironmentLedger mode="SAMPLE" />);
-    fireEvent.click(screen.getByRole('tab', { name: /What is missing/ }));
+    fireEvent.click(screen.getByRole('tab', { name: /Inventory gaps/ }));
     expect(screen.getByRole('heading', { name: /What a certified inventory would need/ })).toBeInTheDocument();
     expect(screen.getByText(/Organic load per volume, as BOD or COD/)).toBeInTheDocument();
     expect(screen.getAllByText('What is needed to convert it').length).toBeGreaterThanOrEqual(6);
+  });
+
+  it('turns the retained evidence into bounded recommendations without claiming carbon neutrality', () => {
+    render(<EnvironmentLedger mode="SAMPLE" />);
+    fireEvent.click(screen.getByRole('tab', { name: /Action pathway/ }));
+    expect(screen.getByRole('heading', { name: /credible route to lower emissions starts with measured operations/ })).toBeInTheDocument();
+    expect(screen.getByText(/Make tonnes and destinations auditable/)).toBeInTheDocument();
+    expect(screen.getByText(/Neutralise verified residuals last/)).toBeInTheDocument();
+    expect(screen.getByText(/What “carbon neutral” still requires/)).toBeInTheDocument();
+    expect(screen.getByText(/complete Scope 1 and 2 sources/)).toBeInTheDocument();
   });
 
   it('refuses to render a ledger in Demo or Live rather than showing a stand-in', () => {

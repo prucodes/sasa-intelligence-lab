@@ -2195,7 +2195,7 @@ function ModeKey({ mode }: { mode: DataMode }) {
  */
 function Environment({ mode }: { mode: DataMode }) {
   return <>
-    <PageIntro visual="environment" eyebrow="Environment and carbon" title="Environment & Carbon Ledger" description="Read the retained waste, sewage and green cover evidence as the physical account under a carbon claim, with every conversion, assumption and missing measurement stated."><FilterBar mode={mode}/></PageIntro>
+    <PageIntro visual="environment" eyebrow="Environment and carbon" title="Environment & Carbon Ledger" description="Trace retained waste, wastewater and green-asset evidence from reported quantities to transparent carbon screening scenarios—and see what is still missing for an inventory."><FilterBar mode={mode}/></PageIntro>
     <EnvironmentLedger mode={mode}/>
   </>;
 }
