@@ -51,6 +51,14 @@ function EnvironmentWorkspace() {
     () => new Set(sections.flatMap((section) => section.lines.map((line) => line.tableKey))).size + 2,
     [sections],
   );
+  const routeStreams = useMemo(
+    () => sections.map((section) => ({
+      id: section.id,
+      label: section.id === 'diversion' ? 'Waste + collection' : section.id === 'treatment' ? 'Wastewater' : 'Green assets',
+      count: new Set(section.lines.map((line) => line.tableKey)).size + (section.id === 'diversion' ? 2 : 0),
+    })),
+    [sections],
+  );
 
   return (
     <div className="env-ledger">
@@ -92,13 +100,22 @@ function EnvironmentWorkspace() {
           </ul>
         </div>
         <div className="el-system-map">
-          <div className="el-orbit" aria-hidden="true">
-            <span className="el-orbit-ring is-outer" />
-            <span className="el-orbit-ring is-inner" />
-            <span className="el-orbit-node is-waste">Waste</span>
-            <span className="el-orbit-node is-water">Water</span>
-            <span className="el-orbit-node is-green">Green</span>
-            <span className="el-orbit-core"><b>CO₂e</b><small>screening</small></span>
+          <div className="el-signal-field" aria-label="Retained environmental evidence streams">
+            <div className="el-orbit" aria-hidden="true">
+              <span className="el-orbit-ring is-outer" />
+              <span className="el-orbit-ring is-inner" />
+              <span className="el-orbit-core"><b>CO₂e</b><small>screening</small></span>
+            </div>
+            <ul className="el-streams">
+              {routeStreams.map((stream) => (
+                <li key={stream.id} data-stream={stream.id}>
+                  <i aria-hidden="true" />
+                  <span>{stream.label}</span>
+                  <b>{stream.count}</b>
+                  <small>retained routes</small>
+                </li>
+              ))}
+            </ul>
           </div>
           <dl className="el-thesis-figures">
             <div>
@@ -546,13 +563,39 @@ function ActionsView({
         </div>
       </section>
 
-      <section className="el-action-basis" aria-label="Current evidence constraint">
-        <div><small>Modelled wet-waste screening</small><b>{whole(bound.impliedWetTonnesPerDay)} TPD</b></div>
-        <span aria-hidden="true">→</span>
-        <div><small>Completed-status wet capacity</small><b>{qty(bound.completedWetTpd)} TPD</b></div>
-        <span aria-hidden="true">→</span>
-        <div className="is-gap"><small>Nominal capacity share</small><b>{share(bound.coveredShare)}</b></div>
-        <p>These figures locate a verification and capacity question. They do not report actual tonnes diverted.</p>
+      <section
+        className="el-action-basis"
+        aria-label="Current evidence constraint"
+        style={{ '--el-capacity-share': `${Math.min(bound.coveredShare * 100, 100)}%` } as CSSProperties}
+      >
+        <div className="el-action-flow-copy">
+          <span className="el-kicker">The first decision signal</span>
+          <h3>The retained evidence points to an organics capacity and verification gap</h3>
+          <p>
+            Household reporting is converted into a wet-waste screening quantity, then compared with capacity attached to
+            facilities marked completed. Neither side reports actual tonnes diverted.
+          </p>
+        </div>
+        <div className="el-action-flow" role="img" aria-label={`${whole(bound.impliedWetTonnesPerDay)} tonnes per day modelled wet waste; ${qty(bound.completedWetTpd)} tonnes per day completed-status wet capacity; ${share(bound.coveredShare)} nominal capacity share`}>
+          <div className="el-flow-origin">
+            <small>Modelled wet-waste screening</small>
+            <b>{whole(bound.impliedWetTonnesPerDay)}</b>
+            <span>TPD</span>
+          </div>
+          <div className="el-flow-track" aria-hidden="true"><i /><em /></div>
+          <div className="el-capacity-dial">
+            <div><b>{share(bound.coveredShare)}</b><small>nominal share</small></div>
+          </div>
+          <div className="el-flow-capacity">
+            <small>Completed-status wet capacity</small>
+            <b>{qty(bound.completedWetTpd)} TPD</b>
+          </div>
+        </div>
+        <div className="el-action-unknown">
+          <span>Actual diversion</span>
+          <b>Not measured</b>
+          <p>Operating status, throughput, contamination and reject destinations are absent from the retained routes.</p>
+        </div>
       </section>
 
       <ol className="el-actions">
@@ -561,6 +604,7 @@ function ActionsView({
             <div className="el-action-number"><span>{String(index + 1).padStart(2, '0')}</span><small>{action.level}</small></div>
             <div className="el-action-copy">
               <h4>{action.title}</h4>
+              <span>What the evidence says</span>
               <p>{action.evidence}</p>
             </div>
             <div className="el-action-do">
