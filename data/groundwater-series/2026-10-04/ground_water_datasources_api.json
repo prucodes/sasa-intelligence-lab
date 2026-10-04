@@ -1,0 +1,88 @@
+{
+  "requestEcho": {
+    "departmentId": "DEPT-AILABS",
+    "requestId": "466ff801-5fa4-44e8-abc6-99984daff205",
+    "purpose": "BENEFIT_DISBURSEMENT",
+    "tableKey": "ground_water_datasources_api",
+    "filters": {}
+  },
+  "responseMetadata": {
+    "responseId": "resp-0e98d3ac-684f-4c34-aaf6-fdad0325ae5d",
+    "generatedAt": "2026-10-04T12:29:37.948266+00:00",
+    "totalRecordCount": 3,
+    "returnedRecordCount": 3,
+    "hasNextPage": false,
+    "nextPageToken": null,
+    "tableKey": "ground_water_datasources_api",
+    "tableName": "ap_citizen360.ground_water_datasources_api"
+  },
+  "coverage": {
+    "retainedAt": "2026-10-04T12:29:38.088Z",
+    "capturedFor": "2026-10-04",
+    "identityField": "agencyuuid",
+    "distinctIdentities": 3,
+    "reportedTotal": 3,
+    "complete": true,
+    "rowsWithoutIdentity": 0,
+    "routes": {
+      "export": {
+        "returned": 3,
+        "newRows": 3
+      },
+      "paging": {
+        "returned": 3,
+        "newRows": 0
+      }
+    },
+    "readingWindow": null,
+    "grains": {
+      "districtAggregates": 0,
+      "subDistrict": 3
+    },
+    "boundary": "A current-state table with no period column, captured on the date above. It is not a measurement of that date: each row carries its own Egt stamp, and the window is reported beside it. District aggregates and the rows beneath them are both present and must never be summed together."
+  },
+  "records": [
+    {
+      "key_renamed": "APWRIMS",
+      "value": "APWRIMS",
+      "locuuid": "d6b37905-d2d3-4275-9317-d9b6f47cd783",
+      "loctype": "COUNTRY",
+      "locname": "INDIA",
+      "agencyuuid": "4b3a6283-cb13-4b68-9a5b-f4e08f69d5f0",
+      "hasstation": "false",
+      "minmax": "{\"MIN\":0,\"MAX\":0}",
+      "current_renamed": "",
+      "historical": "",
+      "datatypecodes": "",
+      "displaynames": ""
+    },
+    {
+      "key_renamed": "DWLR",
+      "value": "DWLR",
+      "locuuid": "d6b37905-d2d3-4275-9317-d9b6f47cd783",
+      "loctype": "COUNTRY",
+      "locname": "INDIA",
+      "agencyuuid": "ec47877e-2e27-449a-a581-caa43b8829bf",
+      "hasstation": "false",
+      "minmax": "{\"MIN\":20260118,\"MAX\":20260221}",
+      "current_renamed": "",
+      "historical": "",
+      "datatypecodes": "",
+      "displaynames": ""
+    },
+    {
+      "key_renamed": "MERGED_DWLR",
+      "value": "MERGED_DWLR",
+      "locuuid": "d6b37905-d2d3-4275-9317-d9b6f47cd783",
+      "loctype": "COUNTRY",
+      "locname": "INDIA",
+      "agencyuuid": "f74b593d-4dfe-4230-b202-c2d4070957ea",
+      "hasstation": "false",
+      "minmax": "{\"MIN\":20250101,\"MAX\":20260908}",
+      "current_renamed": "",
+      "historical": "",
+      "datatypecodes": "",
+      "displaynames": ""
+    }
+  ]
+}
