@@ -116,6 +116,15 @@ export interface ReadinessGate {
   title: string;
   detail: string;
   state: 'met' | 'blocked' | 'future';
+  /**
+   * What somebody would have to do to open this gate, written as an instruction.
+   *
+   * The readiness screen names the first required data action, and it used to name the ULB
+   * crosswalk in hard-coded text. When that gate closed, the headline went on asking for
+   * something already done. Carrying the action on the gate means the headline follows
+   * whichever gate is actually blocking, and cannot go stale again.
+   */
+  action?: string;
 }
 
 export interface ModeDataset {
@@ -539,8 +548,14 @@ const sampleData: ModeDataset = {
       { title: 'Governed source access', detail: `${readinessCatalogueStats.platformAvailable} account-granted endpoints; ${readinessCatalogueStats.liveNotIngestedDatasets} readable CDMA responses await complete retention`, state: 'met' },
       { title: 'Bundled response totals reconcile', detail: `${governedSnapshotStats.completeDatasets} of ${governedSnapshotStats.retrievedDatasets} bundled exports reconcile to response metadata; Gobardhan is retained. Grid coverage is assessed separately.`, state: governedSnapshotStats.completeDatasets===governedSnapshotStats.retrievedDatasets ? 'met' : 'blocked' },
       { title: 'Rural matched comparison available', detail: 'May through August days 1–7 support one validated common GP-day cohort and reported first-week trajectories.', state: 'met' },
-      { title: 'Reviewed ULB crosswalk', detail: `${codedIdentitySummary()}. The code is the source's own, so it needs no name review, but the department has not confirmed that the column carries it`, state: 'blocked' },
-      { title: 'Same-year outcome data', detail: 'Required before any asset–outcome flag', state: 'blocked' },
+      // Opened on the account holder's decision, on the evidence in
+      // fix-pack/crosswalk-evidence.md. What it asserts is narrow and the detail says so: a
+      // crosswalk exists that rests on the source's own code rather than on matching
+      // spellings. It does not assert that every ULB has one. The entities without a code
+      // are held out of cross-source work, which is the same treatment as any other missing
+      // measurement here, rather than matched by name to close the gap.
+      { title: 'Reviewed ULB crosswalk', detail: `${codedIdentitySummary()}, held out of cross-source work rather than matched by name. The crosswalk rests on the code the source supplies, not on a review of spellings; the department has not confirmed that the column carries it`, state: 'met' },
+      { title: 'Same-year outcome data', detail: 'Required before any asset–outcome flag. Swachh outcomes are source year 2024 and the service measures are 2026, so no asset can be tested against an outcome from its own year', state: 'blocked', action: 'Publish outcome data from the same year as the service measures' },
       { title: 'Persistent bottleneck evidence', detail: 'Requires at least six consecutive validated months', state: 'future' },
       { title: 'Forward-looking warning evidence', detail: 'Requires 12+ months, a defined target, and backtesting cycles', state: 'future' },
       { title: 'Action-ranking evidence', detail: 'Requires interventions, costs, eligibility, and post-action outcomes', state: 'future' },

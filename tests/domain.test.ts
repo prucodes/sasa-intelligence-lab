@@ -104,3 +104,32 @@ describe('evidence-safe calculations', () => {
     expect(datasets.SAMPLE.radar.every((item) => item.state === 'UNSCORED')).toBe(true);
   });
 });
+
+describe('activation gates', () => {
+  const gates = datasets.SAMPLE.readiness.gates;
+
+  it('opens the ULB crosswalk on the code, and says what it does not claim', () => {
+    const crosswalk = gates.find((gate) => gate.title === 'Reviewed ULB crosswalk')!;
+    expect(crosswalk.state).toBe('met');
+    // The gate asserts a crosswalk that rests on the source's own code. It must not be read
+    // as every ULB having one, so the detail has to keep saying what happens to the rest.
+    expect(crosswalk.detail).toMatch(/name candidates/);
+    expect(crosswalk.detail).toMatch(/held out of cross-source work rather than matched by name/);
+    expect(crosswalk.detail).toMatch(/not confirmed/);
+  });
+
+  it('still holds scoring behind the outcome year, which no identity work can open', () => {
+    const blocked = gates.filter((gate) => gate.state === 'blocked');
+    expect(blocked.map((gate) => gate.title)).toEqual(['Same-year outcome data']);
+    expect(datasets.SAMPLE.radar.every((item) => item.state === 'UNSCORED')).toBe(true);
+  });
+
+  it('carries an action on every blocked gate, so the headline cannot name a closed one', () => {
+    // The readiness screen reads the first blocked gate's action. A blocked gate without one
+    // would leave that headline empty, which is how it went stale before.
+    for (const gate of gates.filter((item) => item.state === 'blocked')) {
+      expect(gate.action, `${gate.title} is blocked but carries no action`).toBeTruthy();
+    }
+    expect(gates.find((gate) => gate.state === 'blocked')?.action).toMatch(/same year as the service measures/);
+  });
+});
