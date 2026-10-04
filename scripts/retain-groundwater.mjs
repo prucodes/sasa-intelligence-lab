@@ -96,9 +96,23 @@ const force = argv.includes('--force');
 const dateArg = argv[argv.indexOf('--date') + 1];
 /** Re-capture one table without touching the others already captured for that day. */
 const only = argv.includes('--only') ? argv[argv.indexOf('--only') + 1] : null;
+/**
+ * The local calendar day, not the UTC one.
+ *
+ * The directory name is how a person finds the day they took a capture, so it has to match
+ * the date on their own clock. Taking it from `toISOString()` meant that west of UTC an
+ * evening capture was stamped with tomorrow's date, and the next day's run was then refused
+ * as already captured. The reading timestamps in `readingWindow` stay in UTC, because those
+ * are the platform's and not ours.
+ */
+function localDay(at = new Date()) {
+  const pad = (value) => String(value).padStart(2, '0');
+  return `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}`;
+}
+
 const day = argv.includes('--date') && /^\d{4}-\d{2}-\d{2}$/.test(dateArg ?? '')
   ? dateArg
-  : new Date().toISOString().slice(0, 10);
+  : localDay();
 
 async function send(path, body) {
   for (let attempt = 1; attempt <= 4; attempt += 1) {
@@ -262,6 +276,8 @@ for (const table of wanted) {
     coverage: {
       retainedAt: new Date().toISOString(),
       capturedFor: day,
+      // The day is the capturer's local calendar day; name the zone so it is unambiguous.
+      capturedForZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       identityField: table.identity,
       distinctIdentities: records.length,
       reportedTotal: total,
