@@ -216,8 +216,16 @@ const wanted = TABLES
     return false;
   });
 if (!wanted.length) {
-  console.error(only ? `Nothing to do: ${only} is not a groundwater table, or it is already captured for ${day}.` : `Every table is already captured for ${day}. Pass --force to replace, or --date for a different day.`);
-  process.exit(1);
+  // Running this twice in a day is a normal thing to do and nothing went wrong, so it is
+  // not a failure. Only an unrecognised --only is.
+  const unknown = only && !TABLES.some((table) => table.tableKey === only);
+  if (unknown) {
+    console.error(`Nothing to do: ${only} is not one of the groundwater tables (${TABLES.map((table) => table.tableKey).join(', ')}).`);
+    process.exit(1);
+  }
+  console.log(`\n${day} is already captured, and nothing was changed. Run it again on another day, or pass --force to replace that day.`);
+  console.log('Replacing a captured day discards readings that cannot be fetched again, so --force is rarely what you want.');
+  process.exit(0);
 }
 
 await mkdir(outDir, { recursive: true });
