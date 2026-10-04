@@ -1,6 +1,7 @@
 import {getCollectionProcurementSummary,getIHHLFunnel,getLegacyWasteSummary} from './analytics';
 import {serviceSnapshot} from './ulb-service';
 import {sourceCandidateKey} from './snapshots';
+import {urbanBodyIdentity} from './urban-body-code';
 import {comparisonDiagnosticKey} from './ulb-diagnostics-link';
 import type {ReviewIssueId} from './overview';
 
@@ -47,14 +48,18 @@ export function getRankingDefinition(id:RankingSubject):RankingDefinition {
   const inputs:RankingInput[]=[...groups].map(([candidate,group])=>{
     const r=group[0],missing=candidate.startsWith('unidentified:')||!r.ulb?.trim()||!r.district?.trim();
     const variants=new Set(group.map(v=>JSON.stringify([v.top,v.bottom,v.check,'balance' in v?v.balance:null])));
-    return {key:`${id}:${candidate}`,candidate:missing?null:candidate,name:r.ulb??'Unidentified returned row',district:r.district??'Not stated',identity:null,
+    // A row that declares an urban body code shares an identity with the daily service
+    // sources, which are keyed on the same register. That is the source's own code, not a
+    // name match, so it certifies the link; rows without one stay name candidates.
+    return {key:`${id}:${candidate}`,candidate:missing?null:candidate,name:r.ulb??'Unidentified returned row',district:r.district??'Not stated',identity:urbanBodyIdentity(r.raw),
       top:variants.size>1?null:r.top,bottom:variants.size>1?null:r.bottom,
       reasons:[...(missing?['Missing source ULB identity']:[]),...(variants.size>1?['Conflicting measurements for this source identity']:[]),...(group.some(v=>v.check)?['Source balance does not reconcile']:[])]};
   });
+  const coded=inputs.filter(row=>row.identity).length;
   return {id,label,programme,inputs,period:raw[0]?.period??'Not returned',source:raw[0]?.tableKey??'Not returned',
     topLabel:id==='toilets'?'Completed toilets':id==='vehicles'?'Supplied vehicles':'Cleared tonnes',
     bottomLabel:id==='toilets'?'Approved toilets':id==='vehicles'?'Vehicles on work orders':'Target tonnes',
-    boundary:'Source-name ULB candidates within this programme and period; cross-programme identity is not certified. Rates measure delivery against the reported denominator, not service quality, infrastructure need or overall sanitation performance.'};
+    boundary:`${coded?`${coded} of ${inputs.length} ULBs declare an urban body code, which links them to the daily service sources without matching names; the rest are source-name candidates`:'Source-name ULB candidates within this programme and period; cross-programme identity is not certified'}. Rates measure delivery against the reported denominator, not service quality, infrastructure need or overall sanitation performance.`};
 }
 
 export function rankingDiagnosticLink(definition:RankingDefinition,row:RankingInput){

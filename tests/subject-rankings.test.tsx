@@ -35,10 +35,18 @@ describe('subject rankings',()=>{
     const definitions=rankingSubjects.map(s=>getRankingDefinition(s.id));
     const selected=definitions[0].inputs.find(r=>r.name==='NARSIPATNAM')!;
     const profile=getSubjectProfile(selected,'reach',definitions);
-    expect(profile.filter(p=>p.ranked)).toHaveLength(2);
+    // Toilets joins on the urban body code the source itself supplies, so it is matched
+    // rather than held as a name candidate. Collection and segregation share that code.
     const toilets=profile.find(p=>p.definition.id==='toilets')!;
-    expect(toilets.candidate).toBeDefined();expect(toilets.matched).toBeUndefined();expect(toilets.ranked).toBeUndefined();
-    const other=getSubjectProfile(toilets.candidate!,'toilets',definitions);
+    expect(toilets.matched).toBeDefined();
+    expect(toilets.matched!.identity).toBe(selected.identity);
+    expect(toilets.candidate).toBeUndefined();
+    // Legacy waste returns a ULB name and no code, so it stays a candidate and is never
+    // joined from the name alone.
+    const legacy=profile.find(p=>p.definition.id==='legacy')!;
+    expect(legacy.matched).toBeUndefined();expect(legacy.ranked).toBeUndefined();
+    expect(legacy.candidate).toBeDefined();
+    const other=getSubjectProfile(legacy.candidate!,'legacy',definitions);
     expect(other.filter(p=>p.matched)).toHaveLength(1);
   });
   it('keeps the five subjects separate without creating a combined score',()=>{

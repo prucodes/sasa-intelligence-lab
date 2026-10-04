@@ -16,6 +16,7 @@ import {
   type SnapshotRecord,
 } from '@/lib/snapshots';
 import { IHHL_SOURCE_KEY, sourceLabel } from '@/lib/snapshots';
+import { urbanBodyCode } from '@/lib/urban-body-code';
 
 export type DataMode = 'DEMO' | 'SAMPLE' | 'LIVE';
 
@@ -450,6 +451,23 @@ const demoReadinessRows: ReadinessRow[] = Array.from({ length: 6 }, (_, index) =
   sourceState: 'SYNTHETIC',
 }));
 
+/**
+ * How far the source's own urban body code reaches, measured on the latest toilet period
+ * rather than asserted. The gate stays blocked while any ULB is still a name candidate.
+ */
+function codedIdentitySummary(): string {
+  const records = governedSnapshotByKey.get(IHHL_SOURCE_KEY)?.records ?? [];
+  const coded = new Set<string>();
+  const candidates = new Set<string>();
+  for (const record of records) {
+    const candidate = sourceCandidateKey(record);
+    if (candidate) candidates.add(candidate);
+    const code = urbanBodyCode(record);
+    if (code) coded.add(code);
+  }
+  return `${coded.size} of ${candidates.size} ULBs declare an urban body code the daily service sources share; ${candidates.size - coded.size} are still name candidates`;
+}
+
 const demoData: ModeDataset = {
   mode: 'DEMO', banner: 'Synthetic fixture mode · values are illustrative and not official findings',
   overview: [
@@ -521,7 +539,7 @@ const sampleData: ModeDataset = {
       { title: 'Governed source access', detail: `${readinessCatalogueStats.platformAvailable} account-granted endpoints; ${readinessCatalogueStats.liveNotIngestedDatasets} readable CDMA responses await complete retention`, state: 'met' },
       { title: 'Bundled response totals reconcile', detail: `${governedSnapshotStats.completeDatasets} of ${governedSnapshotStats.retrievedDatasets} bundled exports reconcile to response metadata; Gobardhan is retained. Grid coverage is assessed separately.`, state: governedSnapshotStats.completeDatasets===governedSnapshotStats.retrievedDatasets ? 'met' : 'blocked' },
       { title: 'Rural matched comparison available', detail: 'May through August days 1–7 support one validated common GP-day cohort and reported first-week trajectories.', state: 'met' },
-      { title: 'Reviewed ULB crosswalk', detail: 'Required because selected sources expose names only', state: 'blocked' },
+      { title: 'Reviewed ULB crosswalk', detail: `${codedIdentitySummary()}. The code is the source's own, so it needs no name review, but the department has not confirmed that the column carries it`, state: 'blocked' },
       { title: 'Same-year outcome data', detail: 'Required before any asset–outcome flag', state: 'blocked' },
       { title: 'Persistent bottleneck evidence', detail: 'Requires at least six consecutive validated months', state: 'future' },
       { title: 'Forward-looking warning evidence', detail: 'Requires 12+ months, a defined target, and backtesting cycles', state: 'future' },

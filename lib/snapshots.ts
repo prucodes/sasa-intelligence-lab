@@ -1,3 +1,4 @@
+import { lgdMandalCode, urbanBodyCode } from './urban-body-code';
 import kitchenGarden from '@/data/full-snapshots/serp_kitchen_garden_api.json';
 import swachhataAwareness from '@/data/full-snapshots/serp_swachhata_awareness_api.json';
 import serpCircularEconomy from '@/data/full-snapshots/serp_circular_economy_api.json';
@@ -205,6 +206,8 @@ export interface LgdIdentity {
   districtCode: string | null;
   districtName: string | null;
   ulbCode: string | null;
+  /** The LGD mandal code, when the row carried one instead of an urban body code. */
+  mandalCode: string | null;
   ulbName: string | null;
 }
 
@@ -221,7 +224,10 @@ export function lgdIdentity(record: SnapshotRecord): LgdIdentity {
   return {
     districtCode: value(record.lgd_dist_code ?? record.lgd_district_code),
     districtName: value(record.dstrt_nm ? record.district_name : undefined) ?? value(record.lgd_district_name),
-    ulbCode: value(record.lgd_mandal_code),
+    // `lgd_mandal_code` carries two code systems. Only one of them identifies a ULB, so the
+    // other is reported as what it is rather than counted as identity. See urban-body-code.
+    ulbCode: urbanBodyCode(record),
+    mandalCode: lgdMandalCode(record),
     ulbName: value(record.mandal_name),
   };
 }
