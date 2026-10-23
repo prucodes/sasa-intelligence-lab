@@ -81,11 +81,11 @@ export function getOverviewIssues(): ReviewIssue[] {
       boundary: 'Open approvals identify a review workload. The source does not establish why delivery is incomplete.',
     },
     {
-      id: 'processing', title: 'Legacy waste', quantity: 'tonnes reported remaining', unit: 'tonnes',
-      basisLabel: 'target tonnes', completedLabel: 'cleared tonnes', period: legacy.rows[0]?.period ?? 'Not returned',
+      id: 'processing', title: 'Legacy waste', quantity: 'source units reported remaining', unit: 'source units',
+      basisLabel: 'target quantity', completedLabel: 'cleared quantity', period: legacy.rows[0]?.period ?? 'Not returned',
       source: 'Clearance of Legacy Waste', excluded: wasteRows.excluded,
       rows: wasteRows.rows.map((row) => ({ ...identity(row), value: row.balance!, basis: row.target!, completed: row.achievement! })),
-      boundary: 'Ranked by remaining tonnes to show workload concentration. This is not a ranking of sanitation performance.',
+      boundary: 'The response does not declare a unit. Ranked by remaining quantity to show workload concentration. This is not a ranking of sanitation performance.',
     },
   ];
   return configs.map((issue) => ({

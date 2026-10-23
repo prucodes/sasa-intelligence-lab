@@ -25,7 +25,7 @@ describe('environment and carbon screen', () => {
   it('shows the household grain and says it is one day', () => {
     render(<EnvironmentLedger mode="SAMPLE" />);
     expect(screen.getByText('47,09,868')).toBeInTheDocument();
-    expect(screen.getByText(/only complete day in retention/)).toBeInTheDocument();
+    expect(screen.getByText(/retained collection series contains 16 days/)).toBeInTheDocument();
   });
 
   it('carries the target alongside every figure that has one', () => {
@@ -38,7 +38,7 @@ describe('environment and carbon screen', () => {
     render(<EnvironmentLedger mode="SAMPLE" />);
     fireEvent.click(screen.getByRole('tab', { name: /Carbon scenarios/ }));
     expect(screen.getAllByText(/Screening scenarios, not measured reductions/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { name: /implies more wet waste than any completed plant can take/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Modelled wet waste exceeds reported completed-status wet capacity/ })).toBeInTheDocument();
     // The derivation is on screen, so a reviewer can argue with a parameter.
     expect(screen.getByText('0.15 × 0.5 × 0.8 × 0.5 × 16/12 = 0.04 t CH4')).toBeInTheDocument();
     expect(screen.getByText('1.12 tCO2e per tonne')).toBeInTheDocument();

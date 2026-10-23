@@ -57,9 +57,9 @@ export function getRankingDefinition(id:RankingSubject):RankingDefinition {
   });
   const coded=inputs.filter(row=>row.identity).length;
   return {id,label,programme,inputs,period:raw[0]?.period??'Not returned',source:raw[0]?.tableKey??'Not returned',
-    topLabel:id==='toilets'?'Completed toilets':id==='vehicles'?'Supplied vehicles':'Cleared tonnes',
-    bottomLabel:id==='toilets'?'Approved toilets':id==='vehicles'?'Vehicles on work orders':'Target tonnes',
-    boundary:`${coded?`${coded} of ${inputs.length} ULBs declare an urban body code, which links them to the daily service sources without matching names; the rest are source-name candidates`:'Source-name ULB candidates within this programme and period; cross-programme identity is not certified'}. Rates measure delivery against the reported denominator, not service quality, infrastructure need or overall sanitation performance.`};
+    topLabel:id==='toilets'?'Completed toilets':id==='vehicles'?'Supplied vehicles':'Cleared quantity',
+    bottomLabel:id==='toilets'?'Approved toilets':id==='vehicles'?'Vehicles on work orders':'Target quantity',
+    boundary:`${id==='legacy'?'The source does not declare a quantity unit. ':''}${coded?`${coded} of ${inputs.length} ULBs declare an urban body code, which links them to the daily service sources without matching names; the rest are source-name candidates`:'Source-name ULB candidates within this programme and period; cross-programme identity is not certified'}. Rates measure delivery against the reported denominator, not service quality, infrastructure need or overall sanitation performance.`};
 }
 
 export function rankingDiagnosticLink(definition:RankingDefinition,row:RankingInput){

@@ -15,7 +15,7 @@ const n=(v:number)=>v.toLocaleString('en-IN',{maximumFractionDigits:1});
 const readingWords={
   sanitation:{right:'More toilets approved, so a bigger job.',up:'A bigger share of approved toilets completed.'},
   collection:{right:'More vehicles on work orders, so a bigger job.',up:'A bigger share of those vehicles supplied.'},
-  processing:{right:'More tonnes of legacy waste to clear, so a bigger job.',up:'A bigger share of the target tonnes cleared.'},
+  processing:{right:'More reported legacy waste to clear, in source units.',up:'A bigger share of the target quantity cleared.'},
 };
 export function UlbRadar(){
   const narrow=useCompactChart(),left=narrow?85:70,right=narrow?372:680,top=70,bottom=narrow?410:430;

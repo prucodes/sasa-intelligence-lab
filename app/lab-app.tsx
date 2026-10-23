@@ -1241,7 +1241,7 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
     review: `${getIHHLStageCohorts(period).cohorts.find((item) => item.id === 'approved-none')?.count ?? 0} ULBs report approvals with no construction activity.`,
     limit: 'The records show a conversion gap; they do not identify its cause or prescribe an intervention.',
   } : tab === 'processing' ? {
-    metric: compactMetric(legacy.balance), metricLabel: 'tonnes reported remaining', coverage: `${formatCoverage(legacy.coverage)} ULBs returned`,
+    metric: compactMetric(legacy.balance), metricLabel: 'source units reported remaining', coverage: `${formatCoverage(legacy.coverage)} ULBs returned`,
     headline: 'Legacy-waste balance and facility-status exceptions are ready for review',
     evidence: `${formatPercent(legacy.clearanceRatio)} reported legacy-waste clearance · ${compactNumber(legacy.balance)} source-reported balance`,
     meaning: `The evidence supports a clearance-and-balance view plus a ${processing.configuredTpd.toLocaleString('en-IN')} configured TPD inventory.`,
@@ -1308,9 +1308,9 @@ function OperationalEntityComparison({ domain, period }: { domain: OperationalCo
     } : {
       source: '100% Clearance of Legacy Waste',
       signalLabel: 'reported balance',
-      signalUnit: 'tonnes',
+      signalUnit: 'source units',
       ratioLabel: 'cleared / target',
-      boundary: 'Reported stock clearance only, not daily throughput, utilization, or verified remediation.',
+      boundary: 'Unit not declared by the source. Reported stock clearance only, not daily throughput, utilization, or verified remediation.',
       rows: getLegacyWasteSummary(period).rows.filter((row) => Boolean(row.ulb)).map<OperationalCompareRow>((row) => ({
         key: `${row.district}|${row.ulb}`, ulb: row.ulb, district: row.district, period: row.period,
         stages: [{ label: 'Target', value: row.target }, { label: 'Cleared', value: row.achievement }, { label: 'Balance', value: row.balance }],

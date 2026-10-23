@@ -717,11 +717,11 @@ export function getReportedMovements(): ReportedMovement[] {
       id: 'processing',
       label: 'Legacy-waste balance movement',
       metricLabel: 'Legacy waste balance',
-      unit: 'tonnes',
+      unit: 'source units',
       tableKey: keys.legacyWaste,
       field: 'balance',
       valid: legacyBalancePasses,
-      boundary: 'A lower reported balance indicates less remaining waste. Rows that fail target minus cleared equals balance are held out.',
+      boundary: 'The response does not declare a unit. A lower reported balance indicates less remaining waste. Rows that fail target minus cleared equals balance are held out.',
     }),
   ];
 }
@@ -1120,7 +1120,7 @@ export function getDistrictSignalMaps(): DistrictSignalMap[] {
       id: 'legacy',
       label: 'Legacy-waste balance',
       title: 'Source-reported legacy-waste balance',
-      unit: 'tonnes',
+      unit: 'source units',
       period: legacy.period,
       coverage: { reported: legacy.rows.filter((row) => row.balance !== null && row.balanceCheck !== 'conflict').length, expected: anchorRegistry.length, unit: 'ULBs', basis: 'Internally conflicting balances excluded.' },
       rule: 'Sum of source-reported balance inside the legacy-waste source; arithmetic conflicts excluded.',

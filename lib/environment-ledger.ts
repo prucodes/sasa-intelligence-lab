@@ -18,13 +18,12 @@
  *   a factor instead of the result. Where a conversion would need data we do not hold,
  *   the line stays unconverted and names the missing input. That list is the data ask.
  *
- * The cap in `capacityBound` is the point of the exercise. Reported doorstep segregation
- * implies a wet tonnage far above the wet capacity that any source reports as completed,
- * so the avoided-emissions figure this evidence can carry is set by the plants that exist,
- * not by the collection reports. An estimate layer that did not say so would be flattery.
+ * `capacityBound` compares modelled wet tonnage with reported completed-status capacity.
+ * Neither actual throughput nor avoided emissions is measured by that comparison.
  */
 
 import { currentSnapshots } from './current-snapshots';
+import { getReportingContinuity } from './reporting-continuity';
 import { serviceSnapshot } from './ulb-service';
 import { sourceNumber, sourceText, uniqueSourceRecords } from './record-contract.mjs';
 
@@ -35,6 +34,7 @@ interface Prepared {
   district: string | null;
   period: string | null;
   periodSort: string | null;
+  periodConflict: boolean;
   key: string | null;
   target: number | null;
   reported: number | null;
@@ -76,6 +76,8 @@ export interface LedgerLine {
   reporting: number;
   /** Entities carrying a target that reported no progress at all. */
   silent: number;
+  missingAgainstTarget: number;
+  positiveWithoutTarget: number;
   /** Share of all reported progress held by the named entities, and who they are. */
   concentration: { share: number; top: LedgerEntity[] } | null;
   /** What this figure does not establish. Shown with the figure, never below the fold. */
@@ -104,12 +106,15 @@ function snapshotRows(tableKey: string): { rows: Row[]; retainedAt: string } {
   return { rows: source.records as Row[], retainedAt: source.responseMetadata.generatedAt.slice(0, 10) };
 }
 
-/**
- * A row's declared reporting period. A month name with a separate year is preferred over a
- * numeric month, because several routes carry both and disagree: the FSTP response labels
- * month 7 as JUNE. Reading the name keeps the disagreement visible instead of resolving it
- * silently in favour of whichever field happens to be checked first.
- */
+/** Detect disagreement before selecting a display period; never label it as resolved. */
+function hasConflictingMonth(row: Row): boolean {
+  const name = sourceText(row.month_name ?? row.mnth_nm);
+  const numeric = sourceNumber(row.mnth_no ?? row.month_number);
+  const index = name ? MONTHS.indexOf(name.toUpperCase()) : -1;
+  return index >= 0 && numeric !== null && numeric >= 1 && numeric <= 12 && index + 1 !== numeric;
+}
+
+/** Names group retained records; the display separately flags conflicting numeric months. */
 function resolvePeriod(row: Row): { label: string; sort: string } | null {
   const name = sourceText(row.month_name ?? row.mnth_nm);
   const year = sourceText(row.year);
@@ -197,6 +202,7 @@ function buildLine(spec: LineSpec): LedgerLine {
       district,
       period: period?.label ?? null,
       periodSort: period?.sort ?? null,
+      periodConflict: hasConflictingMonth(row),
       key: identity ? `${identity}|${period?.label ?? 'undated'}` : null,
       target: firstNumber(row, spec.targetFields),
       reported: firstNumber(row, spec.reportedFields),
@@ -216,7 +222,9 @@ function buildLine(spec: LineSpec): LedgerLine {
   const reportedTotal = counted.some((row) => row.reported !== null) ? counted.reduce((sum, row) => sum + (row.reported ?? 0), 0) : null;
 
   const withTarget = entityRows.filter((row) => (row.target ?? 0) > 0);
-  const silent = withTarget.filter((row) => (row.reported ?? 0) === 0).length;
+  const silent = withTarget.filter((row) => row.reported === 0).length;
+  const missingAgainstTarget = withTarget.filter((row) => row.reported === null).length;
+  const positiveWithoutTarget = spec.targetFields ? counted.filter((row) => (row.reported ?? 0) > 0 && (row.target ?? 0) <= 0).length : 0;
 
   const progress = counted.filter((row) => (row.reported ?? 0) > 0).sort((a, b) => (b.reported ?? 0) - (a.reported ?? 0));
   const top = progress.slice(0, 5);
@@ -234,13 +242,15 @@ function buildLine(spec: LineSpec): LedgerLine {
     unit: spec.unit,
     grain: spec.grain,
     polarity: spec.polarity ?? 'progress',
-    period: entityRows[0]?.period ?? null,
+    period: selected.some((row) => row.periodConflict) ? 'Conflicting month labels' : entityRows[0]?.period ?? null,
     target: targetTotal,
     reported: reportedTotal,
     ratio: targetTotal !== null && targetTotal > 0 && reportedTotal !== null ? reportedTotal / targetTotal : null,
-    entities: withTarget.length || entityRows.length,
+    entities: spec.targetFields ? withTarget.length : entityRows.length,
     reporting: progress.length,
     silent,
+    missingAgainstTarget,
+    positiveWithoutTarget,
     concentration,
     boundary: spec.boundary,
     caution: spec.caution ?? null,
@@ -261,7 +271,7 @@ function legacyWasteBalance(): LedgerLine {
     entityFields: ['ulb_name', 'ulb_nm'],
     targetFields: ['target'],
     reportedFields: ['balance'],
-    boundary: 'The source reports a quantity with no unit label, and reports a balance rather than a measured survey. An uncleared dump is a live methane source, so this is a standing liability, not an outstanding task.',
+    boundary: 'The source reports a quantity with no unit label, and reports a balance rather than a measured survey. Organic material in dumps can generate methane; composition, site conditions and emissions are not measured here.',
     caution: 'No unit is declared anywhere in the response. Every conversion below treats the figure as metric tonnes, which is an assumption and not a reading.',
   });
   return { ...line, silent: 0 };
@@ -277,7 +287,7 @@ function processingRegistry(): LedgerLine {
     entityFields: ['ulb_name', 'ulb_nm'],
     reportedFields: ['total_tpd'],
     statusFields: ['status_tx'],
-    boundary: 'Configured capacity is what a facility record states, not throughput. A facility that has commenced is not processing waste.',
+    boundary: 'Configured capacity is what a facility record states, not throughput. A commenced status does not establish whether the facility is operating or how much waste it processes.',
   });
   return configured;
 }
@@ -334,13 +344,17 @@ export function completedWetCapacity() {
   };
 }
 
-/** Doorstep segregation on the one urban day that survived retention complete. */
+/** Doorstep segregation on the paired reference day; continuity is a separate retained series. */
 export function segregationAtSource() {
+  const continuity = getReportingContinuity().datasets.find(row => row.tableKey === 'msw_door_to_door_collection_api');
+  const reference = continuity?.days.find(row => row.date === serviceSnapshot.day);
   const totals = serviceSnapshot.totals;
   const points = serviceSnapshot.points as unknown[][];
   const silent = points.filter((point) => Number(point[3] ?? 0) === 0).length;
   return {
     day: serviceSnapshot.day,
+    retainedDays: continuity?.days.length ?? 0,
+    referenceDayShare: reference && continuity && continuity.totalValue > 0 ? reference.value / continuity.totalValue : null,
     secretariats: points.length,
     ulbs: serviceSnapshot.ulbs.length,
     households: totals.households,
@@ -642,12 +656,12 @@ export function getCarbonEstimates(): CarbonEstimates {
       high: legacyBalance * landfillPerTonne(MCF_HIGH),
       unit: 'tCO2e potential',
       assumptions: ['legacy-unit', 'doc', 'docf', 'mcf', 'f', 'gwp-ch4'],
-      boundary: 'This is the gross generation potential of the mass in place, released over decades of decay. It is not an annual emission, and a dump that has sat for years has already released part of it. Read it as the size of the standing liability, not as this year\'s number.',
+      boundary: 'This scenario treats the entire reported balance as food-like compostable material using a default carbon content; the organic fraction and prior decay are unknown. The low/high values vary only site type, not all uncertainty. This is gross generation potential released over decades of decay. It is not an annual emission, and a dump that has sat for years has already released part of it. Read it as the size of the standing liability, not as this year\'s number.',
     },
     {
       id: 'segregation-implied',
       label: 'Demand-side scenario if the reported households segregated every day',
-      physical: `${segregation.segregated.toLocaleString('en-IN')} households reported segregating on ${segregation.day}, the one complete urban day in retention`,
+      physical: `${segregation.segregated.toLocaleString('en-IN')} households reported segregating on ${segregation.day}, the selected paired urban reference day`,
       derivation: `${segregation.segregated.toLocaleString('en-IN')} households x 0.45 kg x 3.5 persons x 0.52 wet = ${Math.round(impliedWetTonnesPerDay).toLocaleString('en-IN')} t/day x 365 x ${avoidedPerTonne(MCF_CENTRAL).toFixed(2)} tCO2e/t`,
       low: impliedWetTonnesPerDay * DAYS * avoidedPerTonne(MCF_LOW),
       central: impliedWetTonnesPerDay * DAYS * avoidedPerTonne(MCF_CENTRAL),

@@ -15,3 +15,22 @@
 .radar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px}.radar-toolbar .radar-view-switch{margin:0}.radar-toolbar select{max-width:260px;min-height:43px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:9px;font-size:12px}.movement-reference[data-compact=false]>.ew-heading{margin-bottom:17px}.movement-reference[data-compact=false]>.ew-heading h2{font-size:25px}.movement-reference[data-compact=false]>.ew-heading h2 br{display:none}.movement-reference[data-compact=false]>.ew-heading h2 em{margin-left:.25em}.movement-reference[data-compact=false]>.ew-heading>.rc-status{display:none}.content.page-gap-radar:has(.gap-explorer)>.page-intro{min-height:85px;padding-top:6px;padding-bottom:6px;margin-bottom:15px}.gap-explorer>.evidence-tabs{margin-bottom:10px}.gap-explorer>.ew-caption{margin-bottom:12px}
 @media(max-width:760px){.radar-toolbar{flex-direction:column;align-items:stretch;gap:10px}.radar-toolbar select{max-width:none;width:100%;font-size:16px}.movement-reference[data-compact=false]>.ew-heading h2{font-size:23px}.movement-reference[data-compact=false]>.ew-heading h2 em{margin-left:0;display:block}}
 @media(prefers-reduced-motion:reduce){.district-map-stage path{transition:none}}
+
+/* A shared denominator makes daily coverage states visually comparable. */
+.continuity-window { margin-top: 24px; padding: clamp(18px, 3vw, 30px); border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.continuity-window > header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.continuity-window h3 { margin-top: 8px; font-size: 23px; letter-spacing: -.03em; }
+.continuity-window-states { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 26px 0; }
+.continuity-window-states > div { --state-colour: #25867d; display: grid; gap: 9px; }
+.continuity-window-states > div[data-state=zero] { --state-colour: #a47b36; }
+.continuity-window-states > div[data-state=missing] { --state-colour: #7d8794; }
+.continuity-window-states span { font-size: 12px; color: var(--muted); }
+.continuity-window-states strong { font-size: 30px; letter-spacing: -.04em; font-weight: 550; }
+.continuity-window-states small { color: var(--muted); font-size: 11px; }
+.continuity-mini-track { height: 7px; border-radius: 4px; overflow: hidden; background: var(--line); }
+.continuity-mini-track i { display: block; height: 100%; background: var(--state-colour); border-radius: inherit; }
+.continuity-window-coverage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 20px 0; border-block: 1px solid var(--line); margin-bottom: 16px; }
+.continuity-window-coverage b { font-size: 23px; font-weight: 550; }
+.continuity-window-coverage small { font-size: 14px; color: var(--muted); }
+.continuity-window-coverage p { margin-top: 7px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+@media (max-width: 600px) { .continuity-window-states, .continuity-window-coverage { grid-template-columns: 1fr; gap: 20px; } }

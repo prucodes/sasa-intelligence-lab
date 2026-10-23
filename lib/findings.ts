@@ -227,7 +227,7 @@ function remainingLegacyWaste(): Finding | null {
         district: row.district,
         value: share,
         display: `${Math.round(share * 100)}%`,
-        detail: `${Math.round(balance).toLocaleString('en-IN')} t of ${Math.round(target).toLocaleString('en-IN')} t left`,
+        detail: `${Math.round(balance).toLocaleString('en-IN')} of ${Math.round(target).toLocaleString('en-IN')} source units left`,
         stalled: (row.achievement ?? 0) === 0,
       };
     })
@@ -238,9 +238,9 @@ function remainingLegacyWaste(): Finding | null {
   return {
     id: 'legacy-balance',
     tone: 'blue',
-    unit: 'tonnes',
+    unit: 'source units',
     total,
-    headline: `${Math.round(total).toLocaleString('en-IN')} tonnes of legacy waste remain`,
+    headline: `${Math.round(total).toLocaleString('en-IN')} source units of legacy waste remain`,
     statement: `${entities.length} of ${eligible.length} usable ULB records report a remaining balance.`,
     affected: entities.length,
     reporting: eligible.length,

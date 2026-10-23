@@ -26,7 +26,7 @@ const readingWords:Record<RankingSubject,{right:string;up:string}>={
   segregation:{right:'More households had waste collected.',up:'A bigger share of those households segregated their waste.'},
   toilets:{right:'More toilets approved, so a bigger job.',up:'A bigger share of approved toilets completed.'},
   vehicles:{right:'More vehicles on work orders, so a bigger job.',up:'A bigger share of those vehicles supplied.'},
-  legacy:{right:'More tonnes of legacy waste to clear, so a bigger job.',up:'A bigger share of the target tonnes cleared.'},
+  legacy:{right:'More reported legacy waste to clear, in source units.',up:'A bigger share of the target quantity cleared.'},
 };
 /** A ULB is only offered as a learning peer once at least half its reported work is done. */
 const LEARNING_PEER_RATE=50;

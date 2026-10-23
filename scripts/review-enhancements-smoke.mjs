@@ -13,6 +13,7 @@ try {
     const page=await browser.newPage({viewport:{width,height:1000}});
     page.on('pageerror',error=>failures.push(error.message));
     await page.goto(`${base}/gap-radar/?mode=governed`,{waitUntil:'networkidle'});
+    await page.getByText('Identity review and historical investigations', {exact:true}).click();
     const pairing=page.getByRole('region',{name:'Orders issued. Vehicles supplied?'});
     await pairing.scrollIntoViewIfNeeded();
     await pairing.screenshot({path:resolve(output,`pairing-${width}.png`)});
@@ -24,7 +25,8 @@ try {
     await page.goto(`${base}/diagnostics/sample-narsipatnam/?mode=governed`,{waitUntil:'networkidle'});
     const readings=page.getByRole('region',{name:'What this ULB reported'});
     await readings.screenshot({path:resolve(output,`readings-${width}.png`)});
-    for(const name of ['Household toilets','Processing facility','National rank']){
+    for(const [name, family] of [['Household toilets','Delivery'],['Processing facility','Facilities'],['National rank','Historical outcomes']]){
+      await readings.getByRole('button', {name:new RegExp(`^${family}`)}).click();
       const card=readings.getByRole('button',{name:`Inspect ${name} source`});
       if(!await card.isEnabled())continue;
       const before=await card.locator('strong').evaluate(el=>getComputedStyle(el).color);
@@ -44,7 +46,7 @@ try {
     if(width===1440){
       const downloadEvent=page.waitForEvent('download');await brief.getByRole('button',{name:'Download text'}).click();
       const download=await downloadEvent;const text=await readFile(await download.path(),'utf8');
-      for(const required of ['Screen filters','UNSCORED','1,019','8,479','13,53,366','response generated'])if(!text.includes(required))failures.push(`Brief download missing ${required}`);
+      for(const required of ['Screen filters','UNSCORED','1,019','8,593','14,85,769','response generated'])if(!text.includes(required))failures.push(`Brief download missing ${required}`);
       await page.emulateMedia({media:'print'});
       if(await page.locator('.topbar').isVisible())failures.push('App chrome leaked into printed brief');
       const headings=await brief.locator('h2,h3').evaluateAll(elements=>elements.map(el=>getComputedStyle(el).color));

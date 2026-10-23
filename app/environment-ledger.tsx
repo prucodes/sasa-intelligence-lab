@@ -9,6 +9,7 @@ import {
   type LedgerLine,
 } from '@/lib/environment-ledger';
 import { rateText } from '@/lib/format-rate';
+import { getGroundwaterContext } from '@/lib/groundwater-context';
 import './environment-ledger.css';
 
 type View = 'ledger' | 'estimates' | 'gaps' | 'actions';
@@ -20,9 +21,9 @@ const VIEWS: { id: View; label: string; note: string }[] = [
   { id: 'actions', label: 'Action pathway', note: 'Priorities the evidence supports' },
 ];
 
-/** A quantity keeps one decimal only where the source carried one. */
+/** Preserve two decimal places for source quantities such as planting length. */
 const qty = (value: number | null) =>
-  value === null ? 'Not returned' : value.toLocaleString('en-IN', { maximumFractionDigits: Number.isInteger(value) ? 0 : 1 });
+  value === null ? 'Not returned' : value.toLocaleString('en-IN', { maximumFractionDigits: Number.isInteger(value) ? 0 : 2 });
 const whole = (value: number) => Math.round(value).toLocaleString('en-IN');
 const share = (value: number | null) => (value === null ? 'Not available' : `${rateText(value * 100)}%`);
 
@@ -147,7 +148,7 @@ function LedgerView({ sections, day }: { sections: ReturnType<typeof getEnvironm
     <>
       <section className="el-household" aria-labelledby="el-household-title">
         <header>
-          <span className="el-kicker">Household grain · one complete day</span>
+          <span className="el-kicker">Household grain · selected reference day</span>
           <h3 id="el-household-title">Doorstep segregation is reported at ward-secretariat grain for one retained day</h3>
         </header>
         <div className="el-household-flow">
@@ -170,9 +171,11 @@ function LedgerView({ sections, day }: { sections: ReturnType<typeof getEnvironm
           </div>
         </div>
         <p className="el-boundary">
-          One source-reported day, {day.day}, which is the only complete day in retention. {whole(day.silentSecretariats)} of
-          the {whole(day.secretariats)} secretariats reported nothing collected that day, and a reported day is not a rate.
-          The daily feed cannot yet be paged to completion, so this grain exists but the series does not.
+          Selected source-reported day, {day.day}. {whole(day.silentSecretariats)} of
+          the {whole(day.secretariats)} secretariats explicitly reported zero collection that day. The retained collection series contains {day.retainedDays} days;
+          this reference day accounts for {share(day.referenceDayShare)} of their reported collection. Daily record coverage varies,
+          so these figures do not establish sustained activity.
+          {' '}<a href="/operational-analytics?mode=governed&tab=continuity">Inspect reporting continuity →</a>
         </p>
       </section>
 
@@ -207,7 +210,7 @@ function LineCard({ line, section }: { line: LedgerLine; section: 'diversion' | 
           <span className="el-line-type">Reported · {line.grain}</span>
           <h4>{line.label}</h4>
           <p>
-            {line.period ?? 'no reporting date in this response'} · retained {line.retainedAt}
+            {line.period ?? 'no reporting date in this response'} · response generated {line.retainedAt}
           </p>
         </div>
         <p className="el-line-figure">
@@ -239,13 +242,15 @@ function LineCard({ line, section }: { line: LedgerLine; section: 'diversion' | 
           <b>{line.entities}</b> {grainWord} {line.target === null ? 'in the registry' : 'carrying a target'}
         </li>
         <li>
-          <b>{line.reporting}</b> {line.id === 'legacy-balance' ? 'carrying a balance' : 'reporting a figure'}
+          <b>{line.reporting}</b> {line.id === 'legacy-balance' ? 'carrying a balance' : 'reporting a positive figure'}
         </li>
         {line.silent > 0 && (
           <li className="is-silent">
-            <b>{line.silent}</b> reporting nothing against a target
+            <b>{line.silent}</b> reporting zero against a target
           </li>
         )}
+        {line.missingAgainstTarget > 0 && <li><b>{line.missingAgainstTarget}</b> missing a reported value against a target</li>}
+        {line.positiveWithoutTarget > 0 && <li><b>{line.positiveWithoutTarget}</b> positive without a positive target (included above)</li>}
       </ul>
 
       {line.concentration && (
@@ -258,7 +263,8 @@ function LineCard({ line, section }: { line: LedgerLine; section: 'diversion' | 
             {line.concentration.top.map((entity) => (
               <li key={`${entity.district}-${entity.name}`}>
                 <span>{entity.name.replace(/"/g, '')}</span>
-                <b>{qty(entity.value)}</b>
+                <b>{qty(entity.value)} <small>{share(entity.value / (line.reported || 1))}</small></b>
+                <div className="el-concentration-track" aria-hidden="true"><i style={{ width: `${Math.min(100, entity.value / (line.reported || 1) * 100)}%` }}/></div>
               </li>
             ))}
           </ol>
@@ -300,7 +306,7 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
       <section className="el-bound" aria-labelledby="el-bound-title">
         <header>
           <span className="el-kicker">The physical constraint</span>
-          <h3 id="el-bound-title">Reported segregation implies more wet waste than any completed plant can take</h3>
+          <h3 id="el-bound-title">Modelled wet waste exceeds reported completed-status wet capacity</h3>
         </header>
         <div className="el-bound-steps">
           <div>
@@ -413,8 +419,8 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
           <div>
             <h3 id="el-assumptions-title">Every assumption, with its source</h3>
             <p>
-              None of these parameters was measured in the reporting ULBs. They are listed so a reviewer can replace a
-              screening default with a local value and see exactly which result changes.
+              None of these parameters was measured in the reporting ULBs. Their sources and formulas show which
+              screening defaults would need local measurements before recalculation.
             </p>
           </div>
           <button type="button" className="el-toggle" aria-expanded={openAssumptions} onClick={() => setOpenAssumptions((open) => !open)}>
@@ -449,8 +455,21 @@ function EstimatesView({ carbon, day }: { carbon: ReturnType<typeof getCarbonEst
 }
 
 function GapsView({ carbon }: { carbon: ReturnType<typeof getCarbonEstimates>; }) {
+  const groundwater = useMemo(() => getGroundwaterContext(), []);
   return (
     <>
+      <section className="el-water-context" aria-labelledby="el-water-title">
+        <header><span className="el-kicker">Additional Data Lake evidence · groundwater</span><span className="el-water-status">Partial capture</span></header>
+        <h3 id="el-water-title">Water context is available. A trend is not yet established.</h3>
+        <p>Two retained captures contain the same matched records. They can support a separate water review, but do not establish a sanitation impact or carbon reduction.</p>
+        <div className="el-water-metrics">
+          <div><strong>{whole(groundwater.returned)}<small> / {whole(groundwater.expected)}</small></strong><span>distinct locations retained</span><small>{groundwater.missing} identity short of the reported total</small></div>
+          <div><strong>{groundwater.changed}<small> / {groundwater.matched}</small></strong><span>matched records changed</span><small>Captures: {groundwater.captureDates.join(' and ')}</small></div>
+          <div><strong>{groundwater.districts}<small> + {groundwater.subDistricts}</small></strong><span>district + subdistrict rows</span><small>Overlapping geographic levels; never sum together</small></div>
+        </div>
+        <div className="el-water-timeline"><span>Reading timestamps (UTC)</span><b>{groundwater.readingFrom} → {groundwater.readingTo}</b><span>Captured later, in October</span></div>
+        <details><summary>What would unlock a useful water comparison?</summary><p>Retain later observations with changed measurement timestamps; reconcile the missing identity; confirm units and station coverage; then compare the same locations at one geographic level. A connection to sanitation outcomes would need additional evidence.</p><code>{groundwater.tableKey}</code><p>Source: data/groundwater-series, {groundwater.captureDates.join(' and ')}. This is retained context, not a live feed.</p></details>
+      </section>
       <section className="el-gaps-intro" aria-labelledby="el-gaps-title">
         <span className="el-kicker">Conversions withheld</span>
         <h3 id="el-gaps-title">What a certified inventory would need that we do not hold</h3>
@@ -510,7 +529,7 @@ function ActionsView({
     },
     {
       id: 'methane',
-      level: 'Highest climate leverage',
+      level: 'Organics & methane',
       title: 'Keep segregated organics out of unmanaged disposal',
       evidence: `${whole(day.segregated)} households reported segregation on the retained day. The screening model implies ${whole(bound.impliedWetTonnesPerDay)} TPD of wet waste against ${qty(bound.completedWetTpd)} TPD of completed-status wet capacity.`,
       action: 'Verify collection continuity, then commission and operate suitable composting or anaerobic-digestion capacity against measured local tonnage. Track contamination and rejected wet waste.',
@@ -549,7 +568,7 @@ function ActionsView({
           <span className="el-kicker">Evidence to action</span>
           <h3 id="el-action-title">A credible route to lower emissions starts with measured operations</h3>
           <p>
-            This pathway ranks what the retained sanitation evidence supports now. It is not a carbon-neutrality claim:
+            This pathway organises follow-up supported by the retained sanitation evidence. It is not a carbon-neutrality claim:
             municipality-wide neutrality also needs electricity, buildings, transport, procurement, refrigerants and other
             material emission sources inside a declared boundary.
           </p>

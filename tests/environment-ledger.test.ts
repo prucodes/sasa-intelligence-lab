@@ -7,6 +7,8 @@ import {
   segregationAtSource,
 } from '@/lib/environment-ledger';
 
+import { currentSnapshots } from '@/lib/current-snapshots';
+
 const sections = getEnvironmentSections();
 const lines = sections.flatMap((section) => section.lines);
 const line = (id: string) => {
@@ -53,6 +55,28 @@ describe('physical ledger', () => {
     expect(line('water-bodies').silent).toBe(34);
   });
 
+  it('distinguishes missing progress from an explicit zero and reconciles out-of-target positives', () => {
+    const green = line('green-spaces');
+    expect(green.entities).toBe(100);
+    expect(green.reporting).toBe(31);
+    expect(green.positiveWithoutTarget).toBe(4);
+    expect(green.entities).toBe(green.reporting - green.positiveWithoutTarget + green.silent + green.missingAgainstTarget);
+    const snapshot = currentSnapshots.find(item => item.requestEcho.tableKey === green.tableKey)!;
+    const records = snapshot.records as Record<string, unknown>[];
+    const original = [...records];
+    // Replace all repeated copies of one targeted, zero-achievement entity.
+    const zero = records.find(row => Number(row.green_spaces_target_in_nos) > 0 && Number(row.green_spaces_achieved) === 0);
+    expect(zero).toBeDefined();
+    try {
+      for (let index = 0; index < records.length; index++) {
+        if (records[index].ulb_nm === zero!.ulb_nm && records[index].dstrt_nm === zero!.dstrt_nm) records[index] = { ...records[index], green_spaces_achieved: null };
+      }
+      const changed = getEnvironmentSections().flatMap(section => section.lines).find(item => item.id === green.id)!;
+      expect(changed.silent).toBe(green.silent - 1);
+      expect(changed.missingAgainstTarget).toBe(green.missingAgainstTarget + 1);
+    } finally { records.splice(0, records.length, ...original); }
+  });
+
   it('reads the legacy balance as a liability held by named ULBs', () => {
     const legacy = line('legacy-balance');
     expect(legacy.reported).toBe(1485769);
@@ -75,6 +99,7 @@ describe('physical ledger', () => {
     expect(fstp.quality.rawRows).toBe(70);
     expect(fstp.quality.uniqueRows).toBe(35);
     expect(fstp.reported).toBe(600);
+    expect(fstp.period).toBe('Conflicting month labels');
     expect(fstp.caution).toMatch(/month number 7 are labelled JUNE/);
   });
 

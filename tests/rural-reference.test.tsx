@@ -27,7 +27,7 @@ describe('governed reference controls',()=>{
     const button=screen.getByRole('button',{name:/2026-08-13:/});
     fireEvent.click(button);
     expect(button).toHaveAttribute('aria-pressed','true');
-    expect(screen.getByText('Records with a valid zero')).toBeVisible();
-    expect(screen.getByText('Records missing the measure')).toBeVisible();
+    expect(screen.getByText('Valid zero')).toBeVisible();
+    expect(screen.getByText('Missing measure')).toBeVisible();
   });
 });
