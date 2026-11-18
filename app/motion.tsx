@@ -157,7 +157,7 @@ const EASE = 'cubic-bezier(.2, .8, .2, 1)';
 const BAR_TAGS = 'i[style*="width"], em[style*="width"], b[style*="width"], span[style*="width"], i[style*="height"], em[style*="height"], b[style*="height"]';
 const MAP_PATHS = '.district-map-stage path, .or-map path, .presenter-map-district';
 /** Sections and the cards inside them. Nested targets cascade: a section settles, then its cards. */
-const REVEAL = 'section, article, .panel, .page-brief > div, .atlas-tiles > div, .usr-category, .mini-kpi, .metric-card, .atlas-dossier, .atlas-table-wrap, [class$="-card"], [class*="-card "]';
+const REVEAL = 'section, article, .panel, .atlas-tiles > div, .usr-category, .mini-kpi, .metric-card, .atlas-dossier, .atlas-table-wrap, [class$="-card"], [class*="-card "]';
 const LINE_PATHS = 'path.pr-line, polyline[class*="line"], path[class*="-line"]:not([class*="reference"]):not([class*="grid"])';
 
 /** Position among similar marks in the same list or chart, so a list fills top to bottom. */
@@ -266,4 +266,32 @@ export function useScreenMotion(rootId: string, key: string) {
       root.querySelectorAll('.screen-reveal-armed, .screen-reveal-in').forEach((node) => node.classList.remove('screen-reveal-armed', 'screen-reveal-in'));
     };
   }, [rootId, key]);
+}
+
+/**
+ * A pill that slides to whichever tab is selected, so a change of tab reads as movement from
+ * one place to the next. Put `<i className="tab-indicator" aria-hidden="true" />` inside the
+ * tab list and attach the returned ref to it; the selected tab is the one with aria-selected.
+ */
+export function useTabIndicator<T extends HTMLElement>(activeKey: string) {
+  const ref = useRef<T>(null);
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const place = () => {
+      const active = node.querySelector<HTMLElement>('[aria-selected="true"]');
+      if (!active || active.offsetWidth === 0) { node.classList.remove('has-indicator'); return; }
+      node.style.setProperty('--ti-x', `${active.offsetLeft}px`);
+      node.style.setProperty('--ti-y', `${active.offsetTop}px`);
+      node.style.setProperty('--ti-w', `${active.offsetWidth}px`);
+      node.style.setProperty('--ti-h', `${active.offsetHeight}px`);
+      node.classList.add('has-indicator');
+    };
+    place();
+    const ready = requestAnimationFrame(() => node.classList.add('indicator-ready'));
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(place) : null;
+    observer?.observe(node);
+    return () => { cancelAnimationFrame(ready); observer?.disconnect(); };
+  }, [activeKey]);
+  return ref;
 }

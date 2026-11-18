@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import {PageBrief} from './page-brief';
-import {revisedRouteCount} from '@/lib/page-briefs';
+import {revisedRouteCount} from '@/lib/screen-heroes';
 import { getIhhlReconciliation, sumReturned, type Reconciliation } from '@/lib/source-reconciliation';
 import {SourceRevisions} from './source-revisions';
 import './source-reconciliation.css';
@@ -45,7 +44,7 @@ function ReconciliationWorkspace({href}:{href:(path:string)=>string}) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if(new URLSearchParams(window.location.search).get('view')==='revisions')setView('revisions');
   },[]);
-  return <><PageBrief page="reconciliation"/><div className="evidence-tabs" role="group" aria-label="Source reconciliation views"><button aria-pressed={view==='ihhl'} onClick={()=>setView('ihhl')}>Housing & SBM · paired returns</button><button aria-pressed={view==='revisions'} onClick={()=>setView('revisions')}>Current source revisions · {revisedRouteCount().revised} routes</button></div>{view==='ihhl'?<SourceReconciliation href={href}/>:<SourceRevisions/>}</>;
+  return <><div className="evidence-tabs" role="group" aria-label="Source reconciliation views"><button aria-pressed={view==='ihhl'} onClick={()=>setView('ihhl')}>Housing & SBM · paired returns</button><button aria-pressed={view==='revisions'} onClick={()=>setView('revisions')}>Current source revisions · {revisedRouteCount().revised} routes</button></div>{view==='ihhl'?<SourceReconciliation href={href}/>:<SourceRevisions/>}</>;
 }
 
 export function SourceReconciliation({ href = (path: string) => path }: { href?: (path: string) => string }) {

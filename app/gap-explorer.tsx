@@ -43,7 +43,7 @@ export function GapExplorer(){
     if(view==='movement')url.searchParams.set('basis',ruralBasis);else url.searchParams.delete('basis');
     window.history.pushState({},'',url);
   };
-  return <div className="gap-explorer">
+  return <div className="gap-explorer" id="gap-paths">
     <nav className="review-paths" aria-label="Gap Radar analysis groups">{groups.map(g=><button key={g.id} aria-pressed={group.id===g.id} onClick={()=>choose(g.views[0])}>{g.label}</button>)}</nav>
     <div className="review-choice"><p>{group.description}</p><label className="review-mobile-view">Comparison<select aria-label="Comparison view" value={selected} onChange={e=>choose(e.target.value)}>{capabilities.filter(c=>group.views.includes(c.id)).map(c=><option key={c.id} value={c.id} disabled={!c.available}>{c.label}</option>)}</select></label><div className="evidence-tabs" aria-label="Available gap analyses">{capabilities.filter(c=>group.views.includes(c.id)).map(c=><button key={c.id} aria-pressed={selected===c.id} disabled={!c.available} onClick={()=>choose(c.id)}>{c.label}</button>)}</div></div>
     {active.available ? selected==='rankings'?<SubjectRankings/>:selected==='service'?<UlbServiceRadar/>:selected==='ulb'?<UlbRadar/>:selected==='movement'?<RuralMovement basis={ruralBasis} onBasisChange={changeRuralBasis}/>:selected==='register'?<InfrastructureSeries/>:<DeliveryPlans/>:<p>This comparison has no eligible retained evidence.</p>}</div>;

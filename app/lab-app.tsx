@@ -20,8 +20,10 @@ import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import { EnvironmentLedger } from './environment-ledger';
 import { UlbAtlas } from './ulb-atlas';
-import { useScreenMotion } from './motion';
-import { PageBrief } from './page-brief';
+import { useScreenMotion, useTabIndicator } from './motion';
+import { ScreenHero, MiniScatter, HeatStrip, DeliveryFunnels, GateRing } from './screen-hero';
+import { analyticsHero, atlasHero, gapRadarHero, readinessHero } from '@/lib/screen-heroes';
+import { getUlbAtlas } from '@/lib/ulb-atlas';
 import './screen-features.css';
 import './canvas.css';
 import './evidence-content.css';
@@ -1031,6 +1033,9 @@ function WhyItem({ icon, title, text }: { icon: IconName; title: string; text: s
   return <div className="why-item"><span><Icon name={icon}/></span><div><strong><GlossaryText text={title}/></strong><small><GlossaryText text={text}/></small></div></div>;
 }
 
+/** One glyph per programme, so the rail reads at a glance; the tabs have no order, so they carry no numbers. */
+const analyticsTabIcons: Record<AnalyticsTab, IconName> = { collection: 'building', sanitation: 'home', processing: 'leaf', delivery: 'calendar', rural: 'target', continuity: 'clock', outcomes: 'shield' };
+
 const analyticsTabs: Array<{ id: AnalyticsTab; label: string; description: string }> = [
   { id: 'collection', label: 'Collection', description: 'Procurement & assets' },
   { id: 'sanitation', label: 'Sanitation Delivery', description: 'IHHL delivery' },
@@ -1094,8 +1099,12 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
     else url.searchParams.delete('view');
     window.history.replaceState({}, '', url);
   };
+  // Content eases in only when a tab replaces another, never on the first paint.
+  const [switched, setSwitched] = useState(false);
+  const tabRail = useTabIndicator<HTMLDivElement>(tab);
   const selectTab = (next: AnalyticsTab) => {
     setTab(next);
+    setSwitched(true);
     const url = new URL(window.location.href);
     url.searchParams.set('tab', next);
     if (['outcomes', 'delivery', 'rural', 'continuity'].includes(next)) { setLens('snapshot'); url.searchParams.delete('view'); }
@@ -1103,15 +1112,16 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   };
   const tabArt = tab === 'sanitation' ? '/assets/sasa/hero-ihhl.png' : tab === 'processing' ? '/assets/sasa/hero-iswm.png' : tab === 'outcomes' ? '/assets/sasa/hero-swachh.png' : '/assets/sasa/hero-collection.png';
   return <>
-    <PageIntro visual="operational-analytics" art={tabArt} eyebrow={tab === 'outcomes' && mode === 'SAMPLE' ? 'Source year 2024' : 'Available now'} title={tab === 'outcomes' && mode === 'SAMPLE' ? '2024 Swachh Outcomes' : 'Operational Analytics'} description={tab === 'outcomes' && mode === 'SAMPLE' ? 'Descriptive outcome evidence, intentionally separated from 2026 operational snapshots.' : 'Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible.'}><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'SAMPLE' ? 'Authenticated snapshot analytics · scoring remains gated' : mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>
-    {mode === 'SAMPLE' && <PageBrief page="operational-analytics" />}
+    {mode === 'SAMPLE' ? <AnalyticsHero tab={tab}/> : <PageIntro visual="operational-analytics" art={tabArt} eyebrow="Available now" title="Operational Analytics" description="Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible."><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>}
+
     <section className="analytics-control-deck" aria-label="Analytics controls">
       <label className="analytics-mobile-domain">Analytics domain<select value={tab} onChange={event=>selectTab(event.target.value as AnalyticsTab)}>{analyticsTabs.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-      <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => selectTab(item.id)}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
+      <div ref={tabRail} className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains"><i className="tab-indicator" aria-hidden="true"/>{analyticsTabs.map((item) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => selectTab(item.id)}><span className="tab-glyph" aria-hidden="true"><Icon name={analyticsTabIcons[item.id]} size={17}/></span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
       {mode === 'SAMPLE' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <div className="analytics-lens-bar"><div><span>Evidence lens</span><div className="analytics-lens-switch" role="tablist" aria-label="Evidence lens"><button type="button" role="tab" aria-selected={effectiveLens === 'snapshot'} className={effectiveLens === 'snapshot' ? 'active' : ''} onClick={() => selectLens('snapshot')}><Icon name="database" size={14}/>Current snapshot</button><button type="button" role="tab" aria-selected={effectiveLens === 'movement'} className={effectiveLens === 'movement' ? 'active' : ''} onClick={() => selectLens('movement')}><Icon name="chart" size={14}/>Between periods</button></div></div><p>{effectiveLens === 'movement' ? 'Exact ULB matches across the latest two periods in one retained source.' : 'Inspect one reported period with its denominator and evidence boundary.'}</p></div>}
       {mode === 'SAMPLE' && effectiveLens === 'snapshot' && !['delivery','rural','continuity','outcomes'].includes(tab) && <PeriodScrubber period={period} onChange={setPeriod}/>}
     </section>
     {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <ReportedPeriods tab={tab}/>}
+    <div key={`${tab}|${effectiveLens}`} className={switched ? 'tab-swap' : undefined}>
     {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <AnalyticsInsightBrief tab={tab} period={period}/>}
     {mode !== 'SAMPLE' ? <ModeAnalyticsPlaceholder mode={mode} tab={tab}/> : effectiveLens === 'movement' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' ? <ReportedMovementExplorer movement={getReportedMovement(tab)}/> : <>
       {tab === 'collection' && <CollectionAnalytics period={period}/>}
@@ -1122,6 +1132,7 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
       {tab === 'continuity' && <ReportingContinuity/>}
       {tab === 'outcomes' && <OutcomeAnalytics/>}
     </>}
+    </div>
     <EvidenceLabel mode={mode}/>
   </>;
 }
@@ -1236,14 +1247,14 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
   const primaryCount = tab === 'collection' ? collection.rows.length : tab === 'sanitation' ? sanitation.rows.length : tab === 'processing' ? legacy.rows.length : outcomes.rows.length;
   if (primaryCount === 0) return <article className="screen-feature sf-analytics" aria-label="Operational evidence briefing"><div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">Selected snapshot / evidence unavailable</span><h2>No retained {tab === 'processing' ? 'legacy-waste' : tab === 'sanitation' ? 'IHHL' : tab === 'collection' ? 'ULB procurement' : 'outcome'} rows for this selection.</h2><div className="sf-chain"><p>Choose another reported period. Other source panels retain their own availability and boundaries.</p></div></div><div className="sf-big-metric" data-unavailable="true"><strong>Not returned</strong><small>Missing evidence is not zero activity.</small></div></div></article>;
   const content = tab === 'collection' ? {
-    metric: formatPercent(collection.deliveryRatio), metricLabel: 'supplied / target', coverage: `${formatCoverage(collection.coverage)} ULBs returned`,
+    metric: formatPercent(collection.deliveryRatio), ring: collection.deliveryRatio, metricLabel: 'supplied / target', coverage: `${formatCoverage(collection.coverage)} ULBs returned`,
     headline: 'Reported delivery is far behind procurement intent',
     evidence: `${collection.target.toLocaleString('en-IN')} target → ${collection.workOrders.toLocaleString('en-IN')} work orders → ${collection.supplied.toLocaleString('en-IN')} supplied`,
     meaning: `Work orders cover ${formatPercent(collection.workOrderRatio)} of target, while reported supply covers ${formatPercent(collection.deliveryRatio)}.`,
     review: `${getCollectionStageCohorts(period).cohorts.find((item) => item.id === 'ordered-none')?.count ?? 0} ULBs report work orders and no vehicles supplied.`,
     limit: 'This measures procurement and delivery status, not fleet utilization or service quality.',
   } : tab === 'sanitation' ? {
-    metric: formatPercent(sanitation.completionRatio), metricLabel: 'completed / approved', coverage: `${formatCoverage(sanitation.coverage)} ULBs returned`,
+    metric: formatPercent(sanitation.completionRatio), ring: sanitation.completionRatio, metricLabel: 'completed / approved', coverage: `${formatCoverage(sanitation.coverage)} ULBs returned`,
     headline: 'Approvals are not converting into reported completions',
     evidence: `${sanitation.approved.toLocaleString('en-IN')} approved → ${sanitation.underConstruction.toLocaleString('en-IN')} under construction → ${sanitation.completed.toLocaleString('en-IN')} completed`,
     meaning: `The reported completion ratio is ${formatPercent(sanitation.completionRatio)}; ${sanitation.zeroApprovalRows} latest-period rows have zero approvals.`,
@@ -1265,9 +1276,15 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
     limit: 'These outcomes cannot be attributed to, or compared directly with, 2026 operations.',
   };
   return <article className="screen-feature sf-analytics" aria-label="Operational evidence briefing">
-    <div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">{tab === 'outcomes' ? 'Historical evidence / 2024' : 'Operational evidence / selected snapshot'}</span><h2>{content.headline}</h2><div className="sf-chain"><span>Reported evidence</span><p>{content.evidence}</p></div></div><div className="sf-big-metric" data-unavailable={content.metric === 'Not computable'}><strong>{content.metric}</strong><span>{content.metricLabel}</span><small>{content.coverage}</small><i aria-hidden="true"/></div></div>
+    <div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">{tab === 'outcomes' ? 'Historical evidence / 2024' : 'Operational evidence / selected snapshot'}</span><h2>{content.headline}</h2><div className="sf-chain"><span>Reported evidence</span><p>{content.evidence}</p></div></div><div className={`sf-big-metric${typeof ('ring' in content ? content.ring : null) === 'number' ? ' has-ring' : ''}`} data-unavailable={content.metric === 'Not computable'}>{'ring' in content && typeof content.ring === 'number' && <MetricRing key={tab + (period ?? '')} ratio={content.ring}/>}<strong key={tab + (period ?? '')}>{content.metric}</strong><span>{content.metricLabel}</span><small>{content.coverage}</small><i aria-hidden="true"/></div></div>
     <div className="sf-notes"><InsightCell icon="search" label="Why it matters" text={content.meaning}/><InsightCell icon="target" label="Where to review" text={content.review}/><InsightCell icon="shield" label="Boundary" text={content.limit}/></div>
   </article>;
+}
+
+/** The share behind the headline figure, drawn as the arc of a ring that fills to it. */
+function MetricRing({ ratio }: { ratio: number }) {
+  const r = 46, circumference = 2 * Math.PI * r, filled = Math.max(0, Math.min(1, ratio));
+  return <span className="sf-ring" aria-hidden="true"><svg viewBox="0 0 108 108"><circle className="sf-ring-track" cx="54" cy="54" r={r}/><circle className="sf-ring-arc" cx="54" cy="54" r={r} style={{ strokeDasharray: circumference, strokeDashoffset: circumference * (1 - filled), ['--ring-full' as string]: `${circumference}` } as React.CSSProperties}/></svg></span>;
 }
 
 function InsightCell({ icon, label, text }: { icon: IconName; label: string; text: string }) {
@@ -1937,8 +1954,8 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
   ];
 
   return <>
-    <PageIntro visual="gap-radar" eyebrow="Evidence-gated assessment" title="Gap Radar" description="Explore supported changes and reported delivery gaps. Each comparison states its population and evidence limits."/>
-    <PageBrief page="gap-radar" />
+    <GapRadarHero colorTheme={colorTheme}/>
+
     <GapExplorer/>
     <details className="panel radar-gates"><summary>Requirements for formal performance classifications</summary>
     <section className="screen-feature sf-radar" aria-label="Scoring activation briefing">
@@ -2205,7 +2222,7 @@ function ModeKey({ mode }: { mode: DataMode }) {
  */
 function Environment({ mode }: { mode: DataMode }) {
   return <>
-    <PageIntro visual="environment" eyebrow="Environment and carbon" title="Environment & Carbon Ledger" description="Trace retained waste, wastewater and green-asset evidence from reported quantities to transparent carbon screening scenarios—and see what is still missing for an inventory."><FilterBar mode={mode}/></PageIntro>
+    {mode !== 'SAMPLE' && <PageIntro visual="environment" eyebrow="Environment and carbon" title="Environment & Carbon Ledger" description="Trace retained waste, wastewater and green-asset evidence from reported quantities to transparent carbon screening scenarios—and see what is still missing for an inventory."><FilterBar mode={mode}/></PageIntro>}
     <EnvironmentLedger mode={mode}/>
   </>;
 }
@@ -2217,9 +2234,43 @@ function Environment({ mode }: { mode: DataMode }) {
  */
 function Atlas({ mode }: { mode: DataMode }) {
   return <>
-    <PageIntro visual="atlas" eyebrow="Cross-programme ULB atlas" title="ULB Atlas" description="Every urban local body, every programme, one identity. Each source joins on the urban body code it supplies, so no ULB is matched by its name."><FilterBar mode={mode}/></PageIntro>
+    {mode === 'SAMPLE' ? <AtlasHero/> : <PageIntro visual="atlas" eyebrow="Cross-programme ULB atlas" title="ULB Atlas" description="Every urban local body, every programme, one identity. Each source joins on the urban body code it supplies, so no ULB is matched by its name."><FilterBar mode={mode}/></PageIntro>}
     <UlbAtlas mode={mode}/>
   </>;
+}
+
+/* Screen heroes: each screen opens on its figures and a graphic drawn from them. */
+function AnalyticsHero({ tab }: { tab: AnalyticsTab }) {
+  const data = useMemo(() => analyticsHero(), []);
+  // The 2024 survey keeps its own opening, so a historical result never sits under a 2026 heading.
+  const outcomes = useMemo(() => {
+    const summary = getSwachhOutcomeSummary();
+    return { eyebrow: 'Source year 2024', title: '2024 Swachh Outcomes', accent: 'a historical baseline, not current performance.', figures: [
+      { label: 'ODF records', value: summary.odfRecords, context: 'certification levels returned for 2024' },
+      { label: 'National rank records', value: summary.rankRecords, context: 'the response does not name each rank’s population category' },
+      { label: 'Garbage-free city records', value: summary.gfcRecords, context: 'too few for a broad outcome view', tone: 'warm' as const },
+    ] };
+  }, []);
+  if (tab === 'outcomes') return <ScreenHero data={outcomes}/>;
+  return <ScreenHero data={data} visual={<DeliveryFunnels pipelines={data.pipelines}/>} caption="Band thickness is the count at each stage, against the programme's own first stage"/>;
+}
+
+function GapRadarHero({ colorTheme }: { colorTheme: ColorTheme }) {
+  const data = useMemo(() => gapRadarHero(), []);
+  return <ScreenHero data={data} visual={<MiniScatter points={data.points}/>} caption="Every placed ULB on 12 Aug 2026 · dashed lines are draft guides, not targets"
+    actions={<><a href={withMode('/atlas', 'SAMPLE', colorTheme)}>Open the ULB Atlas</a><a href="#gap-paths">Choose a comparison ↓</a></>}/>;
+}
+
+function AtlasHero() {
+  const data = useMemo(() => atlasHero(), []);
+  const model = useMemo(() => getUlbAtlas(), []);
+  return <ScreenHero data={data} visual={<HeatStrip model={model}/>} caption="Each column a ULB, ordered by collection reach · darker is further along · hatched is held out"
+    actions={<><a href="#atlas-lead-title">Explore the atlas ↓</a></>}/>;
+}
+
+function ReadinessHero({ title }: { title: string }) {
+  const data = useMemo(() => ({ ...readinessHero(), title }), [title]);
+  return <ScreenHero data={data} visual={<GateRing gates={data.gates}/>}/>;
 }
 
 function FilterBar({ mode }: { mode: DataMode }) {
@@ -2322,7 +2373,7 @@ function Diagnostics({ mode, colorTheme, cameFrom, diagnostic, allKeys }: { mode
       <span>You opened this from the {cameFrom.toLowerCase()} review table.</span>
     </nav>}
     <PageIntro visual="diagnostics" eyebrow="Source-by-source review" title="ULB Evidence Inspector" description="Explore this ULB’s reported delivery, facilities and historical outcomes."/>
-    {mode === 'SAMPLE' && <PageBrief page="diagnostics" />}
+
     <section className="diagnostic-brief diagnostic-identity" aria-label="ULB evidence file summary"><div><EntityPicker diagnostic={diagnostic} allKeys={allKeys} mode={mode} colorTheme={colorTheme}/>{mode==='SAMPLE'&&<p>Source-name candidate · identity awaiting review</p>}</div>{mode==='SAMPLE'&&<><dl><div><dt>Source families</dt><dd>{sourceFamilies}</dd></div><div><dt>Matching rows</dt><dd>{diagnostic.evidence.length}</dd></div><div><dt>Period labels</dt><dd>{returnedPeriods}</dd></div></dl><EvidencePack diagnostic={diagnostic}/></>}</section>
     {mode === 'SAMPLE' && <UlbPeerProfile key={diagnostic.name+'|'+diagnostic.district} records={diagnostic.evidence} onInspect={id=>{const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/>}
     <section className="diagnostics-layout">
@@ -2376,8 +2427,8 @@ function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnT
       && (eligibility === 'ALL' || row.eligibility === eligibility);
   });
   return <>
-    <PageIntro visual="data-readiness" art={view === 'coverage' ? '/assets/sasa/hero-swachh.png' : undefined} eyebrow="Activation evidence" title={view === 'coverage' ? 'ULB Evidence Coverage Explorer' : 'Data Readiness'} description={view === 'coverage' ? 'See where governed dataset coverage overlaps and where evidence blind spots remain.' : 'Inspect catalogue coverage, returned periods, quality conditions, and the gates for higher-order intelligence.'}><FilterBar mode={mode}/></PageIntro>
-    {mode === 'SAMPLE' && <PageBrief page="data-readiness" />}
+    {mode === 'SAMPLE' ? <ReadinessHero title={view === 'coverage' ? 'ULB Evidence Coverage Explorer' : 'Data Readiness'}/> : <PageIntro visual="data-readiness" art={view === 'coverage' ? '/assets/sasa/hero-swachh.png' : undefined} eyebrow="Activation evidence" title={view === 'coverage' ? 'ULB Evidence Coverage Explorer' : 'Data Readiness'} description={view === 'coverage' ? 'See where governed dataset coverage overlaps and where evidence blind spots remain.' : 'Inspect catalogue coverage, returned periods, quality conditions, and the gates for higher-order intelligence.'}><FilterBar mode={mode}/></PageIntro>}
+
     <div className="analytics-tabs readiness-tabs" role="tablist" aria-label="Data readiness views">{(['catalogue', 'coverage', 'periods', 'quality'] as const).map((item) => <button key={item} role="tab" aria-selected={view === item} className={view === item ? 'active' : ''} onClick={() => setView(item)}>{sentenceCase(item)}</button>)}</div>
     {mode === 'SAMPLE' && (view === 'catalogue' ? <ReadinessCommandCenter readiness={readiness}/> : <div className="sf-readiness-context"><span><b>{governedSnapshotStats.completeDatasets}</b> historical exports · {readinessCatalogueStats.platformAvailable} current routes</span><span>Scoring remains <b>UNSCORED</b></span><button onClick={() => setView('catalogue')}>View activation pipeline <Icon name="arrow" size={15}/></button></div>)}
     {view === 'catalogue' && <><section className="readiness-layout">

@@ -24,7 +24,7 @@ describe('environment and carbon screen', () => {
 
   it('shows the household grain and says it is one day', () => {
     render(<EnvironmentLedger mode="SAMPLE" />);
-    expect(screen.getByText('47,09,868')).toBeInTheDocument();
+    expect(screen.getAllByText('47,09,868').some((element) => element.closest('.el-household'))).toBe(true);
     expect(screen.getByText(/retained collection series contains 16 days/)).toBeInTheDocument();
   });
 

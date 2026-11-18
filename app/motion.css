@@ -60,3 +60,40 @@
 @media (prefers-reduced-motion: reduce) { .usr-mark { transition: none; } }
 .usr-svg.is-compact .usr-pile-label { font-size: 9.5px; }
 .usr-svg.is-compact .usr-pile-count { font-size: 13px; }
+
+/* Sliding tab indicator. The selected tab keeps its own label colours; the pill behind it moves. */
+.has-indicator { position: relative; isolation: isolate; }
+.has-indicator > .tab-indicator {
+  position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none;
+  width: var(--ti-w, 0); height: var(--ti-h, 0); transform: translate(var(--ti-x, 0), var(--ti-y, 0));
+  border-radius: 9px; background: color-mix(in srgb, var(--teal, #0e9aa4) 9%, var(--surface));
+  box-shadow: inset 0 -3px var(--teal-dark, #087f8c), 0 8px 18px -12px color-mix(in srgb, var(--teal-dark, #087f8c) 70%, transparent);
+}
+.tab-indicator { display: none; }
+.has-indicator > .tab-indicator { display: block; }
+.has-indicator.indicator-ready > .tab-indicator { transition: transform .5s cubic-bezier(.2, .8, .2, 1), width .5s cubic-bezier(.2, .8, .2, 1), height .5s cubic-bezier(.2, .8, .2, 1); }
+.has-indicator > button[aria-selected='true'] { background: transparent !important; box-shadow: none !important; }
+
+/* A tab's content eases in when it replaces the previous one. */
+.tab-swap { animation: tabSwap .55s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes tabSwap { from { opacity: 0; transform: translateY(10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .has-indicator.indicator-ready > .tab-indicator { transition: none; }
+  .tab-swap { animation: none; }
+}
+
+/* Operational analytics lede: the share behind the headline figure, as a ring that fills to it. */
+.sf-big-metric.has-ring { padding-right: 132px; min-height: 150px; justify-content: center; }
+.sf-ring { position: absolute; right: 0; top: 50%; width: 118px; height: 118px; transform: translateY(-50%); }
+.sf-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.sf-ring-track { fill: none; stroke: rgba(181, 223, 191, .16); stroke-width: 9; }
+.sf-ring-arc { fill: none; stroke: var(--sf-lime, #c6ef9a); stroke-width: 9; stroke-linecap: round; animation: ringFill 1.4s cubic-bezier(.2, .8, .2, 1) .15s backwards; }
+@keyframes ringFill { from { stroke-dashoffset: var(--ring-full); } }
+.tab-glyph { display: grid; place-items: center; }
+.tab-glyph svg { width: 17px; height: 17px; }
+@media (max-width: 760px) {
+  .sf-big-metric.has-ring { padding-right: 96px; min-height: 110px; }
+  .sf-ring { width: 84px; height: 84px; }
+}
+@media (prefers-reduced-motion: reduce) { .sf-ring-arc { animation: none; } }

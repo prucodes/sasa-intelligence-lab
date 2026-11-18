@@ -6,7 +6,6 @@ import {
   type AtlasMeasure, type AtlasMeasureId, type AtlasModel, type AtlasUlb, type AtlasValue,
 } from '@/lib/ulb-atlas';
 import {DistrictMap} from './district-map';
-import {PageBrief} from './page-brief';
 import {CountUp, Reveal, useMotionClass} from './motion';
 import './ulb-atlas.css';
 
@@ -41,7 +40,6 @@ function AtlasWorkspace() {
   const root = useMotionClass<HTMLDivElement>();
   return (
     <div className="atlas" ref={root}>
-      <PageBrief page="atlas" />
       <AtlasLead model={model} measure={measure} onMeasure={setMeasureId} selected={selected} onSelect={setSelected} district={district} onDistrict={setDistrict} />
       <AtlasMatrix model={model} measure={measure} onMeasure={setMeasureId} selected={ulb} onSelect={setSelected} district={district} onDistrict={setDistrict} />
       <AtlasDistricts model={model} district={district} onDistrict={setDistrict} />

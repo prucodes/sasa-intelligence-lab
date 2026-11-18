@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useId, useMemo, useState, type CSSProperties } from 'react';
 import {
   estimateAssumptions,
   getCarbonEstimates,
@@ -11,6 +11,10 @@ import {
 import { rateText } from '@/lib/format-rate';
 import { getGroundwaterContext } from '@/lib/groundwater-context';
 import './environment-ledger.css';
+import { useMotionClass, useTabIndicator } from './motion';
+import { ScreenHero } from './screen-hero';
+import { NatureScene } from './nature-scene';
+import { environmentHero } from '@/lib/screen-heroes';
 
 type View = 'ledger' | 'estimates' | 'gaps' | 'actions';
 
@@ -48,29 +52,24 @@ function EnvironmentWorkspace() {
   const carbon = useMemo(() => getCarbonEstimates(), []);
   const day = useMemo(() => segregationAtSource(), []);
   const [view, setView] = useState<View>('ledger');
-  const routeCount = useMemo(
-    () => new Set(sections.flatMap((section) => section.lines.map((line) => line.tableKey))).size + 2,
-    [sections],
-  );
-  const routeStreams = useMemo(
-    () => sections.map((section) => ({
-      id: section.id,
-      label: section.id === 'diversion' ? 'Waste + collection' : section.id === 'treatment' ? 'Wastewater' : 'Green assets',
-      count: new Set(section.lines.map((line) => line.tableKey)).size + (section.id === 'diversion' ? 2 : 0),
-    })),
-    [sections],
-  );
+  const [switched, setSwitched] = useState(false);
+  const tabRail = useTabIndicator<HTMLDivElement>(view);
+  const root = useMotionClass<HTMLDivElement>();
+  const hero = useMemo(() => environmentHero(), []);
 
   return (
-    <div className="env-ledger">
-      <div className="analytics-tabs el-tabs" role="tablist" aria-label="Environment and carbon views">
+    <div className="env-ledger" ref={root}>
+      <ScreenHero data={hero} variant="nature" visual={<NatureScene assets={hero.assets} />} caption={`Reported programme counts drawn to scale, not canopy, biomass or water quality · ${hero.routes.count} retained routes, ${hero.routes.detail}`} />
+
+      <div ref={tabRail} className="analytics-tabs el-tabs" role="tablist" aria-label="Environment and carbon views">
+        <i className="tab-indicator" aria-hidden="true" />
         {VIEWS.map((item, index) => (
           <button
             key={item.id}
             role="tab"
             aria-selected={view === item.id}
             className={view === item.id ? 'active' : ''}
-            onClick={() => setView(item.id)}
+            onClick={() => { setView(item.id); setSwitched(true); }}
           >
             <span>{String(index + 1).padStart(2, '0')}</span>
             <b>{item.label}</b>
@@ -79,66 +78,12 @@ function EnvironmentWorkspace() {
         ))}
       </div>
 
-      <section className="el-thesis" aria-label="How to read the environment ledger">
-        <div className="el-thesis-copy">
-          <span className="el-kicker">The reason this screen is separate</span>
-          <h2>
-            Start with what is reported. <em>Stop where measurement ends.</em>
-          </h2>
-          <p>
-            {routeCount} retained routes describe the waste, wastewater and green-asset side of a municipal carbon position. They
-            were catalogued as sanitation programmes; this screen reads them together as environment evidence. Nothing new
-            was ingested for it.
-          </p>
-          <p>
-            Reported quantities, screening arithmetic and missing measurements remain visibly separate. That makes the page
-            useful for review without turning a construction status or a model assumption into an environmental result.
-          </p>
-          <ul className="el-status-key" aria-label="Evidence status key">
-            <li className="is-reported"><i />Reported quantity</li>
-            <li className="is-scenario"><i />Screening scenario</li>
-            <li className="is-missing"><i />Measurement gap</li>
-          </ul>
-        </div>
-        <div className="el-system-map">
-          <div className="el-signal-field" aria-label="Retained environmental evidence streams">
-            <div className="el-orbit" aria-hidden="true">
-              <span className="el-orbit-ring is-outer" />
-              <span className="el-orbit-ring is-inner" />
-              <span className="el-orbit-core"><b>CO₂e</b><small>screening</small></span>
-            </div>
-            <ul className="el-streams">
-              {routeStreams.map((stream) => (
-                <li key={stream.id} data-stream={stream.id}>
-                  <i aria-hidden="true" />
-                  <span>{stream.label}</span>
-                  <b>{stream.count}</b>
-                  <small>retained routes</small>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <dl className="el-thesis-figures">
-            <div>
-              <dt>Retained source routes</dt>
-              <dd>{routeCount}<span>14 snapshots + 2 household feeds</span></dd>
-            </div>
-            <div>
-              <dt>Screening scenarios</dt>
-              <dd>{carbon.estimates.length}<span>assumptions shown beside results</span></dd>
-            </div>
-            <div>
-              <dt>Conversions withheld</dt>
-              <dd>{carbon.unconverted.length}<span>turned into a measurement request</span></dd>
-            </div>
-          </dl>
-        </div>
-      </section>
-
+      <div key={view} className={switched ? 'tab-swap' : undefined}>
       {view === 'ledger' && <LedgerView sections={sections} day={day} />}
       {view === 'estimates' && <EstimatesView carbon={carbon} day={day} />}
       {view === 'gaps' && <GapsView carbon={carbon} />}
       {view === 'actions' && <ActionsView carbon={carbon} sections={sections} day={day} />}
+      </div>
     </div>
   );
 }
@@ -199,97 +144,112 @@ function LedgerView({ sections, day }: { sections: ReturnType<typeof getEnvironm
   );
 }
 
+/**
+ * One ledger line as a row: what was reported, how far along it is, and the figure. The
+ * supporting evidence (who reports, where the figure concentrates, the source's own caveats)
+ * opens beneath it, and stays in the page for search and assistive technology when closed.
+ */
 function LineCard({ line, section }: { line: LedgerLine; section: 'diversion' | 'treatment' | 'sinks' }) {
+  const [open, setOpen] = useState(false);
+  const bodyId = useId();
   const filled = line.ratio === null ? null : Math.min(line.ratio, 1) * 100;
   const grainWord = line.grain === 'Facility' ? 'facilities' : line.grain === 'District' ? 'districts' : 'ULBs';
   const shortfall = line.polarity === 'shortfall';
   return (
-    <article className={`el-line tone-${section}${shortfall ? ' is-shortfall' : ''}`}>
-      <header>
+    <article className={`el-line tone-${section}${shortfall ? ' is-shortfall' : ''}${open ? ' is-open' : ''}`}>
+      <header className="el-line-row" onClick={() => setOpen(!open)}>
         <div className="el-line-name">
-          <span className="el-line-type">Reported · {line.grain}</span>
+          <span className="el-line-type">Reported · {line.grain}{line.caution && <em className="el-line-flag">Source condition</em>}</span>
           <h4>{line.label}</h4>
           <p>
             {line.period ?? 'no reporting date in this response'} · response generated {line.retainedAt}
           </p>
         </div>
+        {filled !== null ? (
+          <div
+            className="el-bar"
+            style={{ '--el-filled': `${filled}%` } as CSSProperties}
+            role="img"
+            aria-label={
+              shortfall
+                ? `${qty(line.reported)} ${line.unit} still outstanding, ${share(line.ratio)} of the ${qty(line.target)} in the programme`
+                : `${qty(line.reported)} of ${qty(line.target)} ${line.unit} reported, ${share(line.ratio)}`
+            }
+          >
+            <i />
+            <b>{share(line.ratio)}</b>
+          </div>
+        ) : <span className="el-bar-none">No target to measure against</span>}
         <p className="el-line-figure">
           <strong>{qty(line.reported)}</strong>
           <span>{line.unit}</span>
           {line.target !== null && <small>{shortfall ? `of ${qty(line.target)} in the programme` : `of ${qty(line.target)} targeted`}</small>}
         </p>
+        <button type="button" className="el-line-toggle" aria-expanded={open} aria-controls={bodyId} onClick={(event) => { event.stopPropagation(); setOpen(!open); }}>
+          <span>{open ? 'Hide' : 'Details'}</span><i aria-hidden="true" />
+        </button>
       </header>
 
-      {filled !== null && (
-        <div
-          className="el-bar"
-          style={{ '--el-filled': `${filled}%` } as CSSProperties}
-          role="img"
-          aria-label={
-            shortfall
-              ? `${qty(line.reported)} ${line.unit} still outstanding, ${share(line.ratio)} of the ${qty(line.target)} in the programme`
-              : `${qty(line.reported)} of ${qty(line.target)} ${line.unit} reported, ${share(line.ratio)}`
-          }
-        >
-          <i />
-          <b>{share(line.ratio)}</b>
-        </div>
-      )}
-      {shortfall && <p className="el-polarity-note">{share(line.ratio)} of the programme total is still outstanding. A bigger bar is a bigger problem on this line.</p>}
+      <div className="el-line-body" id={bodyId} data-open={open}>
+        <div className="el-line-body-inner">
+          {shortfall && <p className="el-polarity-note">{share(line.ratio)} of the programme total is still outstanding. A bigger bar is a bigger problem on this line.</p>}
 
-      <ul className="el-chips">
-        <li>
-          <b>{line.entities}</b> {grainWord} {line.target === null ? 'in the registry' : 'carrying a target'}
-        </li>
-        <li>
-          <b>{line.reporting}</b> {line.id === 'legacy-balance' ? 'carrying a balance' : 'reporting a positive figure'}
-        </li>
-        {line.silent > 0 && (
-          <li className="is-silent">
-            <b>{line.silent}</b> reporting zero against a target
-          </li>
-        )}
-        {line.missingAgainstTarget > 0 && <li><b>{line.missingAgainstTarget}</b> missing a reported value against a target</li>}
-        {line.positiveWithoutTarget > 0 && <li><b>{line.positiveWithoutTarget}</b> positive without a positive target (included above)</li>}
-      </ul>
-
-      {line.concentration && (
-        <div className="el-concentration">
-          <p>
-            <b>{share(line.concentration.share)}</b> of the {shortfall ? 'balance' : 'reported figure'} sits with{' '}
-            {line.concentration.top.length} of the {line.reporting}:
-          </p>
-          <ol>
-            {line.concentration.top.map((entity) => (
-              <li key={`${entity.district}-${entity.name}`}>
-                <span>{entity.name.replace(/"/g, '')}</span>
-                <b>{qty(entity.value)} <small>{share(entity.value / (line.reported || 1))}</small></b>
-                <div className="el-concentration-track" aria-hidden="true"><i style={{ width: `${Math.min(100, entity.value / (line.reported || 1) * 100)}%` }}/></div>
+          <ul className="el-chips">
+            <li>
+              <b>{line.entities}</b> {grainWord} {line.target === null ? 'in the registry' : 'carrying a target'}
+            </li>
+            <li>
+              <b>{line.reporting}</b> {line.id === 'legacy-balance' ? 'carrying a balance' : 'reporting a positive figure'}
+            </li>
+            {line.silent > 0 && (
+              <li className="is-silent">
+                <b>{line.silent}</b> reporting zero against a target
               </li>
-            ))}
-          </ol>
+            )}
+            {line.missingAgainstTarget > 0 && <li><b>{line.missingAgainstTarget}</b> missing a reported value against a target</li>}
+            {line.positiveWithoutTarget > 0 && <li><b>{line.positiveWithoutTarget}</b> positive without a positive target (included above)</li>}
+          </ul>
+
+          {line.concentration && (
+            <div className="el-concentration">
+              <p>
+                <b>{share(line.concentration.share)}</b> of the {shortfall ? 'balance' : 'reported figure'} sits with{' '}
+                {line.concentration.top.length} of the {line.reporting}:
+              </p>
+              <ol>
+                {line.concentration.top.map((entity) => (
+                  <li key={`${entity.district}-${entity.name}`}>
+                    <span>{entity.name.replace(/"/g, '')}</span>
+                    <b>{qty(entity.value)} <small>{share(entity.value / (line.reported || 1))}</small></b>
+                    <div className="el-concentration-track" aria-hidden="true"><i style={{ width: `${Math.min(100, entity.value / (line.reported || 1) * 100)}%` }}/></div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          <div className="el-line-notes">
+            <p className="el-boundary">{line.boundary}</p>
+            {line.caution && (
+              <p className="el-caution">
+                <b>Source condition.</b> {line.caution}
+              </p>
+            )}
+            <details className="el-source">
+              <summary>Source and repeat handling</summary>
+              <p>
+                <code>{line.tableKey}</code> · {qty(line.quality.rawRows)} rows for the selected period collapse to{' '}
+                {qty(line.quality.uniqueRows)} entities
+                {line.quality.duplicateRows > 0 ? `, ${qty(line.quality.duplicateRows)} exact repeats removed` : ', no repeats'}
+                {line.quality.conflictingKeys > 0
+                  ? `, ${qty(line.quality.conflictingKeys)} keys held out because their measures disagree`
+                  : ', nothing held out'}
+                . Months are never added together; one declared period is selected and shown.
+              </p>
+            </details>
+          </div>
         </div>
-      )}
-
-      <p className="el-boundary">{line.boundary}</p>
-      {line.caution && (
-        <p className="el-caution">
-          <b>Source condition.</b> {line.caution}
-        </p>
-      )}
-
-      <details className="el-source">
-        <summary>Source and repeat handling</summary>
-        <p>
-          <code>{line.tableKey}</code> · {qty(line.quality.rawRows)} rows for the selected period collapse to{' '}
-          {qty(line.quality.uniqueRows)} entities
-          {line.quality.duplicateRows > 0 ? `, ${qty(line.quality.duplicateRows)} exact repeats removed` : ', no repeats'}
-          {line.quality.conflictingKeys > 0
-            ? `, ${qty(line.quality.conflictingKeys)} keys held out because their measures disagree`
-            : ', nothing held out'}
-          . Months are never added together; one declared period is selected and shown.
-        </p>
-      </details>
+      </div>
     </article>
   );
 }

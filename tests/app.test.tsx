@@ -152,13 +152,13 @@ describe('application shell and screens', () => {
     fireEvent.click(screen.getByRole('tab', { name: /sanitation delivery/i }));
     expect(screen.getByRole('heading', { name: /approvals are not converting into reported completions/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /household toilets: approval to completion/i })).toBeInTheDocument();
-    expect(screen.getAllByText('8,613', { selector: 'b' })).toHaveLength(2);
+    expect(screen.getAllByText('8,613', { selector: 'b' }).filter((element) => !element.closest('.screen-hero'))).toHaveLength(2);
     expect(screen.getAllByText('0.2%').length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { name: /pipeline drop-off/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: /processing infrastructure/i }));
     expect(screen.getByRole('heading', { name: /legacy-waste balance and facility-status exceptions are ready for review/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /reported clearance, with 1.49 million remaining/i })).toBeInTheDocument();
-    expect(screen.getAllByText('14,85,769').some((element) => !element.closest('.page-brief'))).toBe(true);
+    expect(screen.getAllByText('14,85,769').some((element) => !element.closest('.screen-hero'))).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: /facility registry/i }));
     expect(screen.getByRole('heading', { name: /configured capacity by facility type/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /facility registry/i })).toBeInTheDocument();
