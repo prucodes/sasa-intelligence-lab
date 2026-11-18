@@ -295,3 +295,30 @@ export function useTabIndicator<T extends HTMLElement>(activeKey: string) {
   }, [activeKey]);
   return ref;
 }
+
+/**
+ * Phone header that steps out of the way: it slides up while the reader scrolls down and comes
+ * back as soon as they scroll up, so content gets the whole screen and navigation is one flick
+ * away. Only below the phone breakpoint; desktop keeps its fixed sidebar.
+ */
+export function useAutoHideHeader(shellRef: React.RefObject<HTMLElement | null>, breakpoint = 760) {
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell || typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+    const phone = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    let last = window.scrollY, frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      if (!phone.matches || y < 90) shell.classList.remove('header-hidden');
+      else if (y > last + 6) shell.classList.add('header-hidden');
+      else if (y < last - 6) shell.classList.remove('header-hidden');
+      last = y;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, {passive: true});
+    // The active page's tab is brought into view in the swipeable nav row.
+    if (phone.matches) shell.querySelector<HTMLElement>('.sidebar nav a.active')?.scrollIntoView?.({block: 'nearest', inline: 'center'});
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); shell.classList.remove('header-hidden'); };
+  }, [shellRef, breakpoint]);
+}

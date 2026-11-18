@@ -20,7 +20,7 @@ import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import { EnvironmentLedger } from './environment-ledger';
 import { UlbAtlas } from './ulb-atlas';
-import { useScreenMotion, useTabIndicator } from './motion';
+import { useAutoHideHeader, useScreenMotion, useTabIndicator } from './motion';
 import { ScreenHero, MiniScatter, HeatStrip, DeliveryFunnels, GateRing } from './screen-hero';
 import { analyticsHero, atlasHero, gapRadarHero, readinessHero } from '@/lib/screen-heroes';
 import { getUlbAtlas } from '@/lib/ulb-atlas';
@@ -295,6 +295,8 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
   }, [initialUlbKey]);
   // Runs once the shell is visible, and again for each screen and data mode.
   useScreenMotion('main-content', booted ? `${page}|${mode}` : '');
+  const shellRef = useRef<HTMLDivElement>(null);
+  useAutoHideHeader(shellRef);
 
   function changeMode(next: DataMode) {
     setMode(next);
@@ -322,7 +324,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
   const currentUlbKey = initialUlbKey && datasets[mode].diagnostics.some((item) => item.ulbKey === initialUlbKey) ? initialUlbKey : diagnosticDefault;
 
   return (
-    <div className={`app-shell theme-${colorTheme}${booted ? '' : ' booting'}`} suppressHydrationWarning>
+    <div ref={shellRef} className={`app-shell theme-${colorTheme}${booted ? '' : ' booting'}`} suppressHydrationWarning>
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} onThemeToggle={toggleColorTheme} onAbout={()=>setAboutOpen(true)} aboutOpen={aboutOpen}/>
       <div className="app-main">
