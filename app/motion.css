@@ -1,0 +1,62 @@
+/* ============================================================================
+   Motion layer. Every rule here starts from a page that is already complete:
+   classes are added by script only when motion is allowed, the tab is visible
+   and the element is on screen, and removed again once the movement is over.
+   ========================================================================== */
+
+/* Sections and cards settle into place as they are loaded or scrolled to, siblings in sequence. */
+.screen-reveal-armed { opacity: 0; transform: translateY(18px); }
+.screen-reveal-in { opacity: 1; transform: none; transition: opacity .75s cubic-bezier(.2, .8, .2, 1) var(--reveal-stagger, 0ms), transform .75s cubic-bezier(.2, .8, .2, 1) var(--reveal-stagger, 0ms); }
+
+/* Chart entrances. Points rise from the zero line or grow in place; bars grow from their baseline. */
+.is-entering .usr-dot { animation: usrRise .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--x, 0) * 520ms); }
+@keyframes usrRise { from { transform: translate(var(--px), calc(var(--py) + var(--rise, 30px))); opacity: 0; } 60% { opacity: 1; } }
+.is-entering :is(.ur-dot, .rk-field-dot, .radar-point) { transform-box: fill-box; transform-origin: center; animation: chartGrow .6s cubic-bezier(.3, 1.3, .5, 1) backwards; animation-delay: calc(var(--x, 0) * 480ms); }
+@keyframes chartRise { from { transform: translateY(var(--rise, 30px)); opacity: 0; } 60% { opacity: 1; } }
+@keyframes chartGrow { from { transform: scale(.2); opacity: 0; } }
+
+/* A count-up holds its width so neighbouring text does not shift while digits change. */
+.count-up { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-reveal-armed { opacity: 1; transform: none; }
+  .screen-reveal-in { transition: none; }
+  .is-entering :is(.usr-dot, .ur-dot, .rk-field-dot, .radar-point) { animation: none; }
+}
+
+/* Rural trends: switching between "July vs August" and "change" moves each district to a new
+   height. The same dot glides there, so the eye can follow one district between the two views. */
+.rural-radar .radar-point circle { transition: cy .85s cubic-bezier(.2, .8, .2, 1), r .2s ease; }
+.rural-radar .radar-point-label { transition: opacity .2s; }
+@media (prefers-reduced-motion: reduce) { .rural-radar .radar-point circle { transition: none; } }
+
+/* Maps re-colour by cross-fading, so a change of measure or month reads as a change, not a flash. */
+.district-map-stage path, .or-map path { transition: fill .6s ease, stroke .2s ease, filter .18s ease, opacity .18s ease; }
+@media (prefers-reduced-motion: reduce) { .district-map-stage path, .or-map path { transition: none; } }
+
+/* Gap Radar service chart: each ULB is one group positioned by transform, so switching between
+   "Scatter" and "By category" flies the same dots between the two arrangements. The quadrant
+   frame and the category piles cross-fade while they travel. */
+.usr-dot { transform: translate(var(--px), var(--py)); transition: transform .95s cubic-bezier(.22, .8, .18, 1) calc(var(--x, 0) * 260ms), filter .18s ease, opacity .18s ease; }
+.usr-frame, .usr-piles { transition: opacity .55s ease; }
+.usr-zone-labels { transition: opacity .45s ease; }
+.usr-svg.arrange-category :is(.usr-frame, .usr-zone-labels) { opacity: 0; pointer-events: none; }
+.usr-svg.arrange-scatter .usr-piles { opacity: 0; pointer-events: none; }
+.usr-svg.arrange-category .usr-piles { transition-delay: .35s; }
+.usr-pile-base { stroke: var(--line); stroke-width: 1; }
+.usr-pile-label { fill: var(--usr-tone, var(--ink)); font-size: 11.5px; font-weight: 600; }
+.usr-pile-count { fill: var(--usr-tone, var(--ink)); font-size: 15px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.usr-arrange { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 12px 6px; }
+.usr-arrange button { min-height: 32px; padding: 0 13px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 12px inherit; font-family: inherit; cursor: pointer; transition: background .2s, color .2s; }
+.usr-arrange button:first-of-type { border-radius: 8px 0 0 8px; }
+.usr-arrange button:nth-of-type(2) { border-radius: 0 8px 8px 0; margin-left: -1px; }
+.usr-arrange button[aria-pressed='true'] { background: var(--usr-both); border-color: var(--usr-both); color: #fff; }
+.theme-dark .usr-arrange button[aria-pressed='true'] { color: #0d2226; }
+.usr-arrange span { font-size: 11px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .usr-dot, .usr-frame, .usr-piles { transition: none; }
+}
+.usr-mark { transition: r .6s cubic-bezier(.22, .8, .18, 1); }
+@media (prefers-reduced-motion: reduce) { .usr-mark { transition: none; } }
+.usr-svg.is-compact .usr-pile-label { font-size: 9.5px; }
+.usr-svg.is-compact .usr-pile-count { font-size: 13px; }

@@ -6,6 +6,7 @@ import {
   sourceCandidateKey,
   type SnapshotRecord,
 } from './snapshots';
+import { urbanBodyCode, urbanBodyCodes } from './urban-body-code';
 
 /**
  * The source-supplied LGD crosswalk.
@@ -258,6 +259,16 @@ export interface IdentityReach {
   totalDatasets: number;
   /** Set when the mapping cannot be adopted as canonical identity, and why. */
   blocker: string | null;
+  /** ULBs in the register: the population identity is counted against. */
+  registerUlbs: number;
+  /** Register ULBs that appear in a retained table under their own urban body code. */
+  ulbsByCode: number;
+  /** Source spellings that carry an urban body code, and the ULBs they resolve to. */
+  codedSpellings: number;
+  /** ULBs that appear under more than one spelling yet one code. */
+  respelledUlbs: number;
+  /** Retained tables that name ULBs but publish no urban body code at all. */
+  nameOnlyDatasets: number;
 }
 
 /**
@@ -280,6 +291,22 @@ export function getIdentityReach(): IdentityReach {
     }
   }
   const matched = [...all].filter((key) => covered.has(key)).length;
+  // Identity counted in ULBs, against the register, through the code each source supplies.
+  const spellingsByCode = new Map<string, Set<string>>();
+  let nameOnlyDatasets = 0;
+  for (const snapshot of governedSnapshots) {
+    let names = 0, coded = 0;
+    for (const record of snapshot.records) {
+      const key = sourceCandidateKey(record);
+      if (!key) continue;
+      names += 1;
+      const code = urbanBodyCode(record);
+      if (!code) continue;
+      coded += 1;
+      spellingsByCode.set(code, (spellingsByCode.get(code) ?? new Set()).add(key));
+    }
+    if (names && !coded) nameOnlyDatasets += 1;
+  }
   const unrelated = crosswalk.districtRelabels.filter((relabel) => relabel.kind === 'unrelated');
   return {
     totalCandidates: all.size,
@@ -289,6 +316,11 @@ export function getIdentityReach(): IdentityReach {
     disputed: crosswalk.conflicts.length,
     enrichedDatasets: crosswalk.datasets,
     totalDatasets: governedSnapshots.length,
+    registerUlbs: urbanBodyCodes.size,
+    ulbsByCode: spellingsByCode.size,
+    codedSpellings: new Set([...spellingsByCode.values()].flatMap((keys) => [...keys])).size,
+    respelledUlbs: [...spellingsByCode.values()].filter((keys) => keys.size > 1).length,
+    nameOnlyDatasets,
     blocker: crosswalk.selfContradictions.length
       ? `${crosswalk.selfContradictions.length} departmental district label${crosswalk.selfContradictions.length === 1 ? '' : 's'} map to more than one LGD district inside a single source, and ${unrelated.length} district mapping${unrelated.length === 1 ? ' pairs' : 's pair'} labels that are not spelling variants of each other. The supplied mapping cannot be adopted as canonical identity until the source resolves them.`
       : null,

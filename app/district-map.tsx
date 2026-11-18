@@ -3,8 +3,15 @@ import {useEffect,useId,useState} from 'react';
 import {matchDistrictMeasure,projectDistricts,type DistrictMeasure,type DistrictShape} from '@/lib/visual-evidence';
 import './visual-intelligence.css';
 
-export function DistrictMap({rows,selected,onSelect,title,unit,diverging=false,maximum,shapes:provided}: {
-  rows:DistrictMeasure[];selected:string;onSelect:(district:string)=>void;title:string;unit:string;diverging?:boolean;maximum?:number;shapes?:DistrictShape[];
+const normal=(name:string)=>name.toUpperCase().replace(/[^A-Z]/g,'');
+
+/**
+ * `placements`, when given, names the boundary each row belongs to (for example the LGD name
+ * its district code resolves to). A row is then drawn only where that name matches exactly one
+ * boundary; without it, rows are matched by name as before.
+ */
+export function DistrictMap({rows,selected,onSelect,title,unit,diverging=false,maximum,shapes:provided,placements}: {
+  rows:DistrictMeasure[];selected:string;onSelect:(district:string)=>void;title:string;unit:string;diverging?:boolean;maximum?:number;shapes?:DistrictShape[];placements?:Map<string,string>;
 }){
   const [loaded,setLoaded]=useState<DistrictShape[]|null>(null);
   const [failed,setFailed]=useState(false);
@@ -16,8 +23,14 @@ export function DistrictMap({rows,selected,onSelect,title,unit,diverging=false,m
     return()=>{alive=false;};
   },[provided]);
   const shapes=provided??loaded;
+  const rowFor=(d:string)=>{
+    if(!shapes)return null;
+    if(!placements)return matchDistrictMeasure(d,rows,shapes);
+    const hits=rows.filter(row=>normal(placements.get(row.district)??row.district)===normal(d));
+    return hits.length===1&&shapes.filter(shape=>normal(shape.d)===normal(d)).length===1?hits[0]:null;
+  };
   const extent=maximum??Math.max(1,...rows.map(row=>Math.abs(row.value??0)));
-  const unmatched=shapes?rows.filter(row=>!shapes.some(shape=>matchDistrictMeasure(shape.d,rows,shapes)===row)):[];
+  const unmatched=shapes?rows.filter(row=>!shapes.some(shape=>rowFor(shape.d)===row)):[];
   const selectedRow=rows.find(row=>row.district===selected);
   const format=(v:number|null)=>v===null?'Not available':`${v>0&&diverging?'+':''}${v.toLocaleString('en-IN',{maximumFractionDigits:2})} ${unit}`;
   return <section className="district-evidence-map" aria-label={title}>
@@ -25,7 +38,7 @@ export function DistrictMap({rows,selected,onSelect,title,unit,diverging=false,m
     <div className="district-map-stage">{shapes?<svg viewBox="0 0 560 480" role="group" aria-label={`${title} district map`}>
       <defs><pattern id={hatch} width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--muted)" strokeWidth=".7" opacity=".5"/></pattern></defs>
       {shapes.map(shape=>{
-        const row=matchDistrictMeasure(shape.d,rows,shapes);const value=row?.value;
+        const row=rowFor(shape.d);const value=row?.value;
         const ink=diverging&&value!==null&&value!==undefined&&value<0?'var(--vi-decrease)':'var(--vi-increase)';
         // Mixed toward the map's own ground, not the ambient --surface. On a dark panel
         // that override made the bottom of the scale the same colour as the panel behind

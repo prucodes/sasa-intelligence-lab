@@ -28,13 +28,12 @@ export function LgdCrosswalkPanel() {
 
   const unrelated = crosswalk.districtRelabels.filter((relabel) => relabel.kind === 'unrelated');
   const spelling = crosswalk.districtRelabels.filter((relabel) => relabel.kind === 'spelling');
-  const percent = Math.round(reach.coverageRatio * 100);
 
   return <section className="lgd-panel" aria-labelledby="lgd-panel-title">
     <header className="lgd-head">
       <div>
         <span className="lgd-kicker">Identity evidence / supplied mapping</span>
-        <h2 id="lgd-panel-title">The source now states its own identity.<br/><em>It does not agree with itself.</em></h2>
+        <h2 id="lgd-panel-title">The source now states its own identity.<br/><em>Its ULB codes hold. Its district labels do not.</em></h2>
         <p>
           Six retained datasets carry LGD district and mandal codes beside the departmental
           label, a mapping the source asserts rather than one this product inferred. That
@@ -42,15 +41,16 @@ export function LgdCrosswalkPanel() {
         </p>
       </div>
       <dl className="lgd-reach">
-        <div><dt>Entities reached</dt><dd>{percent}%<span> {reach.covered} of {reach.totalCandidates}</span></dd></div>
-        <div><dt>Datasets carrying codes</dt><dd>{reach.enrichedDatasets}<span> of {reach.totalDatasets} retained</span></dd></div>
+        <div><dt>ULBs identified by their own code</dt><dd>{reach.ulbsByCode}<span> of {reach.registerUlbs} in the register</span></dd></div>
+        <div><dt>Source spellings the code resolves</dt><dd>{reach.codedSpellings}<span> of {reach.totalCandidates} · {reach.respelledUlbs} ULBs spelled more than one way</span></dd></div>
         <div><dt>Codes disputed across sources</dt><dd>{reach.disputed}</dd></div>
       </dl>
     </header>
 
     <div className="lgd-verdict" role="note">
-      <span className="lgd-verdict-tag">Not adopted as canonical identity</span>
+      <span className="lgd-verdict-tag">District labels not adopted as identity</span>
       <p>{reach.blocker}</p>
+      <p>ULBs are identified by the urban body code each source supplies instead. Every such code in the retained tables is in the register and no spelling carries two of them; the {reach.totalCandidates - reach.codedSpellings} spellings without one come largely from {reach.nameOnlyDatasets} tables that publish names only, and stay name candidates.</p>
     </div>
 
     <div className="lgd-tabs" role="tablist" aria-label="Mapping evidence">

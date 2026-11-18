@@ -29,7 +29,7 @@ export function EvidenceIntegrity({ href }: { href: (path: string) => string }) 
       value: crosswalk.selfContradictions.length,
       unit: crosswalk.selfContradictions.length === 1 ? 'district label' : 'district labels',
       title: 'The supplied identity mapping contradicts itself',
-      detail: `Six retained datasets now carry LGD codes beside their departmental labels. ${crosswalk.selfContradictions.length} labels map to two different LGD districts inside a single source, and ${reach.disputed} entities carry codes two sources disagree about. The mapping reaches ${Math.round(reach.coverageRatio * 100)}% of observed entities and is not adopted as identity.`,
+      detail: `Six retained datasets now carry LGD codes beside their departmental labels. ${crosswalk.selfContradictions.length} labels map to two different LGD districts inside a single source, and ${reach.disputed} entities carry codes two sources disagree about. District labels are therefore not adopted as identity. ULBs are identified by the urban body code each source supplies: ${reach.ulbsByCode} of ${reach.registerUlbs} register ULBs appear with it in the retained tables.`,
       href: href('/gap-radar'),
       cta: 'Inspect the mapping',
     },

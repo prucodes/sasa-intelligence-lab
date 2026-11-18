@@ -21,7 +21,8 @@ describe('application shell and screens', () => {
     render(<LabApp page="overview" initialMode="DEMO" />);
     const navigation = screen.getByRole('complementary', { name: /primary navigation/i });
     expect(navigation).toBeInTheDocument();
-    expect(navigation.querySelectorAll('nav a')).toHaveLength(7);
+    expect(navigation.querySelectorAll('nav a')).toHaveLength(8);
+    expect(navigation.querySelector('nav a[href*="/atlas"]')).not.toBeNull();
     expect(screen.getByRole('combobox', { name: /data mode/i })).toHaveValue('DEMO');
     expect(screen.getByRole('heading', { name: /what sasa data can tell us today/i })).toBeInTheDocument();
   });
@@ -29,7 +30,7 @@ describe('application shell and screens', () => {
   it('keeps every page directly linked with an explicit current-page marker', () => {
     render(<LabApp page="overview" initialMode="SAMPLE"/>);
     const nav=screen.getByRole('complementary',{name:'Primary navigation'});
-    expect(nav.querySelectorAll('nav a')).toHaveLength(7);
+    expect(nav.querySelectorAll('nav a')).toHaveLength(8);
     expect(nav.querySelector('[aria-current="page"]')).toHaveAttribute('aria-label','Overview');
     expect(screen.queryByRole('button',{name:'Menu'})).not.toBeInTheDocument();
   });
@@ -64,7 +65,7 @@ describe('application shell and screens', () => {
     fireEvent.change(screen.getByRole('combobox', { name: /data mode/i }), { target: { value: 'SAMPLE' } });
     expect(screen.getByRole('status')).toHaveTextContent('Retained source evidence');
     expect(screen.getAllByText(/6,509/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Andhra Pradesh sanitation overview/i);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Sanitation across the state, as the sources report it/i);
     expect(screen.getByRole('heading', { level: 2, name: /decline at every step/i })).toBeInTheDocument();
     expect(screen.getByLabelText('Operational review subjects')).toHaveTextContent(/Vehicle delivery.*Household toilets.*Legacy waste/i);
     expect(screen.getByLabelText('Four-month rural collection comparison')).toHaveTextContent('85,769');
@@ -157,7 +158,7 @@ describe('application shell and screens', () => {
     fireEvent.click(screen.getByRole('tab', { name: /processing infrastructure/i }));
     expect(screen.getByRole('heading', { name: /legacy-waste balance and facility-status exceptions are ready for review/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /reported clearance, with 1.49 million remaining/i })).toBeInTheDocument();
-    expect(screen.getByText('14,85,769')).toBeInTheDocument();
+    expect(screen.getAllByText('14,85,769').some((element) => !element.closest('.page-brief'))).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: /facility registry/i }));
     expect(screen.getByRole('heading', { name: /configured capacity by facility type/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /facility registry/i })).toBeInTheDocument();

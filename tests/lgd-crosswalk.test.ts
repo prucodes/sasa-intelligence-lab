@@ -48,6 +48,16 @@ describe('LGD crosswalk', () => {
     expect(reach.enrichedDatasets).toBeLessThan(reach.totalDatasets);
   });
 
+  it('counts identity in register ULBs, with spellings as the evidence behind it', () => {
+    const reach = getIdentityReach();
+    expect(reach.ulbsByCode).toBeLessThanOrEqual(reach.registerUlbs);
+    // More spellings than ULBs: the code collapses respellings, which a name count cannot.
+    expect(reach.codedSpellings).toBeGreaterThan(reach.ulbsByCode);
+    expect(reach.codedSpellings).toBeLessThanOrEqual(reach.totalCandidates);
+    expect(reach.respelledUlbs).toBeGreaterThan(0);
+    expect(reach.nameOnlyDatasets).toBeGreaterThan(0);
+  });
+
   it('never invents an LGD code for a row that lacks one', () => {
     const snapshot = governedSnapshotByKey.get('ihhl_new_identification_new1_api')!;
     const blank = snapshot.records.filter((record) => !String(record.lgd_mandal_code ?? '').trim());

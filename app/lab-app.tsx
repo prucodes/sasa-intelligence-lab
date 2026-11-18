@@ -19,6 +19,9 @@ import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import { EnvironmentLedger } from './environment-ledger';
+import { UlbAtlas } from './ulb-atlas';
+import { useScreenMotion } from './motion';
+import { PageBrief } from './page-brief';
 import './screen-features.css';
 import './canvas.css';
 import './evidence-content.css';
@@ -91,7 +94,7 @@ import {
 } from '@/lib/crosswalk';
 import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
 
-type Page = 'overview' | 'operational-analytics' | 'environment' | 'gap-radar' | 'reconciliation' | 'diagnostics' | 'data-readiness';
+type Page = 'overview' | 'operational-analytics' | 'environment' | 'gap-radar' | 'atlas' | 'reconciliation' | 'diagnostics' | 'data-readiness';
 type ColorTheme = 'light' | 'dark';
 type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'delivery' | 'rural' | 'continuity' | 'outcomes';
 type AnalyticsLens = 'snapshot' | 'movement';
@@ -101,6 +104,7 @@ const navItems: { page: Page; label: string; href: string; icon: IconName }[] = 
   { page: 'operational-analytics', label: 'Operational Analytics', href: '/operational-analytics', icon: 'chart' },
   { page: 'environment', label: 'Environment & Carbon', href: '/environment', icon: 'leaf' },
   { page: 'gap-radar', label: 'Gap Radar', href: '/gap-radar', icon: 'target' },
+  { page: 'atlas', label: 'ULB Atlas', href: '/atlas', icon: 'atlas' },
   { page: 'reconciliation', label: 'Source Reconciliation', href: '/reconciliation', icon: 'link' },
   { page: 'diagnostics', label: 'ULB Diagnostics', href: '/diagnostics/demo-delta', icon: 'building' },
   { page: 'data-readiness', label: 'Data Readiness', href: '/data-readiness', icon: 'database' },
@@ -122,7 +126,7 @@ function GlossaryText({ text }: { text: string }) {
   })}</>;
 }
 
-type IconName = 'home' | 'chart' | 'leaf' | 'target' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
+type IconName = 'home' | 'chart' | 'leaf' | 'target' | 'atlas' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
 
 function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
@@ -131,6 +135,7 @@ function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
       {name === 'home' && <><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></>}
       {name === 'chart' && <><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18"/></>}
       {name === 'leaf' && <><path d="M12 21c0-6.5 3-11 9-12 .6 5.9-2.4 11-9 12Z"/><path d="M12 21C9 21 3 18.5 3 12c0-4 2.5-7 6-8 2 1.6 3 4 3 6.5"/><path d="M12 21v-6"/></>}
+      {name === 'atlas' && <><circle cx="6" cy="6" r="1.6"/><circle cx="12" cy="6" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="2.6"/><circle cx="18" cy="12" r="1.6"/><circle cx="6" cy="18" r="1.6"/><circle cx="12" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></>}
       {name === 'target' && <><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 12 21 3M16 3h5v5"/></>}
       {name === 'building' && <><path d="M4 21h16M6 21V8l6-4 6 4v13"/><path d="M9 11h1m4 0h1m-6 4h1m4 0h1m-4 6v-3h2v3"/></>}
       {name === 'database' && <><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></>}
@@ -286,6 +291,8 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
     setBooted(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [initialUlbKey]);
+  // Runs once the shell is visible, and again for each screen and data mode.
+  useScreenMotion('main-content', booted ? `${page}|${mode}` : '');
 
   function changeMode(next: DataMode) {
     setMode(next);
@@ -322,6 +329,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
           {page === 'environment' && <Environment mode={mode} />}
+          {page === 'atlas' && <Atlas mode={mode} />}
           {page === 'gap-radar' && <GapRadar mode={mode} colorTheme={colorTheme} radar={provider.getGapAssessments()} />}
           {page === 'reconciliation' && <SourceReconciliationScreen mode={mode} href={(path) => withMode(path, mode, colorTheme)} />}
           {page === 'diagnostics' && <Diagnostics mode={mode} colorTheme={colorTheme} cameFrom={cameFrom} diagnostic={provider.getDiagnostic(currentUlbKey)} allKeys={datasets[mode].diagnostics.map((d) => ({ key: d.ulbKey, name: mode === 'SAMPLE' ? `${d.name} · ${d.district}` : d.name }))} />}
@@ -342,7 +350,7 @@ function ProductFooter({ mode }: { mode: DataMode }) {
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {
-  const mobileLabels:Record<Page,string>={'overview':'Overview','operational-analytics':'Analytics','environment':'Carbon','gap-radar':'Radar','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
+  const mobileLabels:Record<Page,string>={'overview':'Overview','operational-analytics':'Analytics','environment':'Carbon','gap-radar':'Radar','atlas':'Atlas','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
   return (
     <aside className="sidebar" aria-label="Primary navigation">
       <a className="brand" href={withMode('/', mode, colorTheme)} aria-label="SASA Intelligence Lab overview">
@@ -1096,6 +1104,7 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   const tabArt = tab === 'sanitation' ? '/assets/sasa/hero-ihhl.png' : tab === 'processing' ? '/assets/sasa/hero-iswm.png' : tab === 'outcomes' ? '/assets/sasa/hero-swachh.png' : '/assets/sasa/hero-collection.png';
   return <>
     <PageIntro visual="operational-analytics" art={tabArt} eyebrow={tab === 'outcomes' && mode === 'SAMPLE' ? 'Source year 2024' : 'Available now'} title={tab === 'outcomes' && mode === 'SAMPLE' ? '2024 Swachh Outcomes' : 'Operational Analytics'} description={tab === 'outcomes' && mode === 'SAMPLE' ? 'Descriptive outcome evidence, intentionally separated from 2026 operational snapshots.' : 'Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible.'}><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'SAMPLE' ? 'Authenticated snapshot analytics · scoring remains gated' : mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>
+    {mode === 'SAMPLE' && <PageBrief page="operational-analytics" />}
     <section className="analytics-control-deck" aria-label="Analytics controls">
       <label className="analytics-mobile-domain">Analytics domain<select value={tab} onChange={event=>selectTab(event.target.value as AnalyticsTab)}>{analyticsTabs.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
       <div className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains">{analyticsTabs.map((item, index) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => selectTab(item.id)}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
@@ -1921,7 +1930,7 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
     ['link', localIdentityReviewComplete ? 'Working crosswalk reviewed locally' : 'ULB identity not reviewed', localIdentityReviewComplete ? `${reviewed} of ${stats.residualNames} residual names carry a local decision; formal sign-off is still required.` : `${stats.residualNames - reviewed} of ${stats.residualNames} observed names still need a review decision.`, localIdentityReviewComplete],
     // The platform supplied its own identity mapping in September. It does not clear
     // this gate, and the reason it does not is evidence, so it is stated as a gate.
-    ['alert', 'Supplied LGD mapping is not usable as identity', `${identityReach.enrichedDatasets} of ${identityReach.totalDatasets} retained datasets carry LGD codes, reaching ${Math.round(identityReach.coverageRatio * 100)}% of observed entities. ${crosswalk.selfContradictions.length} district labels map to two different LGD districts inside one source.`, false],
+    ['alert', 'Supplied district labels are not usable as identity', `${identityReach.enrichedDatasets} of ${identityReach.totalDatasets} retained datasets carry LGD codes. ${crosswalk.selfContradictions.length} district labels map to two different LGD districts inside one source, so district labels are not identity; ULBs are, by their own code (${identityReach.ulbsByCode} of ${identityReach.registerUlbs}).`, false],
     ['calendar', 'Periods not aligned', 'Operational and outcome periods have not been aligned for comparison.', false],
     ['clock', 'Outcome data is older', `The retained outcome evidence reports ${outcomeYearLabel}. Operations are from 2026.`, false],
     ['shield', 'Scoring policy not approved', 'Nobody has agreed the thresholds yet, so there is nothing to score against.', false],
@@ -1929,6 +1938,7 @@ function SampleGapRadar({ colorTheme }: { colorTheme: ColorTheme }) {
 
   return <>
     <PageIntro visual="gap-radar" eyebrow="Evidence-gated assessment" title="Gap Radar" description="Explore supported changes and reported delivery gaps. Each comparison states its population and evidence limits."/>
+    <PageBrief page="gap-radar" />
     <GapExplorer/>
     <details className="panel radar-gates"><summary>Requirements for formal performance classifications</summary>
     <section className="screen-feature sf-radar" aria-label="Scoring activation briefing">
@@ -2200,6 +2210,18 @@ function Environment({ mode }: { mode: DataMode }) {
   </>;
 }
 
+/**
+ * The cross-programme atlas: every ULB in the register across every measure whose source
+ * supplies the urban body code. A route of its own because it is the one screen that lines
+ * programmes up side by side, and it does so only on the code, never on a name.
+ */
+function Atlas({ mode }: { mode: DataMode }) {
+  return <>
+    <PageIntro visual="atlas" eyebrow="Cross-programme ULB atlas" title="ULB Atlas" description="Every urban local body, every programme, one identity. Each source joins on the urban body code it supplies, so no ULB is matched by its name."><FilterBar mode={mode}/></PageIntro>
+    <UlbAtlas mode={mode}/>
+  </>;
+}
+
 function FilterBar({ mode }: { mode: DataMode }) {
   return <div className="filter-bar" aria-label="Current filters"><span><Icon name="building" size={16}/>{mode === 'DEMO' ? 'All demo districts' : mode === 'SAMPLE' ? `${governedSnapshotStats.baselineUlbCandidates} observed ULB-name candidates · ${governedSnapshotStats.baselineUlbRows} latest-period IHHL rows` : 'Source pending'}</span><span><Icon name="calendar" size={16}/>{mode === 'DEMO' ? 'Illustrative period' : mode === 'SAMPLE' ? '2024 outcomes + Mar–Aug 2026 operations' : 'No period'}</span></div>;
 }
@@ -2300,6 +2322,7 @@ function Diagnostics({ mode, colorTheme, cameFrom, diagnostic, allKeys }: { mode
       <span>You opened this from the {cameFrom.toLowerCase()} review table.</span>
     </nav>}
     <PageIntro visual="diagnostics" eyebrow="Source-by-source review" title="ULB Evidence Inspector" description="Explore this ULB’s reported delivery, facilities and historical outcomes."/>
+    {mode === 'SAMPLE' && <PageBrief page="diagnostics" />}
     <section className="diagnostic-brief diagnostic-identity" aria-label="ULB evidence file summary"><div><EntityPicker diagnostic={diagnostic} allKeys={allKeys} mode={mode} colorTheme={colorTheme}/>{mode==='SAMPLE'&&<p>Source-name candidate · identity awaiting review</p>}</div>{mode==='SAMPLE'&&<><dl><div><dt>Source families</dt><dd>{sourceFamilies}</dd></div><div><dt>Matching rows</dt><dd>{diagnostic.evidence.length}</dd></div><div><dt>Period labels</dt><dd>{returnedPeriods}</dd></div></dl><EvidencePack diagnostic={diagnostic}/></>}</section>
     {mode === 'SAMPLE' && <UlbPeerProfile key={diagnostic.name+'|'+diagnostic.district} records={diagnostic.evidence} onInspect={id=>{const index=diagnostic.evidence.findIndex(item=>item.id===id);if(index>=0)inspectRecord(index);}}/>}
     <section className="diagnostics-layout">
@@ -2354,6 +2377,7 @@ function DataReadiness({ mode, readiness }: { mode: DataMode; readiness: ReturnT
   });
   return <>
     <PageIntro visual="data-readiness" art={view === 'coverage' ? '/assets/sasa/hero-swachh.png' : undefined} eyebrow="Activation evidence" title={view === 'coverage' ? 'ULB Evidence Coverage Explorer' : 'Data Readiness'} description={view === 'coverage' ? 'See where governed dataset coverage overlaps and where evidence blind spots remain.' : 'Inspect catalogue coverage, returned periods, quality conditions, and the gates for higher-order intelligence.'}><FilterBar mode={mode}/></PageIntro>
+    {mode === 'SAMPLE' && <PageBrief page="data-readiness" />}
     <div className="analytics-tabs readiness-tabs" role="tablist" aria-label="Data readiness views">{(['catalogue', 'coverage', 'periods', 'quality'] as const).map((item) => <button key={item} role="tab" aria-selected={view === item} className={view === item ? 'active' : ''} onClick={() => setView(item)}>{sentenceCase(item)}</button>)}</div>
     {mode === 'SAMPLE' && (view === 'catalogue' ? <ReadinessCommandCenter readiness={readiness}/> : <div className="sf-readiness-context"><span><b>{governedSnapshotStats.completeDatasets}</b> historical exports · {readinessCatalogueStats.platformAvailable} current routes</span><span>Scoring remains <b>UNSCORED</b></span><button onClick={() => setView('catalogue')}>View activation pipeline <Icon name="arrow" size={15}/></button></div>)}
     {view === 'catalogue' && <><section className="readiness-layout">

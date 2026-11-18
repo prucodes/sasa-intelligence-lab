@@ -51,7 +51,7 @@
   .mobile-brand-tools { display:flex; gap:4px; }
   .mobile-brand-tools button { display:grid; place-items:center; width:44px; height:44px; border:0; border-radius:50%; background:transparent; color:var(--muted); }
   .mobile-brand-tools button:hover { background:color-mix(in srgb,var(--teal) 8%,var(--surface)); }
-  .app-shell .sidebar nav { grid-column:1/-1; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); width:100%; padding:0; gap:3px; }
+  .app-shell .sidebar nav { grid-column:1/-1; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100%; padding:0; gap:3px; }
   .app-shell .sidebar nav a { display:flex; flex-direction:column; justify-content:center; gap:5px; padding:7px 1px; min-height:54px; min-width:0; border:0; border-radius:9px; box-shadow:none; color:var(--muted); }
   .sidebar nav a .nav-desktop-label { display:none; }
   .sidebar nav a .nav-mobile-label { display:block; font-size:12px; font-weight:550; line-height:1.2; letter-spacing:-.02em; }

@@ -12,7 +12,7 @@ try {
     const page = await browser.newPage({ viewport: { width, height: 960 } });
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(`${base}/?mode=governed&theme=light`, { waitUntil: 'networkidle' });
-    await page.getByRole('heading', { name: /Andhra Pradesh sanitation overview/ }).waitFor();
+    await page.getByRole('heading', { name: /Sanitation across the state/ }).waitFor();
     const issues = page.getByRole('navigation', { name: 'Operational review subjects' });
     const vehicle = issues.getByRole('button', { name: /Vehicle delivery/, includeHidden: true });
     const before = await vehicle.evaluate((node) => getComputedStyle(node).color);

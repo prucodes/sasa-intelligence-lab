@@ -1,0 +1,66 @@
+/* Overview landing: one calm panel. Four readings on the left, the state on the right. */
+.ov-hero {
+  --vi-increase: #427e72; --vi-decrease: #b78054; --vi-soft: #edf2ed; --vi-dark: #183e41;
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 1.02fr); gap: 12px 30px;
+  margin: 2px 0 24px; padding: 34px 36px 30px; border: 1px solid var(--line); border-radius: 24px; overflow: hidden;
+  background:
+    radial-gradient(60% 80% at 82% 45%, color-mix(in srgb, var(--vi-soft) 90%, transparent), transparent 72%),
+    linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--vi-soft) 22%, var(--surface)));
+}
+.theme-dark .ov-hero { --vi-increase: #91caba; --vi-decrease: #d5aa7f; --vi-soft: #243c39; --vi-dark: #133137; }
+.ov-hero-copy { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.ov-hero h1 { margin: 2px 0 0; max-width: 17ch; font-size: clamp(32px, 3.5vw, 50px); font-weight: 650; line-height: 1.04; letter-spacing: -.045em; color: var(--navy); text-wrap: balance; }
+.ov-hero h1 em { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-style: italic; letter-spacing: -.03em; color: var(--vi-increase); }
+.ov-hero-lede { margin: 0; max-width: 54ch; font-size: 15px; line-height: 1.6; color: var(--muted); }
+
+.ov-hero-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.ov-figure-card { display: grid; align-content: start; gap: 5px; padding: 15px 16px 14px; border: 1px solid var(--line); border-radius: 15px; background: color-mix(in srgb, var(--surface) 88%, transparent); color: inherit; font: inherit; text-align: left; cursor: pointer; transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .25s ease, border-color .25s ease; }
+.ov-figure-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--vi-increase) 45%, var(--line)); box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--vi-dark) 55%, transparent); }
+.ov-figure-card:focus-visible { outline: 2px solid var(--vi-increase); outline-offset: 2px; }
+.ov-figure-label { font-size: 11px; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.ov-figure-card strong { font-size: clamp(26px, 2.4vw, 34px); font-weight: 650; line-height: 1.05; letter-spacing: -.035em; color: var(--navy); font-variant-numeric: tabular-nums; }
+.ov-figure-card.tone-warm strong { color: color-mix(in srgb, var(--vi-decrease) 70%, var(--navy)); }
+.ov-figure-card small { font-size: 12px; line-height: 1.45; color: var(--muted); }
+.ov-figure-card i { display: block; height: 4px; margin-top: 6px; border-radius: 3px; background: color-mix(in srgb, var(--vi-soft) 80%, var(--line)); overflow: hidden; }
+.ov-figure-card i b { display: block; height: 100%; border-radius: 3px; background: var(--vi-increase); }
+.ov-figure-card.tone-warm i b { background: var(--vi-decrease); }
+
+.ov-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.ov-hero-actions a { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 18px; border-radius: 11px; font-size: 13.5px; font-weight: 650; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.ov-action-primary { background: var(--vi-dark); color: #fff; box-shadow: 0 10px 22px -14px var(--vi-dark); }
+.theme-dark .ov-action-primary { background: var(--vi-increase); color: #0d2226; }
+.ov-action-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 26px -14px var(--vi-dark); }
+.ov-action-primary span { transition: transform .2s ease; }
+.ov-action-primary:hover span { transform: translateX(3px); }
+.ov-action-secondary { border: 1px solid var(--line); color: var(--navy); background: var(--surface); }
+.ov-action-secondary:hover { border-color: var(--vi-increase); }
+.ov-hero-actions a:focus-visible { outline: 2px solid var(--vi-increase); outline-offset: 2px; }
+
+.ov-hero-map { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 10px; margin: 0; min-width: 0; }
+.ov-hero-map svg { display: block; width: 110%; margin-left: -5%; height: auto; max-height: 540px; overflow: visible; filter: drop-shadow(0 18px 28px color-mix(in srgb, var(--vi-dark) 14%, transparent)); }
+.ov-hero-map path { stroke: var(--surface); stroke-width: 1.1; transition: fill .6s ease, opacity .2s ease; }
+.ov-hero-map path:hover { opacity: .82; }
+.ov-hero-map-status { margin: auto; padding: 40px 0; font-size: 13px; color: var(--muted); text-align: center; }
+.ov-hero-map figcaption { display: grid; grid-template-columns: 1fr; gap: 5px; max-width: 300px; margin-left: auto; font-size: 11.5px; color: var(--muted); }
+.ov-ramp i { display: block; height: 6px; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--vi-increase) 14%, var(--vi-soft)), var(--vi-increase)); }
+.ov-ramp-labels { display: flex; justify-content: space-between; }
+.ov-ramp-labels small { font-size: 10.5px; }
+
+@media (max-width: 1100px) {
+  .ov-hero { grid-template-columns: minmax(0, 1fr); padding: 26px 24px; }
+  .ov-hero-map { order: -1; }
+  .ov-hero-map svg { width: 100%; margin-left: 0; max-height: 300px; }
+  .ov-hero-map figcaption { margin: 0 auto; }
+}
+@media (max-width: 560px) {
+  .ov-hero { padding: 20px 16px; border-radius: 18px; gap: 8px; }
+  .ov-hero h1 { font-size: 30px; }
+  .ov-hero-figures { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .ov-figure-card { padding: 12px; }
+  .ov-figure-card strong { font-size: 24px; }
+  .ov-figure-card small { font-size: 11px; }
+  .ov-hero-actions a { flex: 1 1 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ov-figure-card, .ov-hero-actions a, .ov-action-primary span, .ov-hero-map path { transition: none; }
+}
