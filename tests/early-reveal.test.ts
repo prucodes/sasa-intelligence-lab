@@ -19,6 +19,10 @@ describe('early reveal of the prerendered page', () => {
     expect(boot('/atlas/?mode=sample&measure=reach')).toBe(true);
   });
 
+  it('carries no route path the subpath build would rewrite', () => {
+    expect(EARLY_REVEAL_SCRIPT).not.toMatch(/\/(diagnostics|goals|atlas|environment|gap-radar|operational-analytics|reconciliation|data-readiness)\b/);
+  });
+
   it('keeps the shell hidden until the client resolves any other mode or theme', () => {
     expect(boot('/?mode=demo')).toBe(false);
     expect(boot('/?mode=live')).toBe(false);
