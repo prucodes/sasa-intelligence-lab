@@ -7,7 +7,7 @@
   --sh-step-3: color-mix(in srgb, var(--vi-increase) 78%, var(--vi-soft));
   --sh-step-4: var(--vi-increase);
   display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr); gap: 18px 34px; align-items: center;
-  margin: 2px 0 22px; padding: 30px 34px; border: 1px solid var(--line); border-radius: 22px; overflow: hidden;
+  margin: 2px 0 22px; padding: 28px 32px; border: 1px solid var(--line); border-radius: 22px; overflow: hidden;
   background:
     radial-gradient(60% 85% at 85% 45%, color-mix(in srgb, var(--vi-soft) 90%, transparent), transparent 72%),
     linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--vi-soft) 22%, var(--surface)));
@@ -15,8 +15,8 @@
 .theme-dark .screen-hero { --vi-increase: #91caba; --vi-decrease: #d5aa7f; --vi-soft: #243c39; --vi-dark: #133137; }
 .screen-hero.is-plain { grid-template-columns: minmax(0, 1fr); }
 .sh-copy { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.screen-hero h1 { margin: 0; font-size: clamp(30px, 3.1vw, 44px); font-weight: 650; line-height: 1.04; letter-spacing: -.045em; color: var(--navy); }
-.sh-accent { margin: -4px 0 4px; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.12; letter-spacing: -.02em; color: var(--vi-increase); text-wrap: balance; }
+.screen-hero h1 { margin: 0; font-size: clamp(28px, 2.9vw, 40px); font-weight: 650; line-height: 1.04; letter-spacing: -.045em; color: var(--navy); }
+.sh-accent { margin: -4px 0 4px; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: clamp(19px, 1.9vw, 26px); line-height: 1.18; letter-spacing: -.015em; color: var(--vi-increase); text-wrap: balance; }
 
 .sh-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
 .sh-figures.count-3 > :last-child { grid-column: 1 / -1; }
@@ -24,7 +24,7 @@
 .sh-figure-label { font-size: 10.5px; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .sh-figure strong { font-size: clamp(24px, 2.2vw, 31px); font-weight: 650; line-height: 1.05; letter-spacing: -.035em; color: var(--navy); font-variant-numeric: tabular-nums; }
 .sh-figure.tone-warm strong { color: color-mix(in srgb, var(--vi-decrease) 70%, var(--navy)); }
-.sh-figure small { font-size: 11.5px; line-height: 1.45; color: var(--muted); }
+.sh-figure small { font-size: 12px; line-height: 1.5; color: var(--muted); }
 .sh-figure i { display: block; height: 4px; margin-top: 5px; border-radius: 3px; background: color-mix(in srgb, var(--vi-soft) 80%, var(--line)); overflow: hidden; }
 .sh-figure i b { display: block; height: 100%; border-radius: 3px; background: var(--vi-increase); }
 .sh-figure.tone-warm i b { background: var(--vi-decrease); }
@@ -60,18 +60,22 @@
 .sh-heat-label { fill: var(--muted); font-size: 9px; font-weight: 600; }
 .sh-heat-cell { shape-rendering: crispEdges; }
 
-/* Pipelines */
-.sh-pipelines { display: grid; gap: 16px; }
-.sh-pipeline { display: grid; gap: 6px; }
-.sh-pipeline-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-.sh-pipeline-head b { font-size: 13px; color: var(--navy); }
+/* Pipelines: exact-scale stage bars */
+.sh-pipelines { display: grid; gap: 18px; }
+.sh-pipeline { display: grid; gap: 7px; }
+.sh-pipeline-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-bottom: 2px; }
+.sh-pipeline-head b { font-size: 13.5px; font-weight: 650; color: var(--navy); }
 .sh-pipeline-head small { font-size: 11px; color: var(--muted); }
-.sh-stage { display: grid; grid-template-columns: 116px minmax(0, 1fr) 72px; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
-.sh-stage i { height: 10px; border-radius: 5px; background: color-mix(in srgb, var(--vi-soft) 85%, var(--line)); overflow: hidden; }
-.sh-stage i b { display: block; height: 100%; border-radius: 5px; background: var(--vi-increase); }
-.sh-stage.is-short i b { background: var(--vi-decrease); }
-.sh-stage.is-short em { color: color-mix(in srgb, var(--vi-decrease) 70%, var(--navy)); }
-.sh-stage em { font-style: normal; font-weight: 650; color: var(--navy); text-align: right; font-variant-numeric: tabular-nums; }
+.sh-stage { display: grid; grid-template-columns: 118px minmax(0, 1fr) 76px; align-items: center; gap: 12px; font-size: 12px; color: var(--muted); }
+.sh-stage i { position: relative; height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--vi-soft) 80%, var(--line)); overflow: hidden; }
+.sh-stage i b { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, color-mix(in srgb, var(--vi-increase) 78%, var(--vi-soft)), var(--vi-increase)); }
+.sh-stage.is-base i b { background: color-mix(in srgb, var(--vi-increase) 38%, var(--vi-soft)); }
+.sh-stage.is-short i b { background: linear-gradient(90deg, color-mix(in srgb, var(--vi-decrease) 70%, var(--vi-soft)), var(--vi-decrease)); }
+.sh-stage.is-zero i::before { content: ''; position: absolute; left: 0; top: 1px; bottom: 1px; width: 2px; border-radius: 1px; background: var(--vi-decrease); }
+.sh-stage.is-short em, .sh-stage.is-zero em { color: color-mix(in srgb, var(--vi-decrease) 72%, var(--navy)); }
+.sh-stage em { font-style: normal; font-weight: 650; color: var(--navy); text-align: right; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.sh-pipeline.is-missing .sh-pipeline-head { padding: 10px 12px; border: 1px dashed var(--line); border-radius: 10px; }
+.sh-pipeline.is-missing small { color: color-mix(in srgb, var(--vi-decrease) 70%, var(--navy)); }
 
 /* Gate ring */
 .sh-gates { display: grid; grid-template-columns: minmax(150px, 220px) auto; align-items: center; justify-content: center; gap: 22px; }
@@ -94,7 +98,8 @@
 .screen-hero.motion-on .sh-dot { animation: shRise .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--x, 0) * 600ms); }
 .screen-hero.motion-on .sh-heat-cell { animation: shFade .5s ease-out backwards; animation-delay: calc(150ms + var(--x, 0) * 800ms); }
 .screen-hero.motion-on .sh-gate { animation: shDraw .7s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--i, 0) * 110ms); }
-.screen-hero.motion-on .sh-stage i b { animation: shGrow .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(250ms + var(--i, 0) * 180ms); transform-origin: left center; }
+.screen-hero.motion-on .sh-stage i b { animation: shGrow .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(250ms + var(--i, 0) * 110ms); transform-origin: left center; }
+.screen-hero.motion-on .sh-pipeline { animation: shLift .6s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(140ms + var(--row, 0) * 120ms); }
 .screen-hero.motion-on .sh-figure { animation: shLift .6s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(80ms + var(--i, 0) * 80ms); }
 @keyframes shRise { from { transform: translateY(var(--rise, 20px)); opacity: 0; } 60% { opacity: 1; } }
 @keyframes shFade { from { opacity: 0; } }
@@ -119,7 +124,7 @@
   .sh-actions a { flex: 1 1 100%; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .screen-hero.motion-on :is(.sh-dot, .sh-heat-cell, .sh-gate, .sh-stage i b, .sh-figure) { animation: none; }
+  .screen-hero.motion-on :is(.sh-dot, .sh-heat-cell, .sh-gate, .sh-stage i b, .sh-figure, .sh-pipeline) { animation: none; }
 }
 
 /* Delivery funnels */
@@ -199,3 +204,16 @@
 @media (max-width: 560px) { .nature-rings svg { max-width: 220px; } .nature-legend { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .screen-hero.is-nature.motion-on :is(.nr-arc, .nr-grain) { animation: none; } }
 
+
+/* Phone: the graphic follows the figures at a modest height, so the first screen holds the reading. */
+@media (max-width: 760px) {
+  .screen-hero { padding: 20px 18px; gap: 16px; }
+  .screen-hero .sh-accent { font-size: 18px; }
+  .sh-figure { padding: 12px 13px 11px; }
+  .sh-figure strong { font-size: 24px; }
+  .sh-figure small { font-size: 12px; }
+  .sh-visual { max-width: none; }
+  .sh-visual > svg { max-height: 260px; }
+  .sh-actions { gap: 8px; }
+  .sh-actions a { min-height: 38px; padding: 0 13px; }
+}

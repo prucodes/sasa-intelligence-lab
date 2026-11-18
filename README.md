@@ -2,13 +2,18 @@
 
 An evidence-first frontend prototype that demonstrates how verified SASA sanitation records could support transparent decision intelligence without presenting synthetic values as government findings.
 
-The application implements exactly five primary screens:
+The application provides nine primary screens:
 
 - **Overview** — three compact operational review signals: collection procurement, IHHL delivery, and legacy-waste clearance, plus current scoring eligibility.
 - **Operational Analytics** — one workspace with Collection, Sanitation Delivery, Processing Infrastructure, and 2024 Swachh Outcomes tabs. Each SAMPLE tab leads with a plain-language finding, its evidence, the next review, and what the evidence cannot establish. Collection, IHHL and legacy-waste views also include a browseable ULB comparison that is locked to one source, period, grain and unit. The shell exposes a persistent, browse-first comparison tray for up to six anchored ULBs, plus a client-side evidence-brief download (governed mode only for source-backed figures).
 - **Gap Radar** — an illustrative two-axis matrix with a first-class unscored state. In SAMPLE mode it shows the four unmet activation gates plus a **crosswalk workbench**: 1,151 of 1,408 observed ULB-name occurrences resolve to a source-provided 123-entity anchor registry by exact match, leaving a bounded queue of 82 names for review. Candidates are district-scoped and similarity is a ranking hint only — decisions are a local working copy and are never an approved crosswalk.
 - **ULB Diagnostics** — metric details, deterministic diagnostics, source-family breadth, and expandable raw evidence.
 - **Data Readiness** — Catalogue, Coverage, Periods, and Quality views inside one route, including full operational evidence breadth and a deterministic reconciliation workspace. Coverage includes an **anchored coverage grid**: 123 registry entities × 18 ULB-grain sources = 2,214 observations. Before local alias decisions, 1,063 cells (48%) were absent; the seeded working crosswalk recovers 235 observations, leaving 828 (37%) not returned. That recovery is a reviewer working state, not an authoritative statewide completeness claim. Absence is drawn as a hatched cell rather than blank space, because "not returned" is never a reported zero. Periods includes the four-check acceptance path that every later governed snapshot must clear before it enters a longitudinal view. Quality opens with the **retained evidence vintage** panel.
+
+- **SASA Goals** — stated targets alongside their retained readings, periods, denominators and district shares.
+- **Environment** — household service and environmental programme ledgers, with explicit population and measurement limits.
+- **ULB Atlas** — eight measures across 123 registered ULBs, linked district filtering, individual dossiers, held-out reasons and a filtered evidence brief. Reported survey ranks are shown without cross-category comparisons.
+- **Source Reconciliation** — differences between retained source revisions, with both readings and their evidence boundaries.
 
 ## Run locally
 
@@ -24,9 +29,11 @@ Open `http://localhost:3000`.
 Validation commands:
 
 ```bash
+npm run validate:data
 npm run lint
+npm run typecheck
 npm test
-npm run build
+npm run build:static
 ```
 
 ## Data modes
@@ -180,3 +187,11 @@ The interface does not treat configured TPD/KLD capacity as throughput or utiliz
 The SASA PR additions preserve District, Block, Gram Panchayat, and collection-date grain. They are not assigned to ULB candidates, and their documentation examples do not establish period availability. The SWPC/Swachh Ratham endpoint titles also require semantic confirmation before final product labeling.
 
 The user-supplied generated illustrations are suitable for this prototype. Organizational approval of the SASA brand treatment and artwork is still required before public release.
+
+## Reading and release safeguards
+
+The header's **Ask the evidence** (or the `/` key) opens a question panel in Governed data mode. Answers are assembled in the page from the same calculations, source periods and links as the screens. Ambiguous city/district names, time-specific requests, unknown places, causal questions and unsupported rank comparisons require clarification instead of invented answers. No live lookup is made. An optional Claude worker (`worker/ask-evidence`, see its README) can add one framing sentence per answer when the build is given its URL; the cited records are still shown verbatim, and framing that carries a figure, a judgement or a cause is discarded.
+
+The Atlas **filtered evidence brief** exports the visible ULB cohort and selected measure, including held and missing values. The header's executive **Brief** remains statewide and labels that scope. **Why these figures differ** explains the population and denominator differences between service readings.
+
+Operational period pickers offer observations retained for that programme. Missing and negative measurements are not converted to zero; latest monthly readings compare the complete year and month. GitHub Pages deployment runs data validation, lint, type checking and unit tests before building. Each static release also includes `evidence-manifest.json` with build time, source revision and retained-data content hashes; build time is not a source observation date.

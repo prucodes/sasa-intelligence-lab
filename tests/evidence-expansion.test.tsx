@@ -18,11 +18,11 @@ describe('expanded governed evidence',()=>{
   it('shows matched rates and updates scope to the selected district',()=>{
     const data=getRuralMovement();
     expect(data.districts.reduce((n,d)=>n+d.pairs,0)).toBe(85769);
-    data.series.forEach((point,i)=>expect(data.districts.reduce((n,d)=>n+d.pairs*d.points[i].collectionRate!,0)/data.cohort.pairs).toBeCloseTo(point.comparable.collectionRate,4));
+    data.series.forEach((point,i)=>expect(data.districts.reduce((n,d)=>n+d.pairs*d.points[i].collectionRate!,0)/data.cohort.pairs).toBeCloseTo(point.comparable.collectionRate!,4));
     expect(data.declining).toHaveLength(5);expect(data.rising).toHaveLength(2);
     render(<RuralMovement/>);
     expect(screen.getByRole('img',{name:/Statewide first-week/})).toHaveAccessibleName(/74.71%.*74.72%.*73.66%.*73.42%/);
-    fireEvent.click(screen.getByRole('button',{name:'Annamayya',exact:true}));
+    fireEvent.click(screen.getByRole('button',{name:/^Annamayya$/}));
     expect(screen.getByRole('img',{name:/Annamayya first-week/})).toHaveAccessibleName(/76.58%.*54.82%/);
 
   });

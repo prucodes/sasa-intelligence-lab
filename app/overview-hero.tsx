@@ -53,9 +53,9 @@ export function OverviewHero({shapes, failed, rural, href, onSubject}: HeroProps
 
   const figures = [
     {id: 'atlas', label: 'Households collected from', value: reach.figure, decimals: 1, suffix: '%', context: `${reachMeasure.reporting} reporting ULBs · ${reachMeasure.period}`, meter: reach.figure, tone: 'good', action: () => { window.location.href = href('/atlas'); }},
-    toilets && {id: 'sanitation', label: 'Approved toilets not yet built', value: toilets.total, decimals: 0, suffix: '', context: `${toilets.stalled} of ${toilets.reporting} ULBs holding approvals report none started · ${toilets.period}`, meter: toilets.stalled / toilets.reporting * 100, tone: 'warm', action: () => onSubject('sanitation')},
-    vehicles && {id: 'collection', label: 'Vehicles ordered, not delivered', value: vehicles.total, decimals: 0, suffix: '', context: `${vehicles.stalled} of ${vehicles.reporting} ULBs with work orders report none supplied · ${vehicles.period}`, meter: vehicles.stalled / vehicles.reporting * 100, tone: 'warm', action: () => onSubject('collection')},
-    {id: 'rural-change', label: 'Rural collection, May to August', value: rural.shift, decimals: 2, suffix: ' pp', context: `${rural.open.toFixed(2)}% to ${rural.close.toFixed(2)}% in the common panchayat-day cohort`, meter: rural.close, tone: 'good', action: () => onSubject('rural-change')},
+    toilets && {id: 'sanitation', label: 'Approved toilets not yet built', value: toilets.total, decimals: 0, suffix: '', context: `${toilets.stalled} of ${toilets.reporting} ULBs holding approvals report none started · ${toilets.period}`, meter: undefined, tone: 'warm', action: () => onSubject('sanitation')},
+    vehicles && {id: 'collection', label: 'Vehicles ordered, not delivered', value: vehicles.total, decimals: 0, suffix: '', context: `${vehicles.stalled} of ${vehicles.reporting} ULBs with work orders report none supplied · ${vehicles.period}`, meter: undefined, tone: 'warm', action: () => onSubject('collection')},
+    {id: 'rural-change', label: 'Rural collection, May to August', value: rural.shift, decimals: 2, suffix: ' pp', context: `${rural.open.toFixed(2)}% to ${rural.close.toFixed(2)}% in the common panchayat-day cohort`, meter: undefined, tone: rural.shift < 0 ? 'warm' : 'good', action: () => onSubject('rural-change')},
   ].filter((figure): figure is NonNullable<typeof figure> => Boolean(figure));
 
   return (
@@ -70,7 +70,7 @@ export function OverviewHero({shapes, failed, rural, href, onSubject}: HeroProps
               <span className="ov-figure-label">{figure.label}</span>
               <strong><CountUp value={figure.value} decimals={figure.decimals} suffix={figure.suffix} prefix={figure.value > 0 && figure.suffix === ' pp' ? '+' : ''} /></strong>
               <small>{figure.context}</small>
-              <i aria-hidden="true"><b style={{width: `${Math.max(2, Math.min(100, figure.meter))}%`}} /></i>
+              {typeof figure.meter === 'number' && <i aria-hidden="true"><b style={{width: `${Math.max(0, Math.min(100, figure.meter))}%`}} /></i>}
             </button>
           ))}
         </div>

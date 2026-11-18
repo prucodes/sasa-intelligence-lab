@@ -7,9 +7,10 @@ import {CountUp, useMotionClass} from './motion';
 import './screen-hero.css';
 
 /**
- * A screen's opening view: the page name, one accent line, up to four headline figures that
- * count up, and a graphic drawn from the same data. It replaces a block of explanatory text,
- * so a reader sees the state of things before reading about it.
+ * A screen's opening view: the page name, one accent line, up to four headline figures, and a
+ * graphic drawn from the same data. It replaces a block of explanatory text, so a reader sees
+ * the state of things before reading about it. A figure's meter, where it has one, is that
+ * figure divided by the population its context names, never a different ratio.
  */
 export function ScreenHero({data, visual, caption, actions, variant}: {data: ScreenHeroData; visual?: ReactNode; caption?: string; actions?: ReactNode; variant?: 'nature'}) {
   const root = useMotionClass<HTMLElement>();
@@ -40,7 +41,7 @@ function Figure({figure, index}: {figure: HeroFigure; index: number}) {
       <span className="sh-figure-label">{figure.label}</span>
       <strong><CountUp value={figure.value} decimals={figure.decimals ?? 0} prefix={figure.prefix ?? ''} suffix={figure.suffix ?? ''} /></strong>
       <small>{figure.context}</small>
-      {typeof figure.meter === 'number' && <i aria-hidden="true"><b style={{width: `${Math.max(2, Math.min(100, figure.meter))}%`}} /></i>}
+      {typeof figure.meter === 'number' && <i aria-hidden="true"><b style={{width: `${Math.max(0, Math.min(100, figure.meter))}%`}} /></i>}
     </div>
   );
 }
@@ -83,7 +84,7 @@ export function HeatStrip({model}: {model: AtlasModel}) {
           <text className="sh-heat-label" x={left - 6} y={ch - 3} textAnchor="end">{measure.short}</text>
           {ordered.map((ulb, column) => {
             const cell = ulb.cells[measure.id];
-            const fill = cell?.state === 'value' ? `var(--sh-step-${cell.step})` : cell?.state === 'held' ? 'url(#sh-hatch)' : 'transparent';
+            const fill = cell?.state === 'value' ? cell.comparable ? `var(--sh-step-${cell.step})` : 'var(--muted)'  : cell?.state === 'held' ? 'url(#sh-hatch)' : 'transparent';
             return <rect key={ulb.code} className="sh-heat-cell" x={left + column * cw} y={0} width={cw - .5} height={ch} fill={fill} style={{'--x': column / ordered.length} as CSSProperties} />;
           })}
         </g>
@@ -92,25 +93,34 @@ export function HeatStrip({model}: {model: AtlasModel}) {
   );
 }
 
-/** Each programme's reported stages as bars against its own first stage, so the drop-off is visible. */
-export function PipelineBars({pipelines}: {pipelines: Pipeline[]}) {
+/**
+ * Each programme's reported stages as bars drawn to exact scale against the programme's own
+ * first stage. A zero is marked, not drawn as a sliver; a split programme (parts of one total)
+ * reads as parts of that total. No bar implies that one stage flows into the next.
+ */
+export function PipelineBars({pipelines, missing = [], missingPeriod}: {pipelines: Pipeline[]; missing?: string[]; missingPeriod?: string}) {
   return (
     <div className="sh-pipelines">
-      {pipelines.map((pipeline) => {
-        const base = Math.max(1, pipeline.stages[0]?.value ?? 1);
+      {pipelines.map((pipeline, row) => {
+        const base = pipeline.stages[0]?.value ?? 0;
         return (
-          <div key={pipeline.label} className="sh-pipeline">
+          <div key={pipeline.label} className={`sh-pipeline is-${pipeline.kind}`} style={{'--row': row} as CSSProperties}>
             <div className="sh-pipeline-head"><b>{pipeline.label}</b><small>{pipeline.period}</small></div>
-            {pipeline.stages.map((stage, index) => (
-              <div key={stage.label} className={`sh-stage${index > 0 && stage.value / base < .5 ? ' is-short' : ''}`} style={{'--i': index} as CSSProperties}>
-                <span>{stage.label}</span>
-                <i><b style={{width: `${Math.max(1.5, stage.value / base * 100)}%`}} /></i>
-                <em>{stage.value.toLocaleString('en-IN')}</em>
-              </div>
-            ))}
+            {pipeline.stages.map((stage, index) => {
+              const width = base > 0 ? Math.min(100, stage.value / base * 100) : 0;
+              const short = index > 0 && base > 0 && stage.value / base < .5;
+              return (
+                <div key={stage.label} className={`sh-stage${short ? ' is-short' : ''}${index === 0 ? ' is-base' : ''}${stage.value === 0 ? ' is-zero' : ''}`} style={{'--i': row * 3 + index} as CSSProperties}>
+                  <span>{stage.label}</span>
+                  <i><b style={{width: `${width}%`}} /></i>
+                  <em>{stage.value.toLocaleString('en-IN')}</em>
+                </div>
+              );
+            })}
           </div>
         );
       })}
+      {missing.map((label) => <div key={label} className="sh-pipeline is-missing"><div className="sh-pipeline-head"><b>{label}</b><small>No rows retained{missingPeriod ? ` for ${missingPeriod}` : ''}</small></div></div>)}
     </div>
   );
 }
@@ -139,58 +149,7 @@ export function GateRing({gates}: {gates: Array<{title: string; state: string}>}
   );
 }
 
-/**
- * Delivery as shape: each programme's stages drawn as a band whose thickness is the count at
- * that stage, against the programme's own first stage. A split programme (parts of one total)
- * is drawn as one bar divided, never as a flow from one part into the other.
- */
+/** Kept for callers: delivery is drawn as exact-scale stage bars, not a flow shape. */
 export function DeliveryFunnels({pipelines}: {pipelines: Pipeline[]}) {
-  const W = 360, H = 74, pad = 4;
-  return (
-    <div className="sh-funnels">
-      {pipelines.map((pipeline, index) => {
-        const base = Math.max(1, pipeline.stages[0]?.value ?? 1);
-        if (pipeline.kind === 'split') {
-          const [whole, ...parts] = pipeline.stages;
-          return (
-            <div key={pipeline.label} className="sh-split" style={{'--i': index} as CSSProperties}>
-              <div className="sh-funnel-head"><b>{pipeline.label}</b><small>{whole.value.toLocaleString('en-IN')} {whole.label} · {pipeline.period}</small></div>
-              <div className="sh-split-bar" role="img" aria-label={parts.map((part) => `${part.value.toLocaleString('en-IN')} ${part.label}`).join(', ')}>
-                {parts.map((part, partIndex) => <i key={part.label} className={partIndex ? 'is-warm' : ''} style={{flexBasis: `${Math.max(1, part.value / base * 100)}%`}} />)}
-              </div>
-              <div className="sh-split-labels">{parts.map((part) => <span key={part.label}><b>{part.value.toLocaleString('en-IN')}</b> {part.label}</span>)}</div>
-            </div>
-          );
-        }
-        const n = pipeline.stages.length;
-        const xs = pipeline.stages.map((_, i) => pad + i * (W - pad * 2) / (n - 1));
-        const half = pipeline.stages.map((stage) => Math.max(1.2, stage.value / base * (H / 2 - 2)));
-        const cy = H / 2;
-        let top = `M ${xs[0]} ${cy - half[0]}`, bottom = `L ${xs[n - 1]} ${cy + half[n - 1]}`;
-        for (let i = 1; i < n; i++) {
-          const mx = (xs[i - 1] + xs[i]) / 2;
-          top += ` C ${mx} ${cy - half[i - 1]}, ${mx} ${cy - half[i]}, ${xs[i]} ${cy - half[i]}`;
-        }
-        for (let i = n - 1; i > 0; i--) {
-          const mx = (xs[i - 1] + xs[i]) / 2;
-          bottom += ` C ${mx} ${cy + half[i]}, ${mx} ${cy + half[i - 1]}, ${xs[i - 1]} ${cy + half[i - 1]}`;
-        }
-        const id = `sh-flow-${index}`;
-        const endShort = (pipeline.stages[n - 1].value / base) < .5;
-        return (
-          <div key={pipeline.label} className="sh-funnel" style={{'--i': index} as CSSProperties}>
-            <div className="sh-funnel-head"><b>{pipeline.label}</b><small>{pipeline.period}</small></div>
-            <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={pipeline.stages.map((stage) => `${stage.value.toLocaleString('en-IN')} ${stage.label}`).join(', then ')}>
-              <defs><linearGradient id={id} x1="0" x2="1"><stop offset="0" stopColor="var(--vi-increase)" /><stop offset="1" stopColor={endShort ? 'var(--vi-decrease)' : 'var(--vi-increase)'} /></linearGradient></defs>
-              <path className="sh-funnel-shape" d={`${top} ${bottom} Z`} fill={`url(#${id})`} />
-              {xs.map((x, i) => <line key={i} className="sh-funnel-tick" x1={x} x2={x} y1={2} y2={H - 2} />)}
-            </svg>
-            <div className="sh-funnel-labels" style={{gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))`}}>
-              {pipeline.stages.map((stage, i) => <span key={stage.label} className={i > 0 && stage.value / base < .5 ? 'is-short' : ''}><b>{stage.value.toLocaleString('en-IN')}</b>{stage.label}</span>)}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <PipelineBars pipelines={pipelines} />;
 }

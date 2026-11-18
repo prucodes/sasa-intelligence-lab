@@ -27,6 +27,7 @@ const outDir = resolve(process.cwd(), 'data/aggregates');
 
 /** Accumulator for one entity in one period. */
 function emptyBucket(config) {
+  /** @type {Record<string, {sum: number, reported: number, zero: number, missing: number, max: number | null}>} */
   const measures = {};
   for (const name of Object.keys(config.measures)) {
     measures[name] = { sum: 0, reported: 0, zero: 0, missing: 0, max: null };
@@ -77,10 +78,12 @@ export function aggregateRecords(records, config) {
   }
 
   const rows = [...byEntity.values()].map((bucket) => {
-    const measures = {};
+    /** @type {Record<string, {sum: number, reported: number, zero: number, missing: number, max: number | null}>} */
+  const measures = {};
     for (const [name, slot] of Object.entries(bucket.measures)) {
       measures[name] = { sum: slot.sum, reported: slot.reported, zero: slot.zero, missing: slot.missing, max: slot.max };
     }
+    /** @type {Record<string, number | null>} */
     const ratios = {};
     for (const [name, [numerator, denominator]] of Object.entries(config.ratios ?? {})) {
       const top = measures[numerator];
@@ -133,6 +136,7 @@ export function rollUpToUlb(rows, config) {
     }
   }
   return [...byUlb.values()].map((bucket) => {
+    /** @type {Record<string, number | null>} */
     const ratios = {};
     for (const [name, [numerator, denominator]] of Object.entries(config.ratios ?? {})) {
       const bottom = bucket.measures[denominator];

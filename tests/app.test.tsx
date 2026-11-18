@@ -66,7 +66,7 @@ describe('application shell and screens', () => {
     fireEvent.change(screen.getByRole('combobox', { name: /data mode/i }), { target: { value: 'SAMPLE' } });
     expect(screen.getByRole('status')).toHaveTextContent('Retained source evidence');
     expect(screen.getAllByText(/6,509/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Sanitation across the state, as the sources report it/i);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Sanitation across the state, as the sources report it./i);
     expect(screen.getByRole('heading', { level: 2, name: /decline at every step/i })).toBeInTheDocument();
     expect(screen.getByLabelText('Operational review subjects')).toHaveTextContent(/Vehicle delivery.*Household toilets.*Legacy waste/i);
     expect(screen.getByLabelText('Four-month rural collection comparison')).toHaveTextContent('85,769');
@@ -184,16 +184,15 @@ describe('application shell and screens', () => {
     expect(screen.getByText('27', { selector: '.movement-kpis .is-lower strong' })).toBeInTheDocument();
   });
 
-  it('does not turn an absent operational source-period into a zero-performance headline', () => {
+  it('offers only retained periods for the selected operational programme', () => {
     render(<LabApp page="operational-analytics" initialMode="SAMPLE" />);
-    fireEvent.change(screen.getByRole('combobox', { name: /reported period/i }), { target: { value: '2026-03' } });
-    const briefing = screen.getByLabelText('Operational evidence briefing');
-    expect(briefing).toHaveTextContent('No retained ULB procurement rows for this selection.');
-    expect(briefing).toHaveTextContent('Not returned');
-    expect(briefing).not.toHaveTextContent('0.0%');
-    expect(briefing).not.toHaveTextContent('far behind procurement intent');
-    expect(screen.queryByLabelText('Reported stage quantities')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Same-source ULB comparison')).not.toBeInTheDocument();
+    const picker = screen.getByRole('combobox', { name: /reported period/i });
+    expect(picker.querySelector('option[value="2026-03"]')).toBeNull();
+    expect(picker.querySelector('option[value="2027-03"]')).toBeNull();
+    expect(picker.querySelector('option[value="2026-06"]')).not.toBeNull();
+    fireEvent.change(picker, {target: {value: '2026-06'}});
+    expect(screen.getByLabelText('Operational evidence briefing')).toHaveTextContent('Jun 2026');
+    expect(screen.queryByText('2026-07 / GOVERNED READING')).not.toBeInTheDocument();
   });
 
   it('keeps coverage, periods, and quality inside Data Readiness', () => {
@@ -246,11 +245,25 @@ describe('application shell and screens', () => {
     expect(screen.queryByRole('dialog', { name: /ulb comparison tray/i })).not.toBeInTheDocument();
   });
 
-  it('exposes a governed evidence brief action without changing the evidence state', () => {
+  it('preserves the selected ULB and measure in evidence answer links', async () => {
+    render(<LabApp page="overview" initialMode="SAMPLE"/>);
+    fireEvent.click(screen.getByRole('button', {name: /ask the evidence/i}));
+    const input = await screen.findByRole('textbox', {name: 'Your question'});
+    fireEvent.change(input, {target: {value: 'Toilets in Vijayawada city'}});
+    fireEvent.click(screen.getByRole('button', {name: /^ask$/i}));
+    const link = screen.getAllByRole('link', {name: /open evidence/i})[0];
+    const url = new URL(link.getAttribute('href')!, 'https://sasa.local');
+    expect(url.pathname).toBe('/atlas');
+    expect(url.searchParams.get('ulb')).toBeTruthy();
+    expect(url.searchParams.get('measure')).toBe('toilets');
+    expect(url.searchParams.get('mode')).toBe('governed');
+  });
+
+  it('exposes a governed evidence brief action without changing the evidence state', async () => {
     render(<LabApp page="overview" initialMode="SAMPLE" />);
     expect(screen.getByRole('button', { name: /open executive evidence brief/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /open executive evidence brief/i }));
-    expect(screen.getByRole('dialog', {name:'Executive evidence brief'})).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', {name:'Executive evidence brief'})).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Retained source evidence');
   });
 

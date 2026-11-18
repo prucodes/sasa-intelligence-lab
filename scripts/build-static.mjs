@@ -22,6 +22,7 @@ import { cp, mkdir, readdir, rename, rm, writeFile, readFile } from 'node:fs/pro
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 
 const OUT = resolve(process.cwd(), 'dist-static');
 const CLIENT = resolve(process.cwd(), 'dist/client');
@@ -70,6 +71,20 @@ async function main() {
 
   console.log(`[${base ? 5 : 4}/${base ? 5 : 4}] .nojekyll`);
   await writeFile(resolve(OUT, '.nojekyll'), '');
+  // Fingerprint distributable retained inputs; exclude ignored raw ingestion working files.
+  const dataFiles = [...new Set(execSync('git ls-files --cached --others --exclude-standard -z -- data', {encoding: 'utf8'}).split('\0'))]
+    .filter(file => file.endsWith('.json')).sort();
+  const sources = await Promise.all(dataFiles.map(async file => {
+    const bytes = await readFile(resolve(file));
+    return {path: file, sha256: createHash('sha256').update(bytes).digest('hex')};
+  }));
+  const revision = execSync('git rev-parse HEAD', {encoding:'utf8'}).trim();
+  const workingTreeModified = Boolean(execSync('git status --porcelain', {encoding:'utf8'}).trim());
+  await writeFile(resolve(OUT, 'evidence-manifest.json'), JSON.stringify({
+    schemaVersion: 1, builtAt: new Date().toISOString(), revision, workingTreeModified, basePath,
+    note: 'Build time is not a source observation or retrieval date. Source periods remain attached to each reading.',
+    evidenceHash: createHash('sha256').update(JSON.stringify(sources)).digest('hex'), sources,
+  }, null, 2) + '\n');
 
   const pages = (await readdir(OUT, { recursive: true })).filter((f) => f.endsWith('index.html')).length;
   console.log(`\nDone. ${pages} pages in dist-static/${base ? ` (base ${base})` : ''}. Publish that folder to GitHub Pages.`);

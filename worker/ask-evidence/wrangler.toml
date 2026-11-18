@@ -1,0 +1,11 @@
+name = "sasa-ask-evidence"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# The only page allowed to call this worker.
+ALLOWED_ORIGIN = "https://prucodes.github.io"
+
+# The Anthropic API key is a secret, never a var:
+#   npx wrangler secret put ANTHROPIC_API_KEY

@@ -7,7 +7,6 @@ import { EvidenceRecordBrowser } from './evidence-record-browser';
 import { DiagnosticReadings } from './diagnostic-readings';
 import { UlbPeerProfile } from './ulb-peer-profile';
 import { VehiclePairing } from './vehicle-pairing';
-import { ExecutiveBrief } from './executive-brief';
 import { AnchoredSourceBrowser } from './anchored-source-browser';
 import { SourceReconciliationScreen } from './source-reconciliation';
 import { LgdCrosswalkPanel } from './lgd-crosswalk-panel';
@@ -22,13 +21,14 @@ import { EnvironmentLedger } from './environment-ledger';
 import { UlbAtlas } from './ulb-atlas';
 import { SasaGoalsScreen } from './sasa-goals';
 import { useAutoHideHeader, useScreenMotion, useTabIndicator } from './motion';
-import { ScreenHero, MiniScatter, HeatStrip, DeliveryFunnels, GateRing } from './screen-hero';
+import { ScreenHero, MiniScatter, HeatStrip, GateRing, PipelineBars } from './screen-hero';
 import { analyticsHero, atlasHero, gapRadarHero, readinessHero } from '@/lib/screen-heroes';
 import { getUlbAtlas } from '@/lib/ulb-atlas';
 import './screen-features.css';
 import './canvas.css';
 import './evidence-content.css';
-import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import './product-refinement.css';
+import { lazy, Suspense, Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { DataMode, GapAssessment, GapState, MetricRow } from '@/lib/domain';
 import { createProvider, datasets, diagnosticsKeyFor, reasonLabels, stateLabels } from '@/lib/domain';
 import type { Coverage } from '@/lib/coverage';
@@ -96,6 +96,9 @@ import {
   type QueueItem,
 } from '@/lib/crosswalk';
 import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
+
+const ExecutiveBrief = lazy(() => import('./executive-brief').then((module) => ({default: module.ExecutiveBrief})));
+const AskEvidence = lazy(() => import('./ask-evidence').then((module) => ({default: module.AskEvidence})));
 
 type Page = 'overview' | 'goals' | 'operational-analytics' | 'environment' | 'gap-radar' | 'atlas' | 'reconciliation' | 'diagnostics' | 'data-readiness';
 type ColorTheme = 'light' | 'dark';
@@ -201,9 +204,11 @@ function siteBase(): string {
 function withMode(href: string, mode: DataMode, colorTheme: ColorTheme = 'light') {
   const base = siteBase();
   const path = base && href.startsWith('/') && href !== base && !href.startsWith(`${base}/`) ? `${base}${href}` : href;
-  const params = new URLSearchParams({ mode: MODE_URL[mode] });
-  if (colorTheme === 'dark') params.set('theme', 'dark');
-  return `${path}?${params.toString()}`;
+  const url = new URL(path, 'https://sasa.local');
+  url.searchParams.set('mode', MODE_URL[mode]);
+  if (colorTheme === 'dark') url.searchParams.set('theme', 'dark');
+  else url.searchParams.delete('theme');
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 /**
@@ -242,6 +247,19 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
   const [mode, setMode] = useState<DataMode>(initialMode);
   const [colorTheme, setColorTheme] = useState<ColorTheme>(initialColorTheme);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [askOpen, setAskOpen] = useState(false);
+  // "/" opens the evidence questions from anywhere outside a text field, as search does elsewhere.
+  useEffect(() => {
+    if (mode !== 'SAMPLE') return;
+    const open = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey || target?.closest('input, textarea, select, [contenteditable="true"]')) return;
+      event.preventDefault();
+      setAskOpen(true);
+    };
+    document.addEventListener('keydown', open);
+    return () => document.removeEventListener('keydown', open);
+  }, [mode]);
   // Governed evidence is the product; the synthetic DEMO fixture is a capability story
   // reachable at ?mode=demo. Opening on DEMO meant an unqualified link showed illustrative
   // numbers to anyone who did not know to add a query parameter.
@@ -331,7 +349,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} onThemeToggle={toggleColorTheme} onAbout={()=>setAboutOpen(true)} aboutOpen={aboutOpen}/>
       <div className="app-main">
-        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} onBrief={() => setBriefOpen(true)} />
+        <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} onBrief={() => setBriefOpen(true)} onAsk={() => setAskOpen(true)} />
         <main id="main-content" data-mode={mode} className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'goals' && <Goals mode={mode} colorTheme={colorTheme} />}
@@ -345,9 +363,10 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
         </main>
         <ProductFooter mode={mode}/>
       </div>
+      {askOpen && mode === 'SAMPLE' && <Suspense fallback={<div className="ask-loading" role="status">Opening evidence questions… <button onClick={() => setAskOpen(false)}>Cancel</button></div>}><AskEvidence onClose={() => setAskOpen(false)} href={(path) => withMode(path, mode, colorTheme)}/></Suspense>}
       <AboutPanel open={aboutOpen} onClose={() => setAboutOpen(false)} />
       <CrossScreenCompareTray mode={mode} open={compareOpen} onClose={() => setCompareOpen(false)} />
-      {briefOpen && <ExecutiveBrief mode={mode} onClose={() => setBriefOpen(false)} />}
+      {briefOpen && <Suspense fallback={<div className="ask-loading" role="status">Preparing evidence brief… <button onClick={() => setBriefOpen(false)}>Cancel</button></div>}><ExecutiveBrief mode={mode} onClose={() => setBriefOpen(false)} /></Suspense>}
       {presenting && <PresenterMode colorTheme={colorTheme} onExit={() => togglePresent(false)} />}
     </div>
   );
@@ -358,6 +377,8 @@ function ProductFooter({ mode }: { mode: DataMode }) {
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const primary = new Set<Page>(['overview', 'goals', 'atlas', 'operational-analytics']);
   const mobileLabels:Record<Page,string>={'overview':'Overview','goals':'Goals','operational-analytics':'Analytics','environment':'Carbon','gap-radar':'Radar','atlas':'Atlas','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
   return (
     <aside className="sidebar" aria-label="Primary navigation">
@@ -365,11 +386,12 @@ function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout
         <BrandMark/><span className="brand-wordmark"><b>SASA</b><small>Intelligence Lab</small></span>
       </a>
       <div className="mobile-brand-tools"><button aria-label={colorTheme==='dark'?'Use light appearance':'Use dark appearance'} aria-pressed={colorTheme==='dark'} onClick={onThemeToggle}><Icon name={colorTheme==='dark'?'sun':'moon'} size={18}/></button><button aria-label="About & glossary" aria-haspopup="dialog" aria-expanded={aboutOpen} onClick={onAbout}><Icon name="info" size={18}/></button></div>
-      <nav id="primary-pages">
+      <nav id="primary-pages" className={menuOpen ? 'menu-expanded' : undefined}>
         {navItems.map((item) => {
           const href = item.page === 'diagnostics' ? `/diagnostics/${diagnosticKey}` : item.href;
-          return <a key={item.page} className={page === item.page ? 'active' : ''} href={withMode(href, mode, colorTheme)} aria-label={item.label} aria-current={page === item.page ? 'page' : undefined}><Icon name={item.icon}/><span className="nav-desktop-label"><GlossaryText text={item.label}/></span><span className="nav-mobile-label" aria-hidden="true">{mobileLabels[item.page]}</span></a>;
+          return <Fragment key={item.page}>{['overview','operational-analytics','reconciliation'].includes(item.page) && <span className="nav-group-label">{item.page === 'overview' ? 'Review' : item.page === 'operational-analytics' ? 'Explore' : 'Evidence'}</span>}<a data-primary={primary.has(item.page)} className={`${page === item.page ? 'active' : ''} ${primary.has(item.page) ? 'nav-primary' : 'nav-secondary'}`} href={withMode(href, mode, colorTheme)} aria-label={item.label} aria-current={page === item.page ? 'page' : undefined}><Icon name={item.icon}/><span className="nav-desktop-label"><GlossaryText text={item.label}/></span><span className="nav-mobile-label" aria-hidden="true">{mobileLabels[item.page]}</span></a></Fragment>;
         })}
+        <button className="mobile-nav-more" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="primary-pages"><span aria-hidden="true">{menuOpen ? '×' : '•••'}</span>{menuOpen ? 'Less' : 'More'}</button>
       </nav>
       <div className="sidebar-art"><Image src="/assets/sasa/hero-collection.png" alt="Illustration of a sanitation collection vehicle" width={353} height={128} /></div>
       <div className="profile"><span className="avatar">AP</span><span><b>Prototype review</b><small>Evidence-first mode</small></span></div>
@@ -377,12 +399,13 @@ function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout
   );
 }
 
-function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent, onCompare, onBrief }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void; onCompare: () => void; onBrief: () => void }) {
+function Header({ mode, onModeChange, colorTheme, onThemeToggle, onAbout, aboutOpen, onPresent, onCompare, onBrief, onAsk }: { mode: DataMode; onModeChange: (mode: DataMode) => void; colorTheme: 'light' | 'dark'; onThemeToggle: () => void; onAbout: () => void; aboutOpen: boolean; onPresent: () => void; onCompare: () => void; onBrief: () => void; onAsk: () => void }) {
   const [compareIds] = useCompareSelection();
   return (
     <header className="topbar">
       <div className="header-brand"><span className={`mode-disclosure mode-${mode.toLowerCase()}`} role="status" title={datasets[mode].banner}><Icon name="shield" size={17}/>{mode==='SAMPLE'?'Retained source evidence':datasets[mode].banner}</span></div>
       <div className="header-actions">
+        {mode === 'SAMPLE' && <button className="icon-button ask-button" onClick={onAsk} aria-label="Ask the evidence" aria-haspopup="dialog" title="Ask the evidence ( / )"><span className="ask-orb" aria-hidden="true"><i/></span><span>Ask the evidence</span><kbd aria-hidden="true">/</kbd></button>}
         <label className="mode-control"><span className="sr-only">Data mode</span><select aria-label="Data mode" value={mode} onChange={(event) => onModeChange(event.target.value as DataMode)}><option value="DEMO">{MODE_LABEL.DEMO}</option><option value="SAMPLE">{MODE_LABEL.SAMPLE}</option><option value="LIVE">{MODE_LABEL.LIVE}</option></select></label>
         <button className="icon-button theme-button" aria-label={colorTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} aria-pressed={colorTheme === 'dark'} onClick={onThemeToggle}><Icon name={colorTheme === 'dark' ? 'sun' : 'moon'} size={19}/></button>
         <button className="icon-button present-button" aria-label="Open presenter briefing" title="Open presenter briefing" onClick={onPresent}><Icon name="play" size={15}/><span>Briefing</span></button>
@@ -1110,6 +1133,7 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   const tabRail = useTabIndicator<HTMLDivElement>(tab);
   const selectTab = (next: AnalyticsTab) => {
     setTab(next);
+    setPeriod(null);
     setSwitched(true);
     const url = new URL(window.location.href);
     url.searchParams.set('tab', next);
@@ -1118,13 +1142,13 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   };
   const tabArt = tab === 'sanitation' ? '/assets/sasa/hero-ihhl.png' : tab === 'processing' ? '/assets/sasa/hero-iswm.png' : tab === 'outcomes' ? '/assets/sasa/hero-swachh.png' : '/assets/sasa/hero-collection.png';
   return <>
-    {mode === 'SAMPLE' ? <AnalyticsHero tab={tab}/> : <PageIntro visual="operational-analytics" art={tabArt} eyebrow="Available now" title="Operational Analytics" description="Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible."><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>}
+    {mode === 'SAMPLE' ? <AnalyticsHero tab={tab} period={effectiveLens === 'snapshot' ? period : null}/> : <PageIntro visual="operational-analytics" art={tabArt} eyebrow="Available now" title="Operational Analytics" description="Source-backed operational views from retained governed responses, with grain, periods, and quality conditions kept visible."><span className="catalogue-context"><Icon name="shield" size={15}/>{mode === 'DEMO' ? 'Synthetic story mode' : 'No live request is made'}</span></PageIntro>}
 
     <section className="analytics-control-deck" aria-label="Analytics controls">
       <label className="analytics-mobile-domain">Analytics domain<select value={tab} onChange={event=>selectTab(event.target.value as AnalyticsTab)}>{analyticsTabs.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
       <div ref={tabRail} className="analytics-tabs operational-domain-tabs" role="tablist" aria-label="Operational analytics domains"><i className="tab-indicator" aria-hidden="true"/>{analyticsTabs.map((item) => <button key={item.id} role="tab" aria-selected={tab === item.id} className={tab === item.id ? 'active' : ''} aria-label={item.id === 'outcomes' && mode === 'SAMPLE' ? `${item.label} 2024` : item.label} onClick={() => selectTab(item.id)}><span className="tab-glyph" aria-hidden="true"><Icon name={analyticsTabIcons[item.id]} size={17}/></span><b>{item.label}{item.id === 'outcomes' && mode === 'SAMPLE' ? ' (2024)' : ''}</b><small>{item.description}</small></button>)}</div>
       {mode === 'SAMPLE' && tab !== 'outcomes' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <div className="analytics-lens-bar"><div><span>Evidence lens</span><div className="analytics-lens-switch" role="tablist" aria-label="Evidence lens"><button type="button" role="tab" aria-selected={effectiveLens === 'snapshot'} className={effectiveLens === 'snapshot' ? 'active' : ''} onClick={() => selectLens('snapshot')}><Icon name="database" size={14}/>Current snapshot</button><button type="button" role="tab" aria-selected={effectiveLens === 'movement'} className={effectiveLens === 'movement' ? 'active' : ''} onClick={() => selectLens('movement')}><Icon name="chart" size={14}/>Between periods</button></div></div><p>{effectiveLens === 'movement' ? 'Exact ULB matches across the latest two periods in one retained source.' : 'Inspect one reported period with its denominator and evidence boundary.'}</p></div>}
-      {mode === 'SAMPLE' && effectiveLens === 'snapshot' && !['delivery','rural','continuity','outcomes'].includes(tab) && <PeriodScrubber period={period} onChange={setPeriod}/>}
+      {mode === 'SAMPLE' && effectiveLens === 'snapshot' && !['delivery','rural','continuity','outcomes'].includes(tab) && <PeriodScrubber tab={tab} period={period} onChange={setPeriod}/>}
     </section>
     {mode === 'SAMPLE' && effectiveLens === 'snapshot' && tab !== 'delivery' && tab !== 'rural' && tab !== 'continuity' && <ReportedPeriods tab={tab}/>}
     <div key={`${tab}|${effectiveLens}`} className={switched ? 'tab-swap' : undefined}>
@@ -1143,8 +1167,11 @@ function OperationalAnalytics({ mode, initialTab }: { mode: DataMode; initialTab
   </>;
 }
 
-function PeriodScrubber({ period, onChange }: { period: string | null; onChange: (value: string | null) => void }) {
-  const options = useMemo(() => operationalPeriodOptions(), []);
+function PeriodScrubber({ tab, period, onChange }: { tab: AnalyticsTab; period: string | null; onChange: (value: string | null) => void }) {
+  const options = useMemo(() => operationalPeriodOptions().filter((option) => tab === 'collection'
+    ? getCollectionProcurementSummary(option.id).rows.length > 0
+    : tab === 'sanitation' ? getIHHLFunnel(option.id).rows.length > 0
+    : getLegacyWasteSummary(option.id).rows.length > 0 || getProcessingRegistry(option.id).rows.length > 0), [tab]);
   const selected = options.find((option) => option.id === period);
   // A single control rather than a row of buttons: most reviewers never change this, and
   // it should not compete with the finding underneath it.
@@ -1154,11 +1181,11 @@ function PeriodScrubber({ period, onChange }: { period: string | null; onChange:
       <span>Reported period</span>
       <select value={period ?? ''} onChange={(event) => onChange(event.target.value || null)}>
         <option value="">Latest per dataset</option>
-        {options.map((option) => <option key={option.id} value={option.id}>{option.label} · {option.datasets} sources</option>)}
+        {options.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
       </select>
     </label>
     <p>{selected
-      ? <>Pinned to <b>{selected.label}</b>. {selected.datasets} of {governedSnapshotStats.retrievedDatasets} datasets reported this month; the rest show nothing rather than an older figure.</>
+      ? <>Pinned to <b>{selected.label}</b>. Only retained rows in this programme and month enter the reading.</>
       : <>Each panel is showing its own dataset&rsquo;s latest month, so the months may differ between panels.</>}</p>
   </div>;
 }
@@ -1282,7 +1309,7 @@ function AnalyticsInsightBrief({ tab, period }: { tab: AnalyticsTab; period: str
     limit: 'These outcomes cannot be attributed to, or compared directly with, 2026 operations.',
   };
   return <article className="screen-feature sf-analytics" aria-label="Operational evidence briefing">
-    <div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">{tab === 'outcomes' ? 'Historical evidence / 2024' : 'Operational evidence / selected snapshot'}</span><h2>{content.headline}</h2><div className="sf-chain"><span>Reported evidence</span><p>{content.evidence}</p></div></div><div className={`sf-big-metric${typeof ('ring' in content ? content.ring : null) === 'number' ? ' has-ring' : ''}`} data-unavailable={content.metric === 'Not computable'}>{'ring' in content && typeof content.ring === 'number' && <MetricRing key={tab + (period ?? '')} ratio={content.ring}/>}<strong key={tab + (period ?? '')}>{content.metric}</strong><span>{content.metricLabel}</span><small>{content.coverage}</small><i aria-hidden="true"/></div></div>
+    <div className="sf-dark sf-analytics-lead"><div><span className="sf-eyebrow">{tab === 'outcomes' ? 'Historical evidence / 2024' : `Operational evidence / ${period ? formatPeriodLabel(period) : tab === 'collection' ? collection.rows[0]?.period ?? 'Latest retained period' : tab === 'sanitation' ? sanitation.rows[0]?.period ?? 'Latest retained period' : legacy.rows[0]?.period ?? 'Latest retained period'}`}</span><h2>{content.headline}</h2><div className="sf-chain"><span>Reported evidence</span><p>{content.evidence}</p></div></div><div className={`sf-big-metric${typeof ('ring' in content ? content.ring : null) === 'number' ? ' has-ring' : ''}`} data-unavailable={content.metric === 'Not computable'}>{'ring' in content && typeof content.ring === 'number' && <MetricRing key={tab + (period ?? '')} ratio={content.ring}/>}<strong key={tab + (period ?? '')}>{content.metric}</strong><span>{content.metricLabel}</span><small>{content.coverage}</small><i aria-hidden="true"/></div></div>
     <div className="sf-notes"><InsightCell icon="search" label="Why it matters" text={content.meaning}/><InsightCell icon="target" label="Where to review" text={content.review}/><InsightCell icon="shield" label="Boundary" text={content.limit}/></div>
   </article>;
 }
@@ -2255,8 +2282,9 @@ function Goals({ mode, colorTheme }: { mode: DataMode; colorTheme: ColorTheme })
 }
 
 /* Screen heroes: each screen opens on its figures and a graphic drawn from them. */
-function AnalyticsHero({ tab }: { tab: AnalyticsTab }) {
-  const data = useMemo(() => analyticsHero(), []);
+function AnalyticsHero({ tab, period }: { tab: AnalyticsTab; period: string | null }) {
+  // Bound to the pinned period, so the opening never shows a month the body below does not.
+  const data = useMemo(() => analyticsHero(period), [period]);
   // The 2024 survey keeps its own opening, so a historical result never sits under a 2026 heading.
   const outcomes = useMemo(() => {
     const summary = getSwachhOutcomeSummary();
@@ -2267,7 +2295,8 @@ function AnalyticsHero({ tab }: { tab: AnalyticsTab }) {
     ] };
   }, []);
   if (tab === 'outcomes') return <ScreenHero data={outcomes}/>;
-  return <ScreenHero data={data} visual={<DeliveryFunnels pipelines={data.pipelines}/>} caption="Band thickness is the count at each stage, against the programme's own first stage"/>;
+  return <ScreenHero data={data} visual={<PipelineBars pipelines={data.pipelines} missing={data.missing} missingPeriod={period ? data.periodLabel : undefined}/>}
+    caption={`Each bar to scale against its programme's first stage · ${period ? `pinned to ${data.periodLabel}` : data.periodLabel}`}/>;
 }
 
 function GapRadarHero({ colorTheme }: { colorTheme: ColorTheme }) {

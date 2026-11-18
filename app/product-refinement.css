@@ -1,0 +1,48 @@
+/* Product shell and shared reading hierarchy. Chart-specific scales stay with their charts. */
+.app-shell .workspace-heading{padding:8px 2px 22px}.workspace-heading h1{margin:8px 0;font-size:clamp(27px,3vw,38px);letter-spacing:-.045em;font-weight:650;line-height:1.1;color:var(--navy)}.workspace-heading p{font-size:15px;line-height:1.5;color:var(--muted);margin:0}
+.app-shell .sidebar nav{gap:3px}.app-shell .sidebar nav a{min-height:44px;padding-block:11px}.nav-group-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:18px 18px 6px;font-weight:650}.mobile-nav-more{display:none}
+.app-shell .sidebar-art{opacity:.55;max-height:96px;overflow:hidden}.app-shell .topbar{box-shadow:0 1px 0 var(--line);background:var(--surface)}
+.app-shell .analytics-control-deck{margin-top:0;border-radius:14px;box-shadow:none}.app-shell .analytics-lens-bar{padding-block:12px}.app-shell .period-picker{padding-block:12px}.app-shell .sf-analytics{margin-top:18px}.app-shell .sf-analytics h2{font-size:clamp(24px,2.5vw,34px)}
+.app-shell .overview-review>.or-subject-strip{margin:0 0 18px;padding:0;border:0;background:transparent;box-shadow:none}.app-shell .or-subject-strip>p{font-size:12px;margin:0 0 10px}.app-shell .or-subject-buttons{gap:6px}.app-shell .or-subject-buttons button{padding:10px 12px;min-height:46px}.app-shell .or-subject-buttons button small{display:none}
+.app-shell .overview-review .or-lede{padding:24px;margin-top:20px}.app-shell .overview-review .or-lede-text h2{font-size:clamp(24px,2.5vw,34px);line-height:1.2}.app-shell .overview-review .or-lede-head{margin-bottom:14px}.app-shell .overview-review .or-lede-figure strong{font-size:48px}
+.atlas-cell-reason{position:relative}.atlas-cell-reason>summary{list-style:none;cursor:pointer}.atlas-cell-reason>summary::after{content:' ⓘ';font-size:10px}.atlas-cell-reason>p{position:relative;min-width:140px;max-width:200px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);white-space:normal;font-size:12px;line-height:1.5;box-shadow:0 10px 25px #001e3520}.atlas-cell-reason>summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px}.rank-evidence{background:color-mix(in srgb,var(--muted) 8%,var(--surface));color:var(--ink)}
+.population-note{margin:14px 0;border:1px solid var(--line);border-radius:12px;padding:0 16px;background:var(--surface)}.population-note summary{cursor:pointer;padding:14px 0;font-size:13px;color:var(--teal-dark);font-weight:600}.population-note p{font-size:13px;line-height:1.6;color:var(--muted)}.population-note dl{display:grid;grid-template-columns:1fr 1fr;gap:18px}.population-note dt{font-size:12px;color:var(--muted)}.population-note dd{margin:6px 0;font-size:22px;font-weight:650;color:var(--navy)}
+.ask-loading{position:fixed;inset:30% 20% auto;z-index:150;background:var(--surface);border:1px solid var(--line);padding:24px;border-radius:14px;color:var(--ink)}
+@media(min-width:901px) and (max-width:1100px){.nav-group-label{font-size:8px;padding:12px 3px 4px;text-align:center}}
+@media(max-width:900px){
+ .app-shell .sidebar nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;padding:4px 8px;gap:2px;max-width:100%}.app-shell .sidebar nav .nav-group-label{display:none}.app-shell .sidebar nav .nav-secondary{display:none}.app-shell .sidebar nav a{min-width:0;width:auto;min-height:48px;padding:6px 2px;gap:4px;justify-content:center}.app-shell .sidebar nav a svg{width:18px;height:18px}.app-shell .sidebar nav .nav-mobile-label{font-size:10px;line-height:1.2}.app-shell .sidebar nav .nav-desktop-label{display:none}.mobile-nav-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:48px;border:0;border-radius:9px;background:transparent;color:var(--ink);font:500 10px var(--font-display);cursor:pointer}.mobile-nav-more>span{font-size:18px;line-height:19px}.app-shell .sidebar nav.menu-expanded .nav-secondary{display:flex}.app-shell .sidebar nav .mobile-nav-more{grid-column:5;grid-row:1}.app-shell .sidebar nav.menu-expanded{border-bottom:1px solid var(--line);background:var(--surface)}
+ .app-shell .sidebar nav a:nth-of-type(6){grid-column:3;grid-row:1}.app-shell .sidebar nav a:nth-of-type(3){grid-column:4;grid-row:1}.app-shell .header-actions{gap:6px}.app-shell .topbar .present-button{display:none}.app-shell .mode-control{flex:1}.app-shell .mode-control select{width:100%}.app-shell .content{padding-top:14px}
+ .app-shell .workspace-heading{padding-bottom:16px}.workspace-heading p{font-size:14px}.app-shell .analytics-control-deck{padding:12px}.app-shell .analytics-lens-bar p{display:none}.app-shell .period-picker p{font-size:12px}.app-shell .overview-review>.or-subject-strip{margin-bottom:12px}.app-shell .overview-mobile-subject{padding:0;grid-template-columns:auto minmax(0,1fr);align-items:center}.app-shell .overview-mobile-subject small{display:none}.app-shell .overview-mobile-subject select{font-size:14px;min-height:42px}.app-shell .overview-review .or-lede{padding:20px}.app-shell .overview-review .or-lede-text h2{font-size:26px}.app-shell .overview-review .or-lede-body{gap:14px}
+ .app-shell .atlas-lead-grid{display:flex;flex-direction:column}.app-shell .atlas-lead-side{order:-1}.app-shell .atlas-picker button{min-height:40px}.population-note dl{grid-template-columns:1fr}.app-shell .screen-hero .sh-figure-label{font-size:10px}.app-shell .screen-hero .sh-figure small{font-size:12px}
+}
+@media(prefers-reduced-motion:no-preference){.app-shell .tab-swap{animation-duration:180ms}.app-shell .has-indicator.indicator-ready>.tab-indicator{transition-duration:180ms}}
+
+.atlas-filtered-brief{margin:18px 0;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.atlas-filtered-brief summary{font-size:13px;font-weight:600;cursor:pointer;color:var(--teal-dark)}
+.atlas-filtered-brief pre{max-height:320px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 var(--font-mono);color:var(--muted)}
+.atlas-filtered-brief button{padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:var(--vi-soft);color:var(--teal-dark);cursor:pointer}
+
+@media(min-width:901px){.app-shell .or-subject-buttons button{flex:0 1 auto;min-height:40px;padding:9px 12px}.app-shell .or-subject-buttons{gap:6px}}
+
+/* Ask the evidence: its mark and the header launcher, loaded with the shell (the panel itself loads on demand). */
+/* The mark: a lens of teal and blue, drawn in CSS so both themes get their own. */
+.ask-orb { position: relative; display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--ak-accent, #2c7a6c) 30%, var(--surface)), transparent 60%), conic-gradient(from 210deg, var(--ak-accent, #2c7a6c), var(--ak-accent-2, #3f74b8), var(--ak-accent, #2c7a6c));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface) 40%, transparent), 0 4px 14px var(--ak-glow, transparent); }
+.ask-orb i { width: 42%; height: 42%; border-radius: 50%; background: var(--surface); box-shadow: 0 0 0 2px color-mix(in srgb, var(--surface) 35%, transparent); }
+.ask-orb.is-large { width: 58px; height: 58px; }
+.ask-orb.is-small { width: 18px; height: 18px; box-shadow: none; }
+.ask-orb.is-small i { width: 36%; height: 36%; }
+
+.app-shell .topbar .ask-button { display: inline-flex; flex-direction: row; align-items: center; gap: 8px; width: auto; height: 40px; padding: 0 14px 0 6px; border: 1px solid color-mix(in srgb, #2c7a6c 28%, var(--line)); border-radius: 999px; background: color-mix(in srgb, #2c7a6c 6%, var(--surface)); color: var(--navy); font-size: 12.5px; font-weight: 650; white-space: nowrap; transition: border-color .2s, background .2s, transform .2s; }
+.app-shell .topbar .ask-button:hover { border-color: color-mix(in srgb, #2c7a6c 50%, var(--line)); transform: translateY(-1px); }
+.app-shell .topbar .ask-button .ask-orb { width: 28px; height: 28px; box-shadow: none; }
+.app-shell .topbar .ask-button kbd { padding: 1px 6px; border: 1px solid var(--line); border-radius: 5px; color: var(--muted); font: 600 10.5px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.app-shell.theme-dark .topbar .ask-button { border-color: color-mix(in srgb, #78c8b4 30%, var(--line)); background: color-mix(in srgb, #78c8b4 8%, var(--surface)); color: var(--navy); }
+.app-shell.theme-dark .topbar .ask-button .ask-orb { --ak-accent: #78c8b4; --ak-accent-2: #7fa8e6; }
+.app-shell .topbar .ask-button .ask-orb { --ak-accent: #2c7a6c; --ak-accent-2: #3f74b8; --ak-glow: transparent; }
+@media (max-width: 900px) {
+  .app-shell .topbar .ask-button { padding: 0 4px; width: 40px; justify-content: center; }
+  .app-shell .topbar .ask-button span:not(.ask-orb), .app-shell .topbar .ask-button kbd { display: none; }
+}
+.theme-dark .ask-orb { --ak-accent: #78c8b4; --ak-accent-2: #7fa8e6; }

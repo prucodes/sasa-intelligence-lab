@@ -1,4 +1,5 @@
 'use client';
+import {PopulationNote} from './population-note';
 
 import { useId, useMemo, useState, type CSSProperties } from 'react';
 import {
@@ -61,6 +62,7 @@ function EnvironmentWorkspace() {
     <div className="env-ledger" ref={root}>
       <ScreenHero data={hero} variant="nature" visual={<NatureScene assets={hero.assets} />} caption={`Reported programme counts drawn to scale, not canopy, biomass or water quality · ${hero.routes.count} retained routes, ${hero.routes.detail}`} />
 
+      <PopulationNote/>
       <div ref={tabRail} className="analytics-tabs el-tabs" role="tablist" aria-label="Environment and carbon views">
         <i className="tab-indicator" aria-hidden="true" />
         {VIEWS.map((item, index) => (
@@ -545,7 +547,7 @@ function ActionsView({
       <section
         className="el-action-basis"
         aria-label="Current evidence constraint"
-        style={{ '--el-capacity-share': `${Math.min(bound.coveredShare * 100, 100)}%` } as CSSProperties}
+        style={{ '--el-capacity-share': `${Math.min((bound.coveredShare ?? 0) * 100, 100)}%` } as CSSProperties}
       >
         <div className="el-action-flow-copy">
           <span className="el-kicker">The first decision signal</span>

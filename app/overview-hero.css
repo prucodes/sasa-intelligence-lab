@@ -48,8 +48,8 @@
 
 @media (max-width: 1100px) {
   .ov-hero { grid-template-columns: minmax(0, 1fr); padding: 26px 24px; }
-  .ov-hero-map { order: -1; }
-  .ov-hero-map svg { width: 100%; margin-left: 0; max-height: 300px; }
+  .ov-hero-map { order: 1; }
+  .ov-hero-map svg { width: 100%; margin-left: 0; max-height: 220px; }
   .ov-hero-map figcaption { margin: 0 auto; }
 }
 @media (max-width: 560px) {
@@ -63,4 +63,18 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .ov-figure-card, .ov-hero-actions a, .ov-action-primary span, .ov-hero-map path { transition: none; }
+}
+
+/* Phone: title, figures, then the map at a modest height; the subject strip follows directly. */
+@media (max-width: 760px) {
+  .ov-hero { padding: 20px 18px; margin-top: 0; gap: 16px; }
+  .ov-hero-copy { gap: 12px; }
+  .ov-hero h1 { font-size: 30px; max-width: 20ch; }
+  .ov-hero-lede { font-size: 14px; line-height: 1.5; }
+  .ov-figure-card small { font-size: 12px; line-height: 1.45; }
+  .ov-figure-card { border-radius: 12px; }
+  .ov-hero-map svg { max-height: 200px; }
+  .ov-hero-actions { display: none; }
+  .ov-hero-figures { margin-top: 0; }
+  .ov-figure-label { font-size: 10px; letter-spacing: .05em; }
 }

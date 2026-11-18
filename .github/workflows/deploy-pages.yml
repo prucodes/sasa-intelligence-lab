@@ -34,8 +34,16 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - run: npm run validate:data
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
       # Base path = "/<repo>", matching the Pages project-subpath URL.
       - run: node scripts/build-static.mjs --base "/${{ github.event.repository.name }}"
+        env:
+          # Optional. When the repository variable is set, Ask the evidence sends questions to the
+          # Claude worker in worker/ask-evidence; when it is not, answers are assembled in the page.
+          NEXT_PUBLIC_ASK_EVIDENCE_URL: ${{ vars.ASK_EVIDENCE_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

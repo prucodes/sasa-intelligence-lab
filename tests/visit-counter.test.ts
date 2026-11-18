@@ -1,3 +1,5 @@
+// jsdom is the test environment; isolate its untyped entry here.
+// @ts-expect-error jsdom does not bundle its own declarations.
 import { JSDOM } from 'jsdom';
 import { describe, expect, it, vi } from 'vitest';
 import { GOATCOUNTER_ENDPOINT, VISIT_COUNTER_SCRIPT } from '@/lib/visit-counter';

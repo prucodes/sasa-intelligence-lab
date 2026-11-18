@@ -1,0 +1,183 @@
+/* Ask the evidence: a side panel on desktop, a sheet on phones. Built on the app's own tokens
+   (surface, ink, line, navy) with the SASA teal as its one accent, so it follows the theme. */
+.ask-root {
+  --ak-accent: #2c7a6c;
+  --ak-accent-2: #3f74b8;
+  --ak-soft: color-mix(in srgb, var(--ak-accent) 9%, var(--surface));
+  --ak-softer: color-mix(in srgb, var(--ak-accent) 5%, var(--surface));
+  --ak-track: color-mix(in srgb, var(--line) 70%, transparent);
+  --ak-glow: color-mix(in srgb, var(--ak-accent) 16%, transparent);
+  --ak-shadow: 0 28px 70px rgba(9, 32, 60, .22), 0 2px 8px rgba(9, 32, 60, .06);
+  --ak-scrim: rgba(8, 24, 44, .28);
+  position: fixed; inset: 0; z-index: 160;
+  display: flex; justify-content: flex-end;
+  padding: 12px;
+  background: var(--ak-scrim);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.theme-dark .ask-root {
+  --ak-accent: #78c8b4;
+  --ak-accent-2: #7fa8e6;
+  --ak-glow: color-mix(in srgb, var(--ak-accent) 14%, transparent);
+  --ak-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 2px 8px rgba(0, 0, 0, .3);
+  --ak-scrim: rgba(1, 8, 16, .55);
+}
+
+.ask-panel {
+  position: relative;
+  display: flex; flex-direction: column;
+  width: min(480px, 100%); height: 100%;
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(120% 60% at 100% 0%, var(--ak-glow), transparent 55%),
+    var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--ak-shadow);
+}
+.ask-grab { display: none; }
+
+/* Header */
+.ask-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 18px 18px 10px 20px; }
+.ask-head h2 { margin: 0; color: var(--navy); font-size: 17px; font-weight: 650; letter-spacing: -.02em; }
+.ask-head p { margin: 2px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.ask-close { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid transparent; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.ask-close svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.ask-close:hover { background: var(--ak-soft); color: var(--navy); }
+
+.ask-scope { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0 20px 14px; list-style: none; border-bottom: 1px solid var(--line); }
+.ask-scope li { padding: 4px 9px; border-radius: 999px; background: var(--ak-softer); color: var(--muted); font-size: 11px; }
+.ask-scope b { color: var(--navy); font-weight: 650; font-variant-numeric: tabular-nums; }
+
+/* Body */
+.ask-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 20px 18px; scroll-padding-top: 12px; }
+.ask-welcome { display: grid; justify-items: start; gap: 10px; padding: 26px 0 8px; }
+.ask-welcome h3 { margin: 6px 0 0; color: var(--navy); font-size: 22px; font-weight: 650; letter-spacing: -.03em; }
+.ask-welcome > p { max-width: 40ch; margin: 0 0 6px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.ask-suggestions { display: grid; gap: 6px; width: 100%; margin: 0; padding: 0; list-style: none; }
+.ask-suggestions button { display: grid; grid-template-columns: 30px minmax(0, 1fr) 16px; align-items: center; gap: 12px; width: 100%; padding: 10px 12px 10px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; transition: border-color .2s, background .2s, transform .2s; }
+.ask-suggestions button:hover { border-color: color-mix(in srgb, var(--ak-accent) 45%, var(--line)); background: var(--ak-softer); transform: translateX(2px); }
+.ask-topic { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ak-soft); color: var(--ak-accent); }
+.ask-topic svg, .ask-arrow { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.ask-arrow { color: var(--muted); }
+
+/* Thread */
+.ask-thread { display: grid; gap: 22px; padding-top: 16px; }
+.ask-turn { display: grid; gap: 10px; scroll-margin-top: 10px; }
+.ask-q { justify-self: end; max-width: 86%; margin: 0; padding: 9px 14px; border-radius: 16px 16px 4px 16px; background: var(--ak-soft); color: var(--navy); font-size: 14px; line-height: 1.45; }
+.ask-a { display: grid; gap: 10px; }
+.ask-a-head { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11.5px; font-weight: 600; letter-spacing: .01em; }
+.ask-a.is-clarify .ask-a-head { color: color-mix(in srgb, #b8641a 70%, var(--ink)); }
+.ask-lead { margin: 0; color: var(--ink); font-size: 15px; line-height: 1.6; text-wrap: pretty; }
+.ask-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ask-tiles.count-1 { grid-template-columns: minmax(0, 1fr); }
+.ask-tile { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, var(--surface), var(--ak-softer)); }
+.ask-tile span { color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.ask-tile strong { color: var(--navy); font-size: 24px; font-weight: 650; line-height: 1.15; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.ask-tile small { color: var(--muted); font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+.ask-lead.is-detail { color: var(--ink); font-size: 13.5px; line-height: 1.55; }
+.ask-lines { display: grid; gap: 8px; margin: 0; padding: 0 0 0 14px; border-left: 2px solid var(--ak-soft); list-style: none; }
+.ask-lines li { color: var(--ink); font-size: 13.5px; line-height: 1.55; }
+
+.ask-rows { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.ask-rows li { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(60px, 1fr) auto; align-items: center; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--ak-track); font-size: 13px; }
+.ask-rows li:last-child { border-bottom: 0; }
+.ask-row-name { min-width: 0; color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
+.ask-row-name small { display: block; color: var(--muted); font-size: 11px; font-weight: 500; }
+.ask-row-bar { display: block; height: 6px; overflow: hidden; border-radius: 4px; background: var(--ak-track); }
+.ask-row-bar b { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, color-mix(in srgb, var(--ak-accent) 65%, var(--surface)), var(--ak-accent)); }
+.ask-row-bar.is-empty { background: transparent; }
+.ask-row-value { color: var(--navy); font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.ask-notes { display: grid; gap: 6px; }
+.ask-notes p { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 8px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.ask-notes svg { width: 14px; height: 14px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+.ask-model-note { margin: 0; color: var(--muted); font-size: 11.5px; font-style: italic; }
+
+.ask-sources { display: flex; flex-wrap: wrap; gap: 6px; }
+.ask-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px 4px 7px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: 11px; font-weight: 600; }
+.ask-chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--ak-accent); }
+.ask-chip small { color: var(--muted); font-weight: 500; }
+
+.ask-readings summary { display: inline-flex; align-items: center; gap: 7px; color: var(--ak-accent); font-size: 12px; font-weight: 650; cursor: pointer; list-style: none; }
+.ask-readings summary::-webkit-details-marker { display: none; }
+.ask-readings summary::before { content: ''; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); transition: transform .2s; }
+.ask-readings[open] summary::before { transform: rotate(45deg); }
+.ask-readings summary span { padding: 0 6px; border-radius: 999px; background: var(--ak-soft); font-variant-numeric: tabular-nums; }
+.ask-readings ol { display: grid; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+.ask-readings li { display: grid; gap: 3px; padding: 10px 12px; border-radius: 12px; background: var(--ak-softer); }
+.ask-readings li b { color: var(--navy); font-size: 12px; }
+.ask-readings li p { margin: 0; color: var(--ink); font-size: 12.5px; line-height: 1.5; }
+.ask-readings li small { color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.ask-readings code { font-size: 10.5px; }
+.ask-readings li a { justify-self: start; color: var(--ak-accent); font-size: 12px; font-weight: 650; }
+.ask-readings li a:hover { text-decoration: underline; }
+
+.ask-shimmer { display: grid; gap: 7px; }
+.ask-shimmer i { height: 10px; border-radius: 6px; background: linear-gradient(90deg, var(--ak-track), var(--ak-soft), var(--ak-track)); background-size: 200% 100%; animation: akShimmer 1.3s linear infinite; }
+.ask-shimmer i:nth-child(2) { width: 86%; } .ask-shimmer i:nth-child(3) { width: 62%; }
+
+.ask-next { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; }
+.ask-next > span { width: 100%; color: var(--muted); font-size: 11px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
+.ask-next button { padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; font-size: 12px; text-align: left; cursor: pointer; transition: border-color .2s, background .2s; }
+.ask-next button:hover { border-color: color-mix(in srgb, var(--ak-accent) 45%, var(--line)); background: var(--ak-softer); }
+
+/* Composer */
+.ask-composer { padding: 12px 16px 14px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 94%, transparent); }
+.ask-field { display: flex; align-items: flex-end; gap: 8px; padding: 6px 6px 6px 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); transition: border-color .2s, box-shadow .2s; }
+.ask-field:focus-within { border-color: color-mix(in srgb, var(--ak-accent) 55%, var(--line)); box-shadow: 0 0 0 4px var(--ak-glow); }
+.ask-field textarea { flex: 1; min-width: 0; max-height: 120px; padding: 8px 0; border: 0; outline: 0; resize: none; background: transparent; color: var(--ink); font: inherit; font-size: 14.5px; line-height: 1.45; }
+.ask-field textarea::placeholder { color: color-mix(in srgb, var(--muted) 80%, transparent); }
+.ask-send { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--ak-accent); color: var(--surface); cursor: pointer; transition: transform .2s, opacity .2s; }
+.ask-send svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ask-send:disabled { opacity: .35; cursor: default; }
+.ask-send:not(:disabled):hover { transform: translateY(-1px); }
+.ask-foot { margin: 8px 2px 0; color: var(--muted); font-size: 11px; }
+
+.ask-root :is(button, textarea, a, summary):focus-visible { outline: 2px solid var(--ak-accent); outline-offset: 2px; }
+.ask-field textarea:focus-visible { outline: 0; }
+
+/* Motion: the panel slides in, answers settle, bars fill. Nothing moves under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .ask-root { animation: akFade .22s ease-out both; }
+  .ask-panel { animation: akSlide .34s cubic-bezier(.2, .8, .2, 1) both; }
+  .ask-root.is-closing { animation: akFade .2s ease-in reverse both; }
+  .ask-root.is-closing .ask-panel { animation: akSlideOut .2s ease-in both; }
+  .ask-suggestions button { animation: akRise .45s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(120ms + var(--i, 0) * 50ms); }
+  .ask-turn.is-latest .ask-q { animation: akRise .3s cubic-bezier(.2, .8, .2, 1) both; }
+  .ask-turn.is-latest .ask-a { animation: akRise .45s cubic-bezier(.2, .8, .2, 1) .08s backwards; }
+  .ask-turn.is-latest .ask-tile { animation: akRise .45s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(140ms + var(--i, 0) * 70ms); }
+  .ask-turn.is-latest .ask-row-bar b { animation: akGrow .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--i, 0) * 60ms); transform-origin: left center; }
+  .ask-welcome .ask-orb.is-large { animation: akBreathe 5s ease-in-out infinite; }
+}
+@keyframes akFade { from { opacity: 0; } }
+@keyframes akSlide { from { opacity: 0; transform: translateX(28px); } }
+@keyframes akSlideOut { to { opacity: 0; transform: translateX(28px); } }
+@keyframes akRise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes akGrow { from { transform: scaleX(0); } }
+@keyframes akBreathe { 50% { transform: scale(1.04); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface) 40%, transparent), 0 6px 24px var(--ak-glow); } }
+@keyframes akShimmer { to { background-position: -200% 0; } }
+
+/* Phone: a sheet from the bottom with a grab handle. */
+@media (max-width: 640px) {
+  .ask-root { align-items: flex-end; padding: 0; }
+  .ask-panel { width: 100%; height: min(92dvh, 100%); border-radius: 22px 22px 0 0; border-bottom: 0; }
+  .ask-grab { display: block; width: 40px; height: 4px; margin: 8px auto 0; border-radius: 2px; background: var(--line); }
+  .ask-head { padding: 10px 14px 8px 16px; }
+  .ask-scope { padding: 0 16px 12px; }
+  .ask-body { padding: 4px 16px 16px; }
+  .ask-welcome { padding-top: 16px; }
+  .ask-welcome h3 { font-size: 20px; }
+  .ask-composer { padding: 10px 12px calc(12px + env(safe-area-inset-bottom)); }
+  .ask-field textarea { font-size: 16px; }
+  .ask-rows li { grid-template-columns: minmax(0, 1.4fr) minmax(40px, .8fr) auto; gap: 10px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .ask-panel { animation-name: akSheet; }
+    .ask-root.is-closing .ask-panel { animation-name: akSheetOut; }
+  }
+}
+@keyframes akSheet { from { transform: translateY(40px); opacity: 0; } }
+@keyframes akSheetOut { to { transform: translateY(40px); opacity: 0; } }
+

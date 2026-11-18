@@ -1,3 +1,4 @@
+import {measurement, reportedSum, latestMonthlyRows} from './measurement';
 import bwg from '@/data/aggregates/bwg-reference-day.json';
 import {currentSnapshots} from './current-snapshots';
 import {getEnvironmentSections} from './environment-ledger';
@@ -85,18 +86,19 @@ function status(reading: GoalReading | null, deadline: string | null, kind: 'dir
 type Row = Record<string, unknown>;
 const snapshot = (key: string) => currentSnapshots.find((entry) => entry.requestEcho.tableKey === key);
 const recordsOf = (key: string): Row[] => (snapshot(key)?.records ?? []) as Row[];
-const num = (value: unknown) => Number(String(value ?? '').replace(/[^0-9.]/g, '')) || 0;
+const num = measurement;
+const formatMeasurement = (value: unknown) => { const parsed = num(value); return parsed === null ? 'Not reported' : whole(parsed); };
 
 /** District-grain target/achievement table, latest month only, summed. */
 function districtTable(key: string) {
   const rows = recordsOf(key);
   const monthOf = (row: Row) => Number(row.month ?? row.month_id ?? row.mnth_no ?? 0);
-  const latest = Math.max(0, ...rows.map(monthOf));
-  const current = rows.filter((row) => monthOf(row) === latest);
+  const current = latestMonthlyRows(rows);
+  const latest = current.length ? monthOf(current[0]) : 0;
   return {
     rows: current.map((row) => ({district: String(row.district_name ?? ''), target: num(row.target), achievement: num(row.achievement)})),
-    target: current.reduce((sum, row) => sum + num(row.target), 0),
-    achievement: current.reduce((sum, row) => sum + num(row.achievement), 0),
+    target: reportedSum(current.map((row) => num(row.target))),
+    achievement: reportedSum(current.map((row) => num(row.achievement))),
     month: latest,
     year: current[0] ? Number(current[0].year ?? 0) : 0,
   };
@@ -112,8 +114,8 @@ function odfPlusCurrent() {
   const rows = (entry?.records ?? []) as Row[];
   const generated = String((entry?.responseMetadata as {generatedAt?: string} | undefined)?.generatedAt ?? '').slice(0, 10);
   return {
-    target: rows.reduce((sum, row) => sum + num(row.odf_vlges_declaration_target_units), 0),
-    achievement: rows.reduce((sum, row) => sum + num(row.odf_vlges_declaration_achvmt), 0),
+    target: reportedSum(rows.map((row) => num(row.odf_vlges_declaration_target_units))),
+    achievement: reportedSum(rows.map((row) => num(row.odf_vlges_declaration_achvmt))),
     districts: rows.length,
     generated,
     upstream: String((entry?.responseMetadata as {upstreamTableKey?: string} | undefined)?.upstreamTableKey ?? ''),
@@ -185,9 +187,9 @@ function build() {
     },
     {
       id: 'odf-plus', theme: 'Sanitation', target: 'ODF Plus status for all villages', deadline: '2026-09-30', deadlineLabel: 'September 2026', source: SOURCES.apr2026,
-      reading: odf.target ? reading({share: share(odf.achievement, odf.target), display: `${whole(odf.achievement)} of ${whole(odf.target)} villages`, detail: `declared ODF Plus against targets in ${odf.districts} districts; the copy carries no month`, dataset: 'sasa_declaration_of_odf_plus_model_villages_api', asOf: odf.generated}, `copy of ${formatAtlasDay(odf.generated)}`) : null,
+      reading: odf.target && odf.achievement !== null ? reading({share: share(odf.achievement, odf.target), display: `${whole(odf.achievement)} of ${whole(odf.target ?? 0)} villages`, detail: `declared ODF Plus against targets in ${odf.districts} districts; the copy carries no month`, dataset: 'sasa_declaration_of_odf_plus_model_villages_api', asOf: odf.generated}, `copy of ${formatAtlasDay(odf.generated)}`) : null,
       status: 'not-measured',
-      note: `The dataset is titled for model villages, and its July copy counted 3,569 of them; the current copy comes from another upstream table (${odf.upstream || 'not named'}) and targets ${whole(odf.target)}. Which villages each counts is not defined, so this is read as a related measure, not the goal. A January report gave March 2026; the April review moved it to September.`,
+      note: `The dataset is titled for model villages, and its July copy counted 3,569 of them; the current copy comes from another upstream table (${odf.upstream || 'not named'}) and targets ${whole(odf.target ?? 0)}. Which villages each counts is not defined, so this is read as a related measure, not the goal. A January report gave March 2026; the April review moved it to September.`,
       needs: 'ODF Plus status for every village, the definition of its target, and the verification date.',
       evidence: {label: 'Rural sanitation', href: '/operational-analytics?tab=rural'},
     },
@@ -280,29 +282,33 @@ function districtStanding(service: ReturnType<typeof placedService>) {
   };
 
   const legacyRows = recordsOf('sasa_100_percent_clearance_of_legacy_waste_api');
-  const legacyLatest = Math.max(0, ...legacyRows.map((row) => Number(row.month_id ?? 0)));
-  const legacyMonth = legacyRows.find((row) => Number(row.month_id ?? 0) === legacyLatest);
+  const latestLegacy = latestMonthlyRows(legacyRows);
+  const legacyMonth = latestLegacy[0];
+  const legacyLatest = Number(legacyMonth?.month_id ?? 0);
   const legacyPeriod = legacyMonth ? `${MONTHS[legacyLatest - 1]} ${legacyMonth.year ?? ''}`.trim() : '';
-  const legacyBy = new Map<string, {target: number; balance: number; ulbs: number}>();
+  const legacyBy = new Map<string, {target: number; balance: number; ulbs: number; invalid: boolean}>();
   const legacyLabels = new Map<string, string>();
-  for (const row of legacyRows.filter((entry) => Number(entry.month_id ?? 0) === legacyLatest)) {
+  for (const row of latestLegacy) {
     const label = String(row.district_name ?? '').replace(/"/g, '').trim();
     if (!legacyLabels.has(label)) legacyLabels.set(label, join(label, 'Legacy waste') ?? '');
     const district = legacyLabels.get(label);
     if (!district) continue;
-    const entry = legacyBy.get(district) ?? {target: 0, balance: 0, ulbs: 0};
-    entry.target += num(row.target); entry.balance += num(row.balance); entry.ulbs += 1;
+    const entry = legacyBy.get(district) ?? {target: 0, balance: 0, ulbs: 0, invalid: false};
+    const target = num(row.target), balance = num(row.balance);
+    if (target === null || balance === null) entry.invalid = true;
+    else { entry.target += target; entry.balance += balance; entry.ulbs += 1; }
     legacyBy.set(district, entry);
   }
 
   const ban = districtTable('sasa_cdma_ulbs_single_use_plastic_ban_api');
   const banPeriod = ban.month ? `${MONTHS[ban.month - 1]} ${ban.year || ''}`.trim() : '';
-  const banBy = new Map<string, {target: number; achievement: number}>();
+  const banBy = new Map<string, {target: number; achievement: number; invalid: boolean}>();
   for (const row of ban.rows) {
     const district = join(row.district, 'Plastic ban');
     if (!district) continue;
-    const entry = banBy.get(district) ?? {target: 0, achievement: 0};
-    entry.target += row.target; entry.achievement += row.achievement;
+    const entry = banBy.get(district) ?? {target: 0, achievement: 0, invalid: false};
+    if (row.target === null || row.achievement === null) entry.invalid = true;
+    else { entry.target += row.target; entry.achievement += row.achievement; }
     banBy.set(district, entry);
   }
 
@@ -329,8 +335,8 @@ function districtStanding(service: ReturnType<typeof placedService>) {
       district,
       collection: households ? {value: share(collectedHere, households), detail: `${whole(collectedHere)} of ${whole(households)} households · ${placedNote} · ${day}`} : {value: null, detail: noneNote},
       segregation: households ? {value: share(segregatedHere, households), detail: `${whole(segregatedHere)} of ${whole(households)} households · ${placedNote} · ${day}`} : {value: null, detail: noneNote},
-      legacyOutstanding: legacy && legacy.target ? {value: share(legacy.balance, legacy.target), detail: `${whole(legacy.balance)} of ${whole(legacy.target)} source units reported as balance · ${legacyPeriod}`} : {value: null, detail: legacy ? 'No legacy target reported.' : 'The source’s district label did not join this district.'},
-      plasticBan: banned && banned.target ? {value: share(banned.achievement, banned.target), detail: `${whole(banned.achievement)} of ${whole(banned.target)} ULBs enforcing · ${banPeriod}`} : {value: null, detail: banned ? 'No ULB targeted.' : 'The source’s district label did not join this district.'},
+      legacyOutstanding: legacy && !legacy.invalid && legacy.target ? {value: share(legacy.balance, legacy.target), detail: `${whole(legacy.balance)} of ${whole(legacy.target)} source units reported as balance · ${legacyPeriod}`} : {value: null, detail: legacy?.invalid ? 'Held out: a target or balance is missing or invalid.' : legacy ? 'No legacy target reported.' : 'The source’s district label did not join this district.'},
+      plasticBan: banned && !banned.invalid && banned.target ? {value: share(banned.achievement, banned.target), detail: `${whole(banned.achievement)} of ${whole(banned.target)} ULBs enforcing · ${banPeriod}`} : {value: null, detail: banned?.invalid ? 'Held out: a target or achievement is missing or invalid.' : banned ? 'No ULB targeted.' : 'The source’s district label did not join this district.'},
       bulkOnSite: bulk && bulk.identified ? {value: share(bulk.processingOnSite, bulk.identified), detail: `${whole(bulk.processingOnSite)} of ${whole(bulk.identified)} identified · ${whole(bulk.secretariats)} of ${whole(secretariats)} secretariats retained · ${formatAtlasDay(bwg.day)}`} : {value: null, detail: bulk ? 'No bulk generator identified in the retained secretariats.' : `Retrieval returned no secretariat in this district for ${formatAtlasDay(bwg.day)}.`},
     };
   });
@@ -386,16 +392,16 @@ function insights(goals: SasaGoal[], districts: ReturnType<typeof districtStandi
   if (legacy.reading && legacy.status === 'short-after-deadline') {
     const worst = spread('legacyOutstanding');
     const key = 'sasa_100_percent_clearance_of_legacy_waste_api';
-    const month = recordsOf(key).filter((row) => Number(row.month_id ?? 0) === districts.legacyLatest);
+    const month = latestMonthlyRows(recordsOf(key));
     const label = (row: Row) => String(row.district_name ?? '').replace(/"/g, '').trim();
     const ofDistrict = worst ? month.filter((row) => districts.legacyLabels.get(label(row)) === worst.high.district) : [];
     const figure = legacy.reading.display.replace(' still on the ground', '');
     out.push({id: 'legacy', goalId: 'legacy',
-      text: `${figure} of urban legacy waste was still reported on the ground in ${legacy.reading.asOfLabel}, after the ${legacy.deadlineLabel} deadline${worst ? `. ${worst.high.district} had the most left, ${pct(worst.high.legacyOutstanding.value!)} of its own target` : ''}.`,
+      text: `${figure} of urban legacy waste was still reported on the ground in ${legacy.reading.asOfLabel}, after the ${legacy.deadlineLabel} deadline${worst ? `. ${worst.high.district} had the highest remaining share among matched districts, ${pct(worst.high.legacyOutstanding.value!)} of its own target` : ''}.`,
       citations: [
         cite(key, {figure, period: districts.legacyPeriod, basis: `Reported balance over target, summed across all ${month.length} ULB rows for the month.`}),
         ...(worst ? [cite(key, {figure: pct(worst.high.legacyOutstanding.value!), period: districts.legacyPeriod, basis: `Balance over target for the ${ofDistrict.length} ${worst.high.district} ULB rows.`,
-          rows: {columns: ['ULB', 'Target', 'Balance'], values: ofDistrict.map((row) => [String(row.ulb_name ?? '').trim(), whole(num(row.target)), whole(num(row.balance))])}})] : []),
+          rows: {columns: ['ULB', 'Target', 'Balance'], values: ofDistrict.map((row) => [String(row.ulb_name ?? '').trim(), formatMeasurement(row.target), formatMeasurement(row.balance)])}})] : []),
       ]});
   }
 
@@ -419,11 +425,11 @@ function insights(goals: SasaGoal[], districts: ReturnType<typeof districtStandi
   const plastic = goal('plastic');
   if (plastic.reading && plastic.status === 'before-deadline') {
     const key = 'sasa_cdma_ulbs_single_use_plastic_ban_api';
-    const month = recordsOf(key).filter((row) => Number(row.month ?? 0) === districts.banLatest);
+    const month = latestMonthlyRows(recordsOf(key));
     out.push({id: 'plastic', goalId: 'plastic',
       text: `${plastic.reading.display} were enforcing the single-use plastic ban in ${plastic.reading.asOfLabel}, before the ${plastic.deadlineLabel} goal; enforcement is the nearest retained measure of it.`,
       citations: [cite(key, {figure: plastic.reading.display, period: districts.banPeriod, basis: `Achievement over target, summed across ${month.length} district rows; districts with none enforcing are not listed.`,
-        rows: {columns: ['District', 'ULBs enforcing', 'ULBs targeted'], values: month.filter((row) => num(row.achievement) > 0).map((row) => [String(row.district_name ?? ''), whole(num(row.achievement)), whole(num(row.target))])}})]});
+        rows: {columns: ['District', 'ULBs enforcing', 'ULBs targeted'], values: month.filter((row) => (num(row.achievement) ?? -1) > 0).map((row) => [String(row.district_name ?? ''), formatMeasurement(row.achievement), formatMeasurement(row.target)])}})]});
   }
   return out.slice(0, 3);
 }

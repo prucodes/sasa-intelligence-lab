@@ -1,4 +1,3 @@
-import {getNamedFindings} from './findings';
 import {serviceCategory, serviceExclusions, serviceRates, serviceSnapshot} from './ulb-service';
 import {createProvider} from './domain';
 import {getRevisionInventory} from './source-revisions';
@@ -61,7 +60,7 @@ export function gapRadarHero(): ScreenHeroData & {points: Array<{x: number; y: n
       {label: 'Met both draft guides', value: both, context: `of ${eligible.length} placed ULBs, collection and segregation at 80% or more · ${day}`, meter: share(both, eligible.length), tone: 'good'},
       {label: 'Below both guides', value: below, context: `of ${eligible.length} placed ULBs · ${day}`, meter: share(below, eligible.length), tone: 'warm'},
       {label: 'Ranked on collection reach', value: reach.rows.length, context: `of ${reach.population} ULBs; ${reach.excluded.length} held out, each with its reason`, meter: share(reach.rows.length, reach.population), tone: 'good'},
-      {label: 'Rural collection, May to August', value: rural.shift, decimals: 2, prefix: rural.shift > 0 ? '+' : '', suffix: ' pp', context: `${rural.open.toFixed(2)}% to ${rural.close.toFixed(2)}% in the common panchayat-day cohort`, meter: rural.close, tone: 'good'},
+      {label: 'Rural collection, May to August', value: rural.shift, decimals: 2, prefix: rural.shift > 0 ? '+' : '', suffix: ' pp', context: `${rural.open.toFixed(2)}% to ${rural.close.toFixed(2)}% in the common panchayat-day cohort`, tone: rural.shift < 0 ? 'warm' : 'good'},
     ],
     points: eligible.map((ulb) => {
       const rates = serviceRates(ulb);
@@ -91,27 +90,47 @@ export function atlasHero(): ScreenHeroData {
 /** `flow`: stages one after another (each a subset of the last). `split`: parts of one total. */
 export interface Pipeline { label: string; period: string; kind: 'flow' | 'split'; stages: Array<{label: string; value: number}> }
 
-export function analyticsHero(): ScreenHeroData & {pipelines: Pipeline[]} {
-  const findings = getNamedFindings();
-  const collection = getCollectionProcurementSummary(null);
-  const toilets = getIHHLFunnel(null);
-  const legacy = getLegacyWasteSummary(null);
+/**
+ * The Operational Analytics opening, bound to the period the reader has pinned. Each figure is
+ * one programme's last reported stage against its own earlier stage, for that period only; a
+ * programme with no retained rows for the period is named as missing, never shown at an older
+ * month. Stages are drawn to exact scale against the programme's first stage, and no transition
+ * between stages is implied: the source does not say one stage is a subset of the last.
+ */
+export function analyticsHero(period: string | null = null): ScreenHeroData & {pipelines: Pipeline[]; missing: string[]; periodLabel: string} {
+  const collection = getCollectionProcurementSummary(period);
+  const toilets = getIHHLFunnel(period);
+  const legacy = getLegacyWasteSummary(period);
+  const whole = (n: number) => n.toLocaleString('en-IN');
+  const tone = (meter: number) => (meter < 50 ? 'warm' as const : 'good' as const);
+  const figures: HeroFigure[] = [];
+  const pipelines: Pipeline[] = [];
+  const missing: string[] = [];
+  const collectionPeriod = collection.rows[0]?.period ?? '';
+  const toiletPeriod = toilets.rows[0]?.period ?? '';
+  if (collection.rows.length) {
+    const meter = share(collection.supplied, collection.workOrders);
+    figures.push({label: 'E-autos supplied', value: collection.supplied, context: `of ${whole(collection.workOrders)} on work orders · ${collectionPeriod}`, meter, tone: tone(meter)});
+    pipelines.push({label: 'E-auto procurement', kind: 'flow', period: collectionPeriod, stages: [{label: 'target', value: collection.target}, {label: 'work orders', value: collection.workOrders}, {label: 'supplied', value: collection.supplied}]});
+  } else missing.push('E-auto procurement');
+  if (toilets.rows.length) {
+    const meter = share(toilets.completed, toilets.approved);
+    figures.push({label: 'Household toilets completed', value: toilets.completed, context: `of ${whole(toilets.approved)} approved · ${toiletPeriod}`, meter, tone: tone(meter)});
+    pipelines.push({label: 'Household toilets', kind: 'flow', period: toiletPeriod, stages: [{label: 'approved', value: toilets.approved}, {label: 'under construction', value: toilets.underConstruction}, {label: 'completed', value: toilets.completed}]});
+  } else missing.push('Household toilets');
+  if (legacy.rows.length) {
+    const meter = share(legacy.achievement, legacy.target);
+    figures.push({label: 'Legacy waste cleared', value: legacy.achievement, context: `of ${whole(legacy.target)} source units targeted · ${legacy.period}`, meter, tone: tone(meter)});
+    pipelines.push({label: 'Legacy waste', kind: 'split', period: legacy.period, stages: [{label: 'target', value: legacy.target}, {label: 'cleared', value: legacy.achievement}, {label: 'reported balance', value: legacy.balance}]});
+  } else missing.push('Legacy waste');
   return {
-    eyebrow: 'Available now',
+    eyebrow: period ? 'Pinned period' : 'Latest retained month per programme',
     title: 'Operational Analytics',
     accent: 'delivery, programme by programme.',
-    figures: findings.map((finding) => ({
-      label: finding.headline.replace(/^[\d,]+\s*/, '').replace(/^./, (letter) => letter.toUpperCase()),
-      value: finding.total,
-      context: finding.id === 'legacy-balance' ? `${finding.affected} of ${finding.reporting} ULBs carry a balance` : `${finding.stalled} of ${finding.reporting} ULBs report none ${finding.id === 'undelivered-orders' ? 'supplied' : 'started'}`,
-      meter: finding.id === 'legacy-balance' ? share(finding.affected, finding.reporting) : share(finding.stalled, finding.reporting),
-      tone: 'warm' as const,
-    })),
-    pipelines: [
-      {label: 'E-auto procurement', kind: 'flow', period: collection.rows[0]?.period ?? 'Latest period', stages: [{label: 'target', value: collection.target}, {label: 'work orders', value: collection.workOrders}, {label: 'supplied', value: collection.supplied}]},
-      {label: 'Household toilets', kind: 'flow', period: toilets.rows[0]?.period ?? 'Latest period', stages: [{label: 'approved', value: toilets.approved}, {label: 'under construction', value: toilets.underConstruction}, {label: 'completed', value: toilets.completed}]},
-      {label: 'Legacy waste', kind: 'split', period: legacy.period ?? 'Latest period', stages: [{label: 'target', value: legacy.target}, {label: 'cleared', value: legacy.achievement}, {label: 'reported balance', value: legacy.balance}]},
-    ],
+    figures,
+    pipelines,
+    missing,
+    periodLabel: period ? (collectionPeriod || toiletPeriod || legacy.period || period) : 'each programme’s latest month',
   };
 }
 

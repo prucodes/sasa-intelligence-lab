@@ -1,6 +1,7 @@
 import {getRankingDefinition, rankPrecision, rankSubject, type RankingInput} from './subject-rankings';
 import {serviceSnapshot} from './ulb-service';
 import {governedSnapshotByKey, governedSnapshots, normalizeSourceName, type SnapshotRecord} from './snapshots';
+import {measurement, latestMonthlyRows} from './measurement';
 import {urbanBodyCode} from './urban-body-code';
 
 /**
@@ -50,6 +51,8 @@ export interface AtlasValue {
   display: string;
   /** Mid-rank position among the ULBs reporting this measure, 0 to 1, oriented so a larger position is further along. Sort key only. */
   position: number;
+  /** False when a source does not establish a comparable peer population. */
+  comparable: boolean;
   /** Reporting ULBs this one is strictly further along than. */
   ahead: number;
   /** Other reporting ULBs with exactly the same value. */
@@ -197,22 +200,22 @@ function fstpProgress() {
   const out = new Map<string, Raw>();
   for (const [code, rows] of grouped) {
     const spellings = rows.map(spellingOf);
-    const progress = new Set(rows.map((row) => Number(unquote(row.overall_progress).replace('%', ''))));
+    const progress = new Set(rows.map((row) => measurement(row.overall_progress)));
     const [value] = [...progress];
-    if (progress.size !== 1 || !Number.isFinite(value) || value < 0 || value > 100) {
+    if (progress.size !== 1 || value === null || !Number.isFinite(value) || value < 0 || value > 100) {
       out.set(code, {state: 'held', reason: progress.size > 1 ? 'The retained copies report different progress and their month cannot be established' : 'Progress missing or outside 0–100%', spellings});
       continue;
     }
-    const capacity = Number(unquote(rows[0].capacity_in_kld));
-    out.set(code, {state: 'value', value, display: percent(value), detail: Number.isFinite(capacity) ? `${capacity.toLocaleString('en-IN')} KLD configured` : undefined, spellings});
+    const capacity = measurement(rows[0].capacity_in_kld);
+    out.set(code, {state: 'value', value, display: percent(value), detail: capacity !== null ? `${capacity.toLocaleString('en-IN')} KLD configured` : undefined, spellings});
   }
   return {values: out, uncoded, uncodedRepeats};
 }
 
 function sewagePlants() {
   const rows = records(SEWAGE);
-  const latest = Math.max(...rows.map((row) => Number(row.mnth_no)).filter(Number.isFinite));
-  const month = rows.filter((row) => Number(row.mnth_no) === latest);
+  const month = latestMonthlyRows(rows);
+  const latest = Number(month[0]?.mnth_no);
   const {grouped, uncoded, uncodedRepeats} = byCode(month, ['crnt_prgrs_tx', 'capacity_mld']);
   const out = new Map<string, Raw>();
   for (const [code, plants] of grouped) {
@@ -339,7 +342,7 @@ export function getUlbAtlas(): AtlasModel {
   const measures: AtlasMeasure[] = specs.map(({raw, ...spec}) => {
     const values = registry.map((ulb) => raw.get(ulb.code)).filter((entry): entry is Extract<Raw, {state: 'value'}> => entry?.state === 'value').map((entry) => entry.value);
     const held = registry.filter((ulb) => raw.get(ulb.code)?.state === 'held').length;
-    return {...spec, reporting: values.length, held, median: median(values)};
+    return {...spec, reporting: values.length, held, median: spec.kind === 'rank' ? null : median(values)};
   });
 
   const positions = new Map(specs.map((spec) => {
@@ -355,8 +358,9 @@ export function getUlbAtlas(): AtlasModel {
       for (const spelling of raw?.spellings ?? []) if (spelling && !spellings.has(normalizeSourceName(spelling))) spellings.set(normalizeSourceName(spelling), spelling);
       if (!raw) { cells[spec.id] = null; continue; }
       if (raw.state === 'held') { cells[spec.id] = {state: 'held', reason: raw.reason}; continue; }
-      const place = positions.get(spec.id)!(raw.value);
-      cells[spec.id] = {state: 'value', value: raw.value, display: raw.display, ...place, step: stepFor(spec.kind, raw.value, spec.levels, place.position), gap: raw.gap, count: raw.count, detail: raw.detail};
+      const comparable = spec.kind !== 'rank';
+      const place = comparable ? positions.get(spec.id)!(raw.value) : {ahead: 0, tied: 0, of: 0, position: 0};
+      cells[spec.id] = {state: 'value', value: raw.value, display: raw.display, comparable, ...place, step: stepFor(spec.kind, raw.value, spec.levels, place.position), gap: raw.gap, count: raw.count, detail: raw.detail};
     }
     return {code: ulb.code, name: ulb.name, district: ulb.district, households: ulb.households, cells,
       placed: Object.values(cells).filter((cell) => cell?.state === 'value').length, spellings: [...spellings.values()]};
@@ -369,6 +373,7 @@ export function getUlbAtlas(): AtlasModel {
     const code = codes.size === 1 ? [...codes][0] : null;
     const medians = {} as AtlasDistrict['medians'];
     for (const measure of measures) {
+      if (measure.kind === 'rank') { medians[measure.id] = null; continue; }
       const values = members.map((ulb) => ulb.cells[measure.id]).filter((cell): cell is AtlasValue => cell?.state === 'value').map((cell) => cell.value);
       const value = median(values);
       if (value === null) { medians[measure.id] = null; continue; }
@@ -410,7 +415,7 @@ export function largestGaps(model: AtlasModel, id: AtlasMeasureId, count = 5) {
 export function relativePositions(ulb: AtlasUlb, model: AtlasModel) {
   return model.measures
     .map((measure) => ({measure, cell: ulb.cells[measure.id]}))
-    .filter((entry): entry is {measure: AtlasMeasure; cell: AtlasValue} => entry.cell?.state === 'value')
+    .filter((entry): entry is {measure: AtlasMeasure; cell: AtlasValue} => entry.cell?.state === 'value' && entry.cell.comparable)
     .sort((a, b) => a.cell.position - b.cell.position || a.measure.label.localeCompare(b.measure.label));
 }
 
@@ -435,6 +440,7 @@ export function atlasCsv(model: AtlasModel, ulbs: AtlasUlb[] = model.ulbs): stri
     const cell = ulb.cells[measure.id];
     if (!cell) return ['Not reported', ''];
     if (cell.state === 'held') return [`Held out: ${cell.reason}`, ''];
+    if (!cell.comparable) return [cell.display, 'Comparison withheld: ranking category not supplied'];
     return [cell.display, `ahead of ${cell.ahead} of ${cell.of - 1} others${cell.tied ? `; ${cell.tied} report the same` : ''}`];
   })]);
   return [header, ...rows].map((row) => row.map(csvField).join(',')).join('\n');
@@ -496,11 +502,9 @@ export function measureHeadline(model: AtlasModel, id: AtlasMeasureId): AtlasHea
         tiles: (id === 'odf' ? [tally[3], tally[2], tally[0]] : [{label: '3 stars or more', n: tally.slice(2).reduce((sum, entry) => sum + entry.n, 0)}, tally[1], tally[0]]).map((entry) => ({label: entry.label, value: count(entry.n, 'ULB'), sub: `of ${measure.reporting} placed`}))};
     }
     case 'rank': {
-      const ranks = cells.map((cell) => cell.value);
-      const top = model.ulbs.find((ulb) => ulb.cells.rank?.state === 'value' && ulb.cells.rank.value === Math.min(...ranks));
-      return {figure: measure.median ?? 0, decimals: 0, suffix: '',
-        sentence: `is the median national rank returned for the ${measure.reporting} ULBs placed by their code in the 2024 survey.`,
-        tiles: [{label: 'Highest place', value: `#${Math.min(...ranks).toLocaleString('en-IN')}`, sub: top ? top.name : ''}, {label: 'Lowest place', value: `#${Math.max(...ranks).toLocaleString('en-IN')}`, sub: 'as returned'}, {label: 'Rank category', value: 'Not stated', sub: 'ranks may come from different lists'}]};
+      return {figure: measure.reporting, decimals: 0, suffix: '',
+        sentence: 'ULBs have a reported 2024 rank. Peer comparisons are withheld until the source identifies the ranking category.',
+        tiles: [{label: 'Comparison', value: 'Withheld', sub: 'population categories not supplied'}, {label: 'Source year', value: '2024', sub: 'historical context'}, {label: 'Reading', value: 'Source rank', sub: 'inspect each ULB’s original value'}]};
     }
   }
 }

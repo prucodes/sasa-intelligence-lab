@@ -16,7 +16,7 @@
     "ingest": "node scripts/ingest.mjs",
     "retain:groundwater": "node scripts/retain-groundwater.mjs",
     "aggregate": "node scripts/aggregate.mjs",
-    "verify": "npm run validate:data && npm run lint && npm run test && npm run build",
+    "verify": "npm run validate:data && npm run lint && npm run typecheck && npm test && npm run build:static",
     "screenshots": "node scripts/capture-screenshots.mjs",
     "test:browser": "node scripts/browser-smoke.mjs",
     "test:overview": "node scripts/overview-smoke.mjs",
@@ -26,7 +26,8 @@
     "build:static": "node scripts/build-static.mjs",
     "check:live": "node scripts/check-live.mjs",
     "audit:live-snapshots": "node scripts/audit-live-snapshots.mjs",
-    "audit:large-retention": "node scripts/finalize-large-retention.mjs"
+    "audit:large-retention": "node scripts/finalize-large-retention.mjs",
+    "typecheck": "tsc --noEmit --incremental false"
   },
   "dependencies": {
     "next": "16.3.3",

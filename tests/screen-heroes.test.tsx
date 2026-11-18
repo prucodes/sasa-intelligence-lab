@@ -1,7 +1,8 @@
 import {describe, expect, it} from 'vitest';
 import {render, screen, fireEvent, within} from '@testing-library/react';
 import {analyticsHero, atlasHero, environmentHero, gapRadarHero, readinessHero, revisedRouteCount} from '@/lib/screen-heroes';
-import {getNamedFindings} from '@/lib/findings';
+import {getCollectionProcurementSummary, getIHHLFunnel, getLegacyWasteSummary} from '@/lib/analytics';
+import {operationalPeriodOptions} from '@/lib/snapshots';
 import {getRevisionInventory} from '@/lib/source-revisions';
 import {UlbAtlas} from '@/app/ulb-atlas';
 import {getUlbAtlas} from '@/lib/ulb-atlas';
@@ -21,9 +22,17 @@ describe('screen heroes', () => {
     }
   });
 
-  it('takes the analytics figures from the named findings', () => {
-    const totals = getNamedFindings().map((finding) => finding.total);
-    expect(analyticsHero().figures.map((figure) => figure.value)).toEqual(totals);
+  it('binds the analytics opening to the pinned period, and names a programme with no rows rather than showing an older month', () => {
+    const latest = analyticsHero();
+    expect(latest.figures.map((figure) => figure.value)).toEqual([getCollectionProcurementSummary(null).supplied, getIHHLFunnel(null).completed, getLegacyWasteSummary(null).achievement]);
+    for (const option of operationalPeriodOptions()) {
+      const pinned = analyticsHero(option.id);
+      expect(pinned.figures.length + pinned.missing.length).toBe(3);
+      if (!getCollectionProcurementSummary(option.id).rows.length) expect(pinned.missing).toContain('E-auto procurement');
+      else expect(pinned.figures[0].value).toBe(getCollectionProcurementSummary(option.id).supplied);
+    }
+    // A meter is the figure over the population its context names.
+    for (const figure of latest.figures) expect(figure.meter).toBeLessThanOrEqual(100);
   });
 
   it('draws flows only where each stage is a subset of the one before', () => {
@@ -62,7 +71,7 @@ describe('ULB atlas screen', () => {
     expect(within(dossier).getByText(/of 8 measures placed/)).toBeVisible();
     fireEvent.click(screen.getByRole('radio', {name: 'Toilets'}));
     expect(screen.getByRole('heading', {level: 2, name: 'Toilet completion'})).toBeVisible();
-    expect(screen.getByText(/approved toilets not completed/)).toBeVisible();
+    expect(screen.getByRole('heading', {name: /approved toilets not completed/})).toBeVisible();
     const sorted = document.querySelector('.atlas-table thead th.is-sorted');
     expect(sorted?.textContent).toContain('Toilets');
     expect(screen.getAllByRole('row').length).toBeGreaterThan(model.ulbs.length);

@@ -1,10 +1,12 @@
 'use client';
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {
   atlasCsv, districtMapRows, districtPlacements, getUlbAtlas, largestGaps, lookFirst, measureHeadline,
   type AtlasMeasure, type AtlasMeasureId, type AtlasModel, type AtlasUlb, type AtlasValue,
 } from '@/lib/ulb-atlas';
+import {atlasBrief} from '@/lib/atlas-brief';
+import {PopulationNote} from './population-note';
 import {DistrictMap} from './district-map';
 import {CountUp, Reveal, useMotionClass} from './motion';
 import './ulb-atlas.css';
@@ -35,14 +37,33 @@ function AtlasWorkspace() {
   const [measureId, setMeasureId] = useState<AtlasMeasureId>('reach');
   const [selected, setSelected] = useState(() => defaultUlb(model));
   const [district, setDistrict] = useState('');
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    // URL state is applied after hydration, matching the static initial document.
+    /* eslint-disable react-hooks/set-state-in-effect */
+    const id = params.get('measure'), code = params.get('ulb'), place = params.get('district');
+    if (model.measures.some((entry) => entry.id === id)) setMeasureId(id as AtlasMeasureId);
+    if (model.ulbs.some((entry) => entry.code === code)) setSelected(code!);
+    if (model.districts.some((entry) => entry.district === place)) setDistrict(place!);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [model]);
+  const updateUrl = (key: string, value: string) => {
+    const url = new URL(window.location.href);
+    if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
+    window.history.replaceState({}, '', url);
+  };
+  const chooseMeasure = (id: AtlasMeasureId) => {setMeasureId(id); updateUrl('measure', id);};
+  const chooseUlb = (code: string) => {setSelected(code); updateUrl('ulb', code);};
+  const chooseDistrict = (place: string) => {setDistrict(place); updateUrl('district', place);};
   const measure = model.measures.find((entry) => entry.id === measureId)!;
   const ulb = model.ulbs.find((entry) => entry.code === selected)!;
   const root = useMotionClass<HTMLDivElement>();
   return (
     <div className="atlas" ref={root}>
-      <AtlasLead model={model} measure={measure} onMeasure={setMeasureId} selected={selected} onSelect={setSelected} district={district} onDistrict={setDistrict} />
-      <AtlasMatrix model={model} measure={measure} onMeasure={setMeasureId} selected={ulb} onSelect={setSelected} district={district} onDistrict={setDistrict} />
-      <AtlasDistricts model={model} district={district} onDistrict={setDistrict} />
+      <AtlasLead model={model} measure={measure} onMeasure={chooseMeasure} selected={selected} onSelect={chooseUlb} district={district} onDistrict={chooseDistrict} />
+      <PopulationNote/>
+      <AtlasMatrix model={model} measure={measure} onMeasure={chooseMeasure} selected={ulb} onSelect={chooseUlb} district={district} onDistrict={chooseDistrict} />
+      <AtlasDistricts model={model} district={district} onDistrict={chooseDistrict} />
       <AtlasJoin model={model} />
     </div>
   );
@@ -78,7 +99,7 @@ function AtlasLead({model, measure, onMeasure, selected, onSelect, district, onD
             <div className="atlas-unmapped">
               <span className="vi-kicker">Not mapped</span>
               <p>National ranks are not drawn by district. The response does not say which population category each rank is within, so a district median would mix ranks from different lists.</p>
-              <Spread model={model} measure={measure} />
+              <p>Open a ULB dossier to read its original rank and source year.</p>
             </div>
           )}
         </div>
@@ -183,8 +204,8 @@ function Spread({model, measure}: {model: AtlasModel; measure: AtlasMeasure}) {
 function sortValue(ulb: AtlasUlb, key: SortKey): number | null {
   if (key === 'name') return null;
   const cell = ulb.cells[key];
-  if (cell?.state !== 'value') return null;
-  return key === 'rank' ? -cell.value : cell.value;
+  if (cell?.state !== 'value' || !cell.comparable) return null;
+  return cell.value;
 }
 
 function AtlasMatrix({model, measure, onMeasure, selected, onSelect, district, onDistrict}: {
@@ -194,7 +215,7 @@ function AtlasMatrix({model, measure, onMeasure, selected, onSelect, district, o
   const [direction, setDirection] = useState<'behind' | 'ahead'>('behind');
   const [byName, setByName] = useState(false);
   // The table follows the measure chosen anywhere on the page; only an explicit name sort overrides it.
-  const sortKey: SortKey = byName ? 'name' : measure.id;
+  const sortKey: SortKey = byName || measure.kind === 'rank' ? 'name' : measure.id;
   const rows = useMemo(() => {
     const needle = query.trim().toLowerCase();
     const filtered = model.ulbs.filter((ulb) => (!district || ulb.district === district) && (!needle || ulb.spellings.some((name) => name.toLowerCase().includes(needle)) || ulb.code.includes(needle)));
@@ -269,6 +290,11 @@ function AtlasMatrix({model, measure, onMeasure, selected, onSelect, district, o
         </div>
         <AtlasDossier model={model} ulb={selected} />
       </div>
+      <details className="atlas-filtered-brief"><summary>Preview this filtered evidence brief · {rows.length} ULBs</summary><pre>{atlasBrief(model, rows, measure.id, `${district || 'All returned districts'}${query ? `; search: ${query}` : ''}`)}</pre><button onClick={() => {
+        const url = URL.createObjectURL(new Blob([atlasBrief(model, rows, measure.id, `${district || 'All returned districts'}${query ? `; search: ${query}` : ''}`)], {type: 'text/plain;charset=utf-8'}));
+        const link = Object.assign(document.createElement('a'), {href: url, download: 'sasa-filtered-evidence.txt'});
+        link.click(); window.setTimeout(() => URL.revokeObjectURL(url), 0);
+      }}>Download filtered brief</button></details>
       <ScaleKey />
     </section>
   );
@@ -279,7 +305,7 @@ function ScaleKey() {
     <div className="atlas-key" aria-label="Cell colour key">
       <span>Colour follows the value on its own scale</span>
       <span className="atlas-key-ramp">{[0, 1, 2, 3, 4].map((step) => <i key={step} className={`step-${step}`} aria-hidden="true" />)}<em>0% to 100%, or earliest stage to furthest</em></span>
-      <span><i className="held" aria-hidden="true" />Held out, reason on hover</span>
+      <span><i className="held" aria-hidden="true" />Held out · tap for reason</span>
       <span><i className="blank" aria-hidden="true" />Not reported</span>
     </div>
   );
@@ -288,11 +314,13 @@ function ScaleKey() {
 function MatrixCell({ulb, measure}: {ulb: AtlasUlb; measure: AtlasMeasure}) {
   const cell = ulb.cells[measure.id];
   if (!cell) return <span className="atlas-cell none" title={`${ulb.name}: no ${measure.label.toLowerCase()} row carries this code`}><span aria-hidden="true">—</span><span className="sr-only">Not reported</span></span>;
-  if (cell.state === 'held') return <span className="atlas-cell held" title={cell.reason}>Held</span>;
+  if (cell.state === 'held') return <details className="atlas-cell-reason"><summary className="atlas-cell held" aria-label={`${ulb.name}, ${measure.label}: held out`}>Held</summary><p>{cell.reason}</p></details>;
+  if (!cell.comparable) return <span className="atlas-cell rank-evidence" title="Historical source rank; category not supplied, comparison withheld">{cell.display}</span>;
   return <span className={`atlas-cell step-${cell.step}`} title={`${measure.label}: ${cell.display}${cell.detail ? ` (${cell.detail})` : ''}. Ahead of ${cell.ahead} of ${cell.of - 1} others${cell.tied ? `; ${cell.tied} report the same` : ''}.`}>{cell.display}</span>;
 }
 
 function positionText(cell: AtlasValue): string {
+  if (!cell.comparable) return 'Source rank only · comparison withheld';
   const others = cell.of - 1;
   const tie = cell.tied ? `; ${cell.tied} report the same` : '';
   return `Ahead of ${cell.ahead} of ${others} other${others === 1 ? '' : 's'}${tie}`;
@@ -326,13 +354,14 @@ function AtlasDossier({model, ulb}: {model: AtlasModel; ulb: AtlasUlb}) {
 
 function TrackRow({model, measure, ulb}: {model: AtlasModel; measure: AtlasMeasure; ulb: AtlasUlb}) {
   const cell = ulb.cells[measure.id];
+  if (measure.kind === 'rank') return <li><div className="atlas-track-head"><b>{measure.label}</b><span>{cell?.state === 'value' ? cell.display : cell?.state === 'held' ? 'Held out' : 'Not reported'}</span></div><small>2024 source rank · category not supplied; comparison withheld.</small></li>;
   const values = model.ulbs.map((entry) => entry.cells[measure.id]).filter((entry): entry is AtlasValue => entry?.state === 'value').map((entry) => entry.value);
-  const max = measure.kind === 'rank' ? Math.max(1, ...values) : measure.kind === 'level' ? measure.levels!.length - 1 : 100;
-  const min = measure.kind === 'rank' ? 1 : 0;
-  // A rank is drawn reversed so that, on every strip, further along is to the right.
+  const max = measure.kind === 'level' ? measure.levels!.length - 1 : 100;
+  const min = 0;
+  // Comparable measures share the left-to-right direction; source ranks are handled above.
   const x = (value: number) => {
     const t = (value - min) / Math.max(1, max - min);
-    return 6 + (measure.kind === 'rank' ? 1 - t : t) * 228;
+    return 6 + t * 228;
   };
   const stacked = new Map<number, number>();
   return (
@@ -373,14 +402,14 @@ function AtlasDistricts({model, district, onDistrict}: {model: AtlasModel; distr
           <thead>
             <tr>
               <th scope="col">District</th>
-              {model.measures.map((entry) => <th key={entry.id} scope="col" title={entry.label}>{entry.short}<small>{entry.period}</small></th>)}
+              {model.measures.filter(measure => measure.kind !== 'rank').map((entry) => <th key={entry.id} scope="col" title={entry.label}>{entry.short}<small>{entry.period}</small></th>)}
             </tr>
           </thead>
           <tbody>
             {model.districts.map((entry) => (
               <tr key={entry.district} className={entry.district === district ? 'is-selected' : ''}>
                 <th scope="row"><button type="button" onClick={() => onDistrict(district === entry.district ? '' : entry.district)} aria-pressed={district === entry.district}><b>{entry.district}</b><small>{entry.ulbs} ULB{entry.ulbs === 1 ? '' : 's'}</small></button></th>
-                {model.measures.map((measure) => {
+                {model.measures.filter(measure => measure.kind !== 'rank').map((measure) => {
                   const median = entry.medians[measure.id];
                   return <td key={measure.id}>{median ? <span className={`atlas-cell step-${median.step}`} title={`Median of ${median.reporting} reporting ULB${median.reporting === 1 ? '' : 's'}`}>{median.display}<sub>{median.reporting}</sub></span> : <span className="atlas-cell none"><span aria-hidden="true">—</span><span className="sr-only">No reporting ULB</span></span>}</td>;
                 })}
@@ -389,7 +418,7 @@ function AtlasDistricts({model, district, onDistrict}: {model: AtlasModel; distr
           </tbody>
         </table>
       </div>
-      <p className="atlas-footnote">The small number is how many of the district’s ULBs report that measure.</p>
+      <p className="atlas-footnote">The small number is how many of the district’s ULBs report that measure. National-rank medians are withheld because ranking categories are not supplied.</p>
     </section>
   );
 }
