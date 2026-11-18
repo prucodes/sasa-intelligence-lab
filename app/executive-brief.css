@@ -29,3 +29,13 @@
   .executive-brief :is(h2,h3) { color: #172c31 !important; }.executive-brief code { background: transparent !important; color: #526565 !important; }
 }
 @media screen and (max-width: 600px) { .brief-footprint > span { grid-template-columns: 88px minmax(0,1fr); } }
+
+/* The state's targets: a tally and the computed insights, nothing more. */
+.brief-goals { margin: 0 38px 24px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 10px; break-inside: avoid; }
+.brief-goals h3 { margin: 0 0 8px; font-size: 17px; }
+.brief-goals-tally { margin: 0 0 10px; font-size: 12.5px; font-weight: 650; line-height: 1.6; }
+.brief-goals ul { margin: 0 0 10px; padding-left: 18px; font-size: 12px; line-height: 1.7; }
+.brief-goals li + li { margin-top: 6px; }
+.brief-goals small { font-size: 11px; color: var(--muted); }
+@media (max-width: 600px) { .brief-goals { margin-inline: 24px; padding: 18px; } }
+@media print { .brief-goals { margin: 12px 0 0; padding: 14px; } }

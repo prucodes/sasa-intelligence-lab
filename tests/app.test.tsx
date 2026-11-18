@@ -21,7 +21,8 @@ describe('application shell and screens', () => {
     render(<LabApp page="overview" initialMode="DEMO" />);
     const navigation = screen.getByRole('complementary', { name: /primary navigation/i });
     expect(navigation).toBeInTheDocument();
-    expect(navigation.querySelectorAll('nav a')).toHaveLength(8);
+    expect(navigation.querySelectorAll('nav a')).toHaveLength(9);
+    expect(navigation.querySelector('nav a[href*="/goals"]')).not.toBeNull();
     expect(navigation.querySelector('nav a[href*="/atlas"]')).not.toBeNull();
     expect(screen.getByRole('combobox', { name: /data mode/i })).toHaveValue('DEMO');
     expect(screen.getByRole('heading', { name: /what sasa data can tell us today/i })).toBeInTheDocument();
@@ -30,7 +31,7 @@ describe('application shell and screens', () => {
   it('keeps every page directly linked with an explicit current-page marker', () => {
     render(<LabApp page="overview" initialMode="SAMPLE"/>);
     const nav=screen.getByRole('complementary',{name:'Primary navigation'});
-    expect(nav.querySelectorAll('nav a')).toHaveLength(8);
+    expect(nav.querySelectorAll('nav a')).toHaveLength(9);
     expect(nav.querySelector('[aria-current="page"]')).toHaveAttribute('aria-label','Overview');
     expect(screen.queryByRole('button',{name:'Menu'})).not.toBeInTheDocument();
   });

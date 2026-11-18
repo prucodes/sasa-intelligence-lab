@@ -212,6 +212,23 @@ export function validateAggregate(name, data) {
       const open=district.points[0].collectionRate, close=district.points[district.points.length-1].collectionRate;
       equal(district.changePercentagePoints,open===null||close===null?null:(close-open)*100,`${district.district}: first-to-last change`,0.00006);
     }
+  } else if (name === 'bwg-reference-day.json') {
+    // Bulk waste generators on one day, from the retained secretariat pages only.
+    check(/^\d{4}-\d{2}-\d{2}$/.test(data.day),'day must be an ISO date');
+    check(Array.isArray(data.sources)&&data.sources.length===2,'two sources expected');
+    for (const field of ['registerSecretariats','retainedSecretariats','usableSecretariats','identified','processingOnSite']) check(Number.isInteger(data[field])&&data[field]>=0,`${field} must be a non-negative integer`);
+    check(data.usableSecretariats<=data.retainedSecretariats&&data.retainedSecretariats<=data.registerSecretariats,'secretariat containment breach');
+    check(data.processingOnSite<=data.identified,'more generators processing on site than identified');
+    for (const field of ['identified','processingOnSite']) {
+      equal(sum(data.byDistrictCode,field),data[field],`district ${field}`,0);
+      equal(sum(data.byUlbCode,field),data[field],`ULB ${field}`,0);
+    }
+    equal(sum(data.byDistrictCode,'secretariats'),data.usableSecretariats,'district secretariats',0);
+    equal(sum(data.byUlbCode,'secretariats'),data.usableSecretariats,'ULB secretariats',0);
+    check(new Set(data.byDistrictCode.map(d=>d.districtCode)).size===data.byDistrictCode.length,'duplicate district codes');
+    check(new Set(data.byUlbCode.map(u=>u.ulbCode)).size===data.byUlbCode.length,'duplicate ULB codes');
+    check([...data.byDistrictCode,...data.byUlbCode].every(row=>row.processingOnSite<=row.identified),'a group processes more on site than it identified');
+    check(typeof data.boundary==='string'&&/missing, not zero/.test(data.boundary),'boundary must say missing secretariats are not zero');
   } else check(false,'no aggregate reconciliation contract registered');
   return failures;
 }

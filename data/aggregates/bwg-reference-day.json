@@ -1,0 +1,915 @@
+{
+  "version": 1,
+  "day": "2026-08-12",
+  "sources": [
+    "identification_of_bulk_waste_generators_api",
+    "onsite_processing_of_wet_waste_bwg_api"
+  ],
+  "registerSecretariats": 4023,
+  "retainedSecretariats": 3032,
+  "usableSecretariats": 3029,
+  "heldOut": {
+    "conflicting": 0,
+    "nonNumeric": 5
+  },
+  "identified": 1237,
+  "processingOnSite": 312,
+  "byDistrictCode": [
+    {
+      "districtCode": "502",
+      "district": "Anantapuram",
+      "secretariats": 178,
+      "identified": 106,
+      "processingOnSite": 1
+    },
+    {
+      "districtCode": "503",
+      "district": "Chittoor",
+      "secretariats": 61,
+      "identified": 45,
+      "processingOnSite": 2
+    },
+    {
+      "districtCode": "504",
+      "district": "YSR Kadapa",
+      "secretariats": 173,
+      "identified": 57,
+      "processingOnSite": 11
+    },
+    {
+      "districtCode": "505",
+      "district": "East Godavari",
+      "secretariats": 104,
+      "identified": 41,
+      "processingOnSite": 12
+    },
+    {
+      "districtCode": "506",
+      "district": "Guntur",
+      "secretariats": 211,
+      "identified": 85,
+      "processingOnSite": 17
+    },
+    {
+      "districtCode": "510",
+      "district": "Krishna",
+      "secretariats": 92,
+      "identified": 35,
+      "processingOnSite": 3
+    },
+    {
+      "districtCode": "511",
+      "district": "Kurnool",
+      "secretariats": 91,
+      "identified": 93,
+      "processingOnSite": 3
+    },
+    {
+      "districtCode": "515",
+      "district": "Sri Potti Sriramulu Nellore",
+      "secretariats": 140,
+      "identified": 25,
+      "processingOnSite": 0
+    },
+    {
+      "districtCode": "517",
+      "district": "Prakasam",
+      "secretariats": 33,
+      "identified": 15,
+      "processingOnSite": 2
+    },
+    {
+      "districtCode": "519",
+      "district": "Srikakulam",
+      "secretariats": 23,
+      "identified": 6,
+      "processingOnSite": 1
+    },
+    {
+      "districtCode": "520",
+      "district": "Visakhapatnam",
+      "secretariats": 399,
+      "identified": 147,
+      "processingOnSite": 100
+    },
+    {
+      "districtCode": "521",
+      "district": "Vizianagaram",
+      "secretariats": 96,
+      "identified": 29,
+      "processingOnSite": 13
+    },
+    {
+      "districtCode": "523",
+      "district": "West Godavari",
+      "secretariats": 120,
+      "identified": 40,
+      "processingOnSite": 10
+    },
+    {
+      "districtCode": "743",
+      "district": "Parvathipuram Manyam",
+      "secretariats": 38,
+      "identified": 15,
+      "processingOnSite": 9
+    },
+    {
+      "districtCode": "746",
+      "district": "Kakinada",
+      "secretariats": 173,
+      "identified": 23,
+      "processingOnSite": 9
+    },
+    {
+      "districtCode": "747",
+      "district": "Dr. B.R. Ambedkar Konaseema",
+      "secretariats": 33,
+      "identified": 22,
+      "processingOnSite": 17
+    },
+    {
+      "districtCode": "748",
+      "district": "Eluru",
+      "secretariats": 87,
+      "identified": 95,
+      "processingOnSite": 24
+    },
+    {
+      "districtCode": "749",
+      "district": "NTR",
+      "secretariats": 253,
+      "identified": 107,
+      "processingOnSite": 7
+    },
+    {
+      "districtCode": "750",
+      "district": "Bapatla",
+      "secretariats": 59,
+      "identified": 21,
+      "processingOnSite": 4
+    },
+    {
+      "districtCode": "751",
+      "district": "Palnadu",
+      "secretariats": 117,
+      "identified": 36,
+      "processingOnSite": 18
+    },
+    {
+      "districtCode": "752",
+      "district": "Tirupati",
+      "secretariats": 172,
+      "identified": 72,
+      "processingOnSite": 16
+    },
+    {
+      "districtCode": "753",
+      "district": "Annamayya",
+      "secretariats": 90,
+      "identified": 32,
+      "processingOnSite": 8
+    },
+    {
+      "districtCode": "754",
+      "district": "Sri Sathya Sai",
+      "secretariats": 129,
+      "identified": 14,
+      "processingOnSite": 1
+    },
+    {
+      "districtCode": "755",
+      "district": "Nandyal",
+      "secretariats": 106,
+      "identified": 47,
+      "processingOnSite": 19
+    },
+    {
+      "districtCode": "NULL",
+      "district": "Markapuram",
+      "secretariats": 51,
+      "identified": 29,
+      "processingOnSite": 5
+    }
+  ],
+  "byUlbCode": [
+    {
+      "ulbCode": "1003",
+      "secretariats": 35,
+      "identified": 10,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1001",
+      "secretariats": 74,
+      "identified": 78,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1007",
+      "secretariats": 30,
+      "identified": 7,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1006",
+      "secretariats": 18,
+      "identified": 5,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1156",
+      "secretariats": 11,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1158",
+      "secretariats": 10,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1008",
+      "secretariats": 32,
+      "identified": 36,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1118",
+      "secretariats": 11,
+      "identified": 5,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1117",
+      "secretariats": 7,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1180",
+      "secretariats": 11,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1165",
+      "secretariats": 9,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1164",
+      "secretariats": 11,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1122",
+      "secretariats": 18,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1120",
+      "secretariats": 13,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1123",
+      "secretariats": 13,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1014",
+      "secretariats": 44,
+      "identified": 6,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1013",
+      "secretariats": 63,
+      "identified": 46,
+      "processingOnSite": 11
+    },
+    {
+      "ulbCode": "1181",
+      "secretariats": 2,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1064",
+      "secretariats": 67,
+      "identified": 24,
+      "processingOnSite": 10
+    },
+    {
+      "ulbCode": "1061",
+      "secretariats": 14,
+      "identified": 11,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1078",
+      "secretariats": 13,
+      "identified": 3,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1076",
+      "secretariats": 10,
+      "identified": 3,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1023",
+      "secretariats": 45,
+      "identified": 48,
+      "processingOnSite": 4
+    },
+    {
+      "ulbCode": "1028",
+      "secretariats": 21,
+      "identified": 3,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1025",
+      "secretariats": 5,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1021",
+      "secretariats": 140,
+      "identified": 34,
+      "processingOnSite": 12
+    },
+    {
+      "ulbCode": "1192",
+      "secretariats": 17,
+      "identified": 19,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1144",
+      "secretariats": 10,
+      "identified": 6,
+      "processingOnSite": 2
+    },
+    {
+      "ulbCode": "1072",
+      "secretariats": 9,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1070",
+      "secretariats": 42,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1068",
+      "secretariats": 14,
+      "identified": 6,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1016",
+      "secretariats": 57,
+      "identified": 86,
+      "processingOnSite": 2
+    },
+    {
+      "ulbCode": "1163",
+      "secretariats": 4,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1015",
+      "secretariats": 24,
+      "identified": 6,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1018",
+      "secretariats": 6,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1151",
+      "secretariats": 8,
+      "identified": 2,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1031",
+      "secretariats": 85,
+      "identified": 5,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1030",
+      "secretariats": 28,
+      "identified": 18,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1029",
+      "secretariats": 10,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1190",
+      "secretariats": 3,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1185",
+      "secretariats": 6,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1186",
+      "secretariats": 2,
+      "identified": 1,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1035",
+      "secretariats": 16,
+      "identified": 10,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1033",
+      "secretariats": 15,
+      "identified": 4,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1085",
+      "secretariats": 9,
+      "identified": 4,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1083",
+      "secretariats": 3,
+      "identified": 1,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1082",
+      "secretariats": 11,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1086",
+      "secretariats": 399,
+      "identified": 147,
+      "processingOnSite": 100
+    },
+    {
+      "ulbCode": "1135",
+      "secretariats": 8,
+      "identified": 2,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1133",
+      "secretariats": 11,
+      "identified": 2,
+      "processingOnSite": 2
+    },
+    {
+      "ulbCode": "1093",
+      "secretariats": 61,
+      "identified": 20,
+      "processingOnSite": 5
+    },
+    {
+      "ulbCode": "1090",
+      "secretariats": 16,
+      "identified": 5,
+      "processingOnSite": 5
+    },
+    {
+      "ulbCode": "1188",
+      "secretariats": 4,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1081",
+      "secretariats": 19,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1080",
+      "secretariats": 35,
+      "identified": 15,
+      "processingOnSite": 7
+    },
+    {
+      "ulbCode": "1079",
+      "secretariats": 6,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1077",
+      "secretariats": 15,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1074",
+      "secretariats": 41,
+      "identified": 20,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1134",
+      "secretariats": 9,
+      "identified": 4,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1092",
+      "secretariats": 14,
+      "identified": 5,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1091",
+      "secretariats": 15,
+      "identified": 6,
+      "processingOnSite": 6
+    },
+    {
+      "ulbCode": "1063",
+      "secretariats": 15,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1062",
+      "secretariats": 14,
+      "identified": 5,
+      "processingOnSite": 5
+    },
+    {
+      "ulbCode": "1060",
+      "secretariats": 101,
+      "identified": 3,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1140",
+      "secretariats": 9,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1138",
+      "secretariats": 7,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1067",
+      "secretariats": 14,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1066",
+      "secretariats": 13,
+      "identified": 12,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1139",
+      "secretariats": 6,
+      "identified": 1,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1059",
+      "secretariats": 15,
+      "identified": 14,
+      "processingOnSite": 13
+    },
+    {
+      "ulbCode": "1065",
+      "secretariats": 12,
+      "identified": 7,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1075",
+      "secretariats": 63,
+      "identified": 91,
+      "processingOnSite": 24
+    },
+    {
+      "ulbCode": "1142",
+      "secretariats": 4,
+      "identified": 2,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1193",
+      "secretariats": 4,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1071",
+      "secretariats": 16,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1146",
+      "secretariats": 10,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1145",
+      "secretariats": 8,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1073",
+      "secretariats": 214,
+      "identified": 102,
+      "processingOnSite": 6
+    },
+    {
+      "ulbCode": "1187",
+      "secretariats": 7,
+      "identified": 1,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1069",
+      "secretariats": 14,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1032",
+      "secretariats": 25,
+      "identified": 1,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1026",
+      "secretariats": 14,
+      "identified": 3,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1019",
+      "secretariats": 20,
+      "identified": 17,
+      "processingOnSite": 2
+    },
+    {
+      "ulbCode": "1184",
+      "secretariats": 3,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1132",
+      "secretariats": 13,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1131",
+      "secretariats": 11,
+      "identified": 3,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1183",
+      "secretariats": 4,
+      "identified": 2,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1027",
+      "secretariats": 15,
+      "identified": 6,
+      "processingOnSite": 6
+    },
+    {
+      "ulbCode": "1024",
+      "secretariats": 31,
+      "identified": 12,
+      "processingOnSite": 8
+    },
+    {
+      "ulbCode": "1022",
+      "secretariats": 11,
+      "identified": 3,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1020",
+      "secretariats": 29,
+      "identified": 7,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1153",
+      "secretariats": 13,
+      "identified": 6,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1152",
+      "secretariats": 11,
+      "identified": 6,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1127",
+      "secretariats": 14,
+      "identified": 3,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1119",
+      "secretariats": 13,
+      "identified": 8,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1012",
+      "secretariats": 99,
+      "identified": 42,
+      "processingOnSite": 10
+    },
+    {
+      "ulbCode": "1011",
+      "secretariats": 22,
+      "identified": 7,
+      "processingOnSite": 5
+    },
+    {
+      "ulbCode": "1121",
+      "secretariats": 25,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1189",
+      "secretariats": 5,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1010",
+      "secretariats": 16,
+      "identified": 20,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1009",
+      "secretariats": 44,
+      "identified": 11,
+      "processingOnSite": 8
+    },
+    {
+      "ulbCode": "1155",
+      "secretariats": 7,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1154",
+      "secretariats": 6,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1005",
+      "secretariats": 27,
+      "identified": 1,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1004",
+      "secretariats": 43,
+      "identified": 7,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1179",
+      "secretariats": 7,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1002",
+      "secretariats": 39,
+      "identified": 4,
+      "processingOnSite": 1
+    },
+    {
+      "ulbCode": "1017",
+      "secretariats": 48,
+      "identified": 33,
+      "processingOnSite": 9
+    },
+    {
+      "ulbCode": "1162",
+      "secretariats": 10,
+      "identified": 3,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1161",
+      "secretariats": 14,
+      "identified": 4,
+      "processingOnSite": 4
+    },
+    {
+      "ulbCode": "1160",
+      "secretariats": 13,
+      "identified": 4,
+      "processingOnSite": 3
+    },
+    {
+      "ulbCode": "1125",
+      "secretariats": 16,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1182",
+      "secretariats": 5,
+      "identified": 3,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1191",
+      "secretariats": 8,
+      "identified": 0,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1150",
+      "secretariats": 12,
+      "identified": 5,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1148",
+      "secretariats": 10,
+      "identified": 4,
+      "processingOnSite": 0
+    },
+    {
+      "ulbCode": "1034",
+      "secretariats": 21,
+      "identified": 20,
+      "processingOnSite": 5
+    }
+  ],
+  "generatedFrom": {
+    "identification_of_bulk_waste_generators_api": {
+      "generatedAt": "2026-09-08T21:13:37.157Z",
+      "rows": 64528,
+      "pages": 646,
+      "reportedTotalRecordCount": 64528,
+      "sha256": "761a372f9ad4d6acba20fea050e35d0cb72bff64931ab79dd3533e37a24b7166"
+    },
+    "onsite_processing_of_wet_waste_bwg_api": {
+      "generatedAt": "2026-09-08T21:40:02.698Z",
+      "rows": 64528,
+      "pages": 646,
+      "reportedTotalRecordCount": 64528,
+      "sha256": "7b0d1777440ca38677fdd3bbda5a3d5f45ee9d3dff8880af2a60635835e50a28"
+    }
+  },
+  "boundary": "Totals cover only the secretariats retrieval returned for this day; the rest are missing, not zero."
+}

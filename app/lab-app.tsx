@@ -20,6 +20,7 @@ import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import { EnvironmentLedger } from './environment-ledger';
 import { UlbAtlas } from './ulb-atlas';
+import { SasaGoalsScreen } from './sasa-goals';
 import { useAutoHideHeader, useScreenMotion, useTabIndicator } from './motion';
 import { ScreenHero, MiniScatter, HeatStrip, DeliveryFunnels, GateRing } from './screen-hero';
 import { analyticsHero, atlasHero, gapRadarHero, readinessHero } from '@/lib/screen-heroes';
@@ -96,13 +97,14 @@ import {
 } from '@/lib/crosswalk';
 import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
 
-type Page = 'overview' | 'operational-analytics' | 'environment' | 'gap-radar' | 'atlas' | 'reconciliation' | 'diagnostics' | 'data-readiness';
+type Page = 'overview' | 'goals' | 'operational-analytics' | 'environment' | 'gap-radar' | 'atlas' | 'reconciliation' | 'diagnostics' | 'data-readiness';
 type ColorTheme = 'light' | 'dark';
 type AnalyticsTab = 'collection' | 'sanitation' | 'processing' | 'delivery' | 'rural' | 'continuity' | 'outcomes';
 type AnalyticsLens = 'snapshot' | 'movement';
 
 const navItems: { page: Page; label: string; href: string; icon: IconName }[] = [
   { page: 'overview', label: 'Overview', href: '/', icon: 'home' },
+  { page: 'goals', label: 'SASA Goals', href: '/goals', icon: 'flag' },
   { page: 'operational-analytics', label: 'Operational Analytics', href: '/operational-analytics', icon: 'chart' },
   { page: 'environment', label: 'Environment & Carbon', href: '/environment', icon: 'leaf' },
   { page: 'gap-radar', label: 'Gap Radar', href: '/gap-radar', icon: 'target' },
@@ -128,7 +130,7 @@ function GlossaryText({ text }: { text: string }) {
   })}</>;
 }
 
-type IconName = 'home' | 'chart' | 'leaf' | 'target' | 'atlas' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
+type IconName = 'home' | 'flag' | 'chart' | 'leaf' | 'target' | 'atlas' | 'building' | 'database' | 'shield' | 'search' | 'calendar' | 'link' | 'info' | 'check' | 'alert' | 'clock' | 'arrow' | 'moon' | 'sun' | 'play' | 'download';
 
 function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
@@ -137,6 +139,7 @@ function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
       {name === 'home' && <><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></>}
       {name === 'chart' && <><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18"/></>}
       {name === 'leaf' && <><path d="M12 21c0-6.5 3-11 9-12 .6 5.9-2.4 11-9 12Z"/><path d="M12 21C9 21 3 18.5 3 12c0-4 2.5-7 6-8 2 1.6 3 4 3 6.5"/><path d="M12 21v-6"/></>}
+      {name === 'flag' && <><path d="M5 21V4"/><path d="M5 4h11.5l-2 4 2 4H5"/></>}
       {name === 'atlas' && <><circle cx="6" cy="6" r="1.6"/><circle cx="12" cy="6" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="2.6"/><circle cx="18" cy="12" r="1.6"/><circle cx="6" cy="18" r="1.6"/><circle cx="12" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></>}
       {name === 'target' && <><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 12 21 3M16 3h5v5"/></>}
       {name === 'building' && <><path d="M4 21h16M6 21V8l6-4 6 4v13"/><path d="M9 11h1m4 0h1m-6 4h1m4 0h1m-4 6v-3h2v3"/></>}
@@ -331,6 +334,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
         <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} onBrief={() => setBriefOpen(true)} />
         <main id="main-content" data-mode={mode} className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
+          {page === 'goals' && <Goals mode={mode} colorTheme={colorTheme} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
           {page === 'environment' && <Environment mode={mode} />}
           {page === 'atlas' && <Atlas mode={mode} />}
@@ -354,7 +358,7 @@ function ProductFooter({ mode }: { mode: DataMode }) {
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {
-  const mobileLabels:Record<Page,string>={'overview':'Overview','operational-analytics':'Analytics','environment':'Carbon','gap-radar':'Radar','atlas':'Atlas','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
+  const mobileLabels:Record<Page,string>={'overview':'Overview','goals':'Goals','operational-analytics':'Analytics','environment':'Carbon','gap-radar':'Radar','atlas':'Atlas','reconciliation':'Sources','diagnostics':'ULBs','data-readiness':'Data'};
   return (
     <aside className="sidebar" aria-label="Primary navigation">
       <a className="brand" href={withMode('/', mode, colorTheme)} aria-label="SASA Intelligence Lab overview">
@@ -2239,6 +2243,15 @@ function Atlas({ mode }: { mode: DataMode }) {
     {mode === 'SAMPLE' ? <AtlasHero/> : <PageIntro visual="atlas" eyebrow="Cross-programme ULB atlas" title="ULB Atlas" description="Every urban local body, every programme, one identity. Each source joins on the urban body code it supplies, so no ULB is matched by its name."><FilterBar mode={mode}/></PageIntro>}
     <UlbAtlas mode={mode}/>
   </>;
+}
+
+/**
+ * The state's stated Swachha Andhra targets against the retained evidence. Retained evidence
+ * only: the demo dataset has no targets of its own, so it would only blur real against synthetic.
+ */
+function Goals({ mode, colorTheme }: { mode: DataMode; colorTheme: ColorTheme }) {
+  if (mode !== 'SAMPLE') return <PageIntro visual="overview" eyebrow="Swachha Andhra Swarna Andhra" title="SASA Goals" description="The state's stated targets are read only against retained evidence. Switch the data mode to retained evidence to see each target beside its latest reading."><FilterBar mode={mode}/></PageIntro>;
+  return <SasaGoalsScreen href={(path) => withMode(path, mode, colorTheme)}/>;
 }
 
 /* Screen heroes: each screen opens on its figures and a graphic drawn from them. */
