@@ -124,6 +124,14 @@ async function rewriteBase(dir, base) {
       continue;
     }
     for (const token of tokens) {
+      if (routeTokens.includes(token)) {
+        // A route is prefixed only where it stands as a whole path: not inside a word or a
+        // relative import ("./environment-ledger-x.js" once became "./<base>/environment…"
+        // and every page failed to load), and not when it already sits under the base.
+        const pattern = new RegExp(`(?<![\\w.\\-])${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?=[/?#"'\`\\\\\\s)]|$)`, 'g');
+        text = text.replace(pattern, base + token);
+        continue;
+      }
       // Only prefix a token that is not already under the base.
       text = text.split(token).join(base + token);
       // Undo any double-prefix introduced when base + token itself contained the token.
@@ -139,6 +147,13 @@ async function rewriteBase(dir, base) {
     if (text !== before) { await writeFile(path, text); changed += 1; }
   }
   console.log(`   rewrote ${changed} files`);
+  // A chunk must never import from inside the base: that path does not exist on Pages.
+  const broken = [];
+  for (const rel of files.filter((f) => f.endsWith('.js'))) {
+    const text = await readFile(resolve(dir, rel), 'utf8');
+    if (text.includes(`./${base.replace(/^\//, '')}/`) || text.includes(`chunks${base}/`)) broken.push(rel);
+  }
+  if (broken.length) throw new Error(`Subpath rewrite broke chunk imports in: ${broken.join(', ')}`);
 }
 
 /**
