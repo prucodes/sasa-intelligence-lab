@@ -74,3 +74,17 @@ reads as an unstable upstream, not removed tables. The portal's dataset pages re
 - Sample the air quality and green cover feeds when they respond. They are the first
   measured environmental readings in the catalogue and could give the Environment & Carbon
   screen measured context.
+
+## Afternoon recheck, 18 November 2026 (19:26–19:27 UTC)
+
+Read through the playground's own controls after the account holder loaded the session token.
+
+| Dataset | Query | Result |
+|---|---|---|
+| `sasa_cdma_ulbs_single_use_plastic_ban_api` | no filter (echoed `{}`) | 26 rows, all August 2026 |
+| `sasa_cdma_ulbs_single_use_plastic_ban_api` | month 9 and month 10, 2026 | no rows |
+| `waste_egregation_api` | no filter | 64,368 rows reported (same as the 8 September retention); first page 12 Aug 2026 |
+| `msw_door_to_door_collection_api` | no filter | 64,368 rows reported (same as retained); first page 12 Aug 2026 |
+
+No newer month exists for the measures behind the 2 October segregation and plastic-free targets, so the
+SASA Goals statuses stand, and the screen now says when the source was last checked.

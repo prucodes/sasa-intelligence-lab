@@ -169,3 +169,15 @@ describe('goal gaps, sources and the SWM view', () => {
     expect(screen.getByRole('heading', {name: /SWM Rules 2026/})).toBeInTheDocument();
   });
 });
+
+describe('presenter briefing', () => {
+  it('carries the SASA targets beat with the same statuses as the Goals screen', () => {
+    render(<LabApp page="overview" initialMode="SAMPLE" />);
+    fireEvent.click(screen.getByRole('button', {name: /open presenter briefing/i}));
+    const dialog = screen.getByRole('dialog', {name: 'Presenter briefing'});
+    fireEvent.click(within(dialog).getByRole('tab', {name: /SASA targets/}));
+    expect(within(dialog).getByRole('heading', {level: 1})).toHaveTextContent(`${model.goals.length} stated targets`);
+    for (const insight of model.insights) expect(dialog).toHaveTextContent(insight.text);
+    expect(dialog).toHaveTextContent('Data Lake checked');
+  });
+});

@@ -18,7 +18,8 @@ import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import { UlbAtlas } from './ulb-atlas';
-import { SasaGoalsScreen } from './sasa-goals';
+import { GoalTimeline, SasaGoalsScreen } from './sasa-goals';
+import { LAST_SOURCE_CHECK, getSasaGoals, goalSummary, statusLabel as goalStatusLabel } from '@/lib/sasa-goals';
 import { useAutoHideHeader, useScreenMotion, useTabIndicator } from './motion';
 import { ScreenHero, MiniScatter, HeatStrip, GateRing, PipelineBars } from './screen-hero';
 import { analyticsHero, atlasHero, gapRadarHero, readinessHero } from '@/lib/screen-heroes';
@@ -583,7 +584,7 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
   const rural = getRuralMovement();
   const ruralWorkingDays = getRuralMovement('working-days');
   const [beat, setBeat] = useState(0);
-  const beatCount = 6;
+  const beatCount = 7;
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -595,7 +596,7 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
     return () => window.removeEventListener('keydown', onKey);
   }, [onExit]);
 
-  const beatTitles = ['Executive read', 'Rural trajectory', 'District signal map', 'Operating flow', 'Concentration', 'Decision boundary'];
+  const beatTitles = ['Executive read', 'SASA targets', 'Rural trajectory', 'District signal map', 'Operating flow', 'Concentration', 'Decision boundary'];
 
   return <div className={`presenter theme-${colorTheme}`} role="dialog" aria-modal="true" aria-label="Presenter briefing">
     <div className="presenter-top">
@@ -612,15 +613,17 @@ function PresenterMode({ colorTheme, onExit }: { colorTheme: ColorTheme; onExit:
 
       {beat === 0 && <PresenterExecutiveAperture findings={findings} collection={collection} ihhl={ihhl} legacy={legacy}/>}
 
-      {beat === 1 && <PresenterRuralTrajectory rural={rural} workingDays={ruralWorkingDays}/>}
+      {beat === 1 && <PresenterTargets/>}
 
-      {beat === 2 && <PresenterSignalMap maps={signalMaps}/>}
+      {beat === 2 && <PresenterRuralTrajectory rural={rural} workingDays={ruralWorkingDays}/>}
 
-      {beat === 3 && <PresenterStageFlow groups={stageGroups}/>}
+      {beat === 3 && <PresenterSignalMap maps={signalMaps}/>}
 
-      {beat === 4 && <PresenterConcentration findings={findings}/>}
+      {beat === 4 && <PresenterStageFlow groups={stageGroups}/>}
 
-      {beat === 5 && <PresenterDecisionRunway disputed={disputed}/>}
+      {beat === 5 && <PresenterConcentration findings={findings}/>}
+
+      {beat === 6 && <PresenterDecisionRunway disputed={disputed}/>}
     </div>
 
     <div className="presenter-nav">
@@ -776,6 +779,31 @@ function PresenterRuralTrajectory({ rural, workingDays }: {
         <p className="presenter-boundary">Day-of-month pairing holds the weekday mix roughly constant rather than removing it. No month is completely covered.</p>
       </div>
     </div>
+  </div>;
+}
+
+/**
+ * The state's stated targets in the briefing: each target's date beside its latest reading, the
+ * statuses counted, and the computed insights. The same model as the SASA Goals screen, so the
+ * room and the screen never disagree.
+ */
+function PresenterTargets() {
+  const model = useMemo(() => getSasaGoals(), []);
+  const summary = goalSummary(model.goals);
+  const tally: Array<[keyof typeof goalStatusLabel, number]> = [
+    ['short-after-deadline', summary.shortAfterDeadline], ['before-deadline', summary.beforeDeadline], ['met', summary.met],
+    ['different-measure', summary.differentMeasure], ['tracked', summary.tracked], ['not-measured', summary.notMeasured],
+  ];
+  return <div className="presenter-targets sasa-goals">
+    <div className="presenter-title-row"><div><h1>{summary.total} stated targets, read against what is retained.</h1><p className="presenter-lede">Each status comes from dates and values, never chosen. A reading taken before a target fell due cannot show it was missed, and a reading of a different measure is labelled as one.</p></div>
+      <div className="boundary-mark"><span>Data Lake checked</span><b>{LAST_SOURCE_CHECK.date}</b><small>no newer month for these measures</small></div></div>
+    <section className="pt-grid">
+      <div className="pt-timeline"><GoalTimeline goals={model.goals}/></div>
+      <div className="pt-side">
+        <ul className="pt-tally">{tally.filter(([, count]) => count > 0).map(([state, count]) => <li key={state}><b>{count}</b><span className={`gr-chip is-${state}`}><i aria-hidden="true"/>{goalStatusLabel[state]}</span></li>)}</ul>
+        <ol className="pt-insights">{model.insights.map((insight) => <li key={insight.id}>{insight.text}</li>)}</ol>
+      </div>
+    </section>
   </div>;
 }
 

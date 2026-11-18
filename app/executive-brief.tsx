@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DataMode } from '@/lib/domain';
 import { briefNumber, executiveBriefText, getExecutiveBrief, goalTally } from '@/lib/executive-brief';
+import { LAST_SOURCE_CHECK } from '@/lib/sasa-goals';
 import './executive-brief.css';
 
 export function ExecutiveBrief({mode,onClose}:{mode:DataMode;onClose:()=>void}) {
@@ -48,7 +49,7 @@ export function ExecutiveBrief({mode,onClose}:{mode:DataMode;onClose:()=>void}) 
           <div className="brief-reading-body"><div><strong>{issue.rows.length?briefNumber(issue.total):'Not returned'}</strong><h3>{issue.quantity}</h3><p>{issue.rows.length ? briefNumber(issue.completed) : "Not returned"} {issue.completedLabel} / {issue.rows.length ? briefNumber(issue.basis) : "Not returned"} {issue.basisLabel}</p></div><div className="brief-names"><b>Largest reported quantities</b>{issue.rows.filter(row=>row.value>0).slice(0,3).map(row=><div key={row.key}><span>{row.ulb}<small>{row.district}</small></span><b>{briefNumber(row.value)}<small>{issue.unit}</small></b></div>)}</div></div>
           <p className="brief-coverage">{issue.rows.length} eligible / {brief.footprint!.observed} observed-name reference candidates · {issue.excluded} {issue.excluded===1?'row or candidate group':'rows or candidate groups'} excluded by checks. Both quantities use the same eligible cohort.</p><p className="brief-boundary">{issue.boundary}</p>
         </section>)}</div>
-        {brief.goals&&<section className="brief-goals"><h3>Against the state&rsquo;s targets</h3><p className="brief-goals-tally">{goalTally(brief.goals.summary)}</p><ul>{brief.goals.insights.map((text,index)=><li key={text}>{text}<small className="brief-goals-source">Sources: {brief.goals!.citations[index]}</small></li>)}</ul><small>Each target, where it was stated and what its reading can show: the SASA Goals screen.</small></section>}
+        {brief.goals&&<section className="brief-goals"><h3>Against the state&rsquo;s targets</h3><p className="brief-goals-tally">{goalTally(brief.goals.summary)}</p><ul>{brief.goals.insights.map((text,index)=><li key={text}>{text}<small className="brief-goals-source">Sources: {brief.goals!.citations[index]}</small></li>)}</ul><p className="brief-goals-tally">Data Lake checked {LAST_SOURCE_CHECK.date}: {LAST_SOURCE_CHECK.found}.</p><small>Each target, where it was stated and what its reading can show: the SASA Goals screen.</small></section>}
         {brief.governed&&<>
           <section className="brief-outcomes"><h3>Historical outcomes stay separate.</h3><p>{brief.sources.filter(source=>source.key.includes('swacch_survekshan')).map(source=>`${source.key.includes('odf')?'ODF':source.key.includes('gfc')?'GFC':'National rank'}: ${source.latestRows} source rows (${source.period})`).join(' · ')}</p><small>These are source-row counts, not verified certifications or current performance outcomes.</small></section>
           <section className="brief-actions"><h3>What to do next</h3><ol>{brief.nextActions.map(action=><li key={action}>{action}</li>)}</ol><p>{brief.boundary}</p></section>

@@ -1,7 +1,7 @@
 'use client';
 
 import {useMemo, useState, type CSSProperties} from 'react';
-import {getSasaGoals, goalShort, goalSummary, statusLabel, type Citation, type DistrictColumn, type DistrictGoalRow, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
+import {LAST_SOURCE_CHECK, getSasaGoals, goalShort, goalSummary, statusLabel, type Citation, type DistrictColumn, type DistrictGoalRow, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
 import type {ScreenHeroData} from '@/lib/screen-heroes';
 import {ScreenHero} from './screen-hero';
 import './sasa-goals.css';
@@ -43,6 +43,7 @@ export function SasaGoalsScreen({href}: {href: (path: string) => string}) {
           <span className="eyebrow">Brief</span>
           <h2 id="goal-brief-title">What the retained data says</h2>
           <small>Each sentence is computed from the readings below; latest reading {latest ? formatIso(latest) : 'not available'}</small>
+          <p className="gb-fresh"><i aria-hidden="true" />Data Lake checked {LAST_SOURCE_CHECK.date}: {LAST_SOURCE_CHECK.found}. The readings stop where the source stops.</p>
         </div>
         <ul>
           {model.insights.map((insight) => (
@@ -122,7 +123,7 @@ const at = (iso: string) => {
  * retained reading, and the line between them how far apart the two are. The shaded band is the
  * span in which every reading was taken. Targets for 2030, or with no date, are named below it.
  */
-function GoalTimeline({goals}: {goals: SasaGoal[]}) {
+export function GoalTimeline({goals}: {goals: SasaGoal[]}) {
   const dated = goals.filter((goal) => goal.deadline && goal.deadline < '2027-01-01').sort((a, b) => a.deadline!.localeCompare(b.deadline!));
   const later = goals.filter((goal) => !goal.deadline || goal.deadline >= '2027-01-01');
   const readings = dated.map((goal) => goal.reading?.asOf).filter((value): value is string => Boolean(value)).sort();

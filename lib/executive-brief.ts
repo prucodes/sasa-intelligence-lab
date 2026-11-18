@@ -1,7 +1,7 @@
 import type { DataMode } from './domain';
 import { getOverviewIssues } from './overview';
 import { authorizedCatalogue } from './catalogue';
-import { getSasaGoals, goalSummary } from './sasa-goals';
+import { LAST_SOURCE_CHECK, getSasaGoals, goalSummary } from './sasa-goals';
 import { governedSnapshotByKey, governedSnapshotStats, snapshotPeriod, currentSnapshotRecords, IHHL_SOURCE_KEY } from './snapshots';
 
 const sourceKeys = {
@@ -61,7 +61,7 @@ export function executiveBriefText(brief:ReturnType<typeof getExecutiveBrief>,pr
       `Largest reported quantities: ${issue.rows.filter(row=>row.value>0).slice(0,3).map(row=>`${row.ulb} (${row.district}): ${briefNumber(row.value)} ${issue.unit}`).join('; ') || 'None returned in the eligible cohort.'}`,
       issue.boundary,
     ]),
-    ...(brief.goals?['','AGAINST THE STATE\'S TARGETS · SWACHHA ANDHRA SWARNA ANDHRA',goalTally(brief.goals.summary),...brief.goals.insights.flatMap((text,index)=>[text,`  Sources: ${brief.goals!.citations[index]}`]),'Each target, its source and its reading: SASA Goals screen.']:[]),
+    ...(brief.goals?['','AGAINST THE STATE\'S TARGETS · SWACHHA ANDHRA SWARNA ANDHRA',goalTally(brief.goals.summary),...brief.goals.insights.flatMap((text,index)=>[text,`  Sources: ${brief.goals!.citations[index]}`]),`Data Lake checked ${LAST_SOURCE_CHECK.date}: ${LAST_SOURCE_CHECK.found}.`,'Each target, its source and its reading: SASA Goals screen.']:[]),
     ...(brief.governed?['','HISTORICAL OUTCOMES · NOT ALIGNED WITH OPERATIONS',...brief.sources.filter(source=>outcomeKeys.includes(source.key)).map(source=>`${source.name}: ${source.latestRows} source rows · ${source.period}. Row counts are not certified entity counts.`),'','NEXT REVIEW ACTIONS',...brief.nextActions,'','SOURCE PROVENANCE · RESPONSE TIME IS NOT THE REPORTING PERIOD',...brief.sources.map(source=>`${source.name} | ${source.key} | latest period ${source.period} | ${source.rows} retained rows across all periods | response ${source.responseId} | response generated ${source.generatedAt}`)]:[]),
     '',
   ].join('\n');

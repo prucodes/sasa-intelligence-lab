@@ -57,6 +57,8 @@
 .gb-head { display: grid; gap: 3px; margin-bottom: 8px; }
 .gb-head h2 { margin: 0; color: var(--navy); font-size: 18px; font-weight: 650; letter-spacing: -.02em; }
 .gb-head small { color: var(--muted); font-size: 11.5px; }
+.gb-fresh { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 0; color: var(--ink); font-size: 12.5px; line-height: 1.5; }
+.gb-fresh i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--g-short); transform: translateY(-1px); }
 .goal-brief ul { display: grid; margin: 0; padding: 0; list-style: none; }
 .goal-brief > ul > li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; align-items: baseline; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); }
 .goal-brief > ul > li > i { width: 8px; height: 8px; border-radius: 50%; background: var(--tone, var(--muted)); transform: translateY(-1px); }
@@ -238,3 +240,21 @@
   .swm-first ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .goal-brief > ul > li > .gb-sources { grid-column: 2; }
 }
+
+/* The targets beat in the presenter briefing. */
+.presenter-targets .pt-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .9fr); gap: 28px; align-items: start; }
+.presenter-targets .pt-timeline { padding: 18px 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.presenter-targets .gt { --gt-label: 118px; font-size: 13px; }
+.presenter-targets .gt-row { height: 30px; }
+.presenter-targets .pt-side { display: grid; gap: 18px; }
+.presenter-targets .pt-tally { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.presenter-targets .pt-tally li { display: grid; grid-template-columns: 34px auto; align-items: center; gap: 10px; }
+.presenter-targets .pt-tally b { color: var(--navy); font-size: 24px; font-weight: 650; text-align: right; font-variant-numeric: tabular-nums; }
+.presenter-targets .pt-tally .gr-chip { justify-self: start; }
+.presenter-targets .pt-insights { display: grid; gap: 10px; margin: 0; padding: 0 0 0 18px; color: var(--ink); font-size: 14px; line-height: 1.55; }
+@media (prefers-reduced-motion: no-preference) {
+  .presenter-targets .gt-row { animation: gtIn .55s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(150ms + var(--i, 0) * 80ms); }
+  .presenter-targets .gt-gap { animation: gtGrow .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(450ms + var(--i, 0) * 80ms); }
+  .presenter-targets .gt-read { animation: gtPop .45s cubic-bezier(.3, 1.4, .5, 1) backwards; animation-delay: calc(800ms + var(--i, 0) * 80ms); }
+}
+@media (max-width: 900px) { .presenter-targets .pt-grid { grid-template-columns: minmax(0, 1fr); } }

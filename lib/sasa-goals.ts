@@ -506,6 +506,16 @@ export const statusLabel: Record<GoalStatus, string> = {
   'not-measured': 'No retained measure',
 };
 
+/**
+ * When the Data Lake was last checked for newer months of these measures, and what the check
+ * found. Kept apart from the reading dates and the retention dates, which say other things.
+ */
+export const LAST_SOURCE_CHECK = {
+  date: '18 Nov 2026',
+  found: 'no newer month for collection, segregation, the plastic ban, legacy waste, toilets or sewage plants',
+  record: 'audits/2026-11-18-catalogue-audit.md',
+};
+
 export function goalSummary(goals: SasaGoal[]) {
   const count = (state: GoalStatus) => goals.filter((goal) => goal.status === state).length;
   return {
