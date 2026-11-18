@@ -91,12 +91,12 @@ describe('SASA goals screen', () => {
     expect(screen.getByRole('heading', {level: 1, name: 'SASA Goals'})).toBeInTheDocument();
     const list = screen.getByRole('region', {name: 'Every target, one row each'});
     expect(list.querySelectorAll('details')).toHaveLength(11);
-    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByRole('table', {name: /District standing/})).toBeInTheDocument();
   });
 
   it('sorts the district table by a column and marks the sort', () => {
     render(<LabApp page="goals" initialMode="SAMPLE" />);
-    const table = screen.getByRole('table');
+    const table = screen.getByRole('table', {name: /District standing/});
     const header = within(table).getByRole('button', {name: /Collection/});
     fireEvent.click(header);
     expect(header.closest('th')).toHaveAttribute('aria-sort', 'descending');
@@ -107,7 +107,7 @@ describe('SASA goals screen', () => {
 
   it('keeps synthetic data away from the real targets', () => {
     render(<LabApp page="goals" initialMode="DEMO" />);
-    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.queryByRole('table', {name: /District standing/})).not.toBeInTheDocument();
     expect(screen.getByText(/retained evidence/i, {selector: 'p'})).toBeInTheDocument();
   });
 });
@@ -121,5 +121,51 @@ describe('executive brief', () => {
     for (const insight of model.insights) expect(governed).toContain(insight.text);
     const demo = executiveBriefText(getExecutiveBrief('DEMO'), '2026-11-18T00:00:00Z');
     expect(demo).not.toContain('stated targets');
+  });
+});
+
+describe('goal gaps, sources and the SWM view', () => {
+  it('states a gap in the target’s own terms, and none for a different measure', () => {
+    expect(goal('collection').reading!.gap).toMatch(/households not collected from/);
+    expect(goal('plastic').reading!.gap).toMatch(/^94 of 123 ULBs not yet enforcing/);
+    for (const id of ['odf-plus', 'green-cover', 'compost']) expect(goal(id).reading!.gap ?? null).toBeNull();
+  });
+
+  it('traces every figure in the brief to a dataset, a period and a catalogue link', () => {
+    for (const insight of model.insights) {
+      expect(insight.citations.length).toBeGreaterThan(0);
+      for (const citation of insight.citations) {
+        expect(insight.text).toContain(citation.figure);
+        expect(citation.href).toBe(`https://datalakes.ailivinglabs.ap.gov.in/datasets/${citation.dataset}`);
+        expect(citation.period).toBeTruthy();
+      }
+    }
+  });
+
+  it('shows the rows behind a district figure, and they reproduce it', () => {
+    const collection = model.insights.find((insight) => insight.id === 'collection')!;
+    for (const citation of collection.citations.filter((entry) => entry.rows)) {
+      const placed = citation.rows!.values.filter((row) => row[3] !== 'held out');
+      const parse = (text: string) => Number(text.replace(/,/g, ''));
+      const pooled = placed.reduce((sum, row) => sum + parse(row[2]), 0) / placed.reduce((sum, row) => sum + parse(row[1]), 0) * 100;
+      expect(citation.figure).toBe(`${pooled.toLocaleString('en-IN', {maximumFractionDigits: 1})}%`);
+    }
+  });
+
+  it('joins bulk generators to districts by ULB code, so the district totals equal the state total', () => {
+    const swm = model.swm;
+    expect(swm.districts.reduce((sum, district) => sum + district.identified, 0)).toBe(bwg.identified);
+    expect(swm.districts.reduce((sum, district) => sum + district.onSite, 0)).toBe(bwg.processingOnSite);
+    expect(swm.districts.reduce((sum, district) => sum + district.secretariats, 0)).toBe(bwg.usableSecretariats);
+    // The source's own district code is "NULL" for Markapuram; the ULB-code join still places it.
+    expect(swm.districts.find((district) => district.district === 'Markapuram')!.identified).toBeGreaterThan(0);
+    for (const ulb of swm.firstLook) expect(ulb.onSite).toBe(0);
+  });
+
+  it('publishes a method for every district column and no combined score', () => {
+    for (const column of model.districts.columns) expect(column.method.length).toBeGreaterThan(40);
+    render(<LabApp page="goals" initialMode="SAMPLE" />);
+    expect(screen.getByText(/There is no combined score/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: /SWM Rules 2026/})).toBeInTheDocument();
   });
 });

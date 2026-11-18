@@ -1,7 +1,7 @@
 'use client';
 
 import {useMemo, useState, type CSSProperties} from 'react';
-import {getSasaGoals, goalShort, goalSummary, statusLabel, type DistrictColumn, type DistrictGoalRow, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
+import {getSasaGoals, goalShort, goalSummary, statusLabel, type Citation, type DistrictColumn, type DistrictGoalRow, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
 import type {ScreenHeroData} from '@/lib/screen-heroes';
 import {ScreenHero} from './screen-hero';
 import './sasa-goals.css';
@@ -50,6 +50,7 @@ export function SasaGoalsScreen({href}: {href: (path: string) => string}) {
               <i aria-hidden="true" />
               <p>{insight.text}</p>
               <a href={`#goal-${insight.goalId}`} onClick={() => openGoal(insight.goalId)}>See the target</a>
+              <Sources citations={insight.citations} />
             </li>
           ))}
         </ul>
@@ -64,6 +65,8 @@ export function SasaGoalsScreen({href}: {href: (path: string) => string}) {
           {sorted.map((goal) => <GoalRow key={goal.id} goal={goal} href={href} />)}
         </div>
       </section>
+
+      <SwmView model={model} />
 
       <DistrictStanding model={model} />
 
@@ -165,11 +168,12 @@ function GoalRow({goal, href}: {goal: SasaGoal; href: (path: string) => string})
         <span className="gr-what">
           <span className="gr-theme">{goal.theme}</span>
           <span className="gr-target">{goal.target}</span>
-          <span className="gr-due">Due {goal.deadlineLabel}</span>
+          <span className="gr-due">{goal.deadline ? `Due ${goal.deadlineLabel}` : goal.deadlineLabel}</span>
         </span>
         <span className="gr-reading">
           {goal.reading ? <><b>{goal.reading.display}</b><small>{goal.reading.asOfLabel}</small></> : <em>Nothing retained measures this</em>}
           {showsMeter(goal) && <i className="gr-meter"><b style={{width: `${Math.max(1, Math.min(100, goal.reading!.share!))}%`}} /></i>}
+          {goal.reading && (goal.status === 'different-measure' ? <small className="gr-gap">No gap computed: a different measure</small> : goal.reading.gap && <small className="gr-gap">Gap: {goal.reading.gap}</small>)}
         </span>
         <span className={`gr-chip is-${goal.status}`}><i aria-hidden="true" />{statusLabel[goal.status]}</span>
       </summary>
@@ -181,7 +185,7 @@ function GoalRow({goal, href}: {goal: SasaGoal; href: (path: string) => string})
           <div><dt>Where the target was stated</dt><dd><a href={goal.source.url} target="_blank" rel="noreferrer">{goal.source.publisher}, {goal.source.date}</a><small>{goal.source.title}</small></dd></div>
           {goal.reading && <div><dt>Retained dataset</dt><dd><code>{goal.reading.dataset}</code></dd></div>}
         </dl>
-        {goal.evidence && <a className="gr-evidence" href={href(goal.evidence.href)}>Open {goal.evidence.label} →</a>}
+        {goal.evidence && <a className="gr-evidence" href={goal.evidence.href.startsWith('#') ? goal.evidence.href : href(goal.evidence.href)}>Open {goal.evidence.label} {goal.evidence.href.startsWith('#') ? '↓' : '→'}</a>}
       </div>
     </details>
   );
@@ -213,6 +217,7 @@ function DistrictStanding({model}: {model: ReturnType<typeof getSasaGoals>}) {
       </div>
       <div className="gd-scroll" tabIndex={0} aria-label="District standing table, scrolls sideways">
         <table>
+          <caption className="sr-only">District standing on each measurable target</caption>
           <thead>
             <tr>
               <th scope="col" aria-sort={ariaSort('district')}><button type="button" onClick={() => choose('district')}><span>District{sort.by === 'district' && <span aria-hidden="true"> {sort.dir === 1 ? '↑' : '↓'}</span>}</span><small>{rows.length} in the register</small></button></th>
@@ -241,6 +246,18 @@ function DistrictStanding({model}: {model: ReturnType<typeof getSasaGoals>}) {
         {unmatched.length > 0 && <li><b>Not joined</b>: {list(unmatched.map((entry) => `${entry.source} (${entry.column.toLowerCase()})`))} resembles no register district by spelling, so its cell is blank rather than guessed.</li>}
         <li><b>Bulk generators</b> are a partial reading: only the secretariats retrieval returned for the day are counted, and missing ones are not zero.</li>
       </ul>
+      <details className="gd-method">
+        <summary>How each column is computed</summary>
+        <dl>
+          {columns.map((column) => (
+            <div key={column.id}>
+              <dt>{column.label}<small>{column.period} · {column.better === 'lower' ? 'lower is further along' : 'higher is further along'}</small></dt>
+              <dd>{column.method}<code>{column.source}</code></dd>
+            </div>
+          ))}
+        </dl>
+        <p>There is no combined score. The department has not approved a weighting, so the columns are never added, averaged or ranked together.</p>
+      </details>
     </section>
   );
 }
@@ -252,5 +269,88 @@ function Cell({row, column, lowerIsBetter}: {row: DistrictGoalRow; column: Distr
     <td className={`gd-v ${lowerIsBetter ? 'is-lower' : ''} s-${step(cell.value)}`} title={cell.detail}>
       {cell.value.toLocaleString('en-IN', {minimumFractionDigits: column === 'plasticBan' ? 0 : 1, maximumFractionDigits: column === 'plasticBan' ? 0 : 1})}%
     </td>
+  );
+}
+
+/* ------------------------------------------------------------------------------------------ */
+
+/** The rows behind each figure in a brief sentence, folded away until asked for. */
+function Sources({citations}: {citations: Citation[]}) {
+  if (!citations.length) return null;
+  return (
+    <details className="gb-sources">
+      <summary>Source records</summary>
+      <ol>
+        {citations.map((citation, index) => (
+          <li key={`${citation.figure}-${index}`}>
+            <p><b>{citation.figure}</b> {citation.basis}</p>
+            <small>
+              {citation.name !== citation.dataset ? `${citation.name} · ` : ''}{citation.period}{citation.retrieved ? ` · retrieved ${citation.retrieved}` : ''} · <code>{citation.dataset}</code> · <a href={citation.href} target="_blank" rel="noreferrer">Data Lake catalogue ↗</a>
+            </small>
+            {citation.rows && citation.rows.values.length > 0 && (
+              <div className="gb-rows">
+                <table>
+                  <thead><tr>{citation.rows.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
+                  <tbody>{citation.rows.values.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, cellIndex) => cellIndex === 0 ? <th key={cellIndex} scope="row">{cell}</th> : <td key={cellIndex}>{cell}</td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+    </details>
+  );
+}
+
+/**
+ * Bulk waste generators under the SWM Rules 2026. Each district bar is drawn to one shared
+ * scale of generators identified; the filled part is those processing wet waste on site.
+ */
+function SwmView({model}: {model: ReturnType<typeof getSasaGoals>}) {
+  const swm = model.swm;
+  const max = Math.max(1, ...swm.districts.map((district) => district.identified));
+  const share = (part: number, whole: number) => (whole ? part / whole * 100 : 0);
+  const fmt = (n: number) => n.toLocaleString('en-IN');
+  const pctText = (n: number) => `${n.toLocaleString('en-IN', {maximumFractionDigits: 1})}%`;
+  const none = swm.districts.filter((district) => district.secretariats === 0);
+  return (
+    <section className="goal-swm" id="swm-rules" aria-labelledby="swm-title">
+      <div className="gl-head">
+        <h2 id="swm-title">Bulk waste generators under the SWM Rules 2026</h2>
+        <p>The rules have applied since 1 April 2026. The data lake holds two daily secretariat feeds: generators identified, and generators processing wet waste on site. On-site processing is one way a generator can meet the rules and the feeds record no other, so a generator not processing on site is not shown as non-compliant.</p>
+      </div>
+      <div className="swm-grid">
+        <div className="swm-stats">
+          <div><span>Identified</span><strong>{fmt(swm.identified)}</strong><small>in the secretariats retained for {swm.day}</small></div>
+          <div className="is-on"><span>Processing wet waste on site</span><strong>{fmt(swm.onSite)}</strong><small>{pctText(share(swm.onSite, swm.identified))} of those identified</small></div>
+          <div><span>Secretariats retained</span><strong>{fmt(swm.secretariats)}</strong><small>of {fmt(swm.registerSecretariats)} in the register ({pctText(share(swm.secretariats, swm.registerSecretariats))}); the rest are missing, not zero</small><i aria-hidden="true"><b style={{width: `${share(swm.secretariats, swm.registerSecretariats)}%`}} /></i></div>
+        </div>
+        <div className="swm-districts">
+          <div className="swm-key" aria-hidden="true"><span><i className="is-on" />processing on site</span><span><i />identified, not on site</span></div>
+          <ul>
+            {swm.districts.filter((district) => district.secretariats > 0).map((district) => (
+              <li key={district.district} title={`${district.secretariats} of ${district.registerSecretariats} secretariats retained`}>
+                <span className="swm-name" title={district.district}>{district.district}</span>
+                <span className="swm-bar" role="img" aria-label={`${district.onSite} of ${district.identified} identified processing on site`}>
+                  {district.identified > 0 && <i style={{width: `${district.identified / max * 100}%`}}><b style={{width: `${share(district.onSite, district.identified)}%`}} /></i>}
+                </span>
+                <span className="swm-value">{district.identified ? <><b>{fmt(district.onSite)}</b> of {fmt(district.identified)}</> : 'none identified'}</span>
+              </li>
+            ))}
+          </ul>
+          {none.length > 0 && <p className="swm-note">No secretariat retrieved for {swm.day} in {none.map((district) => district.district).join(', ')}.</p>}
+        </div>
+      </div>
+      {swm.firstLook.length > 0 && (
+        <div className="swm-first">
+          <h3>Where to look first</h3>
+          <p>{swm.noneOnSite} of the {swm.withIdentified} ULBs with generators identified report none processing on site. The five with the most identified:</p>
+          <ul>
+            {swm.firstLook.map((ulb) => <li key={ulb.code}><b>{ulb.name}</b><small>{ulb.district}</small><span>{fmt(ulb.identified)} identified, none on site</span></li>)}
+          </ul>
+        </div>
+      )}
+      <p className="swm-sources">Sources: {swm.sources.map((source, index) => <span key={source.key}>{index ? ' and ' : ''}<a href={source.href} target="_blank" rel="noreferrer">{source.name}</a></span>)}, retrieved {swm.retrieved}; {swm.ulbsRetained} of {swm.ulbsInRegister} ULBs have a retained secretariat that day.</p>
+    </section>
   );
 }

@@ -22,7 +22,7 @@ export function getExecutiveBrief(mode:DataMode) {
       generatedAt:snapshot.responseMetadata.generatedAt,rows:snapshot.records.length,latestRows:currentSnapshotRecords(snapshot).length};
   }) : [];
   // The state's own targets, as read on the SASA Goals screen: a tally and the computed insights only.
-  const goals = governed ? (() => { const model = getSasaGoals(); return {summary: goalSummary(model.goals), insights: model.insights.map((insight) => insight.text)}; })() : null;
+  const goals = governed ? (() => { const model = getSasaGoals(); return {summary: goalSummary(model.goals), insights: model.insights.map((insight) => insight.text), citations: model.insights.map((insight) => insight.citations.map((citation) => `${citation.figure}: ${citation.dataset}, ${citation.period}${citation.retrieved ? `, retrieved ${citation.retrieved}` : ''}`).join('; '))}; })() : null;
   return {governed,mode,goals,
     title:governed?'Executive evidence brief':'Capability brief',
     scope:governed?'Whole retained snapshot · latest period per source. Screen filters, selected ULBs and local crosswalk decisions are not applied.':mode==='DEMO'?'Demo mode · synthetic capability story. No governed findings included.':'Live mode · roadmap only. No runtime Data Lake connection or current findings.',
@@ -61,7 +61,7 @@ export function executiveBriefText(brief:ReturnType<typeof getExecutiveBrief>,pr
       `Largest reported quantities: ${issue.rows.filter(row=>row.value>0).slice(0,3).map(row=>`${row.ulb} (${row.district}): ${briefNumber(row.value)} ${issue.unit}`).join('; ') || 'None returned in the eligible cohort.'}`,
       issue.boundary,
     ]),
-    ...(brief.goals?['','AGAINST THE STATE\'S TARGETS · SWACHHA ANDHRA SWARNA ANDHRA',goalTally(brief.goals.summary),...brief.goals.insights,'Each target, its source and its reading: SASA Goals screen.']:[]),
+    ...(brief.goals?['','AGAINST THE STATE\'S TARGETS · SWACHHA ANDHRA SWARNA ANDHRA',goalTally(brief.goals.summary),...brief.goals.insights.flatMap((text,index)=>[text,`  Sources: ${brief.goals!.citations[index]}`]),'Each target, its source and its reading: SASA Goals screen.']:[]),
     ...(brief.governed?['','HISTORICAL OUTCOMES · NOT ALIGNED WITH OPERATIONS',...brief.sources.filter(source=>outcomeKeys.includes(source.key)).map(source=>`${source.name}: ${source.latestRows} source rows · ${source.period}. Row counts are not certified entity counts.`),'','NEXT REVIEW ACTIONS',...brief.nextActions,'','SOURCE PROVENANCE · RESPONSE TIME IS NOT THE REPORTING PERIOD',...brief.sources.map(source=>`${source.name} | ${source.key} | latest period ${source.period} | ${source.rows} retained rows across all periods | response ${source.responseId} | response generated ${source.generatedAt}`)]:[]),
     '',
   ].join('\n');
