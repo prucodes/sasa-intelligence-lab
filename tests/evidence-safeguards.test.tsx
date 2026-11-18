@@ -90,3 +90,41 @@ describe('written framing from the optional Claude worker', () => {
     for (const record of records) expect(record.text).toMatch(/\[.+; .+\]$/);
   });
 });
+
+describe('assistant charts', () => {
+  it('places a named ULB at its own Atlas value among every ULB with a value', () => {
+    const answer = askEvidence('How is Vijayawada city doing on collection and segregation?');
+    const strip = answer.charts!.find((chart) => chart.kind === 'strip' && chart.title.startsWith('Collection reach'))!;
+    if (strip.kind !== 'strip') throw new Error('expected a strip');
+    const atlas = getUlbAtlas();
+    const vijayawada = atlas.ulbs.find((ulb) => ulb.name === 'VIJAYAWADA')!.cells.reach!;
+    if (vijayawada.state !== 'value') throw new Error('expected a value');
+    expect(strip.points.filter((point) => point.highlight).map((point) => point.value)).toEqual([vijayawada.value]);
+    expect(strip.points).toHaveLength(atlas.measures.find((measure) => measure.id === 'reach')!.reporting);
+  });
+
+  it('never draws an urban trend from the window of mostly stored zeros, and says why', () => {
+    const answer = askEvidence('Collection trend in Guntur city');
+    expect(answer.charts?.some((chart) => chart.kind === 'line')).toBe(false);
+    expect(answer.notes.join(' ')).toMatch(/No urban trend is drawn/);
+  });
+
+  it('draws rural months from the common cohort exactly as retained', async () => {
+    const months = (await import('@/data/aggregates/month-series.json')).default;
+    const answer = askEvidence('Rural collection in Kurnool district');
+    const line = answer.charts!.find((chart) => chart.kind === 'line')!;
+    if (line.kind !== 'line') throw new Error('expected a line');
+    expect(line.series[0].values).toEqual(months.series.map((entry) => entry.comparable.collectionRate * 100));
+    const kurnool = months.byDistrict.find((row) => row.district === 'Kurnool')!;
+    expect(line.series.find((entry) => entry.label === 'Kurnool')!.values).toEqual(kurnool.points.map((point) => point.collectionRate * 100));
+  });
+
+  it('profiles districts highest first and draws nothing for incomparable ranks', () => {
+    const answer = askEvidence('Which district has the highest remaining share of legacy waste?');
+    const columns = answer.charts!.find((chart) => chart.kind === 'columns')!;
+    if (columns.kind !== 'columns') throw new Error('expected columns');
+    expect(columns.bars.map((bar) => bar.value)).toEqual([...columns.bars.map((bar) => bar.value)].sort((a, b) => b - a));
+    expect(columns.lowerIsBetter).toBe(true);
+    expect(askEvidence('What is the reported rank of Guntur city?').charts ?? []).toHaveLength(0);
+  });
+});

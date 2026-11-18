@@ -1,7 +1,7 @@
 'use client';
 
 import {useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode} from 'react';
-import {askEvidence, checkFraming, evidenceScope, modelRecords, suggestedQuestions, type EvidenceAnswer, type EvidenceFact} from '@/lib/ask-evidence';
+import {askEvidence, checkFraming, evidenceScope, modelRecords, suggestedQuestions, type AnswerChart, type EvidenceAnswer, type EvidenceFact} from '@/lib/ask-evidence';
 import {motionAllowed} from './motion';
 import './ask-evidence.css';
 
@@ -200,6 +200,7 @@ function TurnView({turn, href, latest}: {turn: Turn; href: (path: string) => str
                 ))}
               </ol>
             )}
+            {answer.charts?.map((chart, index) => <ChartView key={`${chart.kind}-${index}`} chart={chart} />)}
             {answer.notes.length > 0 && <div className="ask-notes">{answer.notes.map((note) => <p key={note}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7.5v.5" /></svg>{note}</p>)}</div>}
             {turn.note && <p className="ask-model-note">{turn.note}</p>}
             {sources.length > 0 && (
@@ -241,6 +242,7 @@ function shortDataset(key: string) {
     fstps_stps_cotreatment_new1_api: 'FSTP progress', sewage_treated_qty_new1_api: 'Sewage plants', swacch_survekshan_info_new1_api: 'Swachh Survekshan 2024',
     sasa_100_percent_clearance_of_legacy_waste_api: 'Legacy waste clearance', sasa_cdma_ulbs_single_use_plastic_ban_api: 'Plastic ban',
     identification_of_bulk_waste_generators_api: 'Bulk waste generators', onsite_processing_of_wet_waste_bwg_api: 'Bulk generators on site',
+    sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026: 'Rural door-to-door collection', waste_segregation_api: 'Segregation',
   };
   return names[first] ?? first.replace(/_api$/, '').replace(/_/g, ' ');
 }
@@ -253,4 +255,134 @@ function topicGlyph(text: string): ReactNode {
     : t.includes('target') || t.includes('plastic') ? <><path d="M6 21V4" /><path d="M6 4h10l-2 4 2 4H6" /></>
     : <><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></>;
   return <svg viewBox="0 0 24 24">{path}</svg>;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Charts. Each draws only the facts named in its caption, at their real values; the readout
+   under it gives the exact figure for whatever the reader points at.
+   ------------------------------------------------------------------------------------------ */
+
+const W = 320;
+const pctText = (value: number) => `${value.toLocaleString('en-IN', {maximumFractionDigits: 1})}%`;
+
+function ChartView({chart}: {chart: AnswerChart}) {
+  const [readout, setReadout] = useState<string | null>(null);
+  const initial = chart.kind === 'line'
+    ? chart.series.filter((entry) => entry.highlight).map((entry) => `${entry.label} ${pctText(entry.values.at(-1) ?? 0)} in ${chart.x.at(-1)}`).join(' · ')
+    : (chart.kind === 'strip' ? chart.points : chart.bars).filter((point) => point.highlight).slice(0, 3).map((point) => `${titleCase(point.label)} ${pctText(point.value)}`).join(' · ');
+  return (
+    <figure className={`ask-chart is-${chart.kind}`}>
+      <figcaption><b>{chart.title}</b><small>{chart.caption}</small></figcaption>
+      {chart.kind === 'strip' && <Strip chart={chart} onPoint={setReadout} />}
+      {chart.kind === 'columns' && <Columns chart={chart} onPoint={setReadout} />}
+      {chart.kind === 'line' && <Line chart={chart} onPoint={setReadout} />}
+      {chart.kind === 'line' && chart.series.length > 1 && (
+        <ul className="ask-legend">
+          {chart.series.map((entry, index) => <li key={entry.label} className={index === 0 && !entry.highlight ? 'is-ref' : `is-s${Math.min(3, chart.series.slice(0, index + 1).filter((item) => item.highlight).length)}`}><i aria-hidden="true" />{entry.label}</li>)}
+        </ul>
+      )}
+      <p className="ask-readout" aria-live="polite">{readout ?? (initial || 'Point at a mark for its value')}</p>
+    </figure>
+  );
+}
+
+const titleCase = (text: string) => (text === text.toUpperCase() ? text.toLowerCase().replace(/(^|[\s(])(\w)/g, (_, gap: string, letter: string) => gap + letter.toUpperCase()) : text);
+
+function useNearest<T>(items: T[], xOf: (item: T) => number, onPoint: (text: string | null) => void, text: (item: T) => string) {
+  return {
+    onPointerMove: (event: React.PointerEvent<SVGSVGElement>) => {
+      const box = event.currentTarget.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width * W;
+      let best: T | null = null, distance = Infinity;
+      for (const item of items) { const d = Math.abs(xOf(item) - x); if (d < distance) { distance = d; best = item; } }
+      onPoint(best ? text(best) : null);
+    },
+    onPointerLeave: () => onPoint(null),
+  };
+}
+
+function Strip({chart, onPoint}: {chart: Extract<AnswerChart, {kind: 'strip'}>; onPoint: (text: string | null) => void}) {
+  const L = 14, R = W - 14, base = 66, x = (value: number) => L + value / 100 * (R - L);
+  // Dots with the same whole percentage stack upward; a tall stack is compressed so it fits.
+  const buckets = new Map<number, number>();
+  const placed = chart.points.map((point) => {
+    const key = Math.round(point.value);
+    const k = buckets.get(key) ?? 0; buckets.set(key, k + 1);
+    return {...point, k, key};
+  });
+  const step = (key: number) => Math.min(5.2, 44 / Math.max(1, buckets.get(key) ?? 1));
+  const ordered = [...placed].sort((a, b) => Number(a.highlight) - Number(b.highlight));
+  const marks = useNearest(placed, (point) => x(point.value), onPoint, (point) => `${titleCase(point.label)} · ${pctText(point.value)}`);
+  return (
+    <svg viewBox={`0 0 ${W} 92`} role="img" aria-label={`${chart.points.length} values from 0 to 100%; median ${chart.median === null ? 'not defined' : pctText(chart.median)}`} {...marks}>
+      {[0, 25, 50, 75, 100].map((tick) => <g key={tick}><line className="ak-grid" x1={x(tick)} x2={x(tick)} y1={18} y2={base + 4} /><text className="ak-tick" x={x(tick)} y={86} textAnchor="middle">{tick}%</text></g>)}
+      <line className="ak-axis" x1={L} x2={R} y1={base + 4} y2={base + 4} />
+      {chart.median !== null && <g><line className="ak-median" x1={x(chart.median)} x2={x(chart.median)} y1={12} y2={base + 4} /><text className="ak-median-label" x={x(chart.median)} y={9} textAnchor="middle">median {pctText(chart.median)}</text></g>}
+      {ordered.map((point, index) => (
+        <circle key={`${point.label}-${index}`} className={point.highlight ? 'ak-dot is-hl' : 'ak-dot'} cx={x(point.value)} cy={base - point.k * step(point.key)} r={point.highlight ? 4.2 : 2.5} style={{'--d': point.value / 100} as CSSProperties}>
+          <title>{`${titleCase(point.label)}: ${pctText(point.value)}`}</title>
+        </circle>
+      ))}
+    </svg>
+  );
+}
+
+function Columns({chart, onPoint}: {chart: Extract<AnswerChart, {kind: 'columns'}>; onPoint: (text: string | null) => void}) {
+  const L = 26, R = W - 6, T = 10, B = 104, n = chart.bars.length;
+  const top = Math.max(5, Math.ceil(Math.max(...chart.bars.map((bar) => bar.value)) / 5) * 5);
+  const y = (value: number) => B - value / top * (B - T);
+  const slot = (R - L) / n, width = Math.max(2, slot - 2.5);
+  const xOf = (index: number) => L + index * slot + slot / 2;
+  const indexed = chart.bars.map((bar, index) => ({...bar, index}));
+  const marks = useNearest(indexed, (bar) => xOf(bar.index), onPoint, (bar) => `${titleCase(bar.label)} · ${pctText(bar.value)}`);
+  return (
+    <svg viewBox={`0 0 ${W} 124`} role="img" aria-label={`${n} districts from ${pctText(chart.bars[0].value)} down to ${pctText(chart.bars.at(-1)!.value)}`} {...marks}>
+      {[0, top / 2, top].map((tick) => <g key={tick}><line className="ak-grid" x1={L} x2={R} y1={y(tick)} y2={y(tick)} /><text className="ak-tick" x={L - 4} y={y(tick) + 3} textAnchor="end">{tick.toLocaleString('en-IN', {maximumFractionDigits: 1})}%</text></g>)}
+      {chart.median !== null && <line className="ak-median" x1={L} x2={R} y1={y(chart.median)} y2={y(chart.median)} />}
+      {indexed.map((bar) => (
+        <rect key={bar.label} className={bar.highlight ? 'ak-col is-hl' : 'ak-col'} x={xOf(bar.index) - width / 2} y={y(bar.value)} width={width} height={Math.max(0, B - y(bar.value))} rx={Math.min(2, width / 2)} style={{'--d': bar.index / n} as CSSProperties}>
+          <title>{`${titleCase(bar.label)}: ${pctText(bar.value)}`}</title>
+        </rect>
+      ))}
+      {indexed.filter((bar) => bar.value === 0).map((bar) => <line key={`z-${bar.label}`} className="ak-zero" x1={xOf(bar.index) - width / 2} x2={xOf(bar.index) + width / 2} y1={B} y2={B} />)}
+      <line className="ak-axis" x1={L} x2={R} y1={B} y2={B} />
+      {spaced(indexed.filter((bar) => bar.highlight).map((bar) => ({bar, x: Math.min(R - 30, Math.max(L + 30, xOf(bar.index)))})), 64).map(({bar, x: at}) => <text key={`l-${bar.label}`} className="ak-col-label" x={at} y={118} textAnchor="middle">{titleCase(bar.label)}</text>)}
+    </svg>
+  );
+}
+
+/** Keeps labels at least `gap` apart, first come first kept, so neighbouring names never overprint. */
+function spaced<T extends {x: number}>(labels: T[], gap: number): T[] {
+  const kept: T[] = [];
+  for (const label of labels) if (kept.every((other) => Math.abs(other.x - label.x) >= gap)) kept.push(label);
+  return kept.slice(0, 3);
+}
+
+function Line({chart, onPoint}: {chart: Extract<AnswerChart, {kind: 'line'}>; onPoint: (text: string | null) => void}) {
+  const L = 34, R = W - 46, T = 12, B = 108;
+  const values = chart.series.flatMap((entry) => entry.values.filter((value): value is number => value !== null));
+  const lo = Math.floor(Math.min(...values) - 2), hi = Math.ceil(Math.max(...values) + 2);
+  const x = (index: number) => L + (chart.x.length === 1 ? 0 : index / (chart.x.length - 1)) * (R - L);
+  const y = (value: number) => B - (value - lo) / (hi - lo) * (B - T);
+  const path = (series: Array<number | null>) => series.reduce((d, value, index) => value === null ? d : `${d}${d && series[index - 1] !== null ? ' L' : ' M'} ${x(index).toFixed(1)} ${y(value).toFixed(1)}`, '').trim();
+  const tone = (index: number) => (index === 0 && !chart.series[0].highlight ? 'is-ref' : `is-s${Math.min(3, chart.series.slice(0, index + 1).filter((entry) => entry.highlight).length)}`);
+  const months = chart.x.map((label, index) => ({label, index}));
+  const marks = useNearest(months, (month) => x(month.index), onPoint, (month) => `${month.label}: ${chart.series.map((entry) => `${entry.label} ${entry.values[month.index] === null ? 'not retained' : pctText(entry.values[month.index]!)}`).join(' · ')}`);
+  const ticks = [lo, (lo + hi) / 2, hi];
+  // End values sit beside the last point; close ones are nudged apart so they never overprint.
+  const endLabels = chart.series.flatMap((entry) => { const last = entry.values.at(-1); return last === null || last === undefined ? [] : [{key: entry.label, value: last, y: y(last)}]; }).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < endLabels.length; i++) if (endLabels[i].y - endLabels[i - 1].y < 10) endLabels[i].y = endLabels[i - 1].y + 10;
+  return (
+    <svg viewBox={`0 0 ${W} 128`} role="img" aria-label={chart.series.map((entry) => `${entry.label}: ${entry.values.map((value, index) => `${chart.x[index]} ${value === null ? 'not retained' : pctText(value)}`).join(', ')}`).join('; ')} {...marks}>
+      {ticks.map((tick) => <g key={tick}><line className="ak-grid" x1={L} x2={R} y1={y(tick)} y2={y(tick)} /><text className="ak-tick" x={L - 5} y={y(tick) + 3} textAnchor="end">{tick.toLocaleString('en-IN', {maximumFractionDigits: 1})}%</text></g>)}
+      {chart.x.map((label, index) => <text key={label} className="ak-tick" x={x(index)} y={122} textAnchor="middle">{label}</text>)}
+      {chart.series.map((entry, index) => (
+        <g key={entry.label} className={`ak-series ${tone(index)}`}>
+          <path className="ak-line" d={path(entry.values)} pathLength={1} />
+          {entry.values.map((value, point) => value === null ? null : <circle key={point} className="ak-point" cx={x(point)} cy={y(value)} r={entry.highlight ? 3.2 : 2.4}><title>{`${entry.label}, ${chart.x[point]}: ${pctText(value)}`}</title></circle>)}
+        </g>
+      ))}
+      {endLabels.map((label) => <text key={label.key} className="ak-end" x={R + 6} y={label.y + 3}>{pctText(label.value)}</text>)}
+    </svg>
+  );
 }

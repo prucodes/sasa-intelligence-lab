@@ -1,4 +1,6 @@
 import bwg from '@/data/aggregates/bwg-reference-day.json';
+import ruralMonths from '@/data/aggregates/month-series.json';
+import {sameDistrict} from './crosswalk';
 import {districtMapRows, getUlbAtlas, measureHeadline, type AtlasMeasureId} from './ulb-atlas';
 import {getSasaGoals, statusLabel} from './sasa-goals';
 import {getEnvironmentSections} from './environment-ledger';
@@ -10,7 +12,7 @@ import {getEnvironmentSections} from './environment-ledger';
  * question cannot be matched to a fact, the answer says so; it never fills the gap.
  */
 
-export type Topic = AtlasMeasureId | 'legacy' | 'plastic' | 'bulk' | 'targets' | 'environment';
+export type Topic = AtlasMeasureId | 'legacy' | 'plastic' | 'bulk' | 'targets' | 'environment' | 'rural';
 
 export interface EvidenceFact {
   id: string;
@@ -41,7 +43,15 @@ export interface EvidenceAnswer {
   notes: string[];
   facts: EvidenceFact[];
   suggestions: string[];
+  /** Charts drawn from the same facts and retained series; never from anything the answer does not cite. */
+  charts?: AnswerChart[];
 }
+
+export interface ChartPoint { label: string; value: number; highlight: boolean }
+export type AnswerChart =
+  | {kind: 'strip'; title: string; caption: string; points: ChartPoint[]; median: number | null}
+  | {kind: 'columns'; title: string; caption: string; bars: ChartPoint[]; median: number | null; lowerIsBetter: boolean}
+  | {kind: 'line'; title: string; caption: string; x: string[]; series: Array<{label: string; values: Array<number | null>; highlight: boolean}>};
 
 const TOPICS: Record<Topic, {label: string; words: string[]; dataset: string; screen: string}> = {
   reach: {label: 'Collection reach', words: ['collect', 'collection', 'collected', 'collecting', 'door to door', 'doorstep', 'pickup', 'reach', 'd2d'], dataset: 'msw_door_to_door_collection_api', screen: '/atlas'},
@@ -57,6 +67,7 @@ const TOPICS: Record<Topic, {label: string; words: string[]; dataset: string; sc
   bulk: {label: 'Bulk waste generators', words: ['bulk', 'bwg', 'bwgs', 'generator', 'generators', 'swm rules', 'hotels', 'institutions'], dataset: `${bwg.sources[0]} + ${bwg.sources[1]}`, screen: '/goals#swm-rules'},
   targets: {label: 'SASA targets', words: ['target', 'targets', 'goal', 'goals', 'deadline', 'deadlines', 'swarna'], dataset: 'stated targets', screen: '/goals'},
   environment: {label: 'Environment ledger', words: ['carbon', 'emission', 'emissions', 'methane', 'environment'], dataset: 'environment ledger', screen: '/environment'},
+  rural: {label: 'Rural collection', words: ['rural', 'panchayat', 'panchayats', 'village', 'villages', 'gram', 'gp', 'gps'], dataset: 'sasa_pr_door_to_door_collection_percentage_of_garbage_api_27_aug_2026', screen: '/operational-analytics?tab=rural'},
 };
 const ULB_TOPICS: AtlasMeasureId[] = ['reach', 'segregation', 'toilets', 'fstp', 'stp', 'odf', 'gfc', 'rank'];
 
@@ -162,6 +173,28 @@ function buildIndex() {
       sentence: `${line.label}: ${whole(line.reported)}${line.target ? ` of ${whole(line.target)}` : ''} ${line.unit} reported${line.period ? `, ${line.period}` : ''}.`});
   }
 
+  // Rural collection: one fixed panchayat-day cohort, days 1-7 of every retained month, so months compare.
+  const months = ruralMonths.series.map((entry) => entry.period);
+  const monthName = (period: string) => new Date(`${period}-01T00:00:00Z`).toLocaleDateString('en-GB', {month: 'short', timeZone: 'UTC'});
+  const span = `${monthName(months[0])}–${monthName(months.at(-1)!)} ${months.at(-1)!.slice(0, 4)}, days 1–7`;
+  const ratesText = (rates: number[]) => rates.map((rate, i) => `${pct(rate * 100)} in ${monthName(months[i])}`).join(', ');
+  const stateRates = ruralMonths.series.map((entry) => entry.comparable.collectionRate);
+  facts.push({id: 'state:rural', kind: 'state', subject: 'Andhra Pradesh', district: null, topics: ['rural'], label: 'Rural collection, common cohort', value: stateRates.at(-1)! * 100, display: pct(stateRates.at(-1)! * 100),
+    period: span, dataset: TOPICS.rural.dataset, screen: TOPICS.rural.screen, better: null,
+    sentence: `Rural door-to-door collection in the common cohort of ${whole(ruralMonths.cohort.pairs)} panchayat-days: ${ratesText(stateRates)}. Every month counts the same panchayat-days, days 1–7.`});
+  const registerDistricts = [...new Set(atlas.ulbs.map((ulb) => ulb.district))];
+  const ruralNames = new Map<string, string>();
+  for (const row of ruralMonths.byDistrict) {
+    const exact = registerDistricts.find((name) => normalize(name) === normalize(row.district));
+    const similar = registerDistricts.filter((name) => sameDistrict(row.district, name));
+    const name = exact ?? (similar.length === 1 ? similar[0] : row.district);
+    ruralNames.set(row.district, name);
+    const rates = row.points.map((point) => point.collectionRate);
+    facts.push({id: `rural:${row.district}`, kind: 'district', subject: name, district: name, topics: ['rural'], label: 'Rural collection, common cohort', value: rates.at(-1)! * 100, display: pct(rates.at(-1)! * 100),
+      period: span, dataset: TOPICS.rural.dataset, screen: TOPICS.rural.screen, better: 'higher',
+      sentence: `${name} district, rural collection in its ${whole(row.pairs)} common panchayat-days: ${ratesText(rates)}.`});
+  }
+
   // Entity names a question can match, longest first.
   const entities: Array<{alias: string; kind: 'ulb' | 'district'; name: string; district: string; code?: string}> = [];
   for (const ulb of atlas.ulbs) {
@@ -178,8 +211,9 @@ function buildIndex() {
   for (const district of new Set(atlas.ulbs.map((ulb) => ulb.district))) {
     for (const alias of [normalize(district), ...(DISTRICT_ALIASES[district] ?? [])]) entities.push({alias, kind: 'district', name: district, district});
   }
+  for (const name of new Set(ruralNames.values())) if (!registerDistricts.includes(name)) entities.push({alias: normalize(name), kind: 'district', name, district: name});
   const unique = new Map(entities.map((entity) => [`${entity.kind}|${entity.name}|${entity.alias}`, entity]));
-  return {facts, entities: [...unique.values()].sort((a, b) => b.alias.length - a.alias.length), measures: atlas.measures, ulbCount: atlas.ulbs.length, districtCount: goals.districts.rows.length};
+  return {facts, ruralMonths: months.map(monthName), ruralNames, entities: [...unique.values()].sort((a, b) => b.alias.length - a.alias.length), measures: atlas.measures, ulbCount: atlas.ulbs.length, districtCount: goals.districts.rows.length};
 }
 
 /* ---------------------------------------------------------------------------------------- */
@@ -188,6 +222,7 @@ const LOW_VALUE = /\b(lowest|least|fewest|smallest|minimum|bottom)\b/;
 const HIGH_VALUE = /\b(highest|most|largest|biggest|maximum|top)\b/;
 const WORST = /\b(worst|weakest|poorest|lagging|laggards?|behind|struggling|slowest)\b/;
 const BEST = /\b(best|strongest|leading|leaders?|ahead|fastest|performing well|doing well)\b/;
+const TREND = /\b(trends?|over time|changed?|changing|movement|month by month|monthly|daily|day by day|series|history)\b/;
 const WHY = /\b(why|cause|causes|reason|reasons|because|blame|should|recommend|predict|forecast|will|next year)\b/;
 
 function matchTopics(q: string): Topic[] {
@@ -219,7 +254,12 @@ const rowFor = (fact: EvidenceFact, max = 100): AnswerRow => ({
 });
 
 /** Answers one question from the index. Deterministic: the same question always gives the same answer. */
+/** Answers one question from the index, with its charts. */
 export function askEvidence(question: string): EvidenceAnswer {
+  return withCharts(askEvidenceCore(question), question);
+}
+
+function askEvidenceCore(question: string): EvidenceAnswer {
   const index = getEvidenceIndex();
   const q = normalize(question);
   const notes: string[] = [];
@@ -235,6 +275,8 @@ export function askEvidence(question: string): EvidenceAnswer {
   const wantsDistricts = /\bdistricts?\b/.test(q);
   const wantsUlbs = /\b(ulbs?|towns?|city|cities|municipal\w*|corporations?|councils?)\b/.test(q);
   const superlative = LOW_VALUE.test(q) || HIGH_VALUE.test(q) || WORST.test(q) || BEST.test(q);
+  const urban = /\b(urban|ulbs?|city|cities|towns?|municipal\w*)\b/.test(q);
+  if (topics.includes('rural') && !urban) { topics = topics.filter((topic) => topic !== 'reach'); entities = entities.filter((entity) => entity.kind === 'district'); }
   if (wantsDistricts && !wantsUlbs) entities = entities.filter((entity) => entity.kind === 'district');
   if (wantsUlbs && !wantsDistricts) entities = entities.filter((entity) => entity.kind === 'ulb');
   if (entities.some((entity) => entity.kind === 'ulb') && entities.some((entity) => entity.kind === 'district') && !wantsDistricts && !wantsUlbs)
@@ -242,7 +284,7 @@ export function askEvidence(question: string): EvidenceAnswer {
   if (topics.includes('rank') && (superlative || /\b(compare|better|ahead|median)\b/.test(q)))
     return empty('Rank comparison is withheld: the 2024 source does not identify population categories. Ask for a named city’s reported rank instead.');
   const requestedYears = q.match(/\b20\d{2}\b/g) ?? [];
-  if (requestedYears.length || /\b(today|current|latest|yesterday|january|february|march|april|may|june|july|august|september|october|november|december)\b/.test(q))
+  if ((requestedYears.length || /\b(today|current|latest|yesterday|january|february|march|april|may|june|july|august|september|october|november|december)\b/.test(q)) && !topics.includes('rural') && !TREND.test(q))
     return empty('This question asks for a time-specific reading. Use the source’s period controls to select an available observation; the question view only summarizes its labelled retained periods.');
   if (WHY.test(q)) return empty('The retained records cannot establish causes, forecasts or the effect of an intervention. Ask what was reported for a place or measure.');
   if (superlative && topics.includes('legacy') && !/\b(share|percent|percentage|rate)\b/.test(q))
@@ -345,6 +387,7 @@ export function suggestedQuestions(): string[] {
     'Which ULBs have the lowest toilet completion?',
     'Bulk waste generators in Visakhapatnam city',
     'Where does the plastic-free target stand?',
+    'How has rural collection changed?',
   ];
 }
 
@@ -406,4 +449,64 @@ export function checkFraming(text: string): {ok: true} | {ok: false; reason: str
 export function evidenceScope() {
   const index = getEvidenceIndex();
   return {ulbs: index.ulbCount, districts: index.districtCount, measures: index.measures.length, facts: index.facts.length};
+}
+
+/* ---------------------------------------------------------------------------------------- */
+
+const CHART_TOPICS: Topic[] = ['reach', 'segregation', 'toilets', 'fstp', 'stp', 'legacy', 'plastic', 'bulk', 'rural'];
+const medianOf = (values: number[]) => {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b), mid = sorted.length >> 1;
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+
+/**
+ * Charts for an answer, drawn only from facts of the same measure and period as the ones it
+ * cites: where the named places sit among every place with a value, a district profile, or the
+ * rural monthly series. No urban daily trend is drawn: outside 12 August the retained window is
+ * mostly stored zeros, which the Gap Radar already explains.
+ */
+function withCharts(answer: EvidenceAnswer, question: string): EvidenceAnswer {
+  const q = normalize(question);
+  const index = getEvidenceIndex();
+  const notes = [...answer.notes];
+  const asked = matchTopics(q);
+  if (TREND.test(q) && (asked.includes('reach') || asked.includes('segregation')) && !asked.includes('rural'))
+    notes.push('No urban trend is drawn. The retained urban window carries substantial collection only on 12 Aug 2026; the other 15 days are mostly stored zeros, which do not show that collection stopped. Rural collection has a monthly series: ask about rural collection.');
+  if (answer.status !== 'answered') return {...answer, notes: [...new Set(notes)]};
+  const charts: AnswerChart[] = [];
+  const primary = [...new Set(answer.facts.map((fact) => fact.topics[0]))].filter((topic) => CHART_TOPICS.includes(topic));
+  for (const topic of primary) {
+    if (charts.length >= 2) break;
+    const cited = answer.facts.filter((fact) => fact.topics[0] === topic);
+    const named = new Set(cited.filter((fact) => fact.kind !== 'state').map((fact) => fact.subject));
+    if (topic === 'rural') { charts.push(ruralChart(index, named)); continue; }
+    const ulbPool = index.facts.filter((fact) => fact.kind === 'ulb' && fact.topics[0] === topic && fact.value !== null && !fact.held && fact.better !== null);
+    const districtPool = index.facts.filter((fact) => fact.kind === 'district' && fact.topics[0] === topic && fact.value !== null && !fact.held);
+    const citesUlb = cited.some((fact) => fact.kind === 'ulb'), citesDistrict = cited.some((fact) => fact.kind === 'district');
+    const label = TOPICS[topic].label;
+    if ((citesUlb || (!citesDistrict && ulbPool.length)) && ulbPool.length > 4) {
+      const points = ulbPool.map((fact) => ({label: fact.subject, value: Math.max(0, Math.min(100, fact.value!)), highlight: named.has(fact.subject)}));
+      const who = named.size === 1 ? [...named][0] : named.size ? 'the named ULBs' : null;
+      charts.push({kind: 'strip', title: who ? `${label}: where ${who} ${named.size === 1 ? 'sits' : 'sit'} among ${points.length} ULBs` : `${label} across ${points.length} ULBs`,
+        caption: `${ulbPool[0].period} · one dot per ULB with a value; held-out and unreported ULBs are not drawn`, points, median: medianOf(points.map((point) => point.value))});
+    } else if (districtPool.length > 3) {
+      const bars = [...districtPool].sort((a, b) => b.value! - a.value! || a.subject.localeCompare(b.subject)).map((fact) => ({label: fact.subject, value: Math.max(0, Math.min(100, fact.value!)), highlight: named.has(fact.subject)}));
+      charts.push({kind: 'columns', title: `${label} by district`, caption: `${districtPool[0].period} · ${bars.length} districts with a value, highest first${districtPool[0].better === 'lower' ? '; lower is further along' : ''}`,
+        bars, median: medianOf(bars.map((bar) => bar.value)), lowerIsBetter: districtPool[0].better === 'lower'});
+    }
+  }
+  return {...answer, notes: [...new Set(notes)], charts};
+}
+
+function ruralChart(index: ReturnType<typeof getEvidenceIndex>, named: Set<string>): AnswerChart {
+  const series: Array<{label: string; values: Array<number | null>; highlight: boolean}> = [
+    {label: 'Andhra Pradesh', values: ruralMonths.series.map((entry) => entry.comparable.collectionRate * 100), highlight: named.size === 0},
+  ];
+  for (const row of ruralMonths.byDistrict) {
+    const name = index.ruralNames.get(row.district) ?? row.district;
+    if (named.has(name) && series.length < 4) series.push({label: name, values: ruralMonths.series.map((entry) => { const point = row.points.find((item) => item.period === entry.period); return point ? point.collectionRate * 100 : null; }), highlight: true});
+  }
+  return {kind: 'line', title: named.size ? `Rural collection: ${[...named].slice(0, 3).join(', ')} against the state` : 'Rural collection, month by month',
+    caption: `Common panchayat-day cohort, days 1–7 of each month · the axis is zoomed to the range shown, not from zero`, x: index.ruralMonths, series};
 }
