@@ -17,7 +17,6 @@ import { EvidenceIntegrity } from './evidence-integrity';
 import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
-import { EnvironmentLedger } from './environment-ledger';
 import { UlbAtlas } from './ulb-atlas';
 import { SasaGoalsScreen } from './sasa-goals';
 import { useAutoHideHeader, useScreenMotion, useTabIndicator } from './motion';
@@ -98,6 +97,9 @@ import {
 import { glossaryCategories, glossaryEntries } from '@/lib/glossary';
 
 const ExecutiveBrief = lazy(() => import('./executive-brief').then((module) => ({default: module.ExecutiveBrief})));
+// The Environment ledger carries the groundwater series (about 0.85 MB of data) that no other
+// screen uses, so it loads with its own route. The prerendered page still holds its content.
+const EnvironmentLedger = lazy(() => import('./environment-ledger').then((module) => ({default: module.EnvironmentLedger})));
 const AskEvidence = lazy(() => import('./ask-evidence').then((module) => ({default: module.AskEvidence})));
 
 type Page = 'overview' | 'goals' | 'operational-analytics' | 'environment' | 'gap-radar' | 'atlas' | 'reconciliation' | 'diagnostics' | 'data-readiness';
@@ -2256,7 +2258,7 @@ function ModeKey({ mode }: { mode: DataMode }) {
 function Environment({ mode }: { mode: DataMode }) {
   return <>
     {mode !== 'SAMPLE' && <PageIntro visual="environment" eyebrow="Environment and carbon" title="Environment & Carbon Ledger" description="Trace retained waste, wastewater and green-asset evidence from reported quantities to transparent carbon screening scenarios—and see what is still missing for an inventory."><FilterBar mode={mode}/></PageIntro>}
-    <EnvironmentLedger mode={mode}/>
+    <Suspense fallback={<div className="screen-loading" role="status">Loading the environment ledger…</div>}><EnvironmentLedger mode={mode}/></Suspense>
   </>;
 }
 

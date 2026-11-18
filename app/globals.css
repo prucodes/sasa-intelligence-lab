@@ -5296,6 +5296,8 @@ table td, table th { font-variant-numeric: tabular-nums; }
    A gentle fade on reveal; instant for reduced-motion. */
 .app-shell { opacity: 1; transition: opacity 0.18s ease; }
 .app-shell.booting { opacity: 0; }
+/* The prerender matches a governed, light link: show it immediately (see lib/early-reveal.ts). */
+html[data-boot="early"] .app-shell.booting { opacity: 1; transition: none; }
 @media (prefers-reduced-motion: reduce) {
   .app-shell { transition: none; }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import {useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ElementType, type ReactNode} from 'react';
+import {revealedEarly} from '@/lib/early-reveal';
 
 /**
  * Motion that is correct first and animated second.
@@ -45,6 +46,7 @@ export function CountUp({value, decimals = 0, prefix = '', suffix = '', duration
   useEffect(() => {
     const node = ref.current;
     if (!node || !motionAllowed() || value === 0) return;
+    if (revealedEarly() && node.getBoundingClientRect().top < window.innerHeight) return;
     let frame = 0;
     const stop = watchFirstSight(node, () => {
       const start = performance.now();
@@ -240,21 +242,28 @@ export function useScreenMotion(rootId: string, key: string) {
         node.classList.add('screen-reveal-armed');
         watch(node, 'section');
       });
+      // Only the initial scan of an early-revealed page skips what is already on screen; content that
+      // arrives later (a new tab, a new measure) still moves.
+      const unseen = (node: Element) => !initialEarly || node.getBoundingClientRect().top >= fold;
       root.querySelectorAll<HTMLElement>('strong, .or-hero-value').forEach((node) => {
-        if (!seen.has(node) && node.childElementCount === 0 && !node.closest('.count-up, [data-still]') && parseFloat(getComputedStyle(node).fontSize) >= 18 && parseFigure(node.textContent ?? '')) watch(node, 'figure');
+        if (unseen(node) && !seen.has(node) && node.childElementCount === 0 && !node.closest('.count-up, [data-still]') && parseFloat(getComputedStyle(node).fontSize) >= 18 && parseFigure(node.textContent ?? '')) watch(node, 'figure');
       });
       root.querySelectorAll<HTMLElement>(BAR_TAGS).forEach((node) => {
-        if (!seen.has(node) && isBar(node)) watch(node, /height/.test(node.getAttribute('style') ?? '') && !/width/.test(node.getAttribute('style') ?? '') ? 'column' : 'bar');
+        if (unseen(node) && !seen.has(node) && isBar(node)) watch(node, /height/.test(node.getAttribute('style') ?? '') && !/width/.test(node.getAttribute('style') ?? '') ? 'column' : 'bar');
       });
-      root.querySelectorAll('.district-map-stage svg, .or-map svg, svg:has(.presenter-map-district)').forEach((svg) => { if (svg.querySelector(MAP_PATHS)) watch(svg, 'map'); });
-      root.querySelectorAll(LINE_PATHS).forEach((path) => watch(path, 'line'));
+      root.querySelectorAll('.district-map-stage svg, .or-map svg, svg:has(.presenter-map-district)').forEach((svg) => { if (unseen(svg) && svg.querySelector(MAP_PATHS)) watch(svg, 'map'); });
+      root.querySelectorAll(LINE_PATHS).forEach((path) => { if (unseen(path)) watch(path, 'line'); });
     };
     let pending = 0;
     const mutations = new MutationObserver(() => {
       window.clearTimeout(pending);
       pending = window.setTimeout(() => scan(false), 140);
     });
-    scan(true);
+    // A page shown before hydration has already been seen: nothing on screen is hidden and
+    // replayed; only what is below the fold waits for its first sight.
+    let initialEarly = revealedEarly();
+    scan(!initialEarly);
+    initialEarly = false;
     mutations.observe(root, {childList: true, subtree: true});
     const frame = 0;
     return () => {

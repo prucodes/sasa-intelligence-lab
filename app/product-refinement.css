@@ -46,3 +46,5 @@
   .app-shell .topbar .ask-button span:not(.ask-orb), .app-shell .topbar .ask-button kbd { display: none; }
 }
 .theme-dark .ask-orb { --ak-accent: #78c8b4; --ak-accent-2: #7fa8e6; }
+
+.screen-loading { min-height: 50vh; display: grid; place-items: center; color: var(--muted); font-size: 14px; }

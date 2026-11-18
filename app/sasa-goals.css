@@ -37,15 +37,15 @@
 .gt-legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--tone); }
 .gt-legend .is-different-measure i { background: transparent; box-shadow: inset 0 0 0 2px var(--tone); }
 
-.screen-hero.motion-on .gt-row { animation: gtIn .55s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(180ms + var(--i, 0) * 85ms); }
-.screen-hero.motion-on .gt-gap { animation: gtGrow .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(520ms + var(--i, 0) * 85ms); }
-.screen-hero.motion-on .gt-read { animation: gtPop .45s cubic-bezier(.3, 1.4, .5, 1) backwards; animation-delay: calc(900ms + var(--i, 0) * 85ms); }
-.screen-hero.motion-on .gt-band { animation: gtFade 1s ease-out backwards; animation-delay: 150ms; }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .gt-row { animation: gtIn .55s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(180ms + var(--i, 0) * 85ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .gt-gap { animation: gtGrow .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(520ms + var(--i, 0) * 85ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .gt-read { animation: gtPop .45s cubic-bezier(.3, 1.4, .5, 1) backwards; animation-delay: calc(900ms + var(--i, 0) * 85ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .gt-band { animation: gtFade 1s ease-out backwards; animation-delay: 150ms; }
 @keyframes gtIn { from { opacity: 0; translate: -6px 0; } }
 @keyframes gtGrow { from { transform: scaleX(0); } }
 @keyframes gtPop { from { scale: 0; } }
 @keyframes gtFade { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .screen-hero.motion-on :is(.gt-row, .gt-gap, .gt-read, .gt-band) { animation: none; } }
+@media (prefers-reduced-motion: reduce) { :is(.screen-hero.motion-on, .motion-early .screen-hero) :is(.gt-row, .gt-gap, .gt-read, .gt-band) { animation: none; } }
 
 /* ---- Section heads ------------------------------------------------------------------- */
 .goal-list, .goal-districts, .goal-themes { margin: 0 0 34px; }

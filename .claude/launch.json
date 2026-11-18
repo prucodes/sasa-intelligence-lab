@@ -4,9 +4,24 @@
     {
       "name": "sasa-lab",
       "runtimeExecutable": "/bin/sh",
-      "runtimeArgs": ["-c", "export PATH=/usr/local/bin:$PATH; exec npm run dev"],
+      "runtimeArgs": [
+        "-c",
+        "export PATH=/usr/local/bin:$PATH; exec npm run dev"
+      ],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "static-build",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4173",
+        "--directory",
+        "dist-static"
+      ],
+      "port": 4173
     }
   ]
 }

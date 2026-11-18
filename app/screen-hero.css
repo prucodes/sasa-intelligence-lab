@@ -95,12 +95,12 @@
 .sh-gates li b { font-variant-numeric: tabular-nums; color: var(--navy); }
 
 /* Motion, only where allowed (motion-on is added by script). */
-.screen-hero.motion-on .sh-dot { animation: shRise .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--x, 0) * 600ms); }
-.screen-hero.motion-on .sh-heat-cell { animation: shFade .5s ease-out backwards; animation-delay: calc(150ms + var(--x, 0) * 800ms); }
-.screen-hero.motion-on .sh-gate { animation: shDraw .7s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--i, 0) * 110ms); }
-.screen-hero.motion-on .sh-stage i b { animation: shGrow .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(250ms + var(--i, 0) * 110ms); transform-origin: left center; }
-.screen-hero.motion-on .sh-pipeline { animation: shLift .6s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(140ms + var(--row, 0) * 120ms); }
-.screen-hero.motion-on .sh-figure { animation: shLift .6s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(80ms + var(--i, 0) * 80ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-dot { animation: shRise .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--x, 0) * 600ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-heat-cell { animation: shFade .5s ease-out backwards; animation-delay: calc(150ms + var(--x, 0) * 800ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-gate { animation: shDraw .7s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--i, 0) * 110ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-stage i b { animation: shGrow .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(250ms + var(--i, 0) * 110ms); transform-origin: left center; }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-pipeline { animation: shLift .6s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(140ms + var(--row, 0) * 120ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-figure { animation: shLift .6s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(80ms + var(--i, 0) * 80ms); }
 @keyframes shRise { from { transform: translateY(var(--rise, 20px)); opacity: 0; } 60% { opacity: 1; } }
 @keyframes shFade { from { opacity: 0; } }
 @keyframes shDraw { from { opacity: 0; stroke-width: 2; } }
@@ -124,7 +124,7 @@
   .sh-actions a { flex: 1 1 100%; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .screen-hero.motion-on :is(.sh-dot, .sh-heat-cell, .sh-gate, .sh-stage i b, .sh-figure, .sh-pipeline) { animation: none; }
+  :is(.screen-hero.motion-on, .motion-early .screen-hero) :is(.sh-dot, .sh-heat-cell, .sh-gate, .sh-stage i b, .sh-figure, .sh-pipeline) { animation: none; }
 }
 
 /* Delivery funnels */
@@ -146,11 +146,11 @@
 .sh-split-bar i.is-warm { background: var(--vi-decrease); }
 .sh-split-labels { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--muted); }
 .sh-split-labels b { font-size: 14px; color: var(--navy); font-variant-numeric: tabular-nums; margin-right: 3px; }
-.screen-hero.motion-on .sh-funnel-shape { animation: shReveal 1.2s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--i, 0) * 220ms); }
-.screen-hero.motion-on .sh-split-bar i { animation: shGrow 1s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: .7s; transform-origin: left center; }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-funnel-shape { animation: shReveal 1.2s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(200ms + var(--i, 0) * 220ms); }
+:is(.screen-hero.motion-on, .motion-early .screen-hero) .sh-split-bar i { animation: shGrow 1s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: .7s; transform-origin: left center; }
 @keyframes shReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @media (prefers-reduced-motion: reduce) {
-  .screen-hero.motion-on :is(.sh-funnel-shape, .sh-split-bar i) { animation: none; }
+  :is(.screen-hero.motion-on, .motion-early .screen-hero) :is(.sh-funnel-shape, .sh-split-bar i) { animation: none; }
 }
 
 /* ============================================================================
@@ -196,13 +196,13 @@
 .nature-legend li span { font-size: 12px; font-weight: 650; color: var(--ink); line-height: 1.25; }
 .nature-legend li b { grid-column: 2; font-size: 21px; line-height: 1.1; letter-spacing: -.03em; color: var(--navy); font-variant-numeric: tabular-nums; }
 .nature-legend li small { grid-column: 2; font-size: 10.5px; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
-.screen-hero.is-nature.motion-on .nr-arc { animation: nrGrow 1.8s cubic-bezier(.22, .8, .18, 1) backwards; animation-delay: calc(300ms + var(--i, 0) * 260ms); }
-.screen-hero.is-nature.motion-on .nr-grain { animation: nrFade 1.4s ease backwards; }
+:is(.screen-hero.is-nature.motion-on, .motion-early .screen-hero.is-nature) .nr-arc { animation: nrGrow 1.8s cubic-bezier(.22, .8, .18, 1) backwards; animation-delay: calc(300ms + var(--i, 0) * 260ms); }
+:is(.screen-hero.is-nature.motion-on, .motion-early .screen-hero.is-nature) .nr-grain { animation: nrFade 1.4s ease backwards; }
 @keyframes nrGrow { from { stroke-dasharray: 0 100; } }
 @keyframes nrFade { from { opacity: 0; } }
 
 @media (max-width: 560px) { .nature-rings svg { max-width: 220px; } .nature-legend { grid-template-columns: minmax(0, 1fr); } }
-@media (prefers-reduced-motion: reduce) { .screen-hero.is-nature.motion-on :is(.nr-arc, .nr-grain) { animation: none; } }
+@media (prefers-reduced-motion: reduce) { :is(.screen-hero.is-nature.motion-on, .motion-early .screen-hero.is-nature) :is(.nr-arc, .nr-grain) { animation: none; } }
 
 
 /* Phone: the graphic follows the figures at a modest height, so the first screen holds the reading. */
