@@ -1,7 +1,11 @@
-import { LabApp } from './lab-app';
+import {LabApp} from './lab-app';
+import {WelcomeScreen} from './welcome';
+import {WELCOME_ENTRY_SCRIPT} from '@/lib/welcome-entry';
 
-// Static export: the page ships with defaults and LabApp reads mode/theme from the
-// URL on the client, so ?mode=sample deep links still resolve without a server.
 export default function OverviewPage() {
-  return <LabApp page="overview" />;
+  return <>
+    <script dangerouslySetInnerHTML={{__html: WELCOME_ENTRY_SCRIPT}} />
+    <WelcomeScreen/>
+    <LabApp page="overview"/>
+  </>;
 }

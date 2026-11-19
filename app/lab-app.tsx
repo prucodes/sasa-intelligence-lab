@@ -256,6 +256,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
     if (mode !== 'SAMPLE') return;
     const open = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
+      if (document.documentElement.dataset.sasaWelcome) return;
       if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey || target?.closest('input, textarea, select, [contenteditable="true"]')) return;
       event.preventDefault();
       setAskOpen(true);
@@ -353,7 +354,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
       <Sidebar page={page} mode={mode} colorTheme={colorTheme} diagnosticKey={diagnosticDefault} onThemeToggle={toggleColorTheme} onAbout={()=>setAboutOpen(true)} aboutOpen={aboutOpen}/>
       <div className="app-main">
         <Header mode={mode} onModeChange={changeMode} colorTheme={colorTheme} onThemeToggle={toggleColorTheme} onAbout={() => setAboutOpen(true)} aboutOpen={aboutOpen} onPresent={() => togglePresent(true)} onCompare={() => setCompareOpen(true)} onBrief={() => setBriefOpen(true)} onAsk={() => setAskOpen(true)} />
-        <main id="main-content" data-mode={mode} className={`content page-${page}`}>
+        <main id="main-content" tabIndex={-1} data-mode={mode} className={`content page-${page}`}>
           {page === 'overview' && <Overview mode={mode} colorTheme={colorTheme} metrics={provider.getOverview()} radar={provider.getGapAssessments()} />}
           {page === 'goals' && <Goals mode={mode} colorTheme={colorTheme} />}
           {page === 'operational-analytics' && <OperationalAnalytics mode={mode} initialTab={initialAnalyticsTab} />}
@@ -364,7 +365,7 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
           {page === 'diagnostics' && <Diagnostics mode={mode} colorTheme={colorTheme} cameFrom={cameFrom} diagnostic={provider.getDiagnostic(currentUlbKey)} allKeys={datasets[mode].diagnostics.map((d) => ({ key: d.ulbKey, name: mode === 'SAMPLE' ? `${d.name} · ${d.district}` : d.name }))} />}
           {page === 'data-readiness' && <DataReadiness mode={mode} readiness={provider.getReadiness()} />}
         </main>
-        <ProductFooter mode={mode}/>
+        <ProductFooter mode={mode} colorTheme={colorTheme}/>
       </div>
       {askOpen && mode === 'SAMPLE' && <Suspense fallback={<div className="ask-loading" role="status">Opening evidence questions… <button onClick={() => setAskOpen(false)}>Cancel</button></div>}><AskEvidence onClose={() => setAskOpen(false)} href={(path) => withMode(path, mode, colorTheme)}/></Suspense>}
       <AboutPanel open={aboutOpen} onClose={() => setAboutOpen(false)} />
@@ -375,8 +376,8 @@ export function LabApp({ page, initialUlbKey, initialMode = 'SAMPLE', initialCol
   );
 }
 
-function ProductFooter({ mode }: { mode: DataMode }) {
-  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><BrandMark/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'on-demand connector · on the roadmap'}</span></footer>;
+function ProductFooter({ mode, colorTheme }: { mode: DataMode; colorTheme: ColorTheme }) {
+  return <footer className="product-footer" aria-label="SASA Intelligence Lab product statement"><div className="footer-brand"><BrandMark/><span><b><GlossaryText text="SASA Intelligence Lab"/></b><small>Governed evidence into explainable review signals</small></span></div><div className="footer-principles"><a className="welcome-replay" href={withMode('/?welcome=1', mode, colorTheme)}>Welcome screen</a><span><Icon name="database" size={16}/>Source-backed</span><span><Icon name="shield" size={16}/>Evidence-gated</span><span><Icon name="search" size={16}/>Review-oriented</span></div><span className={`footer-mode footer-${mode.toLowerCase()}`}>{MODE_LABEL[mode]} · {mode === 'SAMPLE' ? 'retained governed evidence' : mode === 'DEMO' ? 'synthetic capability story' : 'on-demand connector · on the roadmap'}</span></footer>;
 }
 
 function Sidebar({ page, mode, colorTheme, diagnosticKey, onThemeToggle, onAbout, aboutOpen }: { page: Page; mode: DataMode; colorTheme: ColorTheme; diagnosticKey: string; onThemeToggle:()=>void; onAbout:()=>void; aboutOpen:boolean }) {

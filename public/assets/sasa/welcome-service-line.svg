@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="450" height="90" viewBox="0 0 450 90" fill="none">
+ <defs>
+  <pattern id="etch" width="3.6" height="3.6" patternUnits="userSpaceOnUse" patternTransform="rotate(31)">
+   <path d="M0 0v3.6" stroke="#bcdbca" stroke-width=".65" opacity=".48"/>
+  </pattern>
+  <linearGradient id="landline" x1="0" y1="0" x2="450" y2="0" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#c4ad77" stop-opacity="0"/><stop offset=".06" stop-color="#c4ad77" stop-opacity=".7"/>
+   <stop offset=".94" stop-color="#c4ad77" stop-opacity=".7"/><stop offset="1" stop-color="#c4ad77" stop-opacity="0"/>
+  </linearGradient>
+ </defs>
+ <path id="service-line" d="M0 77h132c8 0 9-5 17-5s9 5 17 5h118c8 0 9-5 17-5s9 5 17 5h132" stroke="url(#landline)" stroke-width="1.1"/>
+ <g stroke-linecap="round" stroke-linejoin="round">
+  <g id="collection">
+   <path d="m25 73 36 5 40-9-34-5z" fill="#243f3b"/>
+   <path d="M29 40 57 43v30l-28-5z" fill="#355851" stroke="#a7c5b1" stroke-width="1.25"/>
+   <path d="M57 43 80 35v31l-23 7z" fill="#284840" stroke="#89ae9b" stroke-width="1.25"/>
+   <path d="M59 44 78 37v28l-19 6z" fill="url(#etch)"/>
+   <path d="m25 39 16-23 21 28z" fill="#4b7465" stroke="#c9d7ba" stroke-width="1.4"/>
+   <path d="m41 16 26-4 20 24-25 8z" fill="#466956" stroke="#c0caa7" stroke-width="1.25"/>
+   <path d="m44 18 22-3 16 20-19 6z" fill="url(#etch)"/>
+   <path d="m24 41 38 5 25-8" stroke="#d3b980" stroke-width="1.6"/>
+   <path d="m34 49 10 1v20l-10-2z" fill="#1a3938" stroke="#c4cbb0" stroke-width="1.1"/>
+   <path d="m48 49 6 1v8l-6-1z" fill="#96b5a1"/>
+   <path d="M42 60v2" stroke="#d5bd85"/>
+   <path d="m76 51 17-4 14 3-17 4z" fill="#749782" stroke="#c3ccb2" stroke-width="1.15"/>
+   <path d="m77 53 13 3 15-4-4 17-10 3-10-3z" fill="#416958" stroke="#bdc9aa" stroke-width="1.2"/>
+   <path d="m90 56 1 15 10-3 3-14z" fill="url(#etch)"/>
+   <path d="m78 51-3-6-5-1" stroke="#d3b87b" stroke-width="1.8"/>
+   <path d="m82 58 6 1" stroke="#d5bd85"/>
+   <circle cx="83" cy="71" r="2.3" fill="#112e2d" stroke="#9db8a6"/>
+   <circle cx="97" cy="72" r="2.5" fill="#112e2d" stroke="#c1c8a7"/>
+  </g>
+  <g id="segregation">
+   <path d="m175 72 33 4 17-4 25 4 22-5-57-6z" fill="#273f39"/>
+   <path d="m180 39 29 2 8-4-2 30-8 5-23-2z" fill="#467766" stroke="#b6ceba" stroke-width="1.4"/>
+   <path d="m209 42 8-4-2 29-8 5z" fill="url(#etch)" stroke="#98b9a5" stroke-width=".9"/>
+   <path d="m177 36 9-4 29 2 5 3-11 5-32-3z" fill="#608878" stroke="#c6d5b8" stroke-width="1.4"/>
+   <path d="m188 32 1-4 9 .6 1 3.8" stroke="#d4c191" stroke-width="1.6"/>
+   <path d="M188 61q-3-12 14-14 0 13-12 14z" fill="#afcdb5"/>
+   <path d="m188 64 11-14" stroke="#36564c" stroke-width="1.2"/>
+   <path d="m228 39 28 2 9-4-3 30-8 5-22-2z" fill="#5b624c" stroke="#cec59c" stroke-width="1.4"/>
+   <path d="m256 42 9-4-3 29-8 5z" fill="url(#etch)" stroke="#bcb48b" stroke-width=".9"/>
+   <path d="m225 36 9-4 29 2 5 3-11 5-32-3z" fill="#77785a" stroke="#d8c89c" stroke-width="1.4"/>
+   <path d="m236 32 1-4 9 .6 1 3.8" stroke="#d4c191" stroke-width="1.6"/>
+   <path d="m238.5 48 5 .4-.3 3.3 2.3 3.9-.7 7.7-9.6-.8.7-7.7 2.3-3.4z" fill="#d2c799"/>
+   <path d="m238.6 46.8 5.2.4m-7.4 10.4 7.8.6" stroke="#8b865f" stroke-width="1.1"/>
+  </g>
+  <g id="treatment">
+   <path d="m320 71 52 7 62-12-42-5z" fill="#253f39"/>
+   <path d="M346 48V32h6v17m2-3V23h5v21" fill="#34574e" stroke="#b2c8b3" stroke-width="1.1"/>
+   <path d="M346 32h6m1-9h7" stroke="#d3bb86" stroke-width="1.8"/>
+   <path d="m325 46 9-8 12 2 10-7 14 3v28l-45-5z" fill="#3d6256" stroke="#b8c9b0" stroke-width="1.25"/>
+   <path d="m370 36 12-4v27l-12 5z" fill="url(#etch)" stroke="#a6bdab" stroke-width="1.15"/>
+   <path d="m330 48 6 .9v4.2l-6-.9zm10 1.3 6 .9v4.3l-6-.8zm11 1.5 6 .8v4.3l-6-.9z" fill="#a8c3ae"/>
+   <path d="M359 61c0-6 16-11 36-11 18 0 33 3 33 8l-1 8c-.7 5-17 10-35 10-19 0-33-3-33-8z" fill="#42665a" stroke="#bdccb2" stroke-width="1.35"/>
+   <path d="M361 64c9 5 24 5 34 5s23-2 30-6v2c-4 6-23 10-35 9-12 0-21-2-29-6z" fill="url(#etch)"/>
+   <ellipse cx="393.5" cy="59.2" rx="34.5" ry="8.8" transform="rotate(-3 393.5 59.2)" fill="#315a55" stroke="#c6d7bd" stroke-width="1.35"/>
+   <ellipse cx="393.5" cy="59.2" rx="28.8" ry="5.8" transform="rotate(-3 393.5 59.2)" stroke="#8cb4a3" stroke-width=".85"/>
+   <path d="m362 64 63-10m-33 5-1-6 4-.6 1 6m-4-7.2 3.4-.5" stroke="#d9c38d" stroke-width="1.4"/>
+  </g>
+ </g>
+</svg>

@@ -1,0 +1,179 @@
+/* The entry script runs before this surface paints. Direct links keep their workspace. */
+.welcome-screen { display: none; }
+html[data-sasa-welcome] .welcome-screen { display: block; }
+html[data-sasa-welcome] .welcome-screen ~ .app-shell { display: none; }
+
+.welcome-screen {
+  --paper: #f3f3df;
+  --mint: #b4d8be;
+  --brass: #d8bd80;
+  --line: #b6c9a937;
+  --soft: #b9cec5;
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: clip;
+  color: var(--paper);
+  background: radial-gradient(ellipse at 76% 44%, #1a4140 0%, transparent 49%),
+    linear-gradient(115deg, #101f24, #102d31 69%, #10282c);
+  font-family: var(--font-display, system-ui, sans-serif);
+}
+.welcome-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  max-width: 1680px;
+  margin: auto;
+  padding-inline: clamp(22px, 5.7vw, 96px);
+}
+.welcome-masthead, .welcome-colophon, .welcome-plate-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.welcome-masthead {
+  min-height: clamp(76px, 10vh, 112px);
+  border-bottom: 1px solid var(--line);
+}
+.welcome-brand { display: flex; align-items: center; gap: 13px; }
+.welcome-brand .brand-mark { width: 29px; height: 38px; flex: none; }
+.welcome-brand .brand-mark-base { fill: #e6f3e9; }
+.welcome-brand .brand-mark-mid { fill: #9cc7b4; }
+.welcome-brand .brand-mark-top { fill: #609d91; }
+.welcome-brand .brand-mark-dot { fill: var(--brass); }
+.welcome-brand strong, .welcome-brand small { display: block; }
+.welcome-brand strong { color: var(--paper); font-size: 22px; line-height: 1.1; letter-spacing: .075em; font-weight: 650; }
+.welcome-brand small { margin-top: 2px; color: var(--soft); font-size: 12px; letter-spacing: .035em; }
+.welcome-locale { color: var(--soft); font: 16px 'Kohinoor Telugu', 'Noto Sans Telugu', sans-serif; }
+.welcome-spread {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, .98fr) minmax(0, 1.02fr);
+  align-items: center;
+  gap: clamp(20px, 4vw, 80px);
+  padding-block: clamp(26px, 4vh, 56px);
+}
+.welcome-copy { position: relative; z-index: 1; }
+.welcome-place {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  color: var(--brass);
+  font-size: clamp(10px, .79vw, 13px);
+  letter-spacing: .14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.welcome-place::before { content: ''; width: 30px; height: 1px; background: currentColor; }
+.welcome-screen h1 {
+  margin: 0;
+  color: var(--paper);
+  font: 400 clamp(53px, 5.75vw, 96px)/1.035 Georgia, 'Times New Roman', serif;
+  letter-spacing: -.06em;
+}
+.welcome-screen h1 em { color: var(--mint); font-weight: inherit; }
+.welcome-screen h1 span, .welcome-screen h1 em { display: inline-block; }
+.welcome-description { max-width: 37ch; margin: 25px 0 0; color: #d2dfd5; font-size: clamp(15px, 1.17vw, 19px); line-height: 1.64; text-wrap: pretty; }
+.welcome-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 34px;
+  min-height: 51px;
+  margin-top: 30px;
+  padding: 12px 19px 12px 22px;
+  border: 1px solid #e9edd5;
+  border-radius: 5px;
+  background: #e0e8ce;
+  color: #183432;
+  font-size: 15px;
+  font-weight: 650;
+  text-decoration: none;
+}
+.welcome-enter span { font: 23px/1 Georgia, serif; }
+.welcome-enter:hover { background: #f5f2df; color: #102c29; }
+.welcome-enter:focus-visible, .welcome-view-switch button:focus-visible { outline: 3px solid var(--brass); outline-offset: 4px; }
+.welcome-plate { min-width: 0; margin: 0; }
+.welcome-plate-toolbar { border-bottom: 1px solid var(--line); padding-bottom: 9px; }
+.welcome-view-switch { display: inline-flex; gap: 4px; }
+.welcome-view-switch button {
+  position: relative;
+  min-height: 40px;
+  padding: 0 13px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #bfcec4;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+.welcome-view-switch button[aria-pressed="true"] { background: #a6d1b81e; color: #e0edda; }
+.welcome-view-switch button[aria-pressed="true"]::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  background: #afd0b4;
+  inset: auto 12px -10px;
+}
+.welcome-date, .welcome-map-period { color: #bccfc3; font-size: 11px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.welcome-image-window { position: relative; height: clamp(280px, 49svh, 610px); }
+@media (min-width: 1100px) and (min-height: 850px) {
+  .welcome-spread { padding-block: clamp(12px, 2svh, 30px); }
+  .welcome-image-window { height: min(55svh, calc(100svh - 415px), 680px); }
+}
+.welcome-map-art { position: absolute; inset: 0 -3%; background: center / contain no-repeat; }
+.art-collection { background-image: url('/assets/sasa/welcome-atlas.svg'); }
+.art-segregation { background-image: url('/assets/sasa/welcome-segregation.svg'); }
+.welcome-plate figcaption { border-top: 1px solid var(--line); padding: 12px 0 0; }
+.welcome-caption-title { display: block; color: var(--paper); font-size: 17px; font-weight: 550; }
+.welcome-map-definition { margin: 5px 0 11px; color: #c4d5c9; font-size: 13px; line-height: 1.48; max-width: 56ch; }
+.welcome-key { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 15px; }
+.welcome-key span { display: inline-flex; gap: 6px; align-items: center; color: #dce6db; font-size: 11px; line-height: 1.5; }
+.welcome-key i { width: 14px; height: 8px; border-radius: 1px; box-shadow: inset 0 0 0 1px #c5d8c33b; }
+.welcome-key .key-hatch { background: repeating-linear-gradient(120deg, #233c40 0 3px, #a3b4a3 3px 4px); }
+.welcome-map-period { display: block; margin-top: 7px; }
+.welcome-colophon { min-height: 91px; padding-block: 10px; border-top: 1px solid var(--line); }
+.welcome-credit-line { display: flex; align-items: center; gap: 13px; margin-inline-start: auto; }
+.welcome-programme { padding-inline-end: 13px; border-inline-end: 1px solid var(--line); font: italic 16px Georgia, serif; color: #c3d4c4; }
+.welcome-programme i { color: var(--brass); padding-inline: 3px; }
+.welcome-signature {
+  color: var(--mint);
+  font: italic 26px/1 Georgia, 'Times New Roman', serif;
+  transform: rotate(-8deg);
+}
+.welcome-service-signature { width: clamp(208px, 19vw, 280px); }
+.welcome-service-art { aspect-ratio: 5/1; background: url('/assets/sasa/welcome-service-line.svg') center / contain no-repeat; }
+.welcome-service-labels { display: grid; grid-template-columns: repeat(3,1fr); color: #bdcfc2; font-size: 10px; text-align: center; line-height: 1.4; }
+.welcome-replay { color: inherit; text-underline-offset: 3px; }
+@media (max-width: 760px) {
+  .welcome-masthead { min-height: 67px; }
+  .welcome-spread { grid-template-columns: 1fr; gap: 28px; padding: 30px 0 21px; }
+  .welcome-place { margin-bottom: 12px; }
+  .welcome-screen h1 { font-size: clamp(46px, 8.2vw, 65px); }
+  .welcome-description { font-size: 15px; margin-top: 13px; line-height: 1.5; }
+  .welcome-enter { margin-top: 17px; min-height: 44px; font-size: 14px; padding-block: 9px; }
+  .welcome-image-window { height: clamp(254px, 40svh, 388px); }
+  .welcome-colophon { flex-wrap: wrap; min-height: 66px; justify-content: space-between; }
+  .welcome-service-signature { width: 174px; }
+  .welcome-programme { font-size: 12px; }
+  .welcome-key { gap: 4px 11px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-sasa-welcome="open"] .welcome-screen h1 span { animation: welcome-title .85s cubic-bezier(.16,.8,.3,1) both; }
+  [data-sasa-welcome="open"] .welcome-screen h1 em { animation: welcome-title 1s .13s cubic-bezier(.16,.8,.3,1) both; }
+  [data-sasa-welcome="open"] .welcome-service-art { animation: welcome-route 1.35s .25s ease-out both; }
+  [data-sasa-welcome="open"] .welcome-map-art { animation: welcome-plate-reveal 1s cubic-bezier(.2,.75,.2,1) both; }
+  [data-sasa-welcome="leaving"] .welcome-frame { animation: welcome-out .22s ease-in both; }
+  .welcome-enter span { transition: transform .2s; }
+  .welcome-enter:hover span { transform: translateX(4px); }
+}
+@keyframes welcome-title {
+  from { clip-path: inset(0 0 94% 0); transform: translateY(12px); }
+  to { clip-path: inset(-8% -5% -8% -5%); transform: translateY(0); }
+}
+@keyframes welcome-route { from {clip-path: inset(0 100% 0 0)} to {clip-path: inset(0)} }
+@keyframes welcome-plate-reveal { from {opacity: .42; transform: scale(1.038)} to {opacity: 1; transform: scale(1)} }
+@keyframes welcome-out { to {opacity: 0; transform: translateY(-4px)} }
