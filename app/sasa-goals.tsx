@@ -4,6 +4,7 @@ import {useEffect, useMemo, useRef, useState, type CSSProperties} from 'react';
 import {LAST_SOURCE_CHECK, getSasaGoals, goalShort, goalSummary, statusLabel, type Citation, type DistrictColumn, type DistrictGoalRow, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
 import type {ScreenHeroData} from '@/lib/screen-heroes';
 import {ScreenHero} from './screen-hero';
+import {Gauge, barShare} from './target-graphics';
 import './sasa-goals.css';
 
 const ORDER: GoalStatus[] = ['short-after-deadline', 'before-deadline', 'met', 'tracked', 'different-measure', 'not-measured'];
@@ -176,13 +177,13 @@ export function GoalTimeline({goals}: {goals: SasaGoal[]}) {
 
 /* ------------------------------------------------------------------------------------------ */
 
-/** A reading that measures the target itself (or a step toward it) carries a bar; a different measure does not, so it cannot read as progress. */
-const showsMeter = (goal: SasaGoal) => goal.reading?.share !== null && goal.reading?.share !== undefined && goal.status !== 'different-measure';
 
 function GoalRow({goal, href}: {goal: SasaGoal; href: (path: string) => string}) {
   return (
     <details className={`goal-row is-${goal.status}`} id={`goal-${goal.id}`}>
       <summary>
+        {/* The same ring as the overview tiles: filled only where the reading measures the target itself. */}
+        <Gauge id={goal.id} share={barShare(goal)}/>
         <span className="gr-what">
           <span className="gr-theme">{goal.theme}</span>
           <span className="gr-target">{goal.target}</span>
@@ -190,7 +191,6 @@ function GoalRow({goal, href}: {goal: SasaGoal; href: (path: string) => string})
         </span>
         <span className="gr-reading">
           {goal.reading ? <><b>{goal.reading.display}</b><small>{goal.reading.asOfLabel}</small></> : <em>Nothing retained measures this</em>}
-          {showsMeter(goal) && <i className="gr-meter"><b style={{width: `${Math.max(1, Math.min(100, goal.reading!.share!))}%`}} /></i>}
           {goal.reading && (goal.status === 'different-measure' ? <small className="gr-gap">No gap computed: a different measure</small> : goal.reading.gap && <small className="gr-gap">Gap: {goal.reading.gap}</small>)}
         </span>
         <span className={`gr-chip is-${goal.status}`}><i aria-hidden="true" />{statusLabel[goal.status]}</span>
@@ -338,6 +338,18 @@ function Sources({citations}: {citations: Citation[]}) {
  * Bulk waste generators under the SWM Rules 2026. Each district bar is drawn to one shared
  * scale of generators identified; the filled part is those processing wet waste on site.
  */
+/** One dot per identified generator, the ones processing wet waste on site filled first: the count itself, not a sample. */
+function GeneratorDots({identified, onSite}: {identified: number; onSite: number}) {
+  const columns = 40, pitch = 7, rows = Math.ceil(identified / columns);
+  return (
+    <svg className="swm-dots" viewBox={`0 0 ${columns * pitch} ${rows * pitch}`} role="img" aria-label={`${onSite.toLocaleString('en-IN')} of ${identified.toLocaleString('en-IN')} identified bulk waste generators processing wet waste on site, one dot each`}>
+      {Array.from({length: identified}, (_, index) => (
+        <circle key={index} className={index < onSite ? 'is-on' : undefined} cx={(index % columns) * pitch + pitch / 2} cy={Math.floor(index / columns) * pitch + pitch / 2} r="2.6" />
+      ))}
+    </svg>
+  );
+}
+
 function SwmView({model}: {model: ReturnType<typeof getSasaGoals>}) {
   const swm = model.swm;
   const max = Math.max(1, ...swm.districts.map((district) => district.identified));
@@ -353,6 +365,11 @@ function SwmView({model}: {model: ReturnType<typeof getSasaGoals>}) {
       </div>
       <div className="swm-grid">
         <div className="swm-stats">
+          <figure className="swm-dot-card">
+            <figcaption><span>Every generator identified, one dot each</span><small><span><i className="is-on" aria-hidden="true"/>{fmt(swm.onSite)} processing on site</span><span><i aria-hidden="true"/>{fmt(swm.identified - swm.onSite)} not on site</span></small></figcaption>
+            <GeneratorDots identified={swm.identified} onSite={swm.onSite}/>
+            <small>In the {fmt(swm.secretariats)} secretariats retained for {swm.day}; generators in the missing secretariats are not shown.</small>
+          </figure>
           <div><span>Identified</span><strong>{fmt(swm.identified)}</strong><small>in the secretariats retained for {swm.day}</small></div>
           <div className="is-on"><span>Processing wet waste on site</span><strong>{fmt(swm.onSite)}</strong><small>{pctText(share(swm.onSite, swm.identified))} of those identified</small></div>
           <div><span>Secretariats retained</span><strong>{fmt(swm.secretariats)}</strong><small>of {fmt(swm.registerSecretariats)} in the register ({pctText(share(swm.secretariats, swm.registerSecretariats))}); the rest are missing, not zero</small><i aria-hidden="true"><b style={{width: `${share(swm.secretariats, swm.registerSecretariats)}%`}} /></i></div>

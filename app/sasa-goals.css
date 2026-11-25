@@ -80,8 +80,9 @@
 .goal-row { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); transition: border-color .2s, box-shadow .2s; scroll-margin-top: 90px; }
 .goal-row:hover { border-color: color-mix(in srgb, var(--tone) 40%, var(--line)); }
 .goal-row[open] { box-shadow: var(--shadow); }
-.goal-row summary { position: relative; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 14px 46px 14px 18px; cursor: pointer; list-style: none; }
+.goal-row summary { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1.45fr) minmax(0, 1fr) 13.5rem; align-items: center; gap: 18px; padding: 14px 46px 14px 18px; cursor: pointer; list-style: none; }
 .goal-row summary::-webkit-details-marker { display: none; }
+.goal-row summary > .gr-chip { justify-self: end; }
 .goal-row summary::after { content: ''; position: absolute; top: 50%; right: 19px; width: 7px; height: 7px; margin-top: -6px; border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted); transform: rotate(45deg); transition: transform .25s; }
 .goal-row[open] summary::after { margin-top: -2px; transform: rotate(-135deg); }
 .goal-row summary:focus-visible { outline: 2px solid var(--g-link); outline-offset: -2px; border-radius: 14px; }
@@ -192,6 +193,17 @@
 .goal-swm { margin: 0 0 34px; }
 .swm-grid { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 2fr); gap: 14px; align-items: start; }
 .swm-stats { display: grid; gap: 10px; }
+.swm-dot-card { display: grid; gap: 10px; margin: 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, color-mix(in srgb, var(--g-before) 6%, var(--surface)), var(--surface)); }
+.swm-dot-card figcaption { display: grid; gap: 5px; }
+.swm-dot-card figcaption span { color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.swm-dot-card figcaption small { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--ink); font-size: 12px; }
+.swm-dot-card figcaption small span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.swm-dot-card figcaption i { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--g-before) 18%, var(--line)); }
+.swm-dot-card figcaption i.is-on { background: var(--g-before); }
+.swm-dot-card > small { color: var(--muted); font-size: 11px; line-height: 1.45; }
+.swm-dots { display: block; width: 100%; height: auto; }
+.swm-dots circle { fill: color-mix(in srgb, var(--g-before) 18%, var(--line)); }
+.swm-dots circle.is-on { fill: var(--g-before); }
 .swm-stats > div { display: grid; gap: 3px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
 .swm-stats span { color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 .swm-stats strong { color: var(--navy); font-size: 26px; font-weight: 650; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
@@ -232,7 +244,10 @@
   .goal-brief > ul > li { grid-template-columns: 8px minmax(0, 1fr); gap: 6px 12px; }
   .goal-brief > ul > li > a { grid-column: 2; }
   .goal-brief > ul > li > p { font-size: 14px; }
-  .goal-row summary { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 13px 40px 14px 14px; }
+  .goal-row summary { grid-template-columns: 52px minmax(0, 1fr); gap: 8px 12px; padding: 13px 40px 14px 14px; }
+  .goal-row summary > :not(.ovt-gauge) { grid-column: 2; }
+  .goal-row summary > .ovt-gauge { grid-row: 1 / span 3; align-self: start; }
+  .goal-row summary > .gr-chip { justify-self: start; }
   .goal-row summary::after { top: 22px; right: 16px; margin-top: 0; }
   .goal-row[open] summary::after { margin-top: 4px; }
   .gr-chip { justify-self: start; }
@@ -255,7 +270,7 @@
 
 /* The targets beat in the presenter briefing. */
 .presenter-targets .pt-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .9fr); gap: 28px; align-items: start; }
-.presenter-targets .pt-timeline { padding: 18px 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.presenter-targets .pt-wheel { justify-self: center; width: min(440px, 100%); }
 .presenter-targets .gt { --gt-label: 118px; font-size: 13px; }
 .presenter-targets .gt-row { height: 30px; }
 .presenter-targets .pt-side { display: grid; gap: 18px; }

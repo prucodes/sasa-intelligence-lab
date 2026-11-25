@@ -18,7 +18,8 @@ import { DeliveryPlans } from './delivery-plans';
 import { RuralSanitation } from './rural-sanitation';
 import { ReportingContinuity } from './reporting-continuity';
 import { UlbAtlas } from './ulb-atlas';
-import { GoalTimeline, SasaGoalsScreen } from './sasa-goals';
+import { SasaGoalsScreen } from './sasa-goals';
+import { TargetWheel } from './target-graphics';
 import { LAST_SOURCE_CHECK, getSasaGoals, goalSummary, statusLabel as goalStatusLabel } from '@/lib/sasa-goals';
 import { useAutoHideHeader, useScreenMotion, useTabIndicator } from './motion';
 import { ScreenHero, MiniScatter, HeatStrip, GateRing, PipelineBars } from './screen-hero';
@@ -795,11 +796,15 @@ function PresenterTargets() {
     ['short-after-deadline', summary.shortAfterDeadline], ['before-deadline', summary.beforeDeadline], ['met', summary.met],
     ['different-measure', summary.differentMeasure], ['tracked', summary.tracked], ['not-measured', summary.notMeasured],
   ];
+  // The wheel in the same order as the overview tiles: the targets that need attention first.
+  const order = ['short-after-deadline', 'before-deadline', 'met', 'tracked', 'different-measure', 'not-measured'];
+  const sorted = [...model.goals].sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status) || (a.deadline ?? '9999').localeCompare(b.deadline ?? '9999'));
+  const [pointed, setPointed] = useState<string | null>(null);
   return <div className="presenter-targets sasa-goals">
     <div className="presenter-title-row"><div><h1>{summary.total} stated targets, read against what is retained.</h1><p className="presenter-lede">Each status comes from dates and values, never chosen. A reading taken before a target fell due cannot show it was missed, and a reading of a different measure is labelled as one.</p></div>
       <div className="boundary-mark"><span>Data Lake checked</span><b>{LAST_SOURCE_CHECK.date}</b><small>no newer month for these measures</small></div></div>
     <section className="pt-grid">
-      <div className="pt-timeline"><GoalTimeline goals={model.goals}/></div>
+      <div className="pt-wheel"><TargetWheel goals={sorted} active={pointed} onPoint={setPointed} summary={summary}/></div>
       <div className="pt-side">
         <ul className="pt-tally">{tally.filter(([, count]) => count > 0).map(([state, count]) => <li key={state}><b>{count}</b><span className={`gr-chip is-${state}`}><i aria-hidden="true"/>{goalStatusLabel[state]}</span></li>)}</ul>
         <ol className="pt-insights">{model.insights.map((insight) => <li key={insight.id}>{insight.text}</li>)}</ol>

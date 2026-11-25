@@ -181,3 +181,29 @@ describe('presenter briefing', () => {
     expect(dialog).toHaveTextContent('Data Lake checked');
   });
 });
+
+describe('target graphics on the Goals screen and in the briefing', () => {
+  it('draws one dot per identified bulk generator, the on-site ones filled', () => {
+    const {container} = render(<LabApp page="goals" initialMode="SAMPLE" />);
+    const dots = container.querySelector('.swm-dots')!;
+    expect(dots.querySelectorAll('circle')).toHaveLength(bwg.identified);
+    expect(dots.querySelectorAll('circle.is-on')).toHaveLength(bwg.processingOnSite);
+  });
+
+  it('rings a Goals row only where its reading measures the target itself', () => {
+    const {container} = render(<LabApp page="goals" initialMode="SAMPLE" />);
+    for (const entry of model.goals) {
+      const ring = container.querySelector(`#goal-${entry.id} .ovt-gauge-value`);
+      const measures = entry.reading?.share != null && ['short-after-deadline', 'before-deadline', 'met'].includes(entry.status);
+      expect(Boolean(ring)).toBe(measures);
+    }
+  });
+
+  it('shows the target wheel in the briefing targets beat', () => {
+    render(<LabApp page="overview" initialMode="SAMPLE" />);
+    fireEvent.click(screen.getByRole('button', {name: /open presenter briefing/i}));
+    const dialog = screen.getByRole('dialog', {name: 'Presenter briefing'});
+    fireEvent.click(within(dialog).getByRole('tab', {name: /SASA targets/}));
+    expect(dialog.querySelectorAll('.pt-wheel .ovt-seg')).toHaveLength(model.goals.length);
+  });
+});
