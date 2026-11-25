@@ -130,6 +130,16 @@ function placedService() {
   return {ulbs: serviceSnapshot.ulbs.filter((ulb) => placed.has(String(ulb.code))), held};
 }
 
+/**
+ * Urban households on the reported day, as the collection and segregation targets read them:
+ * one base (the ULBs the Atlas places) and two counts, so every household is counted once.
+ */
+export function householdLine() {
+  const service = placedService();
+  const total = (key: 'households' | 'collected' | 'segregated') => service.ulbs.reduce((sum, ulb) => sum + ulb[key], 0);
+  return {households: total('households'), collected: total('collected'), segregated: total('segregated'), ulbs: service.ulbs.length, held: service.held.length, day: formatAtlasDay(serviceSnapshot.day)};
+}
+
 let cached: ReturnType<typeof build> | null = null;
 export function getSasaGoals() { return (cached ??= build()); }
 

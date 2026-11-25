@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import {OverviewHero} from './overview-hero';
 import {OverviewTargets} from './overview-targets';
+import {HouseholdLine} from './household-line';
 import { getOverviewIssues, type ReviewIssueId } from '@/lib/overview';
 import { getReportedMovements } from '@/lib/analytics';
 import { anchorRegistry, sameDistrict } from '@/lib/crosswalk';
@@ -133,6 +134,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
   return <div className="overview-review" data-issue={selected}>
     <OverviewHero shapes={shapes} failed={failed} href={href} rural={{open:ruralOpen,close:ruralClose,shift:ruralShift}} onSubject={(id)=>{chooseSubject(id);document.querySelector('.or-subject-strip')?.scrollIntoView({behavior:'smooth',block:'start'});}}/>
     <OverviewTargets href={href}/>
+    <HouseholdLine href={href}/>
     <nav className="or-subject-strip" aria-label="Operational review subjects" aria-describedby="or-selector-basis">
       <p id="or-selector-basis">Each subject keeps its own population and period. Totals cover returned districts only.</p>
       <label className="overview-mobile-subject">Review subject<select value={subject} onChange={event=>chooseSubject(event.target.value)}>{subjects.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select><small>{current.scope}</small></label>

@@ -2,7 +2,7 @@ import {fireEvent, render, screen, within} from '@testing-library/react';
 import {beforeEach, describe, expect, it} from 'vitest';
 import {OverviewReview} from '@/app/overview-review';
 import {LabApp} from '@/app/lab-app';
-import {LAST_SOURCE_CHECK, getSasaGoals, goalSummary, pooledDistrictMap, statusLabel} from '@/lib/sasa-goals';
+import {LAST_SOURCE_CHECK, getSasaGoals, goalSummary, householdLine, pooledDistrictMap, statusLabel} from '@/lib/sasa-goals';
 
 const href = (path: string) => `${path}?mode=governed`;
 const model = getSasaGoals();
@@ -52,6 +52,22 @@ describe('overview targets band', () => {
     expect(legacyItem).toHaveTextContent(`${legacy.reading!.share!.toLocaleString('en-IN', {maximumFractionDigits: 1})}% of the target reached`);
     expect(band).toHaveTextContent(`Data Lake checked ${LAST_SOURCE_CHECK.date}`);
     expect(within(band).getByRole('link', {name: /Open SASA Goals/})).toHaveAttribute('href', '/goals?mode=governed');
+  });
+});
+
+describe('every 100 urban households', () => {
+  it('draws 100 houses from the same base as the collection and segregation targets', () => {
+    const line = householdLine();
+    const collection = model.goals.find((goal) => goal.id === 'collection')!.reading!.share!;
+    const segregation = model.goals.find((goal) => goal.id === 'segregation')!.reading!.share!;
+    expect(line.collected / line.households * 100).toBeCloseTo(collection, 9);
+    expect(line.segregated / line.households * 100).toBeCloseTo(segregation, 9);
+    const {container} = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    const houses = container.querySelectorAll('.ovh-house');
+    expect(houses).toHaveLength(100);
+    expect(container.querySelectorAll('.ovh-house.is-segregating')).toHaveLength(Math.round(segregation));
+    expect(container.querySelectorAll('.ovh-house.is-segregating, .ovh-house.is-collected')).toHaveLength(Math.round(collection));
+    expect(screen.getByRole('region', {name: /Of every 100 households/})).toHaveTextContent(`${line.households.toLocaleString('en-IN')} households`);
   });
 });
 

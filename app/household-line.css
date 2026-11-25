@@ -1,0 +1,34 @@
+/* Every 100 urban households: an isotype of one base, three parts. Darker teal is further along. */
+.ov-households {
+  --ovh-seg: #0b7a63; --ovh-col: #8cc7b6; --ovh-miss: #b9c3cf;
+  display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 22px 40px; align-items: center;
+  margin: 0 0 24px; padding: 28px 30px; border: 1px solid var(--line); border-radius: 22px;
+  background: radial-gradient(60% 90% at 100% 50%, color-mix(in srgb, var(--ovh-seg) 7%, transparent), transparent 70%), var(--surface);
+}
+.theme-dark .ov-households { --ovh-seg: #4fc2a4; --ovh-col: #2f7466; --ovh-miss: #5b6b7d; }
+.ovh-copy { display: grid; gap: 13px; min-width: 0; }
+.ovh-kicker { font-size: 11px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-dark, #087f8c); }
+.theme-dark .ovh-kicker { color: #7fd3d8; }
+.ov-households h2 { margin: 0; max-width: 26ch; font-size: clamp(22px, 2.2vw, 30px); font-weight: 650; line-height: 1.14; letter-spacing: -.035em; color: var(--navy); text-wrap: balance; }
+.ov-households h2 em { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-style: italic; letter-spacing: -.02em; color: var(--ovh-seg); }
+.ovh-legend { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.ovh-legend li { display: grid; grid-template-columns: 14px 34px minmax(0, 1fr); align-items: baseline; gap: 10px; }
+.ovh-legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--ovh-seg); transform: translateY(1px); }
+.ovh-legend .is-collected i { background: var(--ovh-col); }
+.ovh-legend .is-missed i { background: none; box-shadow: inset 0 0 0 1.6px var(--ovh-miss); }
+.ovh-legend b { color: var(--navy); font-size: 22px; font-weight: 650; text-align: right; font-variant-numeric: tabular-nums; }
+.ovh-legend span { display: grid; color: var(--ink); font-size: 13.5px; line-height: 1.35; }
+.ovh-legend small { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.ovh-note { margin: 0; max-width: 62ch; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.ovh-open { justify-self: start; display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid var(--line); border-radius: 11px; color: var(--navy); font-size: 13px; font-weight: 650; text-decoration: none; background: var(--surface); }
+.ovh-open:hover { border-color: var(--ovh-seg); }
+.ovh-open:focus-visible { outline: 2px solid var(--ovh-seg); outline-offset: 2px; }
+.ovh-houses { display: block; justify-self: center; width: min(100%, 430px); height: auto; }
+/* The door lives in a shared symbol, so it reads its colour from an inherited variable. */
+.ovh-house { --ovh-door: var(--surface); fill: var(--ovh-seg); stroke: none; }
+.ovh-door { fill: none; stroke: var(--ovh-door); stroke-width: 1.6; }
+.ovh-house.is-collected { fill: var(--ovh-col); }
+.ovh-house.is-missed { fill: none; stroke: var(--ovh-miss); stroke-width: 1.5; stroke-linejoin: round; }
+.ovh-house.is-missed { --ovh-door: var(--ovh-miss); }
+@media (max-width: 1000px) { .ov-households { grid-template-columns: minmax(0, 1fr); padding: 22px; } }
+@media (max-width: 480px) { .ov-households { padding: 18px 16px; border-radius: 18px; } }
