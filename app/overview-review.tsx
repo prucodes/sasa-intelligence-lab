@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import {OverviewHero} from './overview-hero';
 import {OverviewTargets} from './overview-targets';
-import {HouseholdLine} from './household-line';
+import {HouseholdLine, RuralDays} from './household-line';
 import { getOverviewIssues, type ReviewIssueId } from '@/lib/overview';
 import { getReportedMovements } from '@/lib/analytics';
 import { anchorRegistry, sameDistrict } from '@/lib/crosswalk';
@@ -166,7 +166,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
       </dl><p>Historical exports and authorized routes count different things; these figures do not measure current ingestion completeness. Subject comparisons retain their own evidence rules.</p><a href={href('/data-readiness')}>Inspect source coverage <Arrow/></a></details>
     </header>}
     <div id="overview-selected-evidence" className="overview-selected" aria-live="polite">
-    {subject==='rural-change' && <RuralMovement compact basis={ruralBasis} onBasisChange={setRuralBasis} href={`${href('/gap-radar')}&view=movement`}/>}
+    {subject==='rural-change' && <><RuralMovement compact basis={ruralBasis} onBasisChange={setRuralBasis} href={`${href('/gap-radar')}&view=movement`}/><RuralDays basis={ruralBasis}/></>}
     {subject==='works' && <DeliveryPlans overview/>}
     {subject==='rural-centres' && <RuralSanitation/>}
     {subject==='reporting' && <ReportingContinuity/>}

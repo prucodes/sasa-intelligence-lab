@@ -10,12 +10,13 @@
 .ovh-kicker { font-size: 11px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-dark, #087f8c); }
 .theme-dark .ovh-kicker { color: #7fd3d8; }
 .ov-households h2 { margin: 0; max-width: 26ch; font-size: clamp(22px, 2.2vw, 30px); font-weight: 650; line-height: 1.14; letter-spacing: -.035em; color: var(--navy); text-wrap: balance; }
+.ov-households.is-rural { margin-top: 4px; }
 .ov-households h2 em { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-style: italic; letter-spacing: -.02em; color: var(--ovh-seg); }
 .ovh-legend { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
 .ovh-legend li { display: grid; grid-template-columns: 14px 34px minmax(0, 1fr); align-items: baseline; gap: 10px; }
 .ovh-legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--ovh-seg); transform: translateY(1px); }
 .ovh-legend .is-collected i { background: var(--ovh-col); }
-.ovh-legend .is-missed i { background: none; box-shadow: inset 0 0 0 1.6px var(--ovh-miss); }
+.ovh-legend :is(.is-missed, .is-none) i { background: none; box-shadow: inset 0 0 0 1.6px var(--ovh-miss); }
 .ovh-legend b { color: var(--navy); font-size: 22px; font-weight: 650; text-align: right; font-variant-numeric: tabular-nums; }
 .ovh-legend span { display: grid; color: var(--ink); font-size: 13.5px; line-height: 1.35; }
 .ovh-legend small { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
@@ -28,7 +29,7 @@
 .ovh-house { --ovh-door: var(--surface); fill: var(--ovh-seg); stroke: none; }
 .ovh-door { fill: none; stroke: var(--ovh-door); stroke-width: 1.6; }
 .ovh-house.is-collected { fill: var(--ovh-col); }
-.ovh-house.is-missed { fill: none; stroke: var(--ovh-miss); stroke-width: 1.5; stroke-linejoin: round; }
-.ovh-house.is-missed { --ovh-door: var(--ovh-miss); }
+.ovh-house:is(.is-missed, .is-none) { fill: none; stroke: var(--ovh-miss); stroke-width: 1.5; stroke-linejoin: round; }
+.ovh-house:is(.is-missed, .is-none) { --ovh-door: var(--ovh-miss); }
 @media (max-width: 1000px) { .ov-households { grid-template-columns: minmax(0, 1fr); padding: 22px; } }
 @media (max-width: 480px) { .ov-households { padding: 18px 16px; border-radius: 18px; } }

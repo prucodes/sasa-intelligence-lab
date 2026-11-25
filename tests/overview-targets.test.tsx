@@ -62,12 +62,12 @@ describe('every 100 urban households', () => {
     const segregation = model.goals.find((goal) => goal.id === 'segregation')!.reading!.share!;
     expect(line.collected / line.households * 100).toBeCloseTo(collection, 9);
     expect(line.segregated / line.households * 100).toBeCloseTo(segregation, 9);
-    const {container} = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
-    const houses = container.querySelectorAll('.ovh-house');
-    expect(houses).toHaveLength(100);
-    expect(container.querySelectorAll('.ovh-house.is-segregating')).toHaveLength(Math.round(segregation));
-    expect(container.querySelectorAll('.ovh-house.is-segregating, .ovh-house.is-collected')).toHaveLength(Math.round(collection));
-    expect(screen.getByRole('region', {name: /Of every 100 households/})).toHaveTextContent(`${line.households.toLocaleString('en-IN')} households`);
+    render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    const section = screen.getByRole('region', {name: /Of every 100 households/});
+    expect(section.querySelectorAll('.ovh-house')).toHaveLength(100);
+    expect(section.querySelectorAll('.ovh-house.is-segregating')).toHaveLength(Math.round(segregation));
+    expect(section.querySelectorAll('.ovh-house.is-segregating, .ovh-house.is-collected')).toHaveLength(Math.round(collection));
+    expect(section).toHaveTextContent(`${line.households.toLocaleString('en-IN')} households`);
   });
 });
 
@@ -175,5 +175,27 @@ describe('district chosen on the map', () => {
     render(<LabApp page="goals" initialMode="SAMPLE"/>);
     expect(screen.getByRole('table', {name: /District standing/}).querySelector('tr.is-picked')).toBeNull();
     window.history.replaceState({}, '', '/');
+  });
+});
+
+describe('every 100 rural panchayat-days', () => {
+  it('draws the latest cohort month, follows the day basis, and keeps its own unit', async () => {
+    const {getRuralMovement} = await import('@/lib/rural-movement');
+    window.history.replaceState({}, '', '/?mode=governed');
+    const {container} = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    for (const basis of ['all-days', 'working-days'] as const) {
+      if (basis === 'working-days') fireEvent.change(screen.getByRole('combobox', {name: 'Rural collection day basis'}), {target: {value: 'working-days'}});
+      const last = getRuralMovement(basis).series.at(-1)!;
+      const rate = last.comparable.collectionRate! * 100;
+      const section = screen.getByRole('region', {name: /Of every 100 panchayat.days/});
+      expect(section.querySelectorAll('.ovh-house')).toHaveLength(100);
+      expect(section.querySelectorAll('.ovh-house.is-reported')).toHaveLength(Math.round(rate));
+      expect(section).toHaveTextContent(`${last.comparable.pairs.toLocaleString('en-IN')} in`);
+      expect(section).toHaveTextContent('not comparable with the urban figure');
+    }
+    // The all-days count is the stored one: 62,970 of 85,769 in August.
+    const august = getRuralMovement('all-days').series.at(-1)!;
+    expect(Math.round(august.comparable.collectionRate! * august.comparable.pairs)).toBe(august.comparable.collected);
+    expect(container.querySelectorAll('.ov-households')).toHaveLength(2);
   });
 });

@@ -161,3 +161,38 @@
   .or-closing .or-readiness a { padding-left: 0; border-left: 0; }
   .or-closing .or-context-links { grid-template-columns: 1fr; }
 }
+
+/* One hero per subject: the subject's own visual panel below. The header above it is a light,
+   slim title row (kicker, finding, key figure, links), not a second dark canvas. The selectors
+   carry one more class than the earlier dark-canvas rules so this wins without !important. */
+.app-shell .overview-review > header.or-lede {
+  --orh-accent: #087f83;
+  --ew-accent: var(--orh-accent); --ew-light: var(--ink);
+  background: none; color: var(--ink); box-shadow: none; border-radius: 0; isolation: auto;
+  padding: 4px 2px 0; margin: 26px 0 16px;
+}
+.theme-dark .app-shell .overview-review > header.or-lede, .app-shell.theme-dark .overview-review > header.or-lede { --orh-accent: #7fd3c4; }
+.app-shell .overview-review > header.or-lede::before, .app-shell .overview-review > header.or-lede::after { display: none; }
+.app-shell .overview-review > header.or-lede .or-lede-head { margin-bottom: 6px; }
+.app-shell .overview-review > header.or-lede .or-lede-kicker { color: var(--orh-accent); }
+.app-shell .overview-review > header.or-lede .or-lede-edition { color: var(--muted); opacity: 1; }
+.app-shell .overview-review > header.or-lede .or-lede-body { margin-top: 2px; align-items: end; }
+.app-shell .overview-review > header.or-lede .or-lede-text h2 { color: var(--navy); font-size: clamp(22px, 2.2vw, 30px); font-weight: 600; line-height: 1.18; }
+.app-shell .overview-review > header.or-lede .or-lede-text h2 em { color: var(--orh-accent); }
+.app-shell .overview-review > header.or-lede .or-lede-text p { margin-top: 8px; color: var(--muted); opacity: 1; }
+.app-shell .overview-review > header.or-lede .overview-basis-label { color: var(--muted); opacity: 1; }
+.app-shell .overview-review > header.or-lede .or-lede-figure strong { color: var(--orh-accent); font-size: clamp(32px, 3.2vw, 46px); font-weight: 600; }
+.app-shell .overview-review > header.or-lede .or-lede-figure small { color: var(--muted); opacity: 1; }
+.app-shell .overview-review > header.or-lede .review-next { margin: 8px 0 0; }
+.app-shell .overview-review > header.or-lede .review-next a { color: var(--orh-accent); }
+.app-shell .overview-review > header.or-lede .overview-evidence-summary { margin-top: 6px; border-top: 1px solid var(--line); color: var(--muted); }
+.app-shell .overview-review > header.or-lede .overview-evidence-summary a { color: var(--orh-accent); }
+.app-shell .overview-review > header.or-lede .or-lede-ledger dt { color: var(--muted); }
+.app-shell .overview-review > header.or-lede .or-lede-ledger dd { color: var(--navy); }
+
+/* Under an overview subject header the section's own title would be a second headline, so only
+   its one-line description and vintage remain, as a caption. The hidden title still names the
+   section for assistive technology through aria-labelledby. */
+.overview-selected :is(.ew-heading, .rs-intro) :is(h2, .ew-kicker, .rs-kicker) { display: none; }
+.overview-selected :is(.ew-heading, .rs-intro) { margin-bottom: 10px; padding-bottom: 0; border-bottom: 0; }
+.overview-selected :is(.ew-heading, .rs-intro) p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.5; }

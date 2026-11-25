@@ -46,7 +46,7 @@ export function RuralSanitation() {
 
     <div className="vi-geography-section"><div className="ew-controls"><label>Map measure<select aria-label="Centre map measure" value={measure} onChange={e=>setMeasure(e.target.value)}><option value="presence">Processing centre present</option><option value="functioning">Fully functioning among stated conditions</option></select></label></div><div className="vi-map-review"><div className="rs-map-story"><span className="rs-kicker">The register picture</span>      <dl className="rs-summary">
         <div><dt>Gram panchayats</dt><dd>{format(data.panchayats)}<span> across {format(data.blocks)} blocks</span></dd></div>
-        <div><dt>With a processing centre</dt><dd>{data.coverageRatio === null ? 'Not stated' : `${Math.round(data.coverageRatio * 100)}%`}<span> {format(data.withSwpc)} of {format(data.withSwpc + data.withoutSwpc)} stated</span></dd></div>
+        <div><dt>With a processing centre</dt><dd>{data.coverageRatio === null ? 'Not stated' : `${(data.coverageRatio * 100).toFixed(1)}%`}<span> {format(data.withSwpc)} of {format(data.withSwpc + data.withoutSwpc)} stated</span></dd></div>
         <div><dt>Held out for disagreement</dt><dd>{data.heldOut}<span> of {format(data.sourceRows)} source rows</span></dd></div>
       </dl><p>Presence and working condition describe the undated register. They do not establish service outcomes.</p></div><DistrictMap rows={data.districts.map(d=>{
       const denominator=measure==='presence'?d.withSwpc+d.withoutSwpc:d.fullyFunctioning+d.partiallyFunctioning+d.notFunctioning;

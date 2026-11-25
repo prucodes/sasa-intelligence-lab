@@ -2,10 +2,13 @@
 
 import {useMemo} from 'react';
 import {householdLine} from '@/lib/sasa-goals';
+import {getRuralMovement, type RateBasis} from '@/lib/rural-movement';
 import './household-line.css';
 
 const whole = (value: number) => value.toLocaleString('en-IN');
 const pct = (value: number) => `${value.toLocaleString('en-IN', {maximumFractionDigits: 1})}%`;
+// The rural rates read to two decimals everywhere else on the overview, so they do here too.
+const pct2 = (value: number) => `${value.toFixed(2)}%`;
 
 /**
  * Of every 100 urban households on the reported day: collected from and segregating, collected
@@ -50,6 +53,55 @@ export function HouseholdLine({href}: {href: (path: string) => string}) {
         </defs>
         {houses.map((id, index) => (
           <use key={index} href="#ovh-house" className={`ovh-house is-${id}`} x={(index % columns) * pitch + 2} y={Math.floor(index / columns) * pitch + 2} width={pitch - 4} height={pitch - 4}/>
+        ))}
+      </svg>
+    </section>
+  );
+}
+
+/**
+ * Of every 100 rural panchayat-days in the latest month of the common cohort: reported collection
+ * or reported none. Its own unit (panchayat-days, not households), so it sits with the rural subject.
+ */
+export function RuralDays({basis}: {basis: RateBasis}) {
+  const movement = useMemo(() => getRuralMovement(basis), [basis]);
+  const first = movement.series[0], last = movement.series.at(-1)!;
+  const rate = (last.comparable.collectionRate ?? 0) * 100;
+  // Counts for the chosen day basis: the stored count for all days, rate times observations without Sundays and second Saturdays.
+  const days = last.comparable.pairs;
+  const collected = basis === 'all-days' ? last.comparable.collected : Math.round((last.comparable.collectionRate ?? 0) * days);
+  const reported = Math.round(rate);
+  const parts = [
+    {id: 'reported', count: reported, share: rate, label: 'reported collection', days: collected},
+    {id: 'none', count: 100 - reported, share: 100 - rate, label: 'reported no collection', days: days - collected},
+  ];
+  const huts = parts.flatMap((part) => Array.from({length: part.count}, () => part.id));
+  const columns = 10, pitch = 22;
+  const month = (period: string) => new Date(`${period}-01T00:00:00Z`).toLocaleString('en-IN', {month: 'long', year: 'numeric', timeZone: 'UTC'});
+
+  return (
+    <section className="ov-households is-rural" aria-labelledby="ov-rural-days-title">
+      <div className="ovh-copy">
+        <span className="ovh-kicker">Every 100 rural panchayat-days · {month(last.period)}, days 1–7</span>
+        <h2 id="ov-rural-days-title">Of every 100 panchayat‑days, <em>{reported} reported collection.</em></h2>
+        <ul className="ovh-legend">
+          {parts.map((part) => (
+            <li key={part.id} className={`is-${part.id}`}>
+              <i aria-hidden="true"/>
+              <b>{part.count}</b>
+              <span>{part.label}<small>{pct2(part.share)} · {whole(part.days)} panchayat‑days</small></span>
+            </li>
+          ))}
+        </ul>
+        <p className="ovh-note">The common cohort: panchayat-days with a valid report in every retained month, {whole(days)} in {month(last.period)} ({basis === 'all-days' ? 'all seven days counted' : 'without Sundays and second Saturdays'}). It was {pct2((first.comparable.collectionRate ?? 0) * 100)} in {month(first.period)}. A panchayat-day is not a household, so this is not comparable with the urban figure.</p>
+      </div>
+      <svg className="ovh-houses" viewBox={`0 0 ${columns * pitch} ${Math.ceil(huts.length / columns) * pitch}`} role="img"
+        aria-label={`Of every 100 rural panchayat-days: ${parts.map((part) => `${part.count} ${part.label}`).join(', ')}.`}>
+        <defs>
+          <symbol id="ovh-hut" viewBox="0 0 24 24"><path d="M2.5 12.5 12 3.5l9.5 9h-2.5V21H5v-8.5z"/><path className="ovh-door" d="M10.2 21v-4.6h3.6V21"/></symbol>
+        </defs>
+        {huts.map((id, index) => (
+          <use key={index} href="#ovh-hut" className={`ovh-house is-${id}`} x={(index % columns) * pitch + 2} y={Math.floor(index / columns) * pitch + 2} width={pitch - 4} height={pitch - 4}/>
         ))}
       </svg>
     </section>
