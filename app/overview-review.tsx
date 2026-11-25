@@ -138,7 +138,8 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
       <label className="overview-mobile-subject">Review subject<select value={subject} onChange={event=>chooseSubject(event.target.value)}>{subjects.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select><small>{current.scope}</small></label>
       <div className="or-subject-buttons">{subjects.map(item=><button key={item.id} aria-pressed={subject===item.id} onClick={()=>chooseSubject(item.id)}><b>{item.title}</b><small>{item.scope}</small></button>)}</div>
     </nav>
-    <header className="or-lede" aria-label="Selected review subject">
+    {/* Town-level subjects open straight on the review card below, which carries the same total and follows the district filter. */}
+    {!urban&&<header className="or-lede" aria-label="Selected review subject">
       <div className="or-lede-head">
         <span className="or-lede-kicker">{current.title}</span>
         <span className="or-lede-edition">{current.scope}</span>
@@ -154,15 +155,14 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
           <small>{current.lede.unit}</small>
         </div>
       </div>
-      {!urban&&<div className="review-next"><a href="#overview-selected-evidence">{subject==='rural-change'?'Explore the district changes':'Inspect this subject'} ↓</a></div>}
-      {urban&&<div className="review-next"><a href={`${href('/gap-radar')}&programme=${selected}${district?`&district=${encodeURIComponent(district)}`:''}`}>Compare {district||'returned'} ULBs on {active.title.toLowerCase()} <Arrow/></a><a href={`${href('/operational-analytics')}&tab=${selected}`}>Inspect programme evidence <Arrow/></a></div>}
+      <div className="review-next"><a href="#overview-selected-evidence">{subject==='rural-change'?'Explore the district changes':'Inspect this subject'} ↓</a></div>
       <details className="overview-evidence-summary"><summary>Evidence coverage & scoring limits</summary><dl className="or-lede-ledger">
         <div><dt>{current.scale.label}</dt><dd>{current.scale.value}</dd></div>
         <div><dt>Historical exports</dt><dd>{governedSnapshotStats.completeDatasets}</dd></div>
         <div><dt>Authorized routes</dt><dd>{readinessCatalogueStats.platformAvailable}</dd></div>
         <div><dt>Overall scoring</dt><dd>Not assigned</dd></div>
       </dl><p>Historical exports and authorized routes count different things; these figures do not measure current ingestion completeness. Subject comparisons retain their own evidence rules.</p><a href={href('/data-readiness')}>Inspect source coverage <Arrow/></a></details>
-    </header>
+    </header>}
     <div id="overview-selected-evidence" className="overview-selected" aria-live="polite">
     {subject==='rural-change' && <RuralMovement compact basis={ruralBasis} onBasisChange={setRuralBasis} href={`${href('/gap-radar')}&view=movement`}/>}
     {subject==='works' && <DeliveryPlans overview/>}
@@ -222,7 +222,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
             return <li key={row.key}><span className="or-rank">{String(index + 1).padStart(2, '0')}</span><div className="or-row-name"><b>{row.ulb}</b><small>{row.district}</small><i aria-hidden="true"><em style={{ width: `${row.value / (ranked[0]?.value || 1) * 100}%` }}/></i></div><div className="or-row-value"><strong>{format(row.value)}</strong><small>{active.unit}</small></div>{hasDiagnostic ? <a href={href(`/diagnostics/${key}`)} aria-label={`Inspect ${row.ulb} evidence`}><Arrow/></a> : <span className="or-unmatched" title="No diagnostics page for this source name">Name review</span>}</li>;
           })}</ol>
           {ranked.length === 0 && <p className="or-no-gap">{scope.length ? 'Usable records in this selection report no positive shortfall.' : 'No usable measurements in this selection. Missing evidence is not zero.'}</p>}
-          <div className="or-list-actions">{ranked.length > 5 && <button onClick={() => setShowAll(!showAll)} aria-expanded={showAll}>{showAll ? 'Show top five' : `Browse all ${ranked.length} ULBs`}</button>}<a href={`${href('/operational-analytics')}&tab=${selected}`}>Open full analysis <Arrow/></a></div>
+          <div className="or-list-actions">{ranked.length > 5 && <button onClick={() => setShowAll(!showAll)} aria-expanded={showAll}>{showAll ? 'Show top five' : `Browse all ${ranked.length} ULBs`}</button>}<span className="or-list-links"><a href={`${href('/gap-radar')}&programme=${selected}${district?`&district=${encodeURIComponent(district)}`:''}`}>Compare {district||'returned'} ULBs in Gap Radar <Arrow/></a><a href={`${href('/operational-analytics')}&tab=${selected}`}>Open full analysis <Arrow/></a></span></div>
         </div>
       </div>
 
@@ -231,7 +231,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
 
     <section className="or-interpretation" aria-label="Movement and interpretation">
       <a className="or-movement" href={`${href('/operational-analytics')}&tab=${selected}&view=movement`}><div><span className="or-kicker">Across this source / {movement.metricLabel}</span><h3>{movement.repeat.carriedForward ? 'This month may be carried forward' : changed ? `${changed} matched ULB values changed` : 'The reported values repeated'}</h3><p>{movementText}</p><small>{movement.previousPeriod} → {movement.currentPeriod} · {movement.matched} comparable pairs · {movement.excluded} held out</small></div><Arrow/></a>
-      <div className="or-reading"><span className="or-kicker">Read this correctly</span><p>{active.boundary}</p><small>Unchanged reports do not prove inactivity. Two periods do not establish a persistent trend.</small></div>
+      <div className="or-reading"><span className="or-kicker">Read this correctly</span><p>{active.boundary}</p><small>Totals cover returned districts only; a row the source did not return is absent, not zero. Unchanged reports do not prove inactivity. Two periods do not establish a persistent trend.</small></div>
     </section>
 
     </>}

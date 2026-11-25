@@ -599,3 +599,4 @@
   .or-lede { padding: 20px; border-radius: 20px; }
   .or-lede-figure strong { font-size: 46px; }
 }
+.or-list-links { display: inline-flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; }

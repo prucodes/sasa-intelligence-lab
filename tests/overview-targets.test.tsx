@@ -23,12 +23,17 @@ describe('overview targets band', () => {
     const tally = within(band).getByRole('list', {name: 'Targets by status'});
     expect(tally).toHaveTextContent(`${summary.shortAfterDeadline}${statusLabel['short-after-deadline']}`);
     expect(tally).toHaveTextContent(`${summary.notMeasured}${statusLabel['not-measured']}`);
-    const below = within(band).getByRole('list', {name: 'Below target after its date'});
+    // One plain line per target, the ones below target after their date first, each opening its Goals row.
+    const list = within(band).getByRole('list', {name: 'Every stated target'});
+    const items = within(list).getAllByRole('listitem');
+    expect(items).toHaveLength(model.goals.length);
     const shortGoals = model.goals.filter((goal) => goal.status === 'short-after-deadline');
-    expect(within(below).getAllByRole('link')).toHaveLength(shortGoals.length);
-    for (const goal of shortGoals) {
-      expect(below).toHaveTextContent(goal.reading!.display);
-      expect(below).toHaveTextContent(`Due ${goal.deadlineLabel}`);
+    shortGoals.forEach((goal, index) => expect(items[index]).toHaveClass('is-short-after-deadline'));
+    for (const goal of model.goals) {
+      const item = items.find((entry) => within(entry).getByRole('link').getAttribute('href') === `/goals?mode=governed#goal-${goal.id}`)!;
+      expect(item).toHaveTextContent(statusLabel[goal.status]);
+      expect(item).toHaveTextContent(goal.deadlineLabel);
+      expect(item).toHaveTextContent(goal.reading ? `${goal.reading.display}, ${goal.reading.asOfLabel}` : 'None');
     }
     expect(band).toHaveTextContent(`Data Lake checked ${LAST_SOURCE_CHECK.date}`);
     expect(within(band).getByRole('link', {name: /Open SASA Goals/})).toHaveAttribute('href', '/goals?mode=governed');
@@ -70,6 +75,36 @@ describe('overview hero map', () => {
     const goal = model.goals.find((entry) => entry.id === 'collection')!;
     const card = screen.getByRole('button', {name: /Households collected from/});
     expect(card).toHaveTextContent(`Target due ${goal.deadlineLabel} · ${statusLabel[goal.status].toLowerCase()}`);
+  });
+});
+
+describe('town-level review subjects', () => {
+  beforeEach(() => window.history.replaceState({}, '', '/?mode=governed'));
+
+  it('state their total once, in the review card that follows the district filter', () => {
+    const {container} = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    for (const name of ['Vehicle delivery', 'Household toilets', 'Legacy waste']) {
+      fireEvent.click(within(screen.getByLabelText('Operational review subjects')).getByRole('button', {name: new RegExp(name)}));
+      expect(screen.queryByLabelText('Selected review subject')).not.toBeInTheDocument();
+      const total = container.querySelector('.or-hero-value')!.textContent!;
+      const workspace = screen.getByLabelText('Connected district and ULB review');
+      expect(workspace.querySelectorAll('.or-hero-value')).toHaveLength(1);
+      expect(within(workspace).getByRole('link', {name: /ULBs in Gap Radar/})).toHaveAttribute('href', expect.stringContaining('/gap-radar?mode=governed&programme='));
+      expect(total).not.toBe('');
+    }
+    // The rural subject keeps its header: its figure is not repeated below.
+    fireEvent.click(within(screen.getByLabelText('Operational review subjects')).getByRole('button', {name: /Rural collection change/}));
+    expect(screen.getByLabelText('Selected review subject')).toBeInTheDocument();
+  });
+});
+
+describe('Goals calendar', () => {
+  it('names the year and says what each mark means', () => {
+    render(<LabApp page="goals" initialMode="SAMPLE"/>);
+    const calendar = document.querySelector('.screen-hero .gt')!;
+    expect(calendar.querySelector('.gt-year')).toHaveTextContent('2026');
+    expect(calendar.querySelector('.gt-marks')).toHaveTextContent(/Target date.*Latest reading.*When the latest readings were taken/);
+    expect(document.body).toHaveTextContent('shows the time between them, not the size of any shortfall');
   });
 });
 

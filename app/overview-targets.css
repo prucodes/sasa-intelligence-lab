@@ -1,28 +1,21 @@
-/* Overview targets band: the Goals calendar and status chips under the hero, in the hero's calm panel style. */
+/* Overview targets band: a tally and one plain line per target, in the hero's calm panel style.
+   The calendar stays on the Goals screen, where there is room to explain it. */
 .ov-targets {
-  display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: 22px 34px; align-items: start;
+  display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 22px 34px; align-items: start;
   margin: 0 0 24px; padding: 26px 30px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface);
 }
 .ovt-copy { display: grid; gap: 14px; min-width: 0; }
 .ovt-kicker { font-size: 11px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--g-link); }
-.ov-targets h2 { margin: 0; max-width: 24ch; font-size: clamp(22px, 2.2vw, 30px); font-weight: 650; line-height: 1.12; letter-spacing: -.035em; color: var(--navy); text-wrap: balance; }
+.ov-targets h2 { margin: 0; max-width: 22ch; font-size: clamp(22px, 2.2vw, 30px); font-weight: 650; line-height: 1.12; letter-spacing: -.035em; color: var(--navy); text-wrap: balance; }
 .ov-targets h2 em { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-style: italic; letter-spacing: -.02em; color: var(--g-link); }
 
-.ovt-tally { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 0; padding: 0; list-style: none; }
-.ovt-tally li { display: inline-flex; align-items: center; gap: 7px; }
-.ovt-tally b { min-width: 1ch; color: var(--navy); font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
-.ovt-tally .gr-chip { font-size: 12px; }
+.ovt-tally { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ovt-tally li { display: grid; grid-template-columns: 26px auto; align-items: center; gap: 8px; }
+.ovt-tally b { color: var(--navy); font-size: 20px; font-weight: 650; text-align: right; font-variant-numeric: tabular-nums; }
+.ovt-tally .gr-chip { justify-self: start; font-size: 12px; }
+.ovt-note { margin: 0; max-width: 46ch; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
 
-.ovt-below { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
-.ovt-below a { display: grid; gap: 3px; height: 100%; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--tone) 30%, var(--line)); border-radius: 13px;
-  background: color-mix(in srgb, var(--tone) 6%, var(--surface)); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
-.ovt-below a:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--tone) 60%, var(--line)); }
-.ovt-below a:focus-visible { outline: 2px solid var(--tone); outline-offset: 2px; }
-.ovt-below b { color: var(--navy); font-size: 13px; }
-.ovt-below span { color: var(--ink); font-size: 13.5px; font-variant-numeric: tabular-nums; }
-.ovt-below small { color: var(--muted); font-size: 11.5px; }
-
-.ovt-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
+.ovt-foot { display: grid; justify-items: start; gap: 12px; }
 .ovt-fresh { display: flex; align-items: baseline; gap: 8px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .ovt-fresh i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--g-before); transform: translateY(-1px); }
 .ovt-open { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid var(--line); border-radius: 11px;
@@ -30,16 +23,25 @@
 .ovt-open:hover { border-color: var(--g-link); }
 .ovt-open:focus-visible { outline: 2px solid var(--g-link); outline-offset: 2px; }
 
-.ovt-calendar { display: grid; gap: 8px; margin: 0; min-width: 0; padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px;
-  background: color-mix(in srgb, var(--g-before) 3%, var(--surface)); }
-.ovt-calendar .gt { --gt-label: 104px; }
-.ovt-calendar figcaption { color: var(--muted); font-size: 11px; }
+/* One line per target: name and status, then when it fell due and what was last read. */
+.ovt-list { display: grid; margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.ovt-list li + li { border-top: 1px solid var(--line); }
+.ovt-list a { display: grid; gap: 4px; padding: 10px 16px 10px 14px; box-shadow: inset 3px 0 0 var(--tone); color: inherit; text-decoration: none; transition: background-color .2s ease; }
+.ovt-list li.is-short-after-deadline a { background: color-mix(in srgb, var(--tone) 6%, var(--surface)); }
+.ovt-list a:hover { background: color-mix(in srgb, var(--tone) 9%, var(--surface)); }
+.ovt-list a:focus-visible { outline: 2px solid var(--g-link); outline-offset: -2px; }
+.ovt-row-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
+.ovt-row-head b { color: var(--navy); font-size: 14px; }
+.ovt-row-head .gr-chip { padding: 2px 9px; font-size: 11px; }
+.ovt-row-facts { display: flex; flex-wrap: wrap; gap: 2px 18px; color: var(--ink); font-size: 12.5px; line-height: 1.45; font-variant-numeric: tabular-nums; }
+.ovt-row-facts small { margin-right: 3px; color: var(--muted); font-size: 10.5px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
 
 @media (max-width: 1100px) {
-  .ov-targets { grid-template-columns: minmax(0, 1fr); padding: 22px 22px; }
+  .ov-targets { grid-template-columns: minmax(0, 1fr); padding: 22px; }
+  .ovt-tally { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+  .ovt-tally li { grid-template-columns: auto auto; }
 }
 @media (max-width: 560px) {
   .ov-targets { padding: 18px 16px; border-radius: 18px; }
-  .ovt-calendar { padding: 12px; }
-  .ovt-calendar .gt { --gt-label: 84px; }
+  .ovt-list a { padding: 10px 12px; }
 }

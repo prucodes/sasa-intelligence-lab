@@ -31,6 +31,15 @@
 .gt-row.is-different-measure .gt-read { background: var(--surface); box-shadow: inset 0 0 0 2.4px var(--tone), 0 0 0 2px var(--surface); }
 .gt-track em { position: absolute; top: 50%; transform: translate(10px, -50%); color: var(--muted); font-size: 10.5px; font-style: italic; white-space: nowrap; }
 .gt-row.is-not-measured .gt-due { border-style: dashed; border-color: var(--muted); }
+/* The year, today, and what each mark means, so the calendar reads without a presenter. */
+.gt-axis .gt-year { padding-right: 8px; color: var(--ink); text-align: left; letter-spacing: .02em; }
+.gt-today { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1.5px dashed color-mix(in srgb, var(--navy) 55%, transparent); }
+.gt-today span { position: absolute; top: 2px; right: 5px; color: var(--navy); font-size: 10px; font-style: normal; font-weight: 650; white-space: nowrap; }
+.gt-marks i { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+.gt-marks .gt-mark-due i { width: 8px; height: 8px; border: 1.5px solid var(--navy); border-radius: 1.5px; background: var(--surface); transform: rotate(45deg); }
+.gt-marks .gt-mark-read i { background: var(--navy); }
+.gt-marks .gt-mark-band i { width: 12px; height: 10px; border-radius: 3px; background: color-mix(in srgb, var(--g-before) 16%, transparent); box-shadow: inset 1px 0 0 color-mix(in srgb, var(--g-before) 40%, transparent), inset -1px 0 0 color-mix(in srgb, var(--g-before) 40%, transparent); }
+.gt-marks .gt-mark-today i { width: 0; height: 11px; border-radius: 0; border-left: 1.5px dashed color-mix(in srgb, var(--navy) 55%, transparent); background: none; }
 .gt-later { margin: 4px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
 .gt-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: 11px; }
 .gt-legend li { display: inline-flex; align-items: center; gap: 6px; }

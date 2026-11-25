@@ -35,7 +35,7 @@ export function SasaGoalsScreen({href}: {href: (path: string) => string}) {
 
   return (
     <div className="sasa-goals">
-      <ScreenHero data={hero} visual={<GoalTimeline goals={model.goals} />} caption="◆ the date stated · ● the latest retained reading · shaded: when the readings were taken"
+      <ScreenHero data={hero} visual={<GoalTimeline goals={model.goals} />} caption="The line between a target's date and its reading shows the time between them, not the size of any shortfall."
         actions={<><a href="#goals-brief">Read the brief ↓</a><a href="#goal-districts">District standing ↓</a></>} />
 
       <section className="goal-brief" id="goals-brief" aria-labelledby="goal-brief-title">
@@ -124,6 +124,14 @@ const at = (iso: string) => {
  * span in which every reading was taken. Targets for 2030, or with no date, are named below it.
  */
 export function GoalTimeline({goals}: {goals: SasaGoal[]}) {
+  // Today is read after hydration, so the static page and the browser never disagree about it.
+  const [today, setToday] = useState<string | null>(null);
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- one read of the clock once the page is live */
+    setToday(new Date().toISOString().slice(0, 10));
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+  const todayAt = today && Date.parse(`${today}T00:00:00Z`) >= YEAR_START && Date.parse(`${today}T00:00:00Z`) < YEAR_END ? at(today) : null;
   const dated = goals.filter((goal) => goal.deadline && goal.deadline < '2027-01-01').sort((a, b) => a.deadline!.localeCompare(b.deadline!));
   const later = goals.filter((goal) => !goal.deadline || goal.deadline >= '2027-01-01');
   const readings = dated.map((goal) => goal.reading?.asOf).filter((value): value is string => Boolean(value)).sort();
@@ -132,9 +140,12 @@ export function GoalTimeline({goals}: {goals: SasaGoal[]}) {
   const describe = (goal: SasaGoal) => `${goalShort[goal.id]}: due ${goal.deadlineLabel}; ${goal.reading ? `latest reading ${goal.reading.asOfLabel}` : 'no retained measure'}; ${statusLabel[goal.status]}`;
   return (
     <div className="gt" role="img" aria-label={dated.map(describe).join('. ')}>
-      <div className="gt-axis" aria-hidden="true"><span />{months.map((month, index) => <span key={index}>{month}</span>)}</div>
+      <div className="gt-axis" aria-hidden="true"><span className="gt-year">{new Date(YEAR_START).getUTCFullYear()}</span>{months.map((month, index) => <span key={index}>{month}</span>)}</div>
       <div className="gt-rows">
-        {band && <div className="gt-plot" aria-hidden="true"><i className="gt-band" style={{left: `${band.left}%`, width: `${band.width}%`}} /></div>}
+        {(band || todayAt !== null) && <div className="gt-plot" aria-hidden="true">
+          {band && <i className="gt-band" style={{left: `${band.left}%`, width: `${band.width}%`}} />}
+          {todayAt !== null && <i className="gt-today" style={{left: `${todayAt}%`}}><span>Today, {formatIso(today!).replace(/ \d{4}$/, '')}</span></i>}
+        </div>}
         {dated.map((goal, index) => {
           const due = at(goal.deadline!), read = goal.reading ? at(goal.reading.asOf) : null;
           return (
@@ -150,6 +161,12 @@ export function GoalTimeline({goals}: {goals: SasaGoal[]}) {
         })}
       </div>
       <p className="gt-later">Later or undated: {later.map((goal) => `${lower(goal.id)} (${goal.deadline ? goal.deadlineLabel : 'no date'})`).join(', ')}</p>
+      <ul className="gt-legend gt-marks" aria-hidden="true">
+        <li className="gt-mark-due"><i />Target date</li>
+        <li className="gt-mark-read"><i />Latest reading</li>
+        {band && <li className="gt-mark-band"><i />When the latest readings were taken</li>}
+        {todayAt !== null && <li className="gt-mark-today"><i />Today</li>}
+      </ul>
       <ul className="gt-legend" aria-hidden="true">
         {(['short-after-deadline', 'before-deadline', 'tracked', 'different-measure'] as const).filter((state) => dated.some((goal) => goal.status === state)).map((state) => <li key={state} className={`is-${state}`}><i />{statusLabel[state]}</li>)}
       </ul>
