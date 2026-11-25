@@ -33,8 +33,19 @@ describe('overview targets band', () => {
       const item = items.find((entry) => within(entry).getByRole('link').getAttribute('href') === `/goals?mode=governed#goal-${goal.id}`)!;
       expect(item).toHaveTextContent(statusLabel[goal.status]);
       expect(item).toHaveTextContent(goal.deadlineLabel);
-      expect(item).toHaveTextContent(goal.reading ? `${goal.reading.display}, ${goal.reading.asOfLabel}` : 'None');
+      expect(item).toHaveTextContent(goal.reading ? goal.reading.display : 'No data');
+      if (goal.reading) expect(item).toHaveTextContent(`latest ${goal.reading.asOfLabel}`);
+      expect(item).not.toHaveTextContent(/Due No date|Due SWM/);
+      // A bar only where the reading measures the target itself; never for a nearer measure, a tracked count or no data.
+      const bar = item.querySelector('.ovt-bar:not(.is-empty) b') as HTMLElement | null;
+      const measuresTarget = goal.reading?.share != null && ['short-after-deadline', 'before-deadline', 'met'].includes(goal.status);
+      expect(Boolean(bar)).toBe(measuresTarget);
+      if (bar) expect(parseFloat(bar.style.width)).toBeCloseTo(Math.max(1, Math.min(100, goal.reading!.share!)), 6);
     }
+    // Legacy waste reads as what is left; its bar shows the share of the target cleared, and says so.
+    const legacy = model.goals.find((goal) => goal.id === 'legacy')!;
+    const legacyItem = items.find((entry) => within(entry).getByRole('link').getAttribute('href')!.endsWith('#goal-legacy'))!;
+    expect(legacyItem).toHaveTextContent(`${legacy.reading!.share!.toLocaleString('en-IN', {maximumFractionDigits: 1})}% of the target reached`);
     expect(band).toHaveTextContent(`Data Lake checked ${LAST_SOURCE_CHECK.date}`);
     expect(within(band).getByRole('link', {name: /Open SASA Goals/})).toHaveAttribute('href', '/goals?mode=governed');
   });
