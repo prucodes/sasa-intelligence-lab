@@ -37,10 +37,14 @@ describe('overview targets band', () => {
       if (goal.reading) expect(item).toHaveTextContent(`latest ${goal.reading.asOfLabel}`);
       expect(item).not.toHaveTextContent(/Due No date|Due SWM/);
       // A bar only where the reading measures the target itself; never for a nearer measure, a tracked count or no data.
-      const bar = item.querySelector('.ovt-bar:not(.is-empty) b') as HTMLElement | null;
+      const ring = item.querySelector('.ovt-gauge-value');
       const measuresTarget = goal.reading?.share != null && ['short-after-deadline', 'before-deadline', 'met'].includes(goal.status);
-      expect(Boolean(bar)).toBe(measuresTarget);
-      if (bar) expect(parseFloat(bar.style.width)).toBeCloseTo(Math.max(1, Math.min(100, goal.reading!.share!)), 6);
+      expect(Boolean(ring)).toBe(measuresTarget);
+      if (ring) {
+        expect(Number(ring.getAttribute('data-share'))).toBe(goal.reading!.share);
+        const circumference = 2 * Math.PI * 22;
+        expect(parseFloat(ring.getAttribute('stroke-dasharray')!)).toBeCloseTo(Math.max(1, Math.min(100, goal.reading!.share!)) / 100 * circumference, 1);
+      }
     }
     // Legacy waste reads as what is left; its bar shows the share of the target cleared, and says so.
     const legacy = model.goals.find((goal) => goal.id === 'legacy')!;
@@ -48,6 +52,26 @@ describe('overview targets band', () => {
     expect(legacyItem).toHaveTextContent(`${legacy.reading!.share!.toLocaleString('en-IN', {maximumFractionDigits: 1})}% of the target reached`);
     expect(band).toHaveTextContent(`Data Lake checked ${LAST_SOURCE_CHECK.date}`);
     expect(within(band).getByRole('link', {name: /Open SASA Goals/})).toHaveAttribute('href', '/goals?mode=governed');
+  });
+});
+
+describe('target wheel', () => {
+  beforeEach(() => window.history.replaceState({}, '', '/?mode=governed'));
+
+  it('draws one equal segment per target in the tile order, coloured by status, and names the target pointed at', () => {
+    const {container} = render(<OverviewReview shapes={shapes} failed={false} href={href}/>);
+    const segments = [...container.querySelectorAll('.ovt-seg')];
+    const tiles = [...container.querySelectorAll('.ovt-tile')];
+    expect(segments).toHaveLength(model.goals.length);
+    segments.forEach((segment, index) => expect(tiles[index]).toHaveClass(`is-${segment.getAttribute('data-status')}`));
+    const centre = container.querySelector('.ovt-wheel-centre')!;
+    expect(centre).toHaveTextContent(`${model.goals.length}stated targets`);
+    const collection = model.goals.find((goal) => goal.id === 'collection')!;
+    fireEvent.mouseEnter(within(container.querySelector('.ovt-tiles') as HTMLElement).getByRole('link', {name: /^Collection/}));
+    expect(centre).toHaveTextContent(collection.reading!.display.split(' ')[0]);
+    expect(centre).toHaveTextContent(statusLabel[collection.status]);
+    expect(container.querySelector('.ovt-seg.is-active')).toHaveAttribute('data-status', collection.status);
+    expect(container.querySelectorAll('.ovt-seg.is-quiet')).toHaveLength(model.goals.length - 1);
   });
 });
 

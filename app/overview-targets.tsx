@@ -1,6 +1,6 @@
 'use client';
 
-import {useMemo, type ReactNode} from 'react';
+import {useMemo, useState, type ReactNode} from 'react';
 import {LAST_SOURCE_CHECK, getSasaGoals, goalShort, goalSummary, statusLabel, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
 import './sasa-goals.css';
 import './overview-targets.css';
@@ -23,8 +23,23 @@ const PICTOGRAMS: Record<string, ReactNode> = {
   landfill: <><path d="m3 9 9-5 9 5-9 5z"/><path d="m3 14 9 5 9-5"/></>,
 };
 
-function Pictogram({id}: {id: string}) {
-  return <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{PICTOGRAMS[id] ?? <circle cx="12" cy="12" r="7"/>}</svg>;
+function PictogramPaths({id}: {id: string}) {
+  return <>{PICTOGRAMS[id] ?? <circle cx="12" cy="12" r="7"/>}</>;
+}
+
+const ICON = {fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const};
+
+/** The pictogram inside a ring: filled to the share of the target reached, dashed where no reading measures the target. */
+function Gauge({id, share}: {id: string; share: number | null}) {
+  const r = 22, circumference = 2 * Math.PI * r;
+  return (
+    <svg className="ovt-gauge" width="52" height="52" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+      <circle className={`ovt-gauge-track${share === null ? ' is-empty' : ''}`} cx="26" cy="26" r={r} />
+      {share !== null && <circle className="ovt-gauge-value" data-share={share} cx="26" cy="26" r={r} transform="rotate(-90 26 26)"
+        strokeDasharray={`${(Math.max(1, Math.min(100, share)) / 100 * circumference).toFixed(2)} ${circumference.toFixed(2)}`} />}
+      <svg x="14" y="14" width="24" height="24" viewBox="0 0 24 24" {...ICON}><PictogramPaths id={id}/></svg>
+    </svg>
+  );
 }
 
 /** A bar only where the reading measures the target itself, so a nearer measure or a tracked count never reads as progress. */
@@ -34,25 +49,74 @@ const noBar: Partial<Record<GoalStatus, string>> = {
   'different-measure': 'Not the target’s own measure',
 };
 
-function TargetTile({goal, href}: {goal: SasaGoal; href: (path: string) => string}) {
+function TargetTile({goal, href, active, onPoint}: {goal: SasaGoal; href: (path: string) => string; active: boolean; onPoint: (id: string | null) => void}) {
   const reading = goal.reading;
   // The model's own wording, split for emphasis: "63.7%" over "of urban households".
   const [lead, ...rest] = reading ? reading.display.split(' ') : [];
   const share = barShare(goal);
-  const showShare = share !== null && lead !== pct(share);
+  const caption = share !== null ? (lead !== pct(share) ? `${pct(share)} of the target reached` : null) : noBar[goal.status] ?? null;
   return (
-    <li className={`ovt-tile is-${goal.status}`}>
-      <a href={`${href('/goals')}#goal-${goal.id}`}>
-        <span className="ovt-tile-head"><span className="ovt-pict"><Pictogram id={goal.id}/></span><b>{goalShort[goal.id]}</b></span>
-        <span className={`gr-chip is-${goal.status}`}><i aria-hidden="true"/>{statusLabel[goal.status]}</span>
+    <li className={`ovt-tile is-${goal.status}${active ? ' is-active' : ''}`}>
+      <a href={`${href('/goals')}#goal-${goal.id}`} onMouseEnter={() => onPoint(goal.id)} onMouseLeave={() => onPoint(null)} onFocus={() => onPoint(goal.id)} onBlur={() => onPoint(null)}>
+        <span className="ovt-tile-head">
+          <Gauge id={goal.id} share={share}/>
+          <span className="ovt-tile-name"><b>{goalShort[goal.id]}</b><span className={`gr-chip is-${goal.status}`}><i aria-hidden="true"/>{statusLabel[goal.status]}</span></span>
+        </span>
         <span className="ovt-figure">{reading ? <><strong>{lead}</strong> <small>{rest.join(' ')}</small></> : <strong className="is-none">No data</strong>}</span>
-        {share !== null
-          ? <span className="ovt-bar"><i aria-hidden="true"><b style={{width: `${Math.max(1, Math.min(100, share))}%`}}/></i>{showShare && <small>{pct(share)} of the target reached</small>}</span>
-          : <span className="ovt-bar is-empty"><i aria-hidden="true"/>{noBar[goal.status] && <small>{noBar[goal.status]}</small>}</span>}
+        {caption && <small className="ovt-caption">{caption}</small>}
         {/* A dated target says "Due"; a rule or an undated target shows its own label as stated. */}
         <span className="ovt-when">{goal.deadline && goal.status !== 'tracked' ? `Due ${goal.deadlineLabel}` : goal.deadlineLabel}{reading && <> · latest {reading.asOfLabel}</>}</span>
       </a>
     </li>
+  );
+}
+
+/**
+ * The target wheel: one equal segment per target, coloured by status only, with its pictogram.
+ * Segment size never encodes a value, so the wheel is a picture of the tally, not a chart of progress.
+ */
+function TargetWheel({goals, active, onPoint, summary}: {goals: SasaGoal[]; active: string | null; onPoint: (id: string | null) => void; summary: ReturnType<typeof goalSummary>}) {
+  const cx = 150, cy = 150, outer = 142, inner = 96, step = (Math.PI * 2) / goals.length;
+  const at = (r: number, angle: number) => [cx + r * Math.sin(angle), cy - r * Math.cos(angle)].map((value) => value.toFixed(2)).join(' ');
+  const focus = goals.find((goal) => goal.id === active);
+  const [lead, ...rest] = focus?.reading ? focus.reading.display.split(' ') : [];
+  return (
+    <figure className="ovt-wheel">
+      <svg viewBox="0 0 300 300" role="img" aria-label={`${summary.total} stated targets: ${goals.map((goal) => `${goalShort[goal.id]}, ${statusLabel[goal.status].toLowerCase()}`).join('; ')}.`}>
+        <defs>
+          <pattern id="ovt-hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" className="ovt-hatch-ground"/><line x1="0" y1="0" x2="0" y2="6" className="ovt-hatch-line"/></pattern>
+        </defs>
+        <circle className="ovt-wheel-halo" cx={cx} cy={cy} r={inner - 12}/>
+        {goals.map((goal, index) => {
+          const a0 = index * step, a1 = (index + 1) * step, mid = (a0 + a1) / 2;
+          const d = `M${at(outer, a0)}A${outer} ${outer} 0 0 1 ${at(outer, a1)}L${at(inner, a1)}A${inner} ${inner} 0 0 0 ${at(inner, a0)}Z`;
+          const [ix, iy] = at((outer + inner) / 2, mid).split(' ').map(Number);
+          const shift = active === goal.id ? at(6, mid).split(' ').map((value, axis) => Number(value) - (axis ? cy : cx)) : [0, 0];
+          return (
+            <g key={goal.id} className={`ovt-seg is-${goal.status}${active === goal.id ? ' is-active' : ''}${active && active !== goal.id ? ' is-quiet' : ''}`}
+              data-status={goal.status} style={{transform: `translate(${shift[0].toFixed(2)}px, ${shift[1].toFixed(2)}px)`}}
+              onMouseEnter={() => onPoint(goal.id)} onMouseLeave={() => onPoint(null)}>
+              <path d={d} className="ovt-seg-shape"/>
+              {goal.status === 'not-measured' && <circle className="ovt-seg-plate" cx={ix} cy={iy} r="12"/>}
+              <svg className="ovt-seg-icon" x={ix - 10} y={iy - 10} width="20" height="20" viewBox="0 0 24 24" {...ICON}><PictogramPaths id={goal.id}/></svg>
+            </g>
+          );
+        })}
+        <g className="ovt-wheel-centre" aria-hidden="true">
+          {focus ? <>
+            <text x={cx} y={cy - 28} className="ovt-c-name">{goalShort[focus.id]}</text>
+            <text x={cx} y={cy + 4} className={`ovt-c-lead${focus.reading ? '' : ' is-none'}`}>{focus.reading ? lead : 'No data'}</text>
+            {focus.reading && <text x={cx} y={cy + 23} className="ovt-c-rest">{rest.join(' ')}</text>}
+            <text x={cx} y={cy + 45} className={`ovt-c-status is-${focus.status}`}>{statusLabel[focus.status]}</text>
+          </> : <>
+            <text x={cx} y={cy} className="ovt-c-total">{summary.total}</text>
+            <text x={cx} y={cy + 21} className="ovt-c-rest">stated targets</text>
+            <text x={cx} y={cy + 43} className="ovt-c-status is-short-after-deadline">{summary.shortAfterDeadline} below target</text>
+            <text x={cx} y={cy + 58} className="ovt-c-status is-short-after-deadline">after their date</text>
+          </>}
+        </g>
+      </svg>
+    </figure>
   );
 }
 
@@ -69,9 +133,12 @@ export function OverviewTargets({href}: {href: (path: string) => string}) {
   };
   // The same order as the Goals list: the targets that need attention first, then by date.
   const sorted = useMemo(() => [...model.goals].sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status) || (a.deadline ?? '9999').localeCompare(b.deadline ?? '9999')), [model]);
+  // Pointing at a wheel segment or a tile marks both, and the wheel's centre names the target.
+  const [active, setActive] = useState<string | null>(null);
 
   return (
     <section className="ov-targets sasa-goals" aria-labelledby="ov-targets-title">
+      <TargetWheel goals={sorted} active={active} onPoint={setActive} summary={summary}/>
       <div className="ovt-copy">
         <span className="ovt-kicker">Against the state&rsquo;s targets</span>
         <h2 id="ov-targets-title">{summary.total} stated targets, <em>each status read from dates and values.</em></h2>
@@ -80,14 +147,14 @@ export function OverviewTargets({href}: {href: (path: string) => string}) {
             <li key={state}><b>{counts[state]}</b><span className={`gr-chip is-${state}`}><i aria-hidden="true"/>{statusLabel[state]}</span></li>
           ))}
         </ul>
-        <p className="ovt-note">A reading taken before a target&rsquo;s date cannot show it was missed. Bars show how much of a target is reached, and only where the reading measures that target.</p>
+        <p className="ovt-note">A reading taken before a target&rsquo;s date cannot show it was missed. Each wheel segment is one target, coloured by its status. A ring fills to the share of a target reached, and only where the reading measures that target.</p>
         <div className="ovt-foot">
           <p className="ovt-fresh"><i aria-hidden="true"/>Data Lake checked {LAST_SOURCE_CHECK.date}: no newer month for these measures.</p>
           <a className="ovt-open" href={href('/goals')}>Open SASA Goals <span aria-hidden="true">→</span></a>
         </div>
       </div>
       <ol className="ovt-tiles" aria-label="Every stated target">
-        {sorted.map((goal) => <TargetTile key={goal.id} goal={goal} href={href}/>)}
+        {sorted.map((goal) => <TargetTile key={goal.id} goal={goal} href={href} active={active === goal.id} onPoint={setActive}/>)}
       </ol>
     </section>
   );
