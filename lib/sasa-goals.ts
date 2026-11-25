@@ -516,7 +516,7 @@ export const statusLabel: Record<GoalStatus, string> = {
   'short-after-deadline': 'Below target after its date',
   met: 'Met',
   'before-deadline': 'Read before its date',
-  'different-measure': 'Nearest measure differs',
+  'different-measure': 'Different measure',
   tracked: 'Tracked, no target',
   'not-measured': 'No retained measure',
 };
@@ -526,9 +526,9 @@ export const statusLabel: Record<GoalStatus, string> = {
  * found. Kept apart from the reading dates and the retention dates, which say other things.
  */
 export const LAST_SOURCE_CHECK = {
-  date: '18 Nov 2026',
-  found: 'no newer month for collection, segregation, the plastic ban, legacy waste, toilets or sewage plants',
-  record: 'audits/2026-11-18-catalogue-audit.md',
+  date: '25 Nov 2026',
+  found: 'no newer month for urban or rural collection, segregation, the plastic ban, legacy waste, toilets or sewage plants',
+  record: 'audits/2026-11-25-data-lake-recheck.md',
 };
 
 export function goalSummary(goals: SasaGoal[]) {
