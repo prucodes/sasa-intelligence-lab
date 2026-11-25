@@ -2,7 +2,8 @@
 
 import {useEffect, useMemo, useRef} from 'react';
 import {getNamedFindings} from '@/lib/findings';
-import {districtMapRows, districtPlacements, getUlbAtlas, measureHeadline} from '@/lib/ulb-atlas';
+import {districtPlacements, getUlbAtlas, measureHeadline} from '@/lib/ulb-atlas';
+import {pooledDistrictMap} from '@/lib/sasa-goals';
 import {CountUp, motionAllowed} from './motion';
 import './overview-hero.css';
 
@@ -27,7 +28,8 @@ export function OverviewHero({shapes, failed, rural, href, onSubject}: HeroProps
   const findings = useMemo(() => getNamedFindings(), []);
   const toilets = findings.find((finding) => finding.id === 'stalled-approvals');
   const vehicles = findings.find((finding) => finding.id === 'undelivered-orders');
-  const map = useMemo(() => districtMapRows(atlas, 'reach')!, [atlas]);
+  // Pooled like the Goals district table, so the map and the table give a district one figure.
+  const map = useMemo(() => pooledDistrictMap('collection'), []);
   const placements = useMemo(() => districtPlacements(atlas), [atlas]);
   const svg = useRef<SVGSVGElement>(null);
 
@@ -35,10 +37,12 @@ export function OverviewHero({shapes, failed, rural, href, onSubject}: HeroProps
   const fills = useMemo(() => {
     if (!shapes) return [];
     return shapes.map((shape) => {
-      const row = map.rows.find((entry) => normal(placements.get(entry.district) ?? entry.district) === normal(shape.d));
+      const row = map.find((entry) => normal(placements.get(entry.district) ?? entry.district) === normal(shape.d));
       return {shape, row};
     });
   }, [shapes, map, placements]);
+  // A district with a reading but no drawn boundary (a newer district) is named under the map.
+  const offMap = useMemo(() => shapes ? map.filter((row) => row.value !== null && !shapes.some((shape) => normal(placements.get(row.district) ?? row.district) === normal(shape.d))) : [], [shapes, map, placements]);
 
   // On first load the state fills in from west to east.
   useEffect(() => {
@@ -81,19 +85,20 @@ export function OverviewHero({shapes, failed, rural, href, onSubject}: HeroProps
       </div>
       <figure className="ov-hero-map">
         {shapes ? (
-          <svg ref={svg} viewBox="0 0 560 476" role="img" aria-label={`Median ULB collection reach by district, ${reachMeasure.period}. ${map.rows.filter((row) => row.value !== null).length} districts with a reporting ULB.`}>
+          <svg ref={svg} viewBox="0 0 560 476" role="img" aria-label={`Households collected from, by district, ${reachMeasure.period}, summed over each district's ULBs. ${fills.filter(({row}) => row?.value !== null && row?.value !== undefined).length} districts drawn with a reading.`}>
             <defs><pattern id="ov-hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--muted)" strokeWidth=".7" opacity=".45" /></pattern></defs>
             {fills.map(({shape, row}) => (
               <path key={shape.d} d={shape.path} fill={row?.value === null || row?.value === undefined ? 'url(#ov-hatch)' : `color-mix(in srgb, var(--vi-increase) ${14 + row.value * .86}%, var(--vi-soft))`}>
-                <title>{row ? `${row.district}: ${row.value === null ? 'no reporting ULB' : `median ULB ${row.value.toFixed(1)}% collected from`}. ${row.detail}` : `${shape.d}: no ULB in the register is filed under this boundary`}</title>
+                <title>{row ? `${row.district}: ${row.value === null ? 'no reading' : `${row.value.toFixed(1)}% of households collected from`}. ${row.detail}` : `${shape.d}: no ULB in the register is filed under this boundary`}</title>
               </path>
             ))}
           </svg>
         ) : <p className="ov-hero-map-status">{failed ? 'District boundaries did not load. The readings beside the map are unaffected.' : 'Loading district boundaries…'}</p>}
         <figcaption>
-          <span>Median ULB collection reach by district · {reachMeasure.period}</span>
+          <span>Households collected from, by district · {reachMeasure.period}</span>
           <span className="ov-ramp" aria-hidden="true"><i /></span>
           <span className="ov-ramp-labels"><small>0%</small><small>100%</small></span>
+          {offMap.map((row) => <small key={row.district} className="ov-off-map">{row.district} ({row.value!.toFixed(1)}%) has no drawn boundary</small>)}
         </figcaption>
       </figure>
     </section>

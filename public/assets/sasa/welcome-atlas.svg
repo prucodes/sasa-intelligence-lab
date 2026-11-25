@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700" height="620" viewBox="0 0 700 620" role="img" aria-labelledby="title desc">
-<title id="title">Andhra Pradesh · Household waste collection reach</title>
-<desc id="desc">12 Aug 2026. Each coloured district shows the median reporting urban local body's share of households collected from. Lightest: at least 75%. Mid-green: 50% to below 75%. Deep teal: below 50%. Diagonal hatching: no matched reading. 24 of 26 reference districts are coloured. District geography: 2022.</desc>
+<title id="title">Andhra Pradesh · Households collected from</title>
+<desc id="desc">12 Aug 2026. Each coloured district shows households collected from as a share of all households, summed over its urban local bodies. Lightest: at least 75%. Mid-green: 50% to below 75%. Deep teal: below 50%. Diagonal hatching: no matched reading. 24 of 26 reference districts are coloured. Not drawn, having no 2022 boundary: Markapuram 63.6%. District geography: 2022.</desc>
 <style>
   .leader{fill:none;stroke:#e4d8a6;stroke-width:1.25;stroke-linecap:round}
   .area,.value{paint-order:stroke;stroke:#102c31;stroke-width:3;stroke-linejoin:round}
@@ -85,55 +85,55 @@
 </g>
 <g clip-path="url(#development)" fill-rule="evenodd" stroke="#284b49" stroke-width=".95" stroke-linejoin="round">
   <g><title>ALLURI SITHARAMA RAJU: No mapped reading</title><use xlink:href="#district-0" fill="url(#no-reading)"/></g>
-<g><title>Anakapalli: 63.0%. Median of 2 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-1" fill="#75ae9a"/></g>
-<g><title>Anantapuram: 75.0%. Median of 6 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-2" fill="#75ae9a"/></g>
-<g><title>Annamayya: 59.0%. Median of 4 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-3" fill="#75ae9a"/></g>
-<g><title>Bapatla: 41.8%. Median of 3 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-4" fill="#327b82"/></g>
-<g><title>Chittoor: 89.0%. Median of 4 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-5" fill="#d6deaa"/></g>
-<g><title>Dr. B.R. Ambedkar Konaseema: 70.0%. Median of 3 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-6" fill="#75ae9a"/></g>
-<g><title>East Godavari: 84.1%. Median of 3 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-7" fill="#d6deaa"/></g>
-<g><title>Eluru: 82.3%. Median of 4 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-8" fill="#d6deaa"/></g>
-<g><title>Guntur: 60.7%. Median of 3 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-9" fill="#75ae9a"/></g>
-<g><title>Kakinada: 70.0%. Median of 7 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-10" fill="#75ae9a"/></g>
-<g><title>Krishna: 54.1%. Median of 5 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-11" fill="#75ae9a"/></g>
-<g><title>Kurnool: 64.5%. Median of 4 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-12" fill="#75ae9a"/></g>
-<g><title>Nandyal: 46.5%. Median of 6 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-13" fill="#327b82"/></g>
-<g><title>NTR: 74.3%. Median of 5 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-14" fill="#75ae9a"/></g>
-<g><title>Palnadu: 59.3%. Median of 8 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-15" fill="#75ae9a"/></g>
-<g><title>Parvathipuram Manyam: 71.3%. Median of 3 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-16" fill="#75ae9a"/></g>
-<g><title>Prakasam: 72.1%. Median of 5 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-17" fill="#75ae9a"/></g>
-<g><title>Sri Potti Sriramulu Nellore: 68.6%. Median of 4 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-18" fill="#75ae9a"/></g>
-<g><title>Sri Sathya Sai: 75.3%. Median of 6 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-19" fill="#d6deaa"/></g>
-<g><title>Srikakulam: 47.8%. Median of 3 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-20" fill="#327b82"/></g>
-<g><title>Tirupati: 60.1%. Median of 5 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-21" fill="#75ae9a"/></g>
+<g><title>Anakapalli: 67.3%. 24,112 of 35,844 households · 2 of 2 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-1" fill="#75ae9a"/></g>
+<g><title>Anantapuram: 72.7%. 1,43,282 of 1,96,963 households · 6 of 6 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-2" fill="#75ae9a"/></g>
+<g><title>Annamayya: 62.8%. 58,635 of 93,323 households · 4 of 4 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-3" fill="#75ae9a"/></g>
+<g><title>Bapatla: 49.5%. 32,343 of 65,331 households · 3 of 3 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-4" fill="#327b82"/></g>
+<g><title>Chittoor: 84.6%. 88,004 of 1,04,007 households · 4 of 4 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-5" fill="#d6deaa"/></g>
+<g><title>Dr. B.R. Ambedkar Konaseema: 69.1%. 27,932 of 40,413 households · 3 of 3 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-6" fill="#75ae9a"/></g>
+<g><title>East Godavari: 86.4%. 42,348 of 49,012 households · 3 of 4 ULBs placed · RAJAMAHENDRAVARAM held out · 12 Aug 2026</title><use xlink:href="#district-7" fill="#d6deaa"/></g>
+<g><title>Eluru: 62.3%. 83,128 of 1,33,353 households · 4 of 4 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-8" fill="#75ae9a"/></g>
+<g><title>Guntur: 41.0%. 1,31,650 of 3,21,346 households · 3 of 4 ULBs placed · MANGALAGIRI TADEPALLI held out · 12 Aug 2026</title><use xlink:href="#district-9" fill="#327b82"/></g>
+<g><title>Kakinada: 60.4%. 1,23,786 of 2,05,089 households · 7 of 7 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-10" fill="#75ae9a"/></g>
+<g><title>Krishna: 58.8%. 99,199 of 1,68,847 households · 5 of 5 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-11" fill="#75ae9a"/></g>
+<g><title>Kurnool: 66.3%. 1,52,431 of 2,29,766 households · 4 of 4 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-12" fill="#75ae9a"/></g>
+<g><title>Nandyal: 48.6%. 70,577 of 1,45,354 households · 6 of 6 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-13" fill="#327b82"/></g>
+<g><title>NTR: 72.5%. 2,62,701 of 3,62,422 households · 5 of 5 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-14" fill="#75ae9a"/></g>
+<g><title>Palnadu: 56.6%. 93,738 of 1,65,657 households · 8 of 8 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-15" fill="#75ae9a"/></g>
+<g><title>Parvathipuram Manyam: 62.9%. 26,027 of 41,406 households · 3 of 3 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-16" fill="#75ae9a"/></g>
+<g><title>Prakasam: 73.2%. 1,01,891 of 1,39,284 households · 5 of 5 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-17" fill="#75ae9a"/></g>
+<g><title>Sri Potti Sriramulu Nellore: 68.8%. 1,69,030 of 2,45,780 households · 4 of 6 ULBs placed · ALLURU, GUDUR(Nellore) held out · 12 Aug 2026</title><use xlink:href="#district-18" fill="#75ae9a"/></g>
+<g><title>Sri Sathya Sai: 78.7%. 1,13,971 of 1,44,847 households · 6 of 6 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-19" fill="#d6deaa"/></g>
+<g><title>Srikakulam: 36.1%. 15,617 of 43,245 households · 3 of 4 ULBs placed · SRIKAKULAM held out · 12 Aug 2026</title><use xlink:href="#district-20" fill="#327b82"/></g>
+<g><title>Tirupati: 71.1%. 59,628 of 83,825 households · 5 of 6 ULBs placed · TIRUPATI held out · 12 Aug 2026</title><use xlink:href="#district-21" fill="#75ae9a"/></g>
 <g><title>Visakhapatnam: No mapped reading</title><use xlink:href="#district-22" fill="url(#no-reading)"/></g>
-<g><title>Vizianagaram: 79.5%. Median of 4 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-23" fill="#d6deaa"/></g>
-<g><title>West Godavari: 83.7%. Median of 6 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-24" fill="#d6deaa"/></g>
-<g><title>YSR Kadapa: 59.3%. Median of 9 reporting ULBs · 12 Aug 2026</title><use xlink:href="#district-25" fill="#75ae9a"/></g>
+<g><title>Vizianagaram: 75.2%. 90,693 of 1,20,559 households · 4 of 4 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-23" fill="#d6deaa"/></g>
+<g><title>West Godavari: 79.0%. 1,27,988 of 1,62,008 households · 6 of 6 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-24" fill="#d6deaa"/></g>
+<g><title>YSR Kadapa: 49.5%. 1,30,199 of 2,62,838 households · 9 of 9 ULBs placed · 12 Aug 2026</title><use xlink:href="#district-25" fill="#327b82"/></g>
 </g>
 <g aria-hidden="true" transform="translate(92 105)" fill="#c3cbb8" font-family="Arial,sans-serif">
   <path d="M0 5V-25M-5-8H5" fill="none" stroke="#9caf9f"/><path d="m0-28 3.2 9-3.2-1.5-3.2 1.5Z" fill="#cdb986"/><text y="-35" text-anchor="middle" font-size="10">N</text>
 </g>
 
   <g class="callout callout-1">
-    <title>Bapatla: 41.8%, median of 3 reporting urban local bodies</title>
+    <title>Bapatla: 49.5%, households pooled across 3 urban local bodies</title>
     <path class="leader" d="M322 303h12L389 333H405" pathLength="1"/>
     <circle cx="322" cy="303" r="4.6" fill="#0d282e" stroke="#f5e7bb" stroke-width="1.2"/>
     <circle cx="322" cy="303" r="1.7" fill="#f4dda0"/>
     <g transform="translate(413 333)" class="callout-label">
       <text class="area" y="-3">Bapatla</text>
-      <text class="value" y="24">41.8%</text>
+      <text class="value" y="24">49.5%</text>
     </g>
   </g>
 
   <g class="callout callout-2">
-    <title>Chittoor: 89.0%, median of 4 reporting urban local bodies</title>
+    <title>Chittoor: 84.6%, households pooled across 4 urban local bodies</title>
     <path class="leader" d="M218 516h12L292 535H308" pathLength="1"/>
     <circle cx="218" cy="516" r="4.6" fill="#0d282e" stroke="#f5e7bb" stroke-width="1.2"/>
     <circle cx="218" cy="516" r="1.7" fill="#f4dda0"/>
     <g transform="translate(316 535)" class="callout-label">
       <text class="area" y="-3">Chittoor</text>
-      <text class="value" y="24">89.0%</text>
+      <text class="value" y="24">84.6%</text>
     </g>
   </g>
 <text x="514" y="439" transform="rotate(-17 514 439)" fill="#9db5a8" opacity=".8" text-anchor="middle" font-family="Georgia,serif" font-size="20" font-style="italic" letter-spacing="1.4">Bay of Bengal</text>

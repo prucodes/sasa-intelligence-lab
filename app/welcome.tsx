@@ -7,14 +7,14 @@ import {welcomeMapKey, welcomeSegregationKey} from '@/lib/welcome-map-key';
 import './welcome.css';
 
 const layers = [
-  {id: 'collection', label: 'Collection', title: 'Household collection reach', definition: 'Households receiving collection, as a share of all households.', key: welcomeMapKey},
-  {id: 'segregation', label: 'Segregation', title: 'Segregation at source', definition: 'Households reporting segregation, as a share of households receiving collection.', key: welcomeSegregationKey},
+  {id: 'collection', label: 'Collection', title: 'Households collected from', definition: 'Households collected from, as a share of all households in the register.', key: welcomeMapKey},
+  {id: 'segregation', label: 'Segregation', title: 'Households segregating', definition: 'Households segregating, as a share of all households in the register, so a household not collected from counts as not segregating.', key: welcomeSegregationKey},
 ] as const;
 
 function WelcomePlate() {
   const [active, setActive] = useState<(typeof layers)[number]['id']>('collection');
   const layer = layers.find(item => item.id === active)!;
-  const examples = layer.key.examples.map(row => `${row.district} ${row.display} from ${row.reporting} reporting urban local bodies`).join('. ');
+  const examples = layer.key.examples.map(row => `${row.district} ${row.display} across ${row.reporting} urban local bodies`).join('. ');
 
   return <figure className="welcome-plate">
     <div className="welcome-plate-toolbar">
@@ -28,9 +28,9 @@ function WelcomePlate() {
     </div>
     <figcaption aria-live="polite" aria-atomic="true">
       <strong className="welcome-caption-title">{layer.title}</strong>
-      <p className="welcome-map-definition">{layer.definition} Districts show the median among reporting urban local bodies.</p>
+      <p className="welcome-map-definition">{layer.definition} Each district adds up the households of its urban local bodies, the same figures as the Goals screen.</p>
       <div className="welcome-key">{layer.key.bands.map(band => <span key={band.label}><i style={{background:band.color}}/>{band.label}</span>)}<span><i className="key-hatch"/>No matched reading</span></div>
-      <small className="welcome-map-period">{layer.key.mapUlbCount} urban local bodies · {layer.key.mapped} of {layer.key.total} district shapes · 2022 boundaries</small>
+      <small className="welcome-map-period">{layer.key.mapUlbCount} urban local bodies · {layer.key.mapped} of {layer.key.total} district shapes · 2022 boundaries{layer.key.offMap.map(row => <span key={row.district}> · {row.district} {row.display}, {row.reporting} urban local bodies, has no 2022 boundary and is not drawn</span>)}</small>
     </figcaption>
   </figure>;
 }

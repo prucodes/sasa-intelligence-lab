@@ -247,6 +247,21 @@ function build() {
   return {goals, districts, insights: insights(goals, districts, service), themes: themes(goals, water), swm: swmView(), dataAsOf: dayLabel, heldUlbs: service.held};
 }
 
+/**
+ * The pooled district figures behind the welcome and overview maps: the same rows the Goals
+ * district table shows, so a district reads one number on every screen. Each row counts the
+ * district's placed ULBs; a district whose ULBs are all held out stays blank with its reason.
+ */
+export function pooledDistrictMap(column: 'collection' | 'segregation') {
+  const placed = getUlbAtlas().ulbs.filter((ulb) => ulb.cells.reach?.state === 'value');
+  return getSasaGoals().districts.rows.map((row) => ({
+    district: row.district,
+    value: row[column].value,
+    detail: row[column].detail,
+    ulbs: placed.filter((ulb) => ulb.district === row.district).length,
+  }));
+}
+
 export interface DistrictCell { value: number | null; detail: string }
 export interface DistrictGoalRow {
   district: string;

@@ -1,6 +1,7 @@
 // Run from the checkout: npx vite-node --config vitest.config.ts scripts/generate-welcome-map.ts
 import {readFileSync, writeFileSync} from 'node:fs';
-import {getUlbAtlas, districtMapRows, districtPlacements} from '../lib/ulb-atlas';
+import {getUlbAtlas, districtPlacements} from '../lib/ulb-atlas';
+import {pooledDistrictMap} from '../lib/sasa-goals';
 
 type Position = [number, number];
 type Geometry = {type: 'Polygon'; coordinates: Position[][]} | {type: 'MultiPolygon'; coordinates: Position[][][]};
@@ -55,18 +56,19 @@ function contains(feature: Feature, sample: Sample) {
 
 function renderMeasure(id: 'reach' | 'segregation') {
   const measure = model.measures.find(m => m.id === id)!;
-  const mapRows = districtMapRows(model, id)!.rows;
-  const name = id === 'reach' ? 'Household waste collection reach' : 'Segregation among collected households';
+  // Pooled, as on the Goals screen: households summed over the district's placed ULBs.
+  const mapRows = pooledDistrictMap(id === 'reach' ? 'collection' : 'segregation');
+  const name = id === 'reach' ? 'Households collected from' : 'Households segregating';
   const definition = id === 'reach'
-    ? "the median reporting urban local body's share of households collected from"
-    : "the median reporting urban local body's share of collected households segregating waste";
+    ? 'households collected from as a share of all households, summed over its urban local bodies'
+    : 'households segregating as a share of all households, summed over its urban local bodies';
   const districts = geo.features.map((feature, index) => {
     const boundary = feature.properties.d;
     const matches = mapRows.filter(row => normal(placements.get(row.district) ?? row.district) === normal(boundary));
     const unique = geo.features.filter(other => normal(other.properties.d) === normal(boundary)).length === 1;
     const row = matches.length === 1 && unique ? matches[0] : undefined;
     const value = row?.value ?? null;
-    const reporting = row ? model.ulbs.filter(ulb => ulb.district === row.district && ulb.cells[id]?.state === 'value').length : 0;
+    const reporting = row && row.value !== null ? row.ulbs : 0;
     const label = row?.district ?? boundary;
     return {id: `district-${index}`, feature, label, value, reporting, detail: row?.detail, d: pathFor(feature.geometry)};
   });
@@ -86,6 +88,9 @@ function renderMeasure(id: 'reach' | 'segregation') {
     total: districts.length,
     mapUlbCount: districts.reduce((n, row) => n + row.reporting, 0),
     examples: samples.map(({district, display, reporting}) => ({district, display, reporting})),
+    // A district with a reading but no 2022 boundary (a newer district) is named, never dropped silently.
+    offMap: mapRows.filter(row => row.value !== null && geo.features.filter(f => normal(placements.get(row.district) ?? row.district) === normal(f.properties.d)).length !== 1)
+      .map(row => ({district: row.district, display: percent(row.value!), reporting: row.ulbs})),
   };
 
   const paths = districts.map(row => `<path id="${row.id}" d="${row.d}"/>`).join('\n');
@@ -98,7 +103,7 @@ function renderMeasure(id: 'reach' | 'segregation') {
   }).join('\n');
   const callouts = samples.map(({district, x, y, endX, endY, display, reporting}, index) => `
   <g class="callout callout-${index + 1}">
-    <title>${district}: ${display}, median of ${reporting} reporting urban local bodies</title>
+    <title>${district}: ${display}, households pooled across ${reporting} urban local bodies</title>
     <path class="leader" d="M${x} ${y}h12L${endX - 16} ${endY}H${endX}" pathLength="1"/>
     <circle cx="${x}" cy="${y}" r="4.6" fill="#0d282e" stroke="#f5e7bb" stroke-width="1.2"/>
     <circle cx="${x}" cy="${y}" r="1.7" fill="#f4dda0"/>
@@ -110,7 +115,7 @@ function renderMeasure(id: 'reach' | 'segregation') {
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700" height="620" viewBox="0 0 700 620" role="img" aria-labelledby="title desc">
 <title id="title">Andhra Pradesh · ${name}</title>
-<desc id="desc">${measure.period}. Each coloured district shows ${definition}. Lightest: at least 75%. Mid-green: 50% to below 75%. Deep teal: below 50%. Diagonal hatching: no matched reading. ${key.mapped} of ${key.total} reference districts are coloured. District geography: 2022.</desc>
+<desc id="desc">${measure.period}. Each coloured district shows ${definition}. Lightest: at least 75%. Mid-green: 50% to below 75%. Deep teal: below 50%. Diagonal hatching: no matched reading. ${key.mapped} of ${key.total} reference districts are coloured.${key.offMap.length ? ` Not drawn, having no 2022 boundary: ${key.offMap.map(row => `${row.district} ${row.display}`).join(', ')}.` : ''} District geography: 2022.</desc>
 <style>
   .leader{fill:none;stroke:#e4d8a6;stroke-width:1.25;stroke-linecap:round}
   .area,.value{paint-order:stroke;stroke:#102c31;stroke-width:3;stroke-linejoin:round}
@@ -161,7 +166,7 @@ const segregation = renderMeasure('segregation');
 writeFileSync('public/assets/sasa/welcome-atlas.svg', collection.svg);
 writeFileSync('public/assets/sasa/welcome-segregation.svg', segregation.svg);
 const moduleSource = [
-  '// Generated by scripts/generate-welcome-map.ts from the Atlas service-day measures.',
+  '// Generated by scripts/generate-welcome-map.ts from the pooled SASA Goals district rows.',
   'export const welcomeMapKey = ' + JSON.stringify(collection.key, null, 2) + ' as const;',
   'export const welcomeSegregationKey = ' + JSON.stringify(segregation.key, null, 2) + ' as const;',
 ];

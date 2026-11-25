@@ -73,3 +73,35 @@ describe('welcome entry', () => {
     expect(params.get('mode')).toBe('governed');
   });
 });
+
+describe('welcome map figures', () => {
+  // The maps are generated files; these checks fail if they drift from the Goals district table.
+  it('gives each district the same pooled figure as the Goals screen, and names any district it cannot draw', async () => {
+    const {readFileSync} = await import('node:fs');
+    const {welcomeMapKey, welcomeSegregationKey} = await import('@/lib/welcome-map-key');
+    const {getSasaGoals, pooledDistrictMap} = await import('@/lib/sasa-goals');
+    const {districtPlacements, getUlbAtlas} = await import('@/lib/ulb-atlas');
+    const normal = (label: string) => label.toUpperCase().replace(/[^A-Z]/g, '');
+    const placements = districtPlacements(getUlbAtlas());
+    const shapes: string[] = JSON.parse(readFileSync('public/ap-districts.geojson', 'utf8')).features.map((feature: {properties: {d: string}}) => feature.properties.d);
+    const goals = getSasaGoals().districts.rows;
+    const fmt = (value: number) => `${value.toFixed(1)}%`;
+    for (const [key, column] of [[welcomeMapKey, 'collection'], [welcomeSegregationKey, 'segregation']] as const) {
+      const rows = pooledDistrictMap(column);
+      const drawn = shapes.map((shape) => rows.filter((row) => normal(placements.get(row.district) ?? row.district) === normal(shape))).filter((match) => match.length === 1 && match[0].value !== null).map((match) => match[0]);
+      expect(key.mapped).toBe(drawn.length);
+      expect(key.total).toBe(shapes.length);
+      expect(key.mapUlbCount).toBe(drawn.reduce((sum, row) => sum + row.ulbs, 0));
+      const band = (value: number) => value < 50 ? 0 : value < 75 ? 1 : 2;
+      expect(key.bands.map((entry) => entry.count)).toEqual([0, 1, 2].map((index) => drawn.filter((row) => band(row.value!) === index).length));
+      for (const example of key.examples) {
+        const goal = goals.find((row) => row.district === example.district)!;
+        expect(example.display).toBe(fmt(goal[column].value!));
+      }
+      const offMap = rows.filter((row) => row.value !== null && !drawn.includes(row));
+      expect(key.offMap.map((row) => row.district)).toEqual(offMap.map((row) => row.district));
+      // Every district with a reading is either drawn or named; none is dropped silently.
+      expect(drawn.length + offMap.length).toBe(rows.filter((row) => row.value !== null).length);
+    }
+  });
+});
