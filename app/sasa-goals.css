@@ -120,6 +120,9 @@
 /* Specific enough to beat the global dark table cell fill. */
 .sasa-goals .goal-districts td { background: var(--surface); color: var(--ink); }
 .sasa-goals .goal-districts td.gd-v { background: color-mix(in srgb, var(--hue) var(--mix, 0%), var(--surface)); }
+.goal-districts tr.is-picked > * { box-shadow: inset 0 2px 0 var(--g-link), inset 0 -2px 0 var(--g-link); }
+.goal-districts tr.is-picked > th { box-shadow: inset 3px 0 0 var(--g-link), inset 0 2px 0 var(--g-link), inset 0 -2px 0 var(--g-link); }
+.gd-picked { display: block; color: var(--g-link); font-size: 10.5px; font-weight: 600; }
 .gd-v.s-0 { --mix: 3%; } .gd-v.s-1 { --mix: 10%; } .gd-v.s-2 { --mix: 18%; } .gd-v.s-3 { --mix: 27%; } .gd-v.s-4 { --mix: 37%; }
 .gd-empty { color: var(--muted); }
 .gd-notes { display: grid; gap: 6px; max-width: 92ch; margin: 12px 0 0; padding: 0; list-style: none; color: var(--muted); font-size: 12.5px; line-height: 1.5; }

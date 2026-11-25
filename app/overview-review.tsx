@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import {OverviewHero} from './overview-hero';
+import {OverviewTargets} from './overview-targets';
 import { getOverviewIssues, type ReviewIssueId } from '@/lib/overview';
 import { getReportedMovements } from '@/lib/analytics';
 import { anchorRegistry, sameDistrict } from '@/lib/crosswalk';
@@ -131,6 +132,7 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
 
   return <div className="overview-review" data-issue={selected}>
     <OverviewHero shapes={shapes} failed={failed} href={href} rural={{open:ruralOpen,close:ruralClose,shift:ruralShift}} onSubject={(id)=>{chooseSubject(id);document.querySelector('.or-subject-strip')?.scrollIntoView({behavior:'smooth',block:'start'});}}/>
+    <OverviewTargets href={href}/>
     <nav className="or-subject-strip" aria-label="Operational review subjects" aria-describedby="or-selector-basis">
       <p id="or-selector-basis">Each subject keeps its own population and period. Totals cover returned districts only.</p>
       <label className="overview-mobile-subject">Review subject<select value={subject} onChange={event=>chooseSubject(event.target.value)}>{subjects.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select><small>{current.scope}</small></label>
@@ -234,9 +236,11 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
 
     </>}
     </div>
-    <section className="overview-cross-signal" aria-label="Validated cross-subject signals">
+    <section className="or-closing" aria-labelledby="or-closing-title">
+      <header className="or-closing-head"><span className="or-kicker">Before acting on any figure</span><h2 id="or-closing-title">What this evidence can say, <em>and what it cannot.</em></h2></header>
+      <section className="overview-cross-signal" aria-label="Validated cross-subject signals">
       <header>
-        <div><span className="or-kicker">Cross-subject signal</span><h2>Too little overlap <em>for an overall score.</em></h2><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with a nonzero toilet or vehicle rate, so the measures stay side by side and are never ranked as one score.</p></div>
+        <div><span className="or-kicker">Cross-subject signal</span><h3>Too little overlap <em>for an overall score.</em></h3><p>{overallReadiness.exactCandidateOverlap} ULBs carry the same name and district in all three July delivery measures, but only {overallReadiness.validThreeSubjectCandidates} can be rated in all three, and {overallReadiness.zeroToiletAndVehicle} of those report zero for both household toilets and vehicles. That leaves {overallReadiness.nonDegenerateCandidates} with a nonzero toilet or vehicle rate, so the measures stay side by side and are never ranked as one score.</p></div>
         <span className="overview-cross-status">Overall rank gated</span>
       </header>
       <div className="overview-cross-grid">
@@ -248,9 +252,12 @@ export function OverviewReview({ shapes, failed, href, integrity, children }: {
       <div className="overview-cross-movement"><span>Separate June → July movements</span>{movements.map(item=><span key={item.id}><b>{item.metricLabel}</b><small>{item.repeat.carriedForward?`${item.currentPeriod} is identical to ${item.previousPeriod} in every field for ${item.repeat.identical} of ${item.repeat.compared} ULBs`:item.increased+item.decreased>0?`${item.decreased} lower · ${item.increased} higher · ${item.unchanged} unchanged`:`All ${item.matched} ULBs report the same value in ${item.currentPeriod} as in ${item.previousPeriod}`}</small></span>)}</div>
       <footer><span>Movement is shown by source and measure; no cross-subject trend is summed. An unchanged value can be a repeated report rather than no progress, and the source does not say which.</span><a href={`${href('/gap-radar')}&view=rankings`}>Inspect subject comparisons <Arrow/></a></footer>
     </section>
-    <section className="or-readiness" aria-label="Evidence scope and decision boundary"><div><span className="or-kicker">Ready for descriptive review</span><p><b>{governedSnapshotStats.completeDatasets}</b> historical exports <span> · {readinessCatalogueStats.platformAvailable} current catalogue routes</span> · {format(corpus.rawRows)} raw retained rows</p><small>{anchorRegistry.length} observed ULB-name candidates provide a working reference. {format(corpus.rowsExcludingAliases)} bundled rows after excluding repeated endpoint copies; internal row duplicates are a separate check.</small></div><a href={href('/gap-radar')}><span>Evidence investigations</span><b>OPEN GAP RADAR</b><small>Inspect changes, cohorts & works →</small></a></section>
-    {integrity&&<details className="vi-disclosure"><summary>Source quality findings and revision checks</summary>{integrity}</details>}
-    <div className="or-context-links"><a href={`${href('/operational-analytics')}&tab=processing`}><span>Supporting evidence</span><b>Processing facilities & source statuses</b><Arrow/></a><a href={`${href('/operational-analytics')}&tab=outcomes`}><span>Historical context / 2024</span><b>Swachh outcomes & reported ranks</b><Arrow/></a></div>
-    <details className="or-audit"><summary>Methods & additional retained history <span>Source rules and community programmes</span></summary><div><p>For the urban review, {active.rows.length} ULB candidates have the fields needed for this issue. Missing or conflicting measurements are held out; genuine zeros stay in the cohort. Shortfalls are calculated per ULB before summing, so excess delivery in one ULB never cancels another ULB’s shortfall.</p><p>The map and ranking use the same eligible records. Concentration means the top five’s share of the selected source’s reported shortfall. Map matching does not approve a cross-source identity.</p>{children}</div></details>
+      <section className="or-readiness" aria-label="Evidence scope and decision boundary"><div><span className="or-kicker">Ready for descriptive review</span><p><b>{governedSnapshotStats.completeDatasets}</b> historical exports <span> · {readinessCatalogueStats.platformAvailable} current catalogue routes</span> · {format(corpus.rawRows)} raw retained rows</p><small>{anchorRegistry.length} observed ULB-name candidates provide a working reference. {format(corpus.rowsExcludingAliases)} bundled rows after excluding repeated endpoint copies; internal row duplicates are a separate check.</small></div><a href={href('/gap-radar')}><span>Evidence investigations</span><b>OPEN GAP RADAR</b><small>Inspect changes, cohorts & works →</small></a></section>
+      <div className="or-closing-more">
+        <div className="or-context-links"><a href={`${href('/operational-analytics')}&tab=processing`}><span>Supporting evidence</span><b>Processing facilities & source statuses</b><Arrow/></a><a href={`${href('/operational-analytics')}&tab=outcomes`}><span>Historical context / 2024</span><b>Swachh outcomes & reported ranks</b><Arrow/></a></div>
+        {integrity&&<details className="vi-disclosure"><summary>Source quality findings and revision checks</summary>{integrity}</details>}
+        <details className="or-audit"><summary>Methods & additional retained history <span>Source rules and community programmes</span></summary><div><p>For the urban review, {active.rows.length} ULB candidates have the fields needed for this issue. Missing or conflicting measurements are held out; genuine zeros stay in the cohort. Shortfalls are calculated per ULB before summing, so excess delivery in one ULB never cancels another ULB’s shortfall.</p><p>The map and ranking use the same eligible records. Concentration means the top five’s share of the selected source’s reported shortfall. Map matching does not approve a cross-source identity.</p>{children}</div></details>
+      </div>
+    </section>
   </div>;
 }

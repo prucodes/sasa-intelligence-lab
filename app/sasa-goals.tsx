@@ -1,6 +1,6 @@
 'use client';
 
-import {useMemo, useState, type CSSProperties} from 'react';
+import {useEffect, useMemo, useRef, useState, type CSSProperties} from 'react';
 import {LAST_SOURCE_CHECK, getSasaGoals, goalShort, goalSummary, statusLabel, type Citation, type DistrictColumn, type DistrictGoalRow, type GoalStatus, type SasaGoal} from '@/lib/sasa-goals';
 import type {ScreenHeroData} from '@/lib/screen-heroes';
 import {ScreenHero} from './screen-hero';
@@ -209,6 +209,20 @@ function DistrictStanding({model}: {model: ReturnType<typeof getSasaGoals>}) {
   const choose = (by: Sort['by']) => setSort((current) => current.by === by ? {by, dir: current.dir === 1 ? -1 : 1} : {by, dir: by === 'district' ? 1 : -1});
   const ariaSort = (by: Sort['by']) => sort.by === by ? (sort.dir === 1 ? 'ascending' : 'descending') : 'none';
   const heldDistricts = rows.filter((row) => row.collection.value === null).map((row) => row.district);
+  // A district chosen on the overview map arrives as ?district=; its row is marked and brought into view.
+  const [picked, setPicked] = useState<string | null>(null);
+  const pickedRow = useRef<HTMLTableRowElement>(null);
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- one-time read of the static page's URL after hydration */
+    try {
+      const name = new URLSearchParams(window.location.search).get('district');
+      if (name && rows.some((row) => row.district === name)) setPicked(name);
+    } catch { /* No district chosen. */ }
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [rows]);
+  useEffect(() => {
+    if (picked) pickedRow.current?.scrollIntoView?.({block: 'center', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+  }, [picked]);
 
   return (
     <section className="goal-districts" id="goal-districts" aria-labelledby="goal-districts-title">
@@ -233,8 +247,8 @@ function DistrictStanding({model}: {model: ReturnType<typeof getSasaGoals>}) {
           </thead>
           <tbody>
             {ordered.map((row) => (
-              <tr key={row.district}>
-                <th scope="row">{row.district}</th>
+              <tr key={row.district} ref={row.district === picked ? pickedRow : undefined} className={row.district === picked ? 'is-picked' : undefined} aria-current={row.district === picked ? 'true' : undefined}>
+                <th scope="row">{row.district}{row.district === picked && <small className="gd-picked">from the map</small>}</th>
                 {columns.map((column) => <Cell key={column.id} row={row} column={column.id} lowerIsBetter={column.better === 'lower'} />)}
               </tr>
             ))}
